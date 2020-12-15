@@ -12,7 +12,7 @@ import { getPathReady } from './Sidebar';
 import { Location } from '@reach/router';
 import { breakpointDown } from '@paljs/ui/breakpoints';
 import { useTranslation } from 'react-i18next';
-import LanguageMenu from '../components/languageMenu'
+import LanguageMenu from '../components/languageMenu';
 
 const HeaderStyle = styled.div`
   display: flex;
@@ -63,7 +63,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = (props) => {
-  console.log("Props header :: ", props)
+  console.log('Props header :: ', props);
   const { t, i18n } = useTranslation();
   // console.log("I18N :: ", i18n)
   // console.log("T :: ", t)
@@ -107,7 +107,6 @@ const Header: React.FC<HeaderProps> = (props) => {
     },
   ];
 
-
   // function handleChangeLanguage(lng) {
   //   i18n.ns(lng)
   // }
@@ -131,18 +130,18 @@ const Header: React.FC<HeaderProps> = (props) => {
                 </Link>
               ),
             },
-            {
-              content: (
-                <SelectStyled
-                  isSearchable={false}
-                  shape="SemiRound"
-                  placeholder="Themes"
-                  value={themeOptions.find((item) => item.value === props.theme.value)}
-                  options={themeOptions}
-                  onChange={({ value }: { value: DefaultTheme['name'] }) => props.theme.set(value)}
-                />
-              ),
-            },
+            // {
+            //   content: (
+            //     <SelectStyled
+            //       isSearchable={false}
+            //       shape="SemiRound"
+            //       placeholder="Themes"
+            //       value={themeOptions.find((item) => item.value === props.theme.value)}
+            //       options={themeOptions}
+            //       onChange={({ value }: { value: DefaultTheme['name'] }) => props.theme.set(value)}
+            //     />
+            //   ),
+            // },
           ]}
         />
         <Actions
@@ -150,33 +149,7 @@ const Header: React.FC<HeaderProps> = (props) => {
           className="right"
           actions={[
             {
-              content: (
-                // <SelectStyled
-                //   isSearchable={false}
-                //   shape="SemiRound"
-                //   value={[{ value: 'EN', },
-                //   { title: 'TH', }]}
-                //   options={[
-                //     {
-                //       value: 'en',
-                //       label: (
-                //         <Label>
-                //           EN
-                //         </Label>
-                //       ),
-                //     },
-                //     {
-                //       value: 'th',
-                //       label: (
-                //         <Label>
-                //           TH
-                //         </Label>
-                //       ),
-                //     },
-                //   ]}
-                // />
-                <LanguageMenu></LanguageMenu>
-              ),
+              content: <LanguageMenu></LanguageMenu>,
             },
             {
               content: (
@@ -198,7 +171,6 @@ const Header: React.FC<HeaderProps> = (props) => {
                 </Location>
               ),
             },
-
           ]}
         />
       </HeaderStyle>
