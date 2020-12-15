@@ -7,7 +7,8 @@ import { SidebarRefObject } from '@paljs/ui/Sidebar';
 import Header from './Header';
 import SimpleLayout from './SimpleLayout';
 import SidebarCustom from './Sidebar';
-import { withTrans } from '../i18n/withTrans'
+import { withTrans } from '../i18n/withTrans';
+import './Custom.css';
 
 const getDefaultTheme = (): DefaultTheme['name'] => {
   if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
@@ -41,8 +42,8 @@ const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ children, p
   };
 
   return (
-    <ThemeProvider theme={themes(theme, dir)} > 
-      <>
+    <ThemeProvider theme={themes(theme, dir)}>
+      <div>
         <SimpleLayout />
         <Layout evaIcons={icons} dir={dir} className={pageContext.layout === 'auth' ? 'auth-layout' : ''}>
           {pageContext.layout !== 'auth' && (
@@ -63,7 +64,7 @@ const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ children, p
             </LayoutContent>
           </LayoutContainer>
         </Layout>
-      </>
+      </div>
     </ThemeProvider>
   );
 };

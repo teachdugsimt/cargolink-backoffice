@@ -47,5 +47,12 @@ module.exports = {
         },
       },
     },
+    {
+      resolve: `gatsby-plugin-google-fonts`,
+      options: {
+        fonts: [`Prompt`],
+        display: 'swap',
+      },
+    },
   ],
 };

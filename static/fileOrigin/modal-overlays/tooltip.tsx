@@ -4,7 +4,7 @@ import Tooltip from '@paljs/ui/Tooltip';
 import { Card, CardBody } from '@paljs/ui/Card';
 import { Button } from '@paljs/ui/Button';
 import React from 'react';
-import SEO from '../../components/SEO';
+import SEO from '../../../src/components/SEO';
 
 export default function TooltipPage() {
   return (

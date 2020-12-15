@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardBody } from '@paljs/ui/Card';
-import SEO from '../../components/SEO';
+import SEO from '../../../src/components/SEO';
 import { Editor } from '@tinymce/tinymce-react';
 
 export default function TinyMCE() {

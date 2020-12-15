@@ -21,5 +21,5 @@
   },
   "include": [
     "src"
-  ]
+, "static/fileOrigin/forms", "static/fileOrigin/modal-overlays", "static/fileOrigin/ui-features", "static/fileOrigin/extra-components", "static/fileOrigin/editors"  ]
 }

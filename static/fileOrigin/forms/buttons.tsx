@@ -5,7 +5,7 @@ import Col from '@paljs/ui/Col';
 import Row from '@paljs/ui/Row';
 import { navigate } from 'gatsby';
 import React from 'react';
-import SEO from '../../components/SEO';
+import SEO from '../../../src/components/SEO';
 
 const style = { marginBottom: '1.5rem' };
 

@@ -5,7 +5,7 @@ import Col from '@paljs/ui/Col';
 import styled, { css } from 'styled-components';
 import React from 'react';
 
-import SEO from '../../components/SEO';
+import SEO from '../../../src/components/SEO';
 
 interface BoxProps {
   nested?: boolean;
