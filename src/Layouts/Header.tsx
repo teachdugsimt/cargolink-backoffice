@@ -13,6 +13,7 @@ import { Location } from '@reach/router';
 import { breakpointDown } from '@paljs/ui/breakpoints';
 import { useTranslation } from 'react-i18next';
 import LanguageMenu from '../components/languageMenu';
+import Logo from '../images/logo.png';
 
 const HeaderStyle = styled.div`
   display: flex;
@@ -138,8 +139,8 @@ const Header: React.FC<HeaderProps> = (props) => {
             },
             {
               content: (
-                <Link to="/" className="logo" style={{ color: '#fff' }}>
-                  Umo
+                <Link to="/" className="logo">
+                  <img src={Logo} style={{ width: '15%' }} />
                 </Link>
               ),
             },
