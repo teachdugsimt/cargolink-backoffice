@@ -3,5 +3,9 @@
     "jobs": "รับงาน",
     "trucks":"รถบรรทุก",
     "drivers":"คนขับ",
-    "userManagement":"จัดการผู้ใช้งาน"
+    "userManagement":"จัดการผู้ใช้งาน",
+    "truckstype":"ประเภทรถบรรทุก",
+    "truckRegion":"ประเภทรถบรรทุกในแต่ละภูมิภาค",
+    "JobsRegion":"งานในแต่ภูมิภาค"
+    
   }
