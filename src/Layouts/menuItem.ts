@@ -12,10 +12,12 @@ const items: MenuItemType[] = [
   // },
   {
     title: 'Shipper',
+    icon: {name: 'archive'},
     children: [{ title: 'Jobs', link: { to: '/Jobs' } }],
   },
   {
     title: 'Carrier',
+    icon: {name: 'car'},
     children: [
       { title: 'Trucks', link: { to: '/Trucks' } },
       { title: 'Drivers', link: { to: '/Drivers' } },
@@ -23,6 +25,7 @@ const items: MenuItemType[] = [
   },
   {
     title: 'User Management',
+    icon: {name: 'people'},
     link: { to: '/UserManagement' },
   },
 ];
