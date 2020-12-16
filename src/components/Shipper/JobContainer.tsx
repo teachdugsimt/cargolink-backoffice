@@ -1,9 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import TableTree, { Headers, Header, Rows, Row, Cell } from '@atlaskit/table-tree';
 import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
+import { Button, ButtonLink } from '@paljs/ui/Button';
 import { caption, head, rows } from './dynamic-table/sample-data';
+import { Icon } from 'react-icons-kit';
+import { search } from 'react-icons-kit/icomoon/search';
 
 const Wrapper = styled.div`
   min-width: 600px;
@@ -14,36 +16,28 @@ const Input = styled(InputGroup)`
   margin-bottom: 10px;
 `;
 
-const JobContainer = (props) => {
+const JobContainer = (props: any) => {
   const { t } = useTranslation();
   console.log('props', props);
 
   return (
     <div style={{ backgroundColor: '#fff', width: '100%', height: '100%', padding: 20 }}>
-      <h1>{t('jobs')}</h1>
-      <Input fullWidth>
-        <input placeholder="Enter your search here" />
-      </Input>
-      {/* <TableTree>
-        <Headers>
-          <Header width={200}>Chapter title</Header>
-          <Header width={100}>Numbering</Header>
-          <Header width={100}>Page</Header>
-        </Headers>
-        <Rows
-          items={staticData.children}
-          render={({ title, numbering, page, children }) => (
-            <Row itemId={numbering} items={children} hasChildren={children.length > 0}>
-              <Cell singleLine>{title}</Cell>
-              <Cell>{numbering}</Cell>
-              <Cell>{page}</Cell>
-            </Row>
-          )}
-        />
-      </TableTree> */}
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <h1 style={{ display: 'flex', flexDirection: 'column' }}>{t('jobs')}</h1>
+        <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <InputGroup>
+              <input placeholder="Enter your search here" />
+            </InputGroup>
+            <Button appearance="filled" status="Basic">
+              <Icon size={18} icon={search} />
+            </Button>
+          </div>
+        </div>
+      </div>
       <Wrapper>
         <DynamicTable
-          caption={caption}
+          //   caption={caption}
           head={head}
           rows={rows}
           rowsPerPage={10}

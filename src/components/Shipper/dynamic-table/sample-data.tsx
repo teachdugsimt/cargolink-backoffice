@@ -39,27 +39,47 @@ export const createHead = (withWidth: boolean) => {
     cells: [
       {
         key: 'name',
-        content: 'Name',
+        content: 'ID',
         isSortable: true,
-        width: withWidth ? 25 : undefined,
+        width: withWidth ? 5 : undefined,
       },
       {
         key: 'party',
-        content: 'Party',
+        content: 'Phone number',
         shouldTruncate: true,
         isSortable: true,
         width: withWidth ? 15 : undefined,
       },
       {
         key: 'term',
-        content: 'Term',
+        content: 'Full name',
         shouldTruncate: true,
         isSortable: true,
-        width: withWidth ? 10 : undefined,
+        width: withWidth ? 15 : undefined,
       },
       {
         key: 'content',
-        content: 'Comment',
+        content: 'Member Type',
+        shouldTruncate: true,
+      },
+      {
+        key: 'content',
+        content: 'Register Date',
+        shouldTruncate: true,
+      },
+      {
+        key: 'content',
+        content: 'Approve Date',
+        shouldTruncate: true,
+      },
+      {
+        key: 'content',
+        content: 'Sales Code',
+        shouldTruncate: true,
+      },
+      {
+        key: 'action',
+        content: 'Action',
         shouldTruncate: true,
       },
       {
@@ -77,14 +97,15 @@ export const rows = presidents.map((president: President, index: number) => ({
   cells: [
     {
       key: createKey(president.nm),
-      content: (
-        <NameWrapper>
-          <AvatarWrapper>
-            <Avatar name={president.nm} size="medium" />
-          </AvatarWrapper>
-          <a href="https://atlassian.design">{president.nm}</a>
-        </NameWrapper>
-      ),
+      //   content: (
+      //     <NameWrapper>
+      //       <AvatarWrapper>
+      //         <Avatar name={president.nm} size="medium" />
+      //       </AvatarWrapper>
+      //       <a href="https://atlassian.design">{president.nm}</a>
+      //     </NameWrapper>
+      //   ),
+      content: president.id,
     },
     {
       key: createKey(president.pp),
@@ -92,7 +113,7 @@ export const rows = presidents.map((president: President, index: number) => ({
     },
     {
       key: president.id,
-      content: president.tm,
+      content: president.nm,
     },
     {
       content: iterateThroughLorem(index),
