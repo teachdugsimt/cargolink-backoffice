@@ -43,6 +43,20 @@ const HeaderStyle = styled.div`
   }
 `;
 
+const StyleHeader = styled(LayoutHeader)`
+  background: rgb(34, 43, 69);
+  & header {
+    padding-bottom: 0.5rem;
+    text-align: center;
+    display: flex;
+    height: auto;
+    button {
+      font-size: 1.5rem;
+      padding: 0.25rem 0.5rem;
+    }
+  }
+`;
+
 const Label = styled.span`
   display: flex;
   align-items: center;
@@ -111,7 +125,7 @@ const Header: React.FC<HeaderProps> = (props) => {
   // }
 
   return (
-    <LayoutHeader fixed>
+    <StyleHeader fixed>
       <HeaderStyle>
         <Actions
           size="Medium"
@@ -124,7 +138,7 @@ const Header: React.FC<HeaderProps> = (props) => {
             },
             {
               content: (
-                <Link to="/" className="logo">
+                <Link to="/" className="logo" style={{ color: '#fff' }}>
                   Umo
                 </Link>
               ),
@@ -155,7 +169,7 @@ const Header: React.FC<HeaderProps> = (props) => {
                 <Location>
                   {({ location }) => (
                     <ContextMenu
-                      style={{ cursor: 'pointer' }}
+                      style={{ cursor: 'pointer', color: '#fff' }}
                       placement="bottom"
                       currentPath={getPathReady(location.pathname)}
                       items={[
@@ -164,7 +178,8 @@ const Header: React.FC<HeaderProps> = (props) => {
                       ]}
                       Link={Link}
                     >
-                      <User color="#eee" name="Wirachai Khueankaew" title="Manger" size="Medium" />
+                      {/* <User color="#fff" name="Wirachai Khueankaew" title="Manger" size="Medium"/> */}
+                      Wirachai Khueankaew
                     </ContextMenu>
                   )}
                 </Location>
@@ -173,7 +188,7 @@ const Header: React.FC<HeaderProps> = (props) => {
           ]}
         />
       </HeaderStyle>
-    </LayoutHeader>
+    </StyleHeader>
   );
 };
 export default Header;
