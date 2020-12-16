@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Button, ButtonLink } from '@paljs/ui/Button';
 import styled from 'styled-components';
 
 import Avatar from '@atlaskit/avatar';
@@ -7,6 +8,10 @@ import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdow
 
 import { lorem } from './lorem';
 import { presidents } from './presidents';
+
+import { Icon } from 'react-icons-kit';
+import { edit } from 'react-icons-kit/fa/edit';
+import { ic_delete } from 'react-icons-kit/md/ic_delete';
 
 interface President {
   id: number;
@@ -32,58 +37,44 @@ const AvatarWrapper = styled.div`
   margin-right: 8px;
 `;
 
-export const caption = 'List of US Presidents';
+export const caption = `Results found: ${presidents.length}`;
 
 export const createHead = (withWidth: boolean) => {
   return {
     cells: [
       {
         key: 'name',
-        content: 'ID',
+        content: 'Job No.',
         isSortable: true,
-        width: withWidth ? 5 : undefined,
+        // width: withWidth ? 10 : undefined,
       },
       {
         key: 'party',
-        content: 'Phone number',
+        content: 'Name of  shipper',
         shouldTruncate: true,
         isSortable: true,
-        width: withWidth ? 15 : undefined,
+        // width: withWidth ? 15 : undefined,
       },
       {
         key: 'term',
-        content: 'Full name',
+        content: 'Type of goods',
         shouldTruncate: true,
         isSortable: true,
-        width: withWidth ? 15 : undefined,
+        // width: withWidth ? 15 : undefined,
       },
       {
         key: 'content',
-        content: 'Member Type',
-        shouldTruncate: true,
-      },
-      {
-        key: 'content',
-        content: 'Register Date',
+        content: 'Route',
         shouldTruncate: true,
       },
       {
         key: 'content',
-        content: 'Approve Date',
+        content: 'Valid unit',
         shouldTruncate: true,
       },
       {
         key: 'content',
-        content: 'Sales Code',
-        shouldTruncate: true,
-      },
-      {
-        key: 'action',
-        content: 'Action',
-        shouldTruncate: true,
-      },
-      {
-        key: 'more',
+        content: 'Status',
         shouldTruncate: true,
       },
     ],
@@ -105,15 +96,15 @@ export const rows = presidents.map((president: President, index: number) => ({
       //       <a href="https://atlassian.design">{president.nm}</a>
       //     </NameWrapper>
       //   ),
-      content: president.id,
+      content: president.tm,
     },
     {
       key: createKey(president.pp),
-      content: president.pp,
+      content: president.nm,
     },
     {
       key: president.id,
-      content: president.nm,
+      content: president.pp,
     },
     {
       content: iterateThroughLorem(index),
@@ -127,5 +118,26 @@ export const rows = presidents.map((president: President, index: number) => ({
         </DropdownMenu>
       ),
     },
+    // {
+    //   key: createKey(president.pp),
+    //   content: president.pp,
+    // },
+    // {
+    //   key: createKey(president.pp),
+    //   content: president.pp,
+    // },
+    // {
+    //   key: createKey(president.pp),
+    //   content: (
+    //     <div>
+    //       <Button appearance="ghost" status="Basic" size="Small">
+    //         <Icon icon={edit} />
+    //       </Button>
+    //       <Button appearance="ghost" status="Basic" size="Small">
+    //         <Icon icon={ic_delete} />
+    //       </Button>
+    //     </div>
+    //   ),
+    // },
   ],
 }));

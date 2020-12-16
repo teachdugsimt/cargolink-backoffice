@@ -35,22 +35,25 @@ const JobContainer = (props: any) => {
           </div>
         </div>
       </div>
-      <Wrapper>
-        <DynamicTable
-          //   caption={caption}
-          head={head}
-          rows={rows}
-          rowsPerPage={10}
-          defaultPage={1}
-          loadingSpinnerSize="large"
-          isLoading={false}
-          isFixedSize
-          defaultSortKey="term"
-          defaultSortOrder="ASC"
-          onSort={() => console.log('onSort')}
-          onSetPage={() => console.log('onSetPage')}
-        />
-      </Wrapper>
+      <span>{caption}</span>
+      <div style={{ marginTop: 10 }}>
+        <Wrapper>
+          <DynamicTable
+            //   caption={caption}
+            head={head}
+            rows={rows}
+            rowsPerPage={10}
+            defaultPage={1}
+            loadingSpinnerSize="large"
+            isLoading={false}
+            // isFixedSize
+            defaultSortKey="term"
+            defaultSortOrder="ASC"
+            onSort={() => console.log('onSort')}
+            onSetPage={() => console.log('onSetPage')}
+          />
+        </Wrapper>
+      </div>
     </div>
   );
 };
