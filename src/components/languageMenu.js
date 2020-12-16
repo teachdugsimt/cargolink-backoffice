@@ -3,6 +3,8 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
+import united_kingdom from '../assets/images/united-kingdom.png';
+import thailand from '../assets/images/thailand.png';
 
 const useStyles = makeStyles({
   selectFocus: {
@@ -43,8 +45,18 @@ const LanguageMenu = (props) => {
         select: classes.selectFocus,
       }}
     >
-      <MenuItem value={'en'}>EN</MenuItem>
-      <MenuItem value={'th'}>TH</MenuItem>
+      <MenuItem value={'en'}>
+        <div style={{ display: 'flex' }}>
+          <img src={united_kingdom} style={{ width: 20, margin: '0px 5px', alignItems: 'center' }} />
+          <span>EN</span>
+        </div>
+      </MenuItem>
+      <MenuItem value={'th'}>
+        <div style={{ display: 'flex' }}>
+          <img src={thailand} style={{ width: 20, margin: '0px 5px', alignItems: 'center' }} />
+          <span>TH</span>
+        </div>
+      </MenuItem>
     </Select>
   );
 };
