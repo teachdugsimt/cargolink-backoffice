@@ -6,11 +6,12 @@ import { Button, ButtonLink } from '@paljs/ui/Button';
 import { caption, head, rows } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
 import { search } from 'react-icons-kit/icomoon/search';
+import styled from 'styled-components';
+import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 
 const Wrapper = styled.div`
   min-width: 600px;
 `;
-import styled from 'styled-components';
 
 const Input = styled(InputGroup)`
   margin-bottom: 10px;
@@ -21,9 +22,9 @@ const JobContainer = (props: any) => {
   console.log('props', props);
 
   return (
-    <div style={{ backgroundColor: '#fff', width: '100%', height: '100%', padding: 20 }}>
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-        <h1 style={{ display: 'flex', flexDirection: 'column' }}>{t('jobs')}</h1>
+    <Card>
+      <CardHeader style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}>{t('jobs')}</span>
         <div style={{ display: 'flex' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <InputGroup>
@@ -34,9 +35,9 @@ const JobContainer = (props: any) => {
             </Button>
           </div>
         </div>
-      </div>
-      <span>{caption}</span>
-      <div style={{ marginTop: 10 }}>
+      </CardHeader>
+      <CardBody>
+        <span>{caption}</span>
         <Wrapper>
           <DynamicTable
             //   caption={caption}
@@ -53,8 +54,8 @@ const JobContainer = (props: any) => {
             onSetPage={() => console.log('onSetPage')}
           />
         </Wrapper>
-      </div>
-    </div>
+      </CardBody>
+    </Card>
   );
 };
 export default JobContainer;

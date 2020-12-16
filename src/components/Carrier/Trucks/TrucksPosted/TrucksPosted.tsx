@@ -6,6 +6,7 @@ import { caption, head, rows } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
 import { search } from 'react-icons-kit/icomoon/search';
 import { Button } from '@paljs/ui/Button';
+import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 
 const Wrapper = styled.div`
   min-width: 600px;
@@ -20,8 +21,9 @@ const MultipleRole = (props) => {
   const { t } = useTranslation();
 
   return (
-    <div>
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+    <Card>
+      <CardHeader style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}>{t('trucks')}</span>
         <div style={{ display: 'flex' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <InputGroup>
@@ -32,24 +34,26 @@ const MultipleRole = (props) => {
             </Button>
           </div>
         </div>
-      </div>
-      <Wrapper>
-        <DynamicTable
-          caption={caption}
-          head={head}
-          rows={rows}
-          rowsPerPage={10}
-          defaultPage={1}
-          loadingSpinnerSize="large"
-          isLoading={false}
-          isFixedSize
-          defaultSortKey="term"
-          defaultSortOrder="ASC"
-          onSort={() => console.log('onSort')}
-          onSetPage={() => console.log('onSetPage')}
-        />
-      </Wrapper>
-    </div>
+      </CardHeader>
+      <CardBody>
+        <Wrapper>
+          <DynamicTable
+            caption={caption}
+            head={head}
+            rows={rows}
+            rowsPerPage={10}
+            defaultPage={1}
+            loadingSpinnerSize="large"
+            isLoading={false}
+            isFixedSize
+            defaultSortKey="term"
+            defaultSortOrder="ASC"
+            onSort={() => console.log('onSort')}
+            onSetPage={() => console.log('onSetPage')}
+          />
+        </Wrapper>
+      </CardBody>
+    </Card>
   );
 };
 export default MultipleRole;

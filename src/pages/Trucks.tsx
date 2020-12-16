@@ -8,19 +8,8 @@ const Trucks = () => {
   const { t } = useTranslation();
   return (
     <>
-      <Card>
-        <CardHeader>
-          <span style={{ fontSize: 20 }}>{t('trucks')}</span>
-        </CardHeader>
-        <CardBody>
-          <TrucksPosted />
-        </CardBody>
-      </Card>
-      <Card size="Large">
-        <CardBody>
-          <TruckForApproval />
-        </CardBody>
-      </Card>
+      <TrucksPosted />
+      <TruckForApproval />
     </>
   );
 };
