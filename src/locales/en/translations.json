@@ -3,5 +3,8 @@
     "jobs": "Jobs",
     "trucks":"Trucks",
     "drivers":"Drivers",
-    "userManagement":"User Management"
+    "userManagement":"User Management",
+    "truckstype":"Trucks Type",
+    "truckRegion":"Trucks types in each region",
+    "JobsRegion":"Jobs in each region"
   }

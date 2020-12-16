@@ -2,12 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import TableTree, { Headers, Header, Rows, Row, Cell } from '@atlaskit/table-tree';
 import staticData from './data.json';
+import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 
 const Jobs = (props) => {
   const { t } = useTranslation();
   console.log('props', props);
   return (
-    <div style={{ backgroundColor: '#fff', width: '100%', height: '100%', padding: 20 }}>
+    <Card>
       <h1>{t('jobs')}</h1>
       <TableTree>
         <Headers>
@@ -26,7 +27,7 @@ const Jobs = (props) => {
           )}
         />
       </TableTree>
-    </div>
+    </Card>
   );
 };
 export default Jobs;
