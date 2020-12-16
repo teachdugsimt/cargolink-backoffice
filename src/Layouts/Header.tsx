@@ -12,7 +12,7 @@ import { getPathReady } from './Sidebar';
 import { Location } from '@reach/router';
 import { breakpointDown } from '@paljs/ui/breakpoints';
 import { useTranslation } from 'react-i18next';
-import LanguageMenu from '../components/languageMenu';
+import LanguageMenu from '../components/LanguageMenu';
 import Logo from '../images/logo.png';
 
 const HeaderStyle = styled.div`
