@@ -5,6 +5,9 @@
   "version": "0.1.0",
   "author": "Ahmed Elywa",
   "dependencies": {
+    "@atlaskit/avatar": "^20.0.8",
+    "@atlaskit/dropdown-menu": "^10.1.2",
+    "@atlaskit/dynamic-table": "^14.1.5",
     "@atlaskit/table-tree": "^9.0.7",
     "@ckeditor/ckeditor5-build-classic": "23.0.0",
     "@ckeditor/ckeditor5-react": "2.1.0",

@@ -2,13 +2,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import TableTree, { Headers, Header, Rows, Row, Cell } from '@atlaskit/table-tree';
 import staticData from './data.json';
+import JobContainer from '../components/Shipper/JobContainer';
 
 const Jobs = (props) => {
   const { t } = useTranslation();
   console.log('props', props);
   return (
     <div style={{ backgroundColor: '#fff', width: '100%', height: '100%', padding: 20 }}>
-      <h1>{t('jobs')}</h1>
+      <JobContainer />
+      {/* <h1>{t('jobs')}</h1>
       <TableTree>
         <Headers>
           <Header width={200}>Chapter title</Header>
@@ -25,7 +27,7 @@ const Jobs = (props) => {
             </Row>
           )}
         />
-      </TableTree>
+      </TableTree> */}
     </div>
   );
 };
