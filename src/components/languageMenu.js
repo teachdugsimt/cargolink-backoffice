@@ -32,6 +32,7 @@ const LanguageMenu = (props) => {
 
   return (
     <Select
+      style={{ background: '#fff', borderRadius: 5, width: 50 }}
       value={values.language}
       onChange={(e) => handleChange(e)}
       disableUnderline
