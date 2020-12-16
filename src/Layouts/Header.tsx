@@ -128,36 +128,37 @@ const Header: React.FC<HeaderProps> = (props) => {
   return (
     <StyleHeader fixed>
       <HeaderStyle>
-        <Actions
-          size="Medium"
-          actions={[
-            {
-              icon: { name: 'menu-2-outline' },
-              url: {
-                onClick: props.toggleSidebar,
+        <div style={{ display: 'flex' }}>
+          <Actions
+            size="Medium"
+            actions={[
+              {
+                icon: { name: 'menu-2-outline' },
+                url: {
+                  onClick: props.toggleSidebar,
+                },
               },
-            },
-            {
-              content: (
-                <Link to="/" className="logo">
-                  <img src={Logo} style={{ width: '15%' }} />
-                </Link>
-              ),
-            },
-            // {
-            //   content: (
-            //     <SelectStyled
-            //       isSearchable={false}
-            //       shape="SemiRound"
-            //       placeholder="Themes"
-            //       value={themeOptions.find((item) => item.value === props.theme.value)}
-            //       options={themeOptions}
-            //       onChange={({ value }: { value: DefaultTheme['name'] }) => props.theme.set(value)}
-            //     />
-            //   ),
-            // },
-          ]}
-        />
+              {
+                content: <div></div>,
+              },
+              // {
+              //   content: (
+              //     <SelectStyled
+              //       isSearchable={false}
+              //       shape="SemiRound"
+              //       placeholder="Themes"
+              //       value={themeOptions.find((item) => item.value === props.theme.value)}
+              //       options={themeOptions}
+              //       onChange={({ value }: { value: DefaultTheme['name'] }) => props.theme.set(value)}
+              //     />
+              //   ),
+              // },
+            ]}
+          />
+          <div style={{ display: 'flex', alignContent: 'center', marginLeft: -20 }}>
+            <img src={Logo} style={{ width: '22%' }} />
+          </div>
+        </div>
         <Actions
           size="Small"
           className="right"
