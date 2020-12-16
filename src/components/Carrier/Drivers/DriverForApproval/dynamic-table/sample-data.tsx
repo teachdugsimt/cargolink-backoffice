@@ -45,31 +45,31 @@ export const createHead = (withWidth: boolean) => {
       },
       {
         key: 'party',
-        content: 'Truck brand name',
+        content: 'Mobile number of driver',
         shouldTruncate: true,
         isSortable: true,
         width: withWidth ? 15 : undefined,
       },
       {
         key: 'term',
-        content: 'Truck plate number',
+        content: "Driver's name",
         shouldTruncate: true,
         isSortable: true,
         width: withWidth ? 10 : undefined,
       },
       {
         key: 'content',
-        content: 'Truck type',
+        content: 'OTP',
         shouldTruncate: true,
       },
       {
         key: 'Status',
-        content: 'Weigth capacity',
+        content: "Carrier's name",
         shouldTruncate: true,
       },
       {
         key: 'Date of approval',
-        content: "Carrier's name",
+        content: 'Carrier status',
         shouldTruncate: true,
       },
       {
