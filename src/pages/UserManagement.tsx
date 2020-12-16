@@ -4,10 +4,6 @@ import MultipleRole from '../components/UserManagement/Multi/MultipleRole';
 
 const UserManagement = () => {
   const { t } = useTranslation();
-  return (
-    <>
-      <MultipleRole />
-    </>
-  );
+  return <MultipleRole />;
 };
 export default UserManagement;

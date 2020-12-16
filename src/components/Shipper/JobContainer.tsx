@@ -23,7 +23,9 @@ const JobContainer = (props: any) => {
 
   return (
     <Card>
-      <CardHeader style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+      <CardHeader
+        style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+      >
         <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}>{t('jobs')}</span>
         <div style={{ display: 'flex' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>

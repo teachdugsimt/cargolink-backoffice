@@ -7,10 +7,10 @@ import TruckForApproval from '../components/Carrier/Trucks/TruckForApproval/Truc
 const Trucks = () => {
   const { t } = useTranslation();
   return (
-    <>
+    <div>
       <TrucksPosted />
       <TruckForApproval />
-    </>
+    </div>
   );
 };
 export default Trucks;

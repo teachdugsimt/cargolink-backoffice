@@ -4,10 +4,6 @@ import DriverForApproval from '../components/Carrier/Drivers/DriverForApproval/D
 
 const Drivers = () => {
   const { t } = useTranslation();
-  return (
-    <>
-      <DriverForApproval />
-    </>
-  );
+  return <DriverForApproval />;
 };
 export default Drivers;
