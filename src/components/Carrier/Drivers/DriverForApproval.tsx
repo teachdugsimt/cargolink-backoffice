@@ -83,7 +83,7 @@ const DriverForApproval = (props: any) => {
             APPROVED
           </Button>
         </Row>
-        <span>{caption}</span>
+        <span>{`Results found: ${rowData.length}`}</span>
         <Wrapper>
           <DynamicTable
             // caption={caption}
