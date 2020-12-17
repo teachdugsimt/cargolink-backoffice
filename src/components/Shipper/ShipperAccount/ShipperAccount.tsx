@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 
 const Wrapper = styled.div`
+  margin-top: 10px;
   min-width: 600px;
 `;
 
@@ -39,7 +40,7 @@ const JobContainer = (props: any) => {
         </div>
       </CardHeader>
       <CardBody>
-        {/* <span>{caption}</span> */}
+        <span>{caption}</span>
         <Wrapper>
           <DynamicTable
             //   caption={caption}
