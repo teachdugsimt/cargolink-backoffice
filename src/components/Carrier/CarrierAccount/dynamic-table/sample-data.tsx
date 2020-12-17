@@ -1,38 +1,27 @@
 import React from 'react';
+import { Button, ButtonLink } from '@paljs/ui/Button';
 
-import styled from 'styled-components';
+import { carriers } from './carriers';
 
-import Avatar from '@atlaskit/avatar';
-import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdown-menu';
+import { Icon } from 'react-icons-kit';
+import { edit } from 'react-icons-kit/fa/edit';
+import { ic_delete } from 'react-icons-kit/md/ic_delete';
 
-import { lorem } from './lorem';
-import { presidents } from './presidents';
-
-interface President {
+interface Carrier {
   id: number;
-  nm: string;
-  pp: string;
-  tm: string;
+  full_name: string;
+  member_type: string;
+  phone: string;
+  register_date: string;
+  sales_code: string;
+  date_approve: string;
 }
 
 function createKey(input: string) {
   return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
 }
 
-function iterateThroughLorem(index: number) {
-  return index > lorem.length ? index - lorem.length : index;
-}
-
-const NameWrapper = styled.span`
-  display: flex;
-  align-items: center;
-`;
-
-const AvatarWrapper = styled.div`
-  margin-right: 8px;
-`;
-
-export const caption = '';
+export const caption = `Results found: ${carriers.length}`;
 
 export const createHead = (withWidth: boolean) => {
   return {
@@ -44,41 +33,41 @@ export const createHead = (withWidth: boolean) => {
         width: withWidth ? 5 : undefined,
       },
       {
-        key: 'party',
+        key: 'phone',
         content: 'Phone number',
         shouldTruncate: true,
         isSortable: true,
         width: withWidth ? 12 : undefined,
       },
       {
-        key: 'term',
+        key: 'full_name',
         content: 'Full name',
         shouldTruncate: true,
         isSortable: true,
         width: withWidth ? 15 : undefined,
       },
       {
-        key: 'content',
+        key: 'member_type',
         content: 'Member Type',
         shouldTruncate: true,
       },
       {
-        key: 'Status',
+        key: 'register_date',
         content: 'Register Date',
         shouldTruncate: true,
       },
       {
-        key: 'Date of approval',
+        key: 'date_approval',
         content: 'Approve Date',
         shouldTruncate: true,
       },
       {
-        key: 'Action',
+        key: 'sales_code',
         content: 'Sales code',
         shouldTruncate: true,
       },
       {
-        key: 'Action',
+        key: 'action',
         content: 'Action',
         shouldTruncate: true,
       },
@@ -88,23 +77,49 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const rows = presidents.map((president: President, index: number) => ({
-  // key: `row-${index}-${president.nm}`,
+export const rows = carriers.map((carrier: Carrier, index: number) => ({
+  key: `row-${index}-${carrier.id}`,
   cells: [
     {
-      content: president.id,
+      key: carrier.id,
+      content: carrier.id,
     },
     {
-      content: president.pn,
+      key: carrier.phone,
+      content: carrier.phone,
     },
     {
-      content: president.nm,
+      key: carrier.full_name,
+      content: carrier.full_name,
     },
     {
-      content: president.mt,
+      key: carrier.member_type,
+      content: carrier.member_type,
     },
     {
-      content: president.rd,
+      key: carrier.register_date,
+      content: carrier.register_date,
+    },
+    {
+      key: carrier.date_approve,
+      content: carrier.date_approve,
+    },
+    {
+      key: carrier.sales_code,
+      content: carrier.sales_code,
+    },
+    {
+      key: carrier.id,
+      content: (
+        <div>
+          <Button appearance="ghost" status="Basic" size="Small">
+            <Icon icon={edit} />
+          </Button>
+          <Button appearance="ghost" status="Basic" size="Small">
+            <Icon icon={ic_delete} />
+          </Button>
+        </div>
+      ),
     },
   ],
 }));

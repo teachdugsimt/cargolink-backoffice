@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 
 const Wrapper = styled.div`
+  margin-top: 10px;
   text-align: center;
   min-width: 600px;
 `;

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Button, ButtonLink } from '@paljs/ui/Button';
-import styled from 'styled-components';
 
 import { shippers } from './shippers';
 
