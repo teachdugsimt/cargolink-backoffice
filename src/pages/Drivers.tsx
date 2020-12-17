@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import DriverForApproval from '../components/Carrier/Drivers/DriverForApproval/DriverForApproval';
+import DriverForApproval from '../components/Carrier/Drivers/DriverForApproval';
 
 const Drivers = () => {
   const { t } = useTranslation();

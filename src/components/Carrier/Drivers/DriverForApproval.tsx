@@ -9,6 +9,7 @@ import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 
 const Wrapper = styled.div`
+  margin-top: 10px;
   min-width: 600px;
 `;
 import styled from 'styled-components';
@@ -38,16 +39,17 @@ const DriverForApproval = (props) => {
         </div>
       </CardHeader>
       <CardBody>
+        <span>{caption}</span>
         <Wrapper>
           <DynamicTable
-            caption={caption}
+            // caption={caption}
             head={head}
             rows={rows}
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
             isLoading={false}
-            isFixedSize
+            // isFixedSize
             defaultSortKey="term"
             defaultSortOrder="ASC"
             onSort={() => console.log('onSort')}
