@@ -43,27 +43,6 @@ const MultipleRole = () => {
       </CardHeader>
       <CardBody>
         <Row style={{ padding: 5, marginBottom: 10, justifyContent: 'space-between' }}>
-          {/* <Button
-            appearance="filled"
-            status="Basic"
-            size="Small"
-            style={{
-              marginRight: 10,
-              color: 'rgb(255, 255, 255)',
-              backgroundColor: 'rgb(255, 170, 0',
-              borderColor: 'rgb(255, 170, 0',
-            }}
-          >
-            PENDING
-          </Button>
-          <Button
-            appearance="filled"
-            status="Basic"
-            size="Small"
-            style={{ color: 'rgb(255, 255, 255)', backgroundColor: 'rgb(255, 170, 0', borderColor: 'rgb(255, 170, 0' }}
-          >
-            APPROVED
-          </Button> */}
           <span style={{ display: 'flex', alignItems: 'center' }}>{caption}</span>
           <Button
             appearance="outline"
