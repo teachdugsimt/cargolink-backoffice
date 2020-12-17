@@ -156,7 +156,7 @@ const Header: React.FC<HeaderProps> = (props) => {
             ]}
           />
           <div style={{ display: 'flex', alignItems: 'center', marginLeft: -20 }}>
-            <img src={Logo} style={{ width: '22%' }} />
+            <img src={Logo} style={{ width: '20%' }} />
           </div>
         </div>
         <Actions

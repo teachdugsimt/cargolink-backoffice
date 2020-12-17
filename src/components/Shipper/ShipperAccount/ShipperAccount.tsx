@@ -58,6 +58,7 @@ const JobContainer = (props: any) => {
           <Button
             appearance="filled"
             status="Basic"
+            size="Small"
             style={{ color: 'rgb(255, 255, 255)', backgroundColor: 'rgb(255, 170, 0', borderColor: 'rgb(255, 170, 0' }}
           >
             APPROVED

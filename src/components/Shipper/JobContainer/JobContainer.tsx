@@ -42,10 +42,11 @@ const JobContainer = (props: any) => {
         </div>
       </CardHeader>
       <CardBody>
-        <Row style={{ padding: 5 }}>
+        <Row style={{ padding: 5, marginBottom: 10 }}>
           <Button
             appearance="filled"
             status="Basic"
+            size="Small"
             style={{
               marginRight: 10,
               color: 'rgb(255, 255, 255)',
@@ -58,11 +59,13 @@ const JobContainer = (props: any) => {
           <Button
             appearance="filled"
             status="Basic"
+            size="Small"
             style={{ color: 'rgb(255, 255, 255)', backgroundColor: 'rgb(255, 170, 0', borderColor: 'rgb(255, 170, 0' }}
           >
             APPROVED
           </Button>
         </Row>
+        <span>{caption}</span>
         <Wrapper>
           <DynamicTable
             //   caption={caption}
