@@ -39,7 +39,6 @@ const MultipleRole = () => {
         </div>
       </CardHeader>
       <CardBody>
-        <span>{caption}</span>
         <Wrapper>
           <DynamicTable
             // caption={caption}

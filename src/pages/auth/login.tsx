@@ -18,7 +18,7 @@ export default function Login() {
     setCheckbox({ ...checkbox, [name]: value });
   };
   const submit = () => {
-    navigate('/dashboard');
+    navigate('/Dashboard');
   };
 
   return (
