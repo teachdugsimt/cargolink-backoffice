@@ -7,6 +7,7 @@ import { Icon } from 'react-icons-kit';
 import { search } from 'react-icons-kit/icomoon/search';
 import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
+import Row from '@paljs/ui/Row';
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -39,7 +40,27 @@ const MultipleRole = (props) => {
         </div>
       </CardHeader>
       <CardBody>
-        <span>{caption}</span>
+        <Row style={{ padding: 5 }}>
+          <Button
+            appearance="filled"
+            status="Basic"
+            style={{
+              marginRight: 10,
+              color: 'rgb(255, 255, 255)',
+              backgroundColor: 'rgb(255, 170, 0',
+              borderColor: 'rgb(255, 170, 0',
+            }}
+          >
+            PENDING
+          </Button>
+          <Button
+            appearance="filled"
+            status="Basic"
+            style={{ color: 'rgb(255, 255, 255)', backgroundColor: 'rgb(255, 170, 0', borderColor: 'rgb(255, 170, 0' }}
+          >
+            APPROVED
+          </Button>
+        </Row>
         <Wrapper>
           <DynamicTable
             // caption={caption}
