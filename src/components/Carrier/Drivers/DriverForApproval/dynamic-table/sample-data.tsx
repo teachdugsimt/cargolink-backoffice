@@ -84,41 +84,28 @@ export const createHead = (withWidth: boolean) => {
 export const head = createHead(true);
 
 export const rows = presidents.map((president: President, index: number) => ({
-  key: `row-${index}-${president.nm}`,
+  key: `row-${index}-${president.name}`,
   cells: [
     {
       content: president.id,
     },
     {
-      key: createKey(president.nm),
-      content: (
-        <NameWrapper>
-          <AvatarWrapper>
-            <Avatar name={president.nm} size="medium" />
-          </AvatarWrapper>
-          <a href="https://atlassian.design">{president.nm}</a>
-        </NameWrapper>
-      ),
+      content: president.phone,
     },
     {
-      key: createKey(president.pp),
-      content: president.pp,
+      content: president.name,
     },
     {
-      key: president.id,
-      content: president.tm,
+      content: president.otp,
     },
     {
-      content: iterateThroughLorem(index),
+      content: president.cm,
     },
     {
-      content: (
-        <DropdownMenu trigger="More" triggerType="button">
-          <DropdownItemGroup>
-            <DropdownItem>{president.nm}</DropdownItem>
-          </DropdownItemGroup>
-        </DropdownMenu>
-      ),
+      content: president.status,
+    },
+    {
+      content: president.regisdate,
     },
   ],
 }));
