@@ -1,38 +1,30 @@
 import React from 'react';
+import { Button, ButtonLink } from '@paljs/ui/Button';
+import moment from 'moment';
 
-import styled from 'styled-components';
+import { users } from './users';
 
-import Avatar from '@atlaskit/avatar';
-import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdown-menu';
+import { Icon } from 'react-icons-kit';
+import { ic_delete } from 'react-icons-kit/md/ic_delete';
 
-import { lorem } from './lorem';
-import { presidents } from './presidents';
-
-interface President {
+interface User {
   id: number;
-  nm: string;
-  pp: string;
-  tm: string;
+  full_name: string;
+  status: string;
+  phone: string;
+  register_date: string;
+  date_approve: string;
 }
 
 function createKey(input: string) {
   return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
 }
 
-function iterateThroughLorem(index: number) {
-  return index > lorem.length ? index - lorem.length : index;
+function sortByDate(input: string) {
+  return moment(input, 'DD-MM-YYYY HH:mm').format('YYYYMMDDHHmm');
 }
 
-const NameWrapper = styled.span`
-  display: flex;
-  align-items: center;
-`;
-
-const AvatarWrapper = styled.div`
-  margin-right: 8px;
-`;
-
-export const caption = '';
+export const caption = `Results found: ${users.length}`;
 
 export const createHead = (withWidth: boolean) => {
   return {
@@ -44,36 +36,39 @@ export const createHead = (withWidth: boolean) => {
         width: withWidth ? 5 : undefined,
       },
       {
-        key: 'party',
+        key: 'phone',
         content: 'Phone number',
         shouldTruncate: true,
         isSortable: true,
-        width: withWidth ? 15 : undefined,
+        // width: withWidth ? 15 : undefined,
       },
       {
-        key: 'term',
-        content: 'Fullname',
+        key: 'full_name',
+        content: 'Full name',
         shouldTruncate: true,
         isSortable: true,
-        width: withWidth ? 10 : undefined,
+        // width: withWidth ? 10 : undefined,
       },
       {
-        key: 'content',
+        key: 'register_date',
         content: 'Register Date',
         shouldTruncate: true,
+        isSortable: true,
       },
       {
-        key: 'Status',
+        key: 'status',
         content: 'Status',
         shouldTruncate: true,
+        isSortable: true,
       },
       {
-        key: 'Date of approval',
+        key: 'date_approve',
         content: 'Date of approval',
         shouldTruncate: true,
+        isSortable: true,
       },
       {
-        key: 'Action',
+        key: 'action',
         content: 'Action',
         shouldTruncate: true,
       },
@@ -83,26 +78,40 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const rows = presidents.map((president: President, index: number) => ({
-  key: `row-${index}-${president.nm}`,
+export const rows = users.map((user: User, index: number) => ({
+  key: `row-${index}-${user.id}`,
   cells: [
     {
-      content: president.id,
+      key: user.id,
+      content: user.id,
     },
     {
-      content: president.pn,
+      key: user.phone,
+      content: user.phone,
     },
     {
-      content: president.nm,
+      key: user.full_name,
+      content: user.full_name,
     },
     {
-      content: president.rd,
+      key: sortByDate(user.register_date),
+      content: user.register_date,
     },
     {
-      content: president.st,
+      key: user.status,
+      content: user.status,
     },
     {
-      content: president.da,
+      key: sortByDate(user.date_approve),
+      content: user.date_approve,
+    },
+    {
+      key: user.id,
+      content: (
+        <Button appearance="ghost" status="Basic" size="Small">
+          <Icon icon={ic_delete} />
+        </Button>
+      ),
     },
   ],
 }));

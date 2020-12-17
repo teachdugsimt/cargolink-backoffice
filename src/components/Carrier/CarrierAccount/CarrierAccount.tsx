@@ -49,7 +49,7 @@ const MultipleRole = (props) => {
             defaultPage={1}
             loadingSpinnerSize="large"
             isLoading={false}
-            isFixedSize
+            // isFixedSize
             defaultSortKey="term"
             defaultSortOrder="ASC"
             onSort={() => console.log('onSort')}
