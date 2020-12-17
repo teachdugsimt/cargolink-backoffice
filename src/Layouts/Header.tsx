@@ -13,7 +13,7 @@ import { Location } from '@reach/router';
 import { breakpointDown } from '@paljs/ui/breakpoints';
 import { useTranslation } from 'react-i18next';
 import LanguageMenu from '../components/LanguageMenu';
-import Logo from '../images/logo.png';
+import Logo from '../images/logo Cargolink white.png';
 
 const HeaderStyle = styled.div`
   display: flex;
