@@ -2,7 +2,7 @@ import { MenuItemType } from '@paljs/ui/types';
 
 const items: MenuItemType[] = [
   {
-    title: 'Home Page',
+    title: 'Dashboard',
     icon: { name: 'home' },
     link: { to: '/dashboard' },
   },
