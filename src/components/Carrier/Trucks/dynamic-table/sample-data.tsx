@@ -2,6 +2,10 @@ import React from 'react';
 import moment from 'moment';
 
 import { trucks } from './trucks';
+import Truck30 from '../../../../images/Truck30.png';
+import Truck9 from '../../../../images/Truck9.png';
+import Truck20 from '../../../../images/Truck20.png';
+import Truck12 from '../../../../images/Truck12.png';
 
 interface Truck {
   id: number;
@@ -33,20 +37,21 @@ export const createHead = (withWidth: boolean) => {
         content: 'Truck brand name',
         shouldTruncate: true,
         isSortable: true,
-        // width: withWidth ? 15 : undefined,
+        // width: withWidth ? 5 : undefined,
       },
       {
         key: 'plate_number',
         content: 'Truck plate number',
         shouldTruncate: true,
         isSortable: true,
-        // width: withWidth ? 10 : undefined,
+        // width: withWidth ? 15 : undefined,
       },
       {
         key: 'type',
         content: 'Truck type',
         shouldTruncate: true,
         isSortable: true,
+        width: withWidth ? 15 : undefined,
       },
       {
         key: 'weigth',
@@ -89,7 +94,19 @@ export const rows = trucks.map((truck: Truck, index: number) => ({
     },
     {
       key: truck.type,
-      content: truck.type,
+      content: (
+        <div>
+          {truck.type == 'Truck30' ? (
+            <img style={{ width: '50%' }} src={Truck30} />
+          ) : truck.type == 'Truck9' ? (
+            <img style={{ width: '50%' }} src={Truck9} />
+          ) : truck.type == 'Truck20' ? (
+            <img style={{ width: '50%' }} src={Truck20} />
+          ) : (
+            <img style={{ width: '50%' }} src={Truck12} />
+          )}
+        </div>
+      ),
     },
     {
       key: truck.weigth,
