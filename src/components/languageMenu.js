@@ -20,7 +20,7 @@ const LanguageMenu = (props) => {
   const classes = useStyles();
 
   const [values, setValues] = useState({
-    language: 'en',
+    language: 'th',
   });
 
   function handleChange(event) {

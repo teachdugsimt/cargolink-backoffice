@@ -11,29 +11,19 @@ const Home = () => {
   return (
     <div>
       <Card size="Large">
-        {/* <SEO title="Home" /> */}
         <CardHeader>
-          <span style={{ fontSize: 20 }}>{t('truckstype')}</span>
+          <span style={{ fontSize: 20 }}>Dashboard</span>
         </CardHeader>
-        <CardBody>
-          <ChartCar />
-        </CardBody>
-      </Card>
-      <Card size="Large">
-        <CardHeader>
-          <span style={{ fontSize: 20 }}>{t('truckRegion')}</span>
-        </CardHeader>
-        <CardBody>
-          <ChartArea />
-        </CardBody>
-      </Card>
-      <Card size="Large">
-        <CardHeader>
-          <span style={{ fontSize: 20 }}>{t('JobsRegion')}</span>
-        </CardHeader>
-        <CardBody>
-          <ChartRegion />
-        </CardBody>
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <CardBody>
+            <span style={{ fontSize: 20, marginBottom: 20 }}>{t('truckstype')}</span>
+            <ChartArea />
+          </CardBody>
+          <CardBody>
+            <span style={{ fontSize: 20, marginBottom: 20 }}>{t('JobsRegion')}</span>
+            <ChartRegion />
+          </CardBody>
+        </div>
       </Card>
     </div>
   );
