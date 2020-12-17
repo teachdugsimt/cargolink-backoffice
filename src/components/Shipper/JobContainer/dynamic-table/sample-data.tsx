@@ -13,9 +13,9 @@ import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
 import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
 
-import vegetables from '../../../images/vegetables.png';
-import charcoal from '../../../images/charcoal.png';
-import woods from '../../../images/woods.png';
+import vegetables from '../../../../images/vegetables.png';
+import charcoal from '../../../../images/charcoal.png';
+import woods from '../../../../images/woods.png';
 interface Jobpost {
   id: number;
   job_no: string;
