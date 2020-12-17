@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import TruckForApproval from '../components/Carrier/Trucks/TruckForApproval/TruckForApproval';
+import TruckForApproval from '../components/Carrier/Trucks/TruckForApproval';
 
 const Trucks = () => {
   const { t } = useTranslation();

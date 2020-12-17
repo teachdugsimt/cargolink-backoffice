@@ -9,6 +9,7 @@ import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 
 const Wrapper = styled.div`
+  margin-top: 10px;
   min-width: 600px;
 `;
 import styled from 'styled-components';
@@ -17,7 +18,7 @@ const Input = styled(InputGroup)`
   margin-bottom: 10px;
 `;
 
-const MultipleRole = (props) => {
+const TruckForApproval = (props) => {
   const { t } = useTranslation();
 
   return (
@@ -38,16 +39,17 @@ const MultipleRole = (props) => {
         </div>
       </CardHeader>
       <CardBody>
+        <span>{caption}</span>
         <Wrapper>
           <DynamicTable
-            caption={caption}
+            // caption={caption}
             head={head}
             rows={rows}
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
             isLoading={false}
-            isFixedSize
+            // isFixedSize
             defaultSortKey="term"
             defaultSortOrder="ASC"
             onSort={() => console.log('onSort')}
@@ -58,4 +60,4 @@ const MultipleRole = (props) => {
     </Card>
   );
 };
-export default MultipleRole;
+export default TruckForApproval;
