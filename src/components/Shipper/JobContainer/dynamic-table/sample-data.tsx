@@ -41,10 +41,6 @@ const NameWrapper = styled.div`
   align-items: center;
 `;
 
-const AvatarWrapper = styled.div`
-  margin-right: 8px;
-`;
-
 const nf = new Intl.NumberFormat();
 
 export const caption = `Results found: ${jobpost.length}`;

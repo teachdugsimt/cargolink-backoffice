@@ -22,14 +22,6 @@ interface Shipper {
 function createKey(input: string) {
   return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
 }
-const NameWrapper = styled.span`
-  display: flex;
-  align-items: center;
-`;
-
-const AvatarWrapper = styled.div`
-  margin-right: 8px;
-`;
 
 export const caption = `Results found: ${shippers.length}`;
 
