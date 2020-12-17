@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
@@ -8,6 +8,7 @@ import { search } from 'react-icons-kit/icomoon/search';
 import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
+import { drivers } from './dynamic-table/drivers';
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -16,11 +17,25 @@ const Wrapper = styled.div`
 import styled from 'styled-components';
 
 const Input = styled(InputGroup)`
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 `;
 
-const DriverForApproval = (props) => {
+const DriverForApproval = (props: any) => {
   const { t } = useTranslation();
+  const [searchValue, setSearchValue] = useState('');
+  const [rowData, setRowData] = useState(rows);
+
+  const onClickSearch = () => {
+    const lowercasedValue = searchValue.toLowerCase().trim();
+    if (lowercasedValue === '') setRowData(rows);
+    else {
+      const filteredData = rows.filter((item) => {
+        const data = item.cells.filter((key) => key.key.toString().toLowerCase() === lowercasedValue);
+        return data && data.length ? true : false;
+      });
+      setRowData(filteredData);
+    }
+  };
 
   return (
     <Card>
@@ -30,10 +45,15 @@ const DriverForApproval = (props) => {
         <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}>{t('drivers')}</span>
         <div style={{ display: 'flex' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <InputGroup>
-              <input placeholder="Enter your search here" />
-            </InputGroup>
-            <Button appearance="filled" status="Basic">
+            <Input>
+              <input
+                type="text"
+                placeholder="Enter your search here"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+            </Input>
+            <Button appearance="filled" status="Basic" onClick={() => onClickSearch()}>
               <Icon size={18} icon={search} />
             </Button>
           </div>
@@ -68,7 +88,7 @@ const DriverForApproval = (props) => {
           <DynamicTable
             // caption={caption}
             head={head}
-            rows={rows}
+            rows={rowData}
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
