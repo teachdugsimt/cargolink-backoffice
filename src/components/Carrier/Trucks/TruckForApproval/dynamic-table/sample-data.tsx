@@ -90,35 +90,22 @@ export const rows = presidents.map((president: President, index: number) => ({
       content: president.id,
     },
     {
-      key: createKey(president.nm),
-      content: (
-        <NameWrapper>
-          <AvatarWrapper>
-            <Avatar name={president.nm} size="medium" />
-          </AvatarWrapper>
-          <a href="https://atlassian.design">{president.nm}</a>
-        </NameWrapper>
-      ),
+      content: president.tbn,
     },
     {
-      key: createKey(president.pp),
-      content: president.pp,
+      content: president.tpn,
     },
     {
-      key: president.id,
-      content: president.tm,
+      content: president.tt,
     },
     {
-      content: iterateThroughLorem(index),
+      content: president.wc,
     },
     {
-      content: (
-        <DropdownMenu trigger="More" triggerType="button">
-          <DropdownItemGroup>
-            <DropdownItem>{president.nm}</DropdownItem>
-          </DropdownItemGroup>
-        </DropdownMenu>
-      ),
+      content: president.cn,
+    },
+    {
+      content: president.rd,
     },
   ],
 }));
