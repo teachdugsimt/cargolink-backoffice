@@ -12,7 +12,7 @@ const Home = () => {
     <div>
       <Card size="Large">
         <CardHeader>
-          <span style={{ fontSize: 20 }}>Dashboard</span>
+          <span style={{ fontSize: 20 }}>{t('dashboard')}</span>
         </CardHeader>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           <CardBody>

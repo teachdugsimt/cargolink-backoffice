@@ -40,7 +40,7 @@ const DriverForApproval = (props) => {
         </div>
       </CardHeader>
       <CardBody>
-        <Row style={{ padding: 5 }}>
+        <Row style={{ padding: 5, marginBottom: 10 }}>
           <Button
             appearance="filled"
             status="Basic"

@@ -7,6 +7,7 @@ import { Icon } from 'react-icons-kit';
 import { search } from 'react-icons-kit/icomoon/search';
 import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
+import Row from '@paljs/ui/Row';
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -39,6 +40,28 @@ const TruckForApproval = (props) => {
         </div>
       </CardHeader>
       <CardBody>
+        <Row style={{ padding: 5, marginBottom: 10 }}>
+          <Button
+            appearance="filled"
+            status="Basic"
+            size="Small"
+            style={{
+              marginRight: 10,
+              color: 'rgb(255, 255, 255)',
+              backgroundColor: 'rgb(255, 170, 0',
+              borderColor: 'rgb(255, 170, 0',
+            }}
+          >
+            PENDING
+          </Button>
+          <Button
+            appearance="filled"
+            status="Basic"
+            style={{ color: 'rgb(255, 255, 255)', backgroundColor: 'rgb(255, 170, 0', borderColor: 'rgb(255, 170, 0' }}
+          >
+            APPROVED
+          </Button>
+        </Row>
         <span>{caption}</span>
         <Wrapper>
           <DynamicTable

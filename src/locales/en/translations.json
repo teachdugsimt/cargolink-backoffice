@@ -8,5 +8,6 @@
     "truckRegion":"Trucks types in each region",
     "JobsRegion":"Jobs in each region",
     "shipperaccount":"Shipper account",
-    "carrieraccount":"Carrier account"
+    "carrieraccount":"Carrier account",
+    "dashboard":"Dashboard"
   }
