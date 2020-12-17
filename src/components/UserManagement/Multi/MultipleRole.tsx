@@ -41,8 +41,8 @@ const MultipleRole = () => {
         </div>
       </CardHeader>
       <CardBody>
-        <Row style={{ padding: 5, marginBottom: 10 }}>
-          <Button
+        <Row style={{ padding: 5, marginBottom: 10, justifyContent: 'space-between' }}>
+          {/* <Button
             appearance="filled"
             status="Basic"
             size="Small"
@@ -62,12 +62,24 @@ const MultipleRole = () => {
             style={{ color: 'rgb(255, 255, 255)', backgroundColor: 'rgb(255, 170, 0', borderColor: 'rgb(255, 170, 0' }}
           >
             APPROVED
+          </Button> */}
+          <span>{caption}</span>
+          <Button
+            appearance="filled"
+            status="Basic"
+            size="Small"
+            style={{
+              marginRight: 10,
+              color: 'rgb(0, 214, 143)',
+              backgroundColor: 'rgba(0, 214, 143, 0.08)',
+              borderColor: 'rgb(0, 214, 143)',
+            }}
+          >
+            + ADD NEW ACCOUNT
           </Button>
         </Row>
-        <span>{caption}</span>
         <Wrapper>
           <DynamicTable
-            // caption={caption}
             head={head}
             rows={rows}
             rowsPerPage={10}
