@@ -30,7 +30,7 @@ const DriverForApproval = (props: any) => {
     if (lowercasedValue === '') setRowData(rows);
     else {
       const filteredData = rows.filter((item) => {
-        const data = item.cells.filter((key) => key.key.toString().toLowerCase() === lowercasedValue);
+        const data = item.cells.filter((key) => key.key.toString().toLowerCase().includes(lowercasedValue));
         return data && data.length ? true : false;
       });
       setRowData(filteredData);
