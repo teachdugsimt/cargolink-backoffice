@@ -3,14 +3,9 @@ import React from 'react';
 import { Button, ButtonLink } from '@paljs/ui/Button';
 import styled from 'styled-components';
 
-import Avatar from '@atlaskit/avatar';
-import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdown-menu';
-
 import { jobpost } from './jobpost';
 
 import { Icon } from 'react-icons-kit';
-import { edit } from 'react-icons-kit/fa/edit';
-import { ic_delete } from 'react-icons-kit/md/ic_delete';
 import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
 
 import vegetables from '../../../../images/vegetables.png';
@@ -44,10 +39,6 @@ const NameWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const AvatarWrapper = styled.div`
-  margin-right: 8px;
 `;
 
 const nf = new Intl.NumberFormat();
@@ -159,18 +150,5 @@ export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
     {
       content: jobpost.status,
     },
-    // {
-    //   key: createKey(president.pp),
-    //   content: (
-    //     <div>
-    //       <Button appearance="ghost" status="Basic" size="Small">
-    //         <Icon icon={edit} />
-    //       </Button>
-    //       <Button appearance="ghost" status="Basic" size="Small">
-    //         <Icon icon={ic_delete} />
-    //       </Button>
-    //     </div>
-    //   ),
-    // },
   ],
 }));

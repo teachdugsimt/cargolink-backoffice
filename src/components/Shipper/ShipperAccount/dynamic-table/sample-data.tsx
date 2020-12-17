@@ -3,41 +3,27 @@ import React from 'react';
 import { Button, ButtonLink } from '@paljs/ui/Button';
 import styled from 'styled-components';
 
-import Avatar from '@atlaskit/avatar';
-import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdown-menu';
-
-import { lorem } from './lorem';
-import { presidents } from './presidents';
+import { shippers } from './shippers';
 
 import { Icon } from 'react-icons-kit';
 import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
 
-interface President {
+interface Shipper {
   id: number;
-  nm: string;
-  pp: string;
-  tm: string;
+  full_name: string;
+  member_type: string;
+  phone: string;
+  register_date: string;
+  date_approve: string;
+  sales_code: string;
 }
 
 function createKey(input: string) {
   return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
 }
 
-function iterateThroughLorem(index: number) {
-  return index > lorem.length ? index - lorem.length : index;
-}
-
-const NameWrapper = styled.span`
-  display: flex;
-  align-items: center;
-`;
-
-const AvatarWrapper = styled.div`
-  margin-right: 8px;
-`;
-
-export const caption = `Results found: ${presidents.length}`;
+export const caption = `Results found: ${shippers.length}`;
 
 export const createHead = (withWidth: boolean) => {
   return {
@@ -49,41 +35,45 @@ export const createHead = (withWidth: boolean) => {
         // width: withWidth ? 10 : undefined,
       },
       {
-        key: 'party',
+        key: 'phone',
         content: 'Phone number',
         shouldTruncate: true,
         isSortable: true,
         // width: withWidth ? 15 : undefined,
       },
       {
-        key: 'term',
+        key: 'full_name',
         content: 'Full name',
         shouldTruncate: true,
         isSortable: true,
         // width: withWidth ? 15 : undefined,
       },
       {
-        key: 'content',
+        key: 'member_type',
         content: 'Member Type',
         shouldTruncate: true,
+        isSortable: true,
       },
       {
-        key: 'content',
+        key: 'register_date',
         content: 'Register Date',
         shouldTruncate: true,
+        isSortable: true,
       },
       {
-        key: 'content',
+        key: 'date_approve',
         content: 'Date of approval',
         shouldTruncate: true,
+        isSortable: true,
       },
       {
-        key: 'content',
+        key: 'sales_code',
         content: 'Sales code',
         shouldTruncate: true,
+        isSortable: true,
       },
       {
-        key: 'content',
+        key: 'action',
         content: 'Action',
         shouldTruncate: true,
       },
@@ -93,23 +83,49 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const rows = presidents.map((president: President, index: number) => ({
-  key: `row-${index}-${president.nm}`,
+export const rows = shippers.map((shipper: Shipper, index: number) => ({
+  key: `row-${index}-${shipper.id}`,
   cells: [
     {
-      content: president.id,
+      key: shipper.id,
+      content: shipper.id,
     },
     {
-      content: president.pn,
+      key: shipper.phone,
+      content: shipper.phone,
     },
     {
-      content: president.nm,
+      key: shipper.full_name,
+      content: shipper.full_name,
     },
     {
-      content: president.mt,
+      key: shipper.member_type,
+      content: shipper.member_type,
     },
     {
-      content: president.rd,
+      key: shipper.register_date,
+      content: shipper.register_date,
+    },
+    {
+      key: shipper.date_approve,
+      content: shipper.date_approve,
+    },
+    {
+      key: shipper.sales_code,
+      content: shipper.sales_code,
+    },
+    {
+      key: shipper.id,
+      content: (
+        <div>
+          <Button appearance="ghost" status="Basic" size="Small">
+            <Icon icon={edit} />
+          </Button>
+          <Button appearance="ghost" status="Basic" size="Small">
+            <Icon icon={ic_delete} />
+          </Button>
+        </div>
+      ),
     },
   ],
 }));
