@@ -18,7 +18,7 @@ const Input = styled(InputGroup)`
   margin-bottom: 10px;
 `;
 
-const MultipleRole = (props) => {
+const DriverForApproval = (props) => {
   const { t } = useTranslation();
 
   return (
@@ -80,4 +80,4 @@ const MultipleRole = (props) => {
     </Card>
   );
 };
-export default MultipleRole;
+export default DriverForApproval;
