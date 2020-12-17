@@ -6,6 +6,8 @@
     "userManagement":"จัดการผู้ใช้งาน",
     "truckstype":"ประเภทรถบรรทุก",
     "truckRegion":"ประเภทรถบรรทุกในแต่ละภูมิภาค",
-    "JobsRegion":"งานในแต่ภูมิภาค"
+    "JobsRegion":"งานในแต่ภูมิภาค",
+    "shipperaccount":"บัญชีผู้จัดส่ง",
+    "carrieraccount":"บัญชีผู้ให้บริการ"
     
   }
