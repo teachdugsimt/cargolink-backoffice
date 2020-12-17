@@ -66,14 +66,13 @@ const MultipleRole = () => {
           </Button> */}
           <span style={{ display: 'flex', alignItems: 'center' }}>{caption}</span>
           <Button
-            appearance="filled"
-            status="Basic"
+            appearance="outline"
+            status="Success"
             size="Small"
             style={{
               marginRight: 10,
-              color: 'rgb(0, 214, 143)',
-              backgroundColor: 'rgba(0, 214, 143, 0.08)',
-              borderColor: 'rgb(0, 214, 143)',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
             <Icon icon={ic_add} /> ADD NEW ACCOUNT
