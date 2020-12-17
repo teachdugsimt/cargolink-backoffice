@@ -22,8 +22,10 @@ const MultipleRole = (props) => {
 
   return (
     <Card>
-      <CardHeader style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-        <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}></span>
+      <CardHeader
+        style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+      >
+        <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}>{t('trucks')}</span>
         <div style={{ display: 'flex' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <InputGroup>
