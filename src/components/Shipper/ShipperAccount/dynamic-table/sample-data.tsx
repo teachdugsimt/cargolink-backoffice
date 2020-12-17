@@ -97,49 +97,19 @@ export const rows = presidents.map((president: President, index: number) => ({
   key: `row-${index}-${president.nm}`,
   cells: [
     {
-      key: createKey(president.nm),
       content: president.id,
     },
     {
-      key: createKey(president.pp),
+      content: president.pn,
+    },
+    {
       content: president.nm,
     },
     {
-      key: president.id,
-      content: president.pp,
+      content: president.mt,
     },
     {
-      content: iterateThroughLorem(index),
+      content: president.rd,
     },
-    {
-      content: (
-        <DropdownMenu trigger="More" triggerType="button">
-          <DropdownItemGroup>
-            <DropdownItem>{president.nm}</DropdownItem>
-          </DropdownItemGroup>
-        </DropdownMenu>
-      ),
-    },
-    // {
-    //   key: createKey(president.pp),
-    //   content: president.pp,
-    // },
-    // {
-    //   key: createKey(president.pp),
-    //   content: president.pp,
-    // },
-    // {
-    //   key: createKey(president.pp),
-    //   content: (
-    //     <div>
-    //       <Button appearance="ghost" status="Basic" size="Small">
-    //         <Icon icon={edit} />
-    //       </Button>
-    //       <Button appearance="ghost" status="Basic" size="Small">
-    //         <Icon icon={ic_delete} />
-    //       </Button>
-    //     </div>
-    //   ),
-    // },
   ],
 }));

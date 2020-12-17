@@ -48,14 +48,14 @@ export const createHead = (withWidth: boolean) => {
         content: 'Phone number',
         shouldTruncate: true,
         isSortable: true,
-        width: withWidth ? 15 : undefined,
+        width: withWidth ? 12 : undefined,
       },
       {
         key: 'term',
         content: 'Full name',
         shouldTruncate: true,
         isSortable: true,
-        width: withWidth ? 10 : undefined,
+        width: withWidth ? 15 : undefined,
       },
       {
         key: 'content',

@@ -39,7 +39,7 @@ const JobContainer = (props: any) => {
         </div>
       </CardHeader>
       <CardBody>
-        <span>{caption}</span>
+        {/* <span>{caption}</span> */}
         <Wrapper>
           <DynamicTable
             //   caption={caption}
