@@ -3,8 +3,8 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
-import united_kingdom from '../assets/images/united-kingdom.png';
-import thailand from '../assets/images/thailand.png';
+import united_kingdom from '../images/united-kingdom.png';
+import thailand from '../images/thailand.png';
 
 const useStyles = makeStyles({
   selectFocus: {
