@@ -4,6 +4,7 @@ import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
 import { caption, head, rows } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
+import { ic_add } from 'react-icons-kit/md/ic_add';
 import { search } from 'react-icons-kit/icomoon/search';
 import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
@@ -63,7 +64,7 @@ const MultipleRole = () => {
           >
             APPROVED
           </Button> */}
-          <span>{caption}</span>
+          <span style={{ display: 'flex', alignItems: 'center' }}>{caption}</span>
           <Button
             appearance="filled"
             status="Basic"
@@ -75,7 +76,7 @@ const MultipleRole = () => {
               borderColor: 'rgb(0, 214, 143)',
             }}
           >
-            + ADD NEW ACCOUNT
+            <Icon icon={ic_add} /> ADD NEW ACCOUNT
           </Button>
         </Row>
         <Wrapper>
