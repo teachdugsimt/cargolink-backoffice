@@ -18,7 +18,7 @@ interface Truck {
 }
 
 function sortByDate(input: string) {
-  return moment(input, 'DD-MM-YYYY HH:mm').format('YYYYMMDDHHmm');
+  return moment(input, 'DD-MM-YYYY HH:mm').format('ll');
 }
 
 export const caption = `Results found: ${trucks.length}`;
@@ -97,13 +97,13 @@ export const rows = trucks.map((truck: Truck, index: number) => ({
       content: (
         <div>
           {truck.type == 'Truck30' ? (
-            <img style={{ width: '50%' }} src={Truck30} />
+            <img style={{ height: 30 }} src={Truck30} />
           ) : truck.type == 'Truck9' ? (
-            <img style={{ width: '50%' }} src={Truck9} />
+            <img style={{ height: 30 }} src={Truck9} />
           ) : truck.type == 'Truck20' ? (
-            <img style={{ width: '50%' }} src={Truck20} />
+            <img style={{ height: 30 }} src={Truck20} />
           ) : (
-            <img style={{ width: '50%' }} src={Truck12} />
+            <img style={{ height: 30 }} src={Truck12} />
           )}
         </div>
       ),
@@ -118,7 +118,7 @@ export const rows = trucks.map((truck: Truck, index: number) => ({
     },
     {
       key: sortByDate(truck.register_date),
-      content: truck.register_date,
+      content: moment(truck.register_date, 'DD-MM-YYYY HH:mm').format('ll'),
     },
   ],
 }));

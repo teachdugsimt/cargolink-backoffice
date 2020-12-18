@@ -21,7 +21,7 @@ function createKey(input: string) {
 }
 
 function sortByDate(input: string) {
-  return moment(input, 'DD-MM-YYYY HH:mm').format('YYYYMMDDHHmm');
+  return moment(input, 'DD-MM-YYYY HH:mm').format('ll');
 }
 
 export const caption = `Results found: ${users.length}`;
@@ -95,7 +95,7 @@ export const rows = users.map((user: User, index: number) => ({
     },
     {
       key: sortByDate(user.register_date),
-      content: user.register_date,
+      content: moment(user.register_date, 'DD-MM-YYYY HH:mm').format('ll'),
     },
     {
       key: user.status,
@@ -103,7 +103,7 @@ export const rows = users.map((user: User, index: number) => ({
     },
     {
       key: sortByDate(user.date_approve),
-      content: user.date_approve,
+      content: moment(user.date_approve, 'DD-MM-YYYY HH:mm').format('ll'),
     },
     {
       key: user.id,

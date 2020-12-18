@@ -7,6 +7,7 @@ import { jobpost } from './jobpost';
 
 import { Icon } from 'react-icons-kit';
 import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
+import moment from 'moment';
 
 import vegetables from '../../../../images/vegetables.png';
 import charcoal from '../../../../images/charcoal.png';
@@ -31,9 +32,13 @@ interface Jobpost {
   status: string;
 }
 
-function createKey(input: string) {
-  return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
-}
+// function sortByDate(input: string) {
+//   return moment(input).format('LLL');
+// }
+
+// function createKey(input: string) {
+//   return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
+// }
 
 const NameWrapper = styled.div`
   display: flex;
@@ -121,8 +126,14 @@ export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
     {
       content: (
         <div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              borderBottom: '2px solid black',
+            }}
+          >
+            <span style={{ padding: 2 }}>
               <span style={{ fontWeight: 'bold' }}>From: </span>
               {`${jobpost.route.from.address}`}
             </span>
@@ -132,7 +143,7 @@ export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
             </span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span>
+            <span style={{ padding: 2 }}>
               <span style={{ fontWeight: 'bold' }}>To: </span>
               {`${jobpost.route.to.address}`}
             </span>
@@ -145,7 +156,8 @@ export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
       ),
     },
     {
-      content: jobpost.valid_unit,
+      key: moment(jobpost.valid_unit, 'DD-MM-YYYY HH:mm').format('ll'),
+      content: moment(jobpost.valid_unit, 'DD-MM-YYYY HH:mm').format('ll'),
     },
     {
       content: jobpost.status,

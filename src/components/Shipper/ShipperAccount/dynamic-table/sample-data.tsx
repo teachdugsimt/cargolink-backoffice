@@ -3,6 +3,7 @@ import React from 'react';
 import { Button, ButtonLink } from '@paljs/ui/Button';
 
 import { shippers } from './shippers';
+import moment from 'moment';
 
 import { Icon } from 'react-icons-kit';
 import { edit } from 'react-icons-kit/fa/edit';
@@ -20,6 +21,10 @@ interface Shipper {
 
 function createKey(input: string) {
   return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
+}
+
+function sortByDate(input: string) {
+  return moment(input, 'DD-MM-YYYY HH:mm').format('ll');
 }
 
 export const caption = `Results found: ${shippers.length}`;
@@ -102,8 +107,8 @@ export const rows = shippers.map((shipper: Shipper, index: number) => ({
       content: shipper.member_type,
     },
     {
-      key: shipper.register_date,
-      content: shipper.register_date,
+      key: sortByDate(shipper.register_date),
+      content: moment(shipper.register_date, 'DD-MM-YYYY HH:mm').format('ll'),
     },
     {
       key: shipper.date_approve,

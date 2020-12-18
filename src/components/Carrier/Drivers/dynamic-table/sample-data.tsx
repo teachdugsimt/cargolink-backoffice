@@ -12,9 +12,8 @@ interface Driver {
   status: string;
   register_date: string;
 }
-
 function sortByDate(input: string) {
-  return moment(input, 'DD-MM-YYYY HH:mm').format('YYYYMMDDHHmm');
+  return moment(input, 'DD-MM-YYYY HH:mm').format('ll');
 }
 
 export const caption = `Results found: ${drivers.length}`;
@@ -101,7 +100,7 @@ export const rows = drivers.map((driver: Driver, index: number) => ({
     },
     {
       key: sortByDate(driver.register_date),
-      content: driver.register_date,
+      content: moment(driver.register_date, 'DD-MM-YYYY HH:mm').format('ll'),
     },
   ],
 }));

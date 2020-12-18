@@ -6,6 +6,7 @@ import { carriers } from './carriers';
 import { Icon } from 'react-icons-kit';
 import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
+import moment from 'moment';
 
 interface Carrier {
   id: number;
@@ -15,6 +16,10 @@ interface Carrier {
   register_date: string;
   sales_code: string;
   date_approve: string;
+}
+
+function sortByDate(input: string) {
+  return moment(input, 'DD-MM-YYYY HH:mm').format('ll');
 }
 
 function createKey(input: string) {
@@ -97,8 +102,8 @@ export const rows = carriers.map((carrier: Carrier, index: number) => ({
       content: carrier.member_type,
     },
     {
-      key: carrier.register_date,
-      content: carrier.register_date,
+      key: sortByDate(carrier.register_date),
+      content: moment(carrier.register_date, 'DD-MM-YYYY HH:mm').format('ll'),
     },
     {
       key: carrier.date_approve,
