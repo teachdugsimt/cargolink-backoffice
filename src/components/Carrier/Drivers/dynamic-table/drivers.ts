@@ -5,7 +5,7 @@ export const drivers = [
     name: 'สมหญิง กิ่งแก้ว',
     otp: 132874,
     carrier_name: 'บริษัท วินทรานสปอร์ต จำกัด',
-    status: '',
+    status: 'Pending',
     register_date: '13-04-2020 12:52',
   },
   {
@@ -14,7 +14,7 @@ export const drivers = [
     name: 'สมชาย กิ่งแก้ว',
     otp: 145874,
     carrier_name: 'บริษัท วินทรานสปอร์ต จำกัด',
-    status: '',
+    status: 'Pending',
     register_date: '13-04-2020 12:52',
   },
   {

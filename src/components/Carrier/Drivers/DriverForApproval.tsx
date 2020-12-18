@@ -26,6 +26,7 @@ const DriverForApproval = (props: any) => {
   const [rowData, setRowData] = useState(rows);
   const [panding, setPanding] = useState(false);
   const [approved, setApproved] = useState(false);
+  const [all, setAll] = useState(false);
 
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();
@@ -42,6 +43,7 @@ const DriverForApproval = (props: any) => {
   const onClickPending = () => {
     setPanding(true);
     setApproved(false);
+    setAll(false);
     const filteredData = rows.filter((item) => {
       const data = item.cells.filter((key) => key.key == 'Pending');
       return data && data.length ? true : false;
@@ -52,12 +54,19 @@ const DriverForApproval = (props: any) => {
   const onClickApproved = () => {
     setApproved(true);
     setPanding(false);
-
+    setAll(false);
     const filteredData = rows.filter((item) => {
       const data = item.cells.filter((key) => key.key == 'Approved');
       return data && data.length ? true : false;
     });
     setRowData(filteredData);
+  };
+
+  const onClickAll = () => {
+    setAll(true);
+    setPanding(false);
+    setApproved(false);
+    setRowData(rows);
   };
 
   return (
@@ -84,6 +93,17 @@ const DriverForApproval = (props: any) => {
       </CardHeader>
       <CardBody>
         <Row style={{ padding: 5, marginBottom: 10 }}>
+          <Button
+            appearance={all == true ? 'filled' : 'outline'}
+            status="Success"
+            size="Small"
+            onClick={() => onClickAll()}
+            style={{
+              marginRight: 10,
+            }}
+          >
+            ALL
+          </Button>
           <Button
             appearance={panding == true ? 'filled' : 'outline'}
             status="Warning"

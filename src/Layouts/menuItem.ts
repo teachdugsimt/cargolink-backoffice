@@ -14,23 +14,23 @@ const items: MenuItemType[] = [
     title: 'Shipper',
     icon: { name: 'archive' },
     children: [
-      { title: 'Shipper account', link: { to: '/ShipperAccount' } },
-      { title: 'Jobs', link: { to: '/Jobs' } },
+      { title: 'Shipper account', link: { to: '/shipper-account' } },
+      { title: 'Jobs', link: { to: '/jobs' } },
     ],
   },
   {
     title: 'Carrier',
     icon: { name: 'car' },
     children: [
-      { title: 'Carrier account', link: { to: '/CarrierAccount' } },
-      { title: 'Trucks', link: { to: '/Trucks' } },
-      { title: 'Drivers', link: { to: '/Drivers' } },
+      { title: 'Carrier account', link: { to: '/carrier-account' } },
+      { title: 'Trucks', link: { to: '/trucks' } },
+      { title: 'Drivers', link: { to: '/drivers' } },
     ],
   },
   {
     title: 'User Management',
     icon: { name: 'people' },
-    link: { to: '/UserManagement' },
+    link: { to: '/user-management' },
   },
 ];
 
