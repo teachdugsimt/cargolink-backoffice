@@ -129,12 +129,11 @@ export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
     {
       key: jobpost.route.from.address,
       content: (
-        <div>
+        <div style={{ borderBottom: '2px solid black' }}>
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
-              borderBottom: '2px solid black',
             }}
           >
             <span style={{ padding: 2 }}>
@@ -143,7 +142,7 @@ export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
             </span>
             <span>
               <Icon style={{ color: '#f8bc18' }} icon={ic_access_time} />
-              {` ${jobpost.route.from.date}`}
+              {` ${moment(jobpost.route.from.date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
             </span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -153,7 +152,7 @@ export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
             </span>
             <span>
               <Icon style={{ color: '#f8bc18' }} icon={ic_access_time} />
-              {` ${jobpost.route.to.date}`}
+              {` ${moment(jobpost.route.to.date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
             </span>
           </div>
         </div>
