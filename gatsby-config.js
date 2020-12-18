@@ -27,7 +27,7 @@ module.exports = {
       options: {
         name: 'oah-admin',
         short_name: 'OAH',
-        start_url: '/Dashboard',
+        start_url: '/dashboard',
         display: 'minimal-ui',
         icon: 'src/images/OAH.png', // This path is relative to the root of the site.
       },

@@ -25,6 +25,8 @@ const MultipleRole = () => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   const [rowData, setRowData] = useState(rows);
+  // const [panding, setPanding] = useState(false)
+  // const [approved, setApproved] = useState(false)
 
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();
@@ -37,6 +39,27 @@ const MultipleRole = () => {
       setRowData(filteredData);
     }
   };
+
+  // const onClickPending = () => {
+  //   setPanding(true)
+  //   setApproved(false)
+  //   const filteredData = rows.filter((item) => {
+  //     const data = item.cells.filter((key) => key.key == 'Pending');
+  //     return data && data.length ? true : false;
+  //   });
+  //   setRowData(filteredData);
+  // };
+
+  // const onClickApproved = () => {
+  //   setApproved(true)
+  //   setPanding(false)
+
+  //   const filteredData = rows.filter((item) => {
+  //     const data = item.cells.filter((key) => key.key == 'Approved');
+  //     return data && data.length ? true : false;
+  //   });
+  //   setRowData(filteredData);
+  // };
 
   return (
     <Card>

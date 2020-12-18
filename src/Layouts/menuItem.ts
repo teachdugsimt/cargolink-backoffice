@@ -4,7 +4,7 @@ const items: MenuItemType[] = [
   {
     title: 'Dashboard',
     icon: { name: 'home' },
-    link: { to: '/Dashboard' },
+    link: { to: '/dashboard' },
   },
   // {
   //   title: 'FEATURES',

@@ -24,6 +24,8 @@ const DriverForApproval = (props: any) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   const [rowData, setRowData] = useState(rows);
+  const [panding, setPanding] = useState(false);
+  const [approved, setApproved] = useState(false);
 
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();
@@ -35,6 +37,27 @@ const DriverForApproval = (props: any) => {
       });
       setRowData(filteredData);
     }
+  };
+
+  const onClickPending = () => {
+    setPanding(true);
+    setApproved(false);
+    const filteredData = rows.filter((item) => {
+      const data = item.cells.filter((key) => key.key == 'Pending');
+      return data && data.length ? true : false;
+    });
+    setRowData(filteredData);
+  };
+
+  const onClickApproved = () => {
+    setApproved(true);
+    setPanding(false);
+
+    const filteredData = rows.filter((item) => {
+      const data = item.cells.filter((key) => key.key == 'Approved');
+      return data && data.length ? true : false;
+    });
+    setRowData(filteredData);
   };
 
   return (
@@ -62,23 +85,21 @@ const DriverForApproval = (props: any) => {
       <CardBody>
         <Row style={{ padding: 5, marginBottom: 10 }}>
           <Button
-            appearance="filled"
-            status="Basic"
+            appearance={panding == true ? 'filled' : 'outline'}
+            status="Warning"
             size="Small"
             style={{
               marginRight: 10,
-              color: 'rgb(255, 255, 255)',
-              backgroundColor: 'rgb(255, 170, 0',
-              borderColor: 'rgb(255, 170, 0',
             }}
+            onClick={() => onClickPending()}
           >
             PENDING
           </Button>
           <Button
-            appearance="filled"
-            status="Basic"
+            appearance={approved == true ? 'filled' : 'outline'}
+            status="Warning"
             size="Small"
-            style={{ color: 'rgb(255, 255, 255)', backgroundColor: 'rgb(255, 170, 0', borderColor: 'rgb(255, 170, 0' }}
+            onClick={() => onClickApproved()}
           >
             APPROVED
           </Button>

@@ -6,7 +6,7 @@ export default function Index() {
 
   useEffect(() => {
     if (token == true) {
-      navigate('/Dashboard');
+      navigate('/dashboard');
     } else {
       navigate('/auth/login');
     }
