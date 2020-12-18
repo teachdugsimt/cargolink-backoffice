@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
@@ -21,7 +21,20 @@ const Input = styled(InputGroup)`
 
 const JobContainer = (props: any) => {
   const { t } = useTranslation();
-  console.log('props', props);
+  const [searchValue, setSearchValue] = useState('');
+  const [rowData, setRowData] = useState(rows);
+
+  const onClickSearch = () => {
+    const lowercasedValue = searchValue.toLowerCase().trim();
+    if (lowercasedValue === '') setRowData(rows);
+    else {
+      const filteredData = rows.filter((item) => {
+        const data = item.cells.filter((key) => key.key.toString().toLowerCase().includes(lowercasedValue));
+        return data && data.length ? true : false;
+      });
+      setRowData(filteredData);
+    }
+  };
 
   return (
     <Card>
@@ -32,9 +45,14 @@ const JobContainer = (props: any) => {
         <div style={{ display: 'flex' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <InputGroup>
-              <input placeholder="Enter your search here" />
+              <input
+                type="text"
+                placeholder="Enter your search here"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
             </InputGroup>
-            <Button appearance="filled" status="Basic">
+            <Button appearance="filled" status="Basic" onClick={() => onClickSearch()}>
               <Icon size={18} icon={search} />
             </Button>
           </div>
@@ -64,12 +82,12 @@ const JobContainer = (props: any) => {
             APPROVED
           </Button>
         </Row>
-        <span>{caption}</span>
+        <span>{`Results found: ${rowData.length}`}</span>
         <Wrapper>
           <DynamicTable
             //   caption={caption}
             head={head}
-            rows={rows}
+            rows={rowData}
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"

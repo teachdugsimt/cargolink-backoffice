@@ -36,9 +36,9 @@ interface Jobpost {
 //   return moment(input).format('LLL');
 // }
 
-// function createKey(input: string) {
-//   return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
-// }
+function createKey(input: string) {
+  return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
+}
 
 const NameWrapper = styled.div`
   display: flex;
@@ -99,6 +99,7 @@ export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
   key: `row-${index}-${jobpost.id}`,
   cells: [
     {
+      key: jobpost.job_no,
       content: (
         <NameWrapper>
           <span style={{ padding: '10px 0px', color: '#f8bc18', fontWeight: 'bold' }}>{jobpost.job_no}</span>
@@ -107,6 +108,7 @@ export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
       ),
     },
     {
+      key: jobpost.name_shipper,
       content: jobpost.name_shipper,
     },
     {
@@ -124,6 +126,7 @@ export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
       ),
     },
     {
+      key: jobpost.route.from.address,
       content: (
         <div>
           <div
@@ -160,6 +163,7 @@ export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
       content: moment(jobpost.valid_unit, 'DD-MM-YYYY HH:mm').format('ll'),
     },
     {
+      key: jobpost.status,
       content: jobpost.status,
     },
   ],
