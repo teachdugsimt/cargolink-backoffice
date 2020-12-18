@@ -2,7 +2,8 @@ import React from 'react';
 import moment from 'moment';
 
 import { drivers } from './drivers';
-
+import 'moment/locale/th'; // without this line it didn't work
+moment.locale('th');
 interface Driver {
   id: number;
   mobile_number: string;
@@ -13,7 +14,7 @@ interface Driver {
   register_date: string;
 }
 function sortByDate(input: string) {
-  return moment(input, 'DD-MM-YYYY HH:mm').format('ll');
+  return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
 
 export const caption = `Results found: ${drivers.length}`;
@@ -100,7 +101,7 @@ export const rows = drivers.map((driver: Driver, index: number) => ({
     },
     {
       key: sortByDate(driver.register_date),
-      content: moment(driver.register_date, 'DD-MM-YYYY HH:mm').format('ll'),
+      content: moment(driver.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
     },
   ],
 }));

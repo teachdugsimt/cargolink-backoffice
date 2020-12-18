@@ -6,7 +6,8 @@ import { users } from './users';
 
 import { Icon } from 'react-icons-kit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
-
+import 'moment/locale/th'; // without this line it didn't work
+moment.locale('th');
 interface User {
   id: number;
   full_name: string;
@@ -21,7 +22,7 @@ function createKey(input: string) {
 }
 
 function sortByDate(input: string) {
-  return moment(input, 'DD-MM-YYYY HH:mm').format('ll');
+  return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
 
 export const caption = `Results found: ${users.length}`;
@@ -95,7 +96,7 @@ export const rows = users.map((user: User, index: number) => ({
     },
     {
       key: sortByDate(user.register_date),
-      content: moment(user.register_date, 'DD-MM-YYYY HH:mm').format('ll'),
+      content: moment(user.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
     },
     {
       key: user.status,
@@ -103,7 +104,7 @@ export const rows = users.map((user: User, index: number) => ({
     },
     {
       key: sortByDate(user.date_approve),
-      content: moment(user.date_approve, 'DD-MM-YYYY HH:mm').format('ll'),
+      content: moment(user.date_approve, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
     },
     {
       key: user.id,

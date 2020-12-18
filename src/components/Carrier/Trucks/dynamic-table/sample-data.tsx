@@ -6,7 +6,8 @@ import Truck30 from '../../../../images/Truck30.png';
 import Truck9 from '../../../../images/Truck9.png';
 import Truck20 from '../../../../images/Truck20.png';
 import Truck12 from '../../../../images/Truck12.png';
-
+import 'moment/locale/th'; // without this line it didn't work
+moment.locale('th');
 interface Truck {
   id: number;
   name: string;
@@ -18,7 +19,7 @@ interface Truck {
 }
 
 function sortByDate(input: string) {
-  return moment(input, 'DD-MM-YYYY HH:mm').format('ll');
+  return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
 
 export const caption = `Results found: ${trucks.length}`;
@@ -118,7 +119,7 @@ export const rows = trucks.map((truck: Truck, index: number) => ({
     },
     {
       key: sortByDate(truck.register_date),
-      content: moment(truck.register_date, 'DD-MM-YYYY HH:mm').format('ll'),
+      content: moment(truck.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
     },
   ],
 }));

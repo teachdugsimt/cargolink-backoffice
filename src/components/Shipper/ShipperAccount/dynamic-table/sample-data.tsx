@@ -8,7 +8,8 @@ import moment from 'moment';
 import { Icon } from 'react-icons-kit';
 import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
-
+import 'moment/locale/th'; // without this line it didn't work
+moment.locale('th');
 interface Shipper {
   id: number;
   full_name: string;
@@ -24,7 +25,7 @@ function createKey(input: string) {
 }
 
 function sortByDate(input: string) {
-  return moment(input, 'DD-MM-YYYY HH:mm').format('ll');
+  return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
 
 export const caption = `Results found: ${shippers.length}`;
@@ -108,7 +109,7 @@ export const rows = shippers.map((shipper: Shipper, index: number) => ({
     },
     {
       key: sortByDate(shipper.register_date),
-      content: moment(shipper.register_date, 'DD-MM-YYYY HH:mm').format('ll'),
+      content: moment(shipper.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
     },
     {
       key: shipper.date_approve,

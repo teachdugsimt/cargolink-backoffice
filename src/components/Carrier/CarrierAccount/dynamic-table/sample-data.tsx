@@ -7,7 +7,8 @@ import { Icon } from 'react-icons-kit';
 import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
 import moment from 'moment';
-
+import 'moment/locale/th'; // without this line it didn't work
+moment.locale('th');
 interface Carrier {
   id: number;
   full_name: string;
@@ -19,7 +20,7 @@ interface Carrier {
 }
 
 function sortByDate(input: string) {
-  return moment(input, 'DD-MM-YYYY HH:mm').format('ll');
+  return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
 
 function createKey(input: string) {
@@ -103,7 +104,7 @@ export const rows = carriers.map((carrier: Carrier, index: number) => ({
     },
     {
       key: sortByDate(carrier.register_date),
-      content: moment(carrier.register_date, 'DD-MM-YYYY HH:mm').format('ll'),
+      content: moment(carrier.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
     },
     {
       key: carrier.date_approve,

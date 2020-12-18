@@ -8,7 +8,8 @@ import { jobpost } from './jobpost';
 import { Icon } from 'react-icons-kit';
 import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
 import moment from 'moment';
-
+import 'moment/locale/th'; // without this line it didn't work
+moment.locale('th');
 import vegetables from '../../../../images/vegetables.png';
 import charcoal from '../../../../images/charcoal.png';
 import woods from '../../../../images/woods.png';
@@ -159,8 +160,8 @@ export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
       ),
     },
     {
-      key: moment(jobpost.valid_unit, 'DD-MM-YYYY HH:mm').format('ll'),
-      content: moment(jobpost.valid_unit, 'DD-MM-YYYY HH:mm').format('ll'),
+      key: moment(jobpost.valid_unit, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
+      content: moment(jobpost.valid_unit, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
     },
     {
       key: jobpost.status,
