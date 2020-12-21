@@ -1,0 +1,52 @@
+/// <reference types="cypress" />
+
+context('Window', () => {
+  beforeEach(() => {
+    cy.visit('http://localhost:8000/auth/login');
+  });
+
+  it('key password', () => {
+    cy.get('form > :nth-child(1) > input').type('notwirachai@gmail.com', { delay: 200 });
+    cy.get('.sc-bkbjAj').click();
+    cy.get('.custom-checkbox');
+    cy.get('h1').should('contain', 'Login');
+    cy.wait(2000);
+  });
+
+  it('key email', () => {
+    cy.get(':nth-child(2) > input').type('230240wewe', { delay: 200 });
+    cy.get('.sc-bkbjAj').click().click();
+    cy.get('h1').should('contain', 'Login');
+    cy.get('.Socials__SocialsStyle-fMyIPa', { timeout: 30000 });
+    cy.wait(2000);
+  });
+
+  it('key email and password', () => {
+    cy.get('.sc-bkbjAj').click().click();
+    cy.wait(3000);
+  });
+
+  it('login', () => {
+    cy.get('form > :nth-child(1) > input').type('notwirachai@gmail.com', { delay: 200 });
+    cy.get(':nth-child(2) > input').type('230240wewe', { delay: 200 });
+    cy.get('.sc-bkbjAj').click();
+    cy.get('.Header__HeaderStyle-hhdliK > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();
+    cy.wait(2000);
+    cy.get(':nth-child(2) > [href="#"]').click();
+    cy.wait(2000);
+    cy.get(':nth-child(2) > .menu-items > :nth-child(1) > a').click();
+    cy.wait(2000);
+    cy.get(':nth-child(2) > .menu-items > :nth-child(2) > a').click();
+    cy.wait(2000);
+    cy.get(':nth-child(3) > [href="#"]').click();
+    cy.wait(2000);
+    cy.get(':nth-child(3) > .menu-items > :nth-child(1) > a').click();
+    cy.wait(2000);
+    cy.get(':nth-child(3) > .menu-items > :nth-child(2) > a').click();
+    cy.wait(2000);
+    cy.get(':nth-child(3) > .menu-items > :nth-child(3) > a').click();
+    cy.wait(2000);
+    cy.get(':nth-child(4) > a').click();
+    cy.wait(2000);
+  });
+});
