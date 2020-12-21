@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
@@ -8,25 +8,50 @@ import { search } from 'react-icons-kit/icomoon/search';
 import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
-import { drivers } from './dynamic-table/drivers';
+import { inject, observer } from 'mobx-react';
+import { CarrierStore } from '../../../stores/carrier-store';
+import { getSnapshot } from 'mobx-state-tree';
+// import { createServer } from 'miragejs';
+// import axios from 'axios';
 
 const Wrapper = styled.div`
   margin-top: 10px;
   min-width: 600px;
 `;
+
 import styled from 'styled-components';
 
 const Input = styled(InputGroup)`
   margin-bottom: 0px;
 `;
 
-const DriverForApproval = (props: any) => {
+// createServer({
+//   routes() {
+//     this.get('/api/movies', () => ({
+//       reminders: [
+//         { id: 1, text: 'Walk the dog' },
+//         { id: 2, text: 'Take out the trash' },
+//         { id: 3, text: 'Work out' },
+//       ],
+//     }));
+//   },
+// });
+
+const DriverForApproval = observer((props: any) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   const [rowData, setRowData] = useState(rows);
   const [panding, setPanding] = useState(false);
   const [approved, setApproved] = useState(false);
   const [all, setAll] = useState(false);
+
+  useEffect(() => {
+    console.log('carriers :> ', JSON.parse(JSON.stringify(CarrierStore.getCarriers())));
+    // console.log('get-carriers :> ', carriers.getCarriers());
+    // axios.get(`/api/movies`).then((res) => {
+    //   console.log('get-carriers :> ', res);
+    // });
+  }, []);
 
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();
@@ -144,5 +169,5 @@ const DriverForApproval = (props: any) => {
       </CardBody>
     </Card>
   );
-};
+});
 export default DriverForApproval;
