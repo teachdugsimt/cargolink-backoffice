@@ -70,8 +70,10 @@ const SelectStyled = styled(Select)`
 interface HeaderProps {
   toggleSidebar: () => void;
   theme: {
-    set: (value: DefaultTheme['name']) => void;
-    value: DefaultTheme['name'];
+    // set: (value: DefaultTheme['name']) => void;
+    // value: DefaultTheme['name'];
+    set: (value: DefaultTheme['default']) => void;
+    value: DefaultTheme['default'];
   };
   changeDir: () => void;
   dir: 'rtl' | 'ltr';
