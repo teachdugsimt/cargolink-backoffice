@@ -17,6 +17,7 @@ export default function Login() {
     // v will be true or false
     setCheckbox({ ...checkbox, [name]: value });
   };
+
   const submit = () => {
     navigate('/dashboard');
   };

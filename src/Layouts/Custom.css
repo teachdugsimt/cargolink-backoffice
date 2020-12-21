@@ -1,4 +1,17 @@
-body, div, h1, h2, h3, h4, h5, h6, span, p , label,a,li,b {
-    font-family: 'Prompt', sans-serif;
-  }
-  
+body,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+p,
+label,
+a,
+li,
+b,
+input {
+  font-family: 'Prompt', sans-serif;
+}
