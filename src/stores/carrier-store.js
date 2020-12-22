@@ -1,19 +1,5 @@
 import { types } from 'mobx-state-tree';
-
-// import { createServer, Model } from 'miragejs';
-// import axios from 'axios';
-
-// createServer({
-//   routes() {
-//     this.get('/api/movies', () => ({
-//       reminders: [
-//         { id: 1, text: 'Walk the dog' },
-//         { id: 2, text: 'Take out the trash' },
-//         { id: 3, text: 'Work out' },
-//       ],
-//     }));
-//   },
-// });
+import axios from 'axios';
 
 const Carrier = types.model({
   id: types.optional(types.identifier, () => Math.random().toString()),
@@ -48,11 +34,10 @@ export const CarrierStore = types
     };
   })
   .views((self) => ({
-    // makeServer()
     getCarriers() {
-      //   axios.get(`/api/movies`).then((res) => {
-      //     return res;
-      //   });
+      axios.get(`/api/users`).then((res) => {
+        console.log('get-carriers :> ', res);
+      });
       return self;
     },
   }))
