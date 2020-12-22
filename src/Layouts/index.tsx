@@ -15,8 +15,8 @@ const getDefaultTheme = (): DefaultTheme['name'] => {
   if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
     return localStorage.getItem('theme') as DefaultTheme['name'];
   } else {
-    const hours = new Date().getHours();
-    return hours > 6 && hours < 19 ? 'default' : 'default';
+    // const hours = new Date().getHours();
+    return 'default';
     // return hours > 6 && hours < 19 ? 'default' : 'dark';
   }
 };
@@ -36,11 +36,11 @@ const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ children, p
     if (localTheme !== theme && theme === 'default') {
       setTheme(localTheme);
     }
-    if (process.env.NODE_ENV === 'development') {
-      makeServer({ environment: 'development' });
-    } else {
-      makeServer();
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    //   makeServer({ environment: 'development' });
+    // } else {
+    //   makeServer();
+    // }
   }, []);
 
   const changeDir = () => {
