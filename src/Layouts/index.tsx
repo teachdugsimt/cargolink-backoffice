@@ -15,7 +15,8 @@ const getDefaultTheme = (): DefaultTheme['name'] => {
     return localStorage.getItem('theme') as DefaultTheme['name'];
   } else {
     const hours = new Date().getHours();
-    return hours > 6 && hours < 19 ? 'default' : 'dark';
+    return hours > 6 && hours < 19 ? 'default' : 'default';
+    // return hours > 6 && hours < 19 ? 'default' : 'dark';
   }
 };
 
