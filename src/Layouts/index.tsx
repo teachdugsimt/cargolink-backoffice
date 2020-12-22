@@ -9,6 +9,7 @@ import SimpleLayout from './SimpleLayout';
 import SidebarCustom from './Sidebar';
 import { withTrans } from '../i18n/withTrans';
 import './Custom.css';
+import { makeServer } from '../services/carrier-api';
 
 const getDefaultTheme = (): DefaultTheme['name'] => {
   if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
@@ -34,6 +35,11 @@ const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ children, p
     const localTheme = getDefaultTheme();
     if (localTheme !== theme && theme === 'default') {
       setTheme(localTheme);
+    }
+    if (process.env.NODE_ENV === 'development') {
+      makeServer({ environment: 'development' });
+    } else {
+      makeServer();
     }
   }, []);
 

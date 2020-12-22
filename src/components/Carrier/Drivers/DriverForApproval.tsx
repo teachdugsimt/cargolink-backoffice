@@ -11,9 +11,6 @@ import Row from '@paljs/ui/Row';
 import { inject, observer } from 'mobx-react';
 import { CarrierStore } from '../../../stores/carrier-store';
 import { getSnapshot } from 'mobx-state-tree';
-// import { createServer } from 'miragejs';
-// import axios from 'axios';
-
 const Wrapper = styled.div`
   margin-top: 10px;
   min-width: 600px;
@@ -25,18 +22,6 @@ const Input = styled(InputGroup)`
   margin-bottom: 0px;
 `;
 
-// createServer({
-//   routes() {
-//     this.get('/api/movies', () => ({
-//       reminders: [
-//         { id: 1, text: 'Walk the dog' },
-//         { id: 2, text: 'Take out the trash' },
-//         { id: 3, text: 'Work out' },
-//       ],
-//     }));
-//   },
-// });
-
 const DriverForApproval = observer((props: any) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
@@ -47,10 +32,6 @@ const DriverForApproval = observer((props: any) => {
 
   useEffect(() => {
     console.log('carriers :> ', JSON.parse(JSON.stringify(CarrierStore.getCarriers())));
-    // console.log('get-carriers :> ', carriers.getCarriers());
-    // axios.get(`/api/movies`).then((res) => {
-    //   console.log('get-carriers :> ', res);
-    // });
   }, []);
 
   const onClickSearch = () => {

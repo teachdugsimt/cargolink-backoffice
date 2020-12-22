@@ -1,23 +1,26 @@
-// import { createServer } from 'miragejs';
+import { createServer, Model } from 'miragejs';
 
-// export default function () {
-//   return createServer({
-//     routes() {
-//       this.get('/api/reminders', () => ({
-//         reminders: [
-//           { id: 1, text: 'Walk the dog' },
-//           { id: 2, text: 'Take out the trash' },
-//           { id: 3, text: 'Work out' },
-//         ],
-//       }));
+export function makeServer({ environment = 'test' } = {}) {
+  let server = createServer({
+    environment,
 
-//       let newId = 4;
-//       this.post('/api/reminders', (schema, request) => {
-//         let attrs = JSON.parse(request.requestBody);
-//         attrs.id = newId++;
+    models: {
+      user: Model,
+    },
 
-//         return { reminder: attrs };
-//       });
-//     },
-//   });
-// }
+    seeds(server) {
+      server.create('user', { name: 'Bob' });
+      server.create('user', { name: 'Alice' });
+    },
+
+    routes() {
+      this.namespace = 'api';
+
+      this.get('/users', (schema) => {
+        return schema.users.all();
+      });
+    },
+  });
+
+  return server;
+}
