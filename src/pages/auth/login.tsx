@@ -99,7 +99,7 @@ export default function Login() {
           Login
         </Button>
       </form>
-      <Socials />
+      {/* <Socials /> */}
       <p>
         Don&apos;t have account? <Link to="/auth/register">Register</Link>
       </p>
