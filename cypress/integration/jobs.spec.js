@@ -5,15 +5,15 @@ context('Window', () => {
     cy.visit('http://localhost:8000/dashboard');
   });
 
-  it('key shipper', () => {
+  it('key jobs', () => {
     cy.wait(1000);
     cy.get('.Header__HeaderStyle-hhdliK > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();
     cy.wait(1000);
     cy.get(':nth-child(2) > [href="#"]').click();
     cy.wait(2000);
-    cy.get(':nth-child(2) > .menu-items > :nth-child(1) > a').click();
-    cy.wait(1000);
-    cy.get('body').click();
+    cy.get(':nth-child(2) > .menu-items > :nth-child(2) > a > .menu-title').click();
+    cy.wait(2000);
+    cy.get('body').click({ force: true });
     cy.wait(1000);
     cy.get('.sc-efHXLn > :nth-child(2)').click();
     cy.wait(2000);
@@ -21,22 +21,13 @@ context('Window', () => {
     cy.wait(2000);
     cy.get('.sc-efHXLn > :nth-child(1)').click();
     cy.wait(2000);
-  });
-
-  it('key search john', () => {
-    cy.wait(2000);
-    cy.visit('http://localhost:8000/shipper-account');
-    cy.wait(2000);
-    cy.get('.sc-dIvqjp > input').type('john', { delay: 300 });
+    cy.get('.sc-dIvqjp > input').type('tid1001933', { delay: 300 });
     cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
     cy.wait(2000);
-  });
-
-  it('key search Company', () => {
+    cy.get('.sc-dIvqjp > input').clear('tid1001933');
+    cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
     cy.wait(2000);
-    cy.visit('http://localhost:8000/shipper-account');
-    cy.wait(2000);
-    cy.get('.sc-dIvqjp > input').type('Company', { delay: 300 });
+    cy.get('.sc-dIvqjp > input').type('อำเภอ', { delay: 300 });
     cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
     cy.wait(2000);
   });

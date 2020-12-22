@@ -48,5 +48,15 @@ context('Window', () => {
     cy.wait(2000);
     cy.get(':nth-child(4) > a').click();
     cy.wait(2000);
+    cy.get('.sc-bdnylx > :nth-child(1) > :nth-child(1) > a').click();
+    cy.wait(2000);
+    cy.get('#mui-component-select-language').click();
+    cy.wait(2000);
+    cy.get('.MuiList-root > [tabindex="-1"]').click();
+    cy.wait(2000);
+    cy.get('#mui-component-select-language').click();
+    cy.wait(2000);
+    cy.get('.MuiList-root > [tabindex="-1"]').click();
+    cy.wait(2000);
   });
 });
