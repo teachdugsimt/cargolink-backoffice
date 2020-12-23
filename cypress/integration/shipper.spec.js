@@ -39,5 +39,16 @@ context('Window', () => {
     cy.get('.sc-dIvqjp > input').type('Company', { delay: 300 });
     cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
     cy.wait(2000);
+    cy.get('.sc-dIvqjp > input').clear('Company');
+    cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
+    cy.wait(2000);
+    cy.get('[page="1"]').click();
+    cy.wait(2000);
+    cy.get('[page="2"]').click();
+    cy.wait(2000);
+    cy.get('[page="3"]').click();
+    cy.wait(2000);
+    cy.get('[page="1"]').click();
+    cy.wait(2000);
   });
 });
