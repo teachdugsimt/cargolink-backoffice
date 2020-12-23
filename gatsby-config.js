@@ -15,6 +15,7 @@ module.exports = {
   },
   plugins: [
     'gatsby-plugin-styled-components',
+    'gatsby-plugin-notify',
     'gatsby-plugin-typescript',
     {
       resolve: `gatsby-source-sugarcrm`,

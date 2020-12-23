@@ -27,6 +27,7 @@
     "gatsby-plugin-google-fonts": "^1.0.1",
     "gatsby-plugin-layout": "1.3.13",
     "gatsby-plugin-manifest": "2.4.34",
+    "gatsby-plugin-notify": "^1.0.0",
     "gatsby-plugin-react-helmet": "3.3.14",
     "gatsby-plugin-sharp": "2.6.42",
     "gatsby-plugin-styled-components": "3.3.14",
@@ -46,11 +47,14 @@
     "moment": "^2.29.1",
     "normalize.css": "^8.0.1",
     "react": "16.13.1",
+    "react-bootstrap-sweetalert": "^5.2.0",
     "react-dom": "16.13.1",
     "react-helmet": "6.1.0",
     "react-i18next": "^11.8.3",
     "react-icons-kit": "^1.3.1",
-    "styled-components": "5.2.0"
+    "styled-components": "5.2.0",
+    "sweetalert": "^2.1.2",
+    "sweetalert2": "^10.12.5"
   },
   "keywords": [
     "react",

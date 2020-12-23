@@ -4,42 +4,60 @@ import { Checkbox } from '@paljs/ui/Checkbox';
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'gatsby';
+import { navigate } from 'gatsby';
 
 import Auth, { Group } from '../../components/Auth';
 import Socials from '../../components/Auth/Socials';
 import SEO from '../../components/SEO';
-import { navigate } from 'gatsby';
-import Alert from '@paljs/ui/Alert';
+import Spinner from '@paljs/ui/Spinner';
 import { LoginStore } from '../../stores/login-store';
+import Alert from '../../components/alert';
+
+const defaultAlertSetting = {
+  icon: '',
+  show: false,
+  type: '',
+  title: '',
+  content: '',
+};
 
 const Login = () => {
   const [checkbox, setCheckbox] = useState({ 1: false });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [toggle, setToggle] = useState(false);
-  const [keypassword, setKeyPassword] = useState(false);
-  const [keyemail, setKeyEmail] = useState(false);
-  const [keyemailpassword, setKeyEmailPassword] = useState(false);
+  const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
   useEffect(() => {
-    console.log('login :> ', LoginStore.loginData);
-  }, []);
-
-  console.log('out side :> ', LoginStore.data_signin);
+    console.log('LoginStore :> ', JSON.parse(JSON.stringify(LoginStore)));
+    if (LoginStore.error_login && !LoginStore.data_signin.idToken) {
+      setAlertSetting({
+        icon: 'error',
+        show: true,
+        type: 'general',
+        title: '',
+        content: LoginStore.error_login,
+      });
+    } else if (LoginStore.data_signin.idToken && !LoginStore.error_login) {
+      navigate('/dashboard');
+    }
+  }, [LoginStore.data_signin, LoginStore.error_login]);
 
   const onChangeCheckbox = (value: boolean, name: number) => {
     // v will be true or false
     setCheckbox({ ...checkbox, [name]: value });
   };
 
-  const AlertLogin = () => {
-    if (keypassword && !password) {
-      return <Alert status="Danger">key password</Alert>;
-    } else if (keyemail && !email) {
-      return <Alert status="Danger">key email</Alert>;
-    } else if (keyemailpassword && !email && !password) {
-      return <Alert status="Danger">key email and password</Alert>;
-    }
+  const onChangeEmail = (value: string) => {
+    setEmail(value);
+    setToggle(false);
+    setAlertSetting(defaultAlertSetting);
+  };
+
+  const onChangePassword = (value: string) => {
+    setPassword(value);
+    setToggle(false);
+    setAlertSetting(defaultAlertSetting);
   };
 
   const submit = () => {
@@ -50,12 +68,13 @@ const Login = () => {
         password: password,
         userType: 0,
       });
-      // navigate('/dashboard');
     }
+    setAlertSetting(defaultAlertSetting);
   };
 
   return (
     <Auth title="Login" subTitle="Hello! Login with your email">
+      <Alert setting={alertSetting} />
       <SEO title="Login" />
       <form>
         <InputGroup
@@ -67,7 +86,7 @@ const Login = () => {
             type="email"
             placeholder="Phone Number"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(event) => onChangeEmail(event.target.value)}
           />
         </InputGroup>
         {toggle && !email ? (
@@ -84,7 +103,7 @@ const Login = () => {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event) => onChangePassword(event.target.value)}
           />
         </InputGroup>
         {toggle && !password ? (
@@ -98,8 +117,24 @@ const Login = () => {
           </Checkbox>
           <Link to="/auth/request-password">Forgot Password?</Link>
         </Group>
-        <Button status="Success" type="button" shape="SemiRound" onClick={() => submit()} fullWidth>
-          Login
+        <Button
+          style={{ position: LoginStore.fetching_login ? 'relative' : 'initial' }}
+          status="Success"
+          type="button"
+          shape="SemiRound"
+          onClick={() => submit()}
+          fullWidth
+        >
+          {LoginStore.fetching_login ? (
+            <div>
+              <Spinner status="Basic">
+                <span style={{ color: 'white' }}>Loading...</span>
+              </Spinner>
+              .
+            </div>
+          ) : (
+            'Login'
+          )}
         </Button>
       </form>
       {/* <Socials /> */}
