@@ -16,16 +16,21 @@ export const LoginStore = types
     return {
       requestLogin: flow(function* requestLogin(params) {
         self.fetching_login = true;
+        self.data_signin = {
+          idToken: '',
+        };
+        self.error_login = '';
+
         try {
           // ... yield can be used in async/await style
           const response = yield LoginApi.LoginApi(params);
           console.log('requestLogin response :> ', response);
           if (response && response.ok) {
             const responseHeader = response.headers.authorization;
+            self.fetching_login = false;
             self.data_signin = {
               idToken: responseHeader,
             };
-            self.fetching_login = false;
             self.error_login = '';
           } else {
             self.fetching_login = false;
