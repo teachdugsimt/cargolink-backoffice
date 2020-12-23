@@ -1,7 +1,8 @@
 import { Button } from '@paljs/ui/Button';
 import { InputGroup } from '@paljs/ui/Input';
 import { Checkbox } from '@paljs/ui/Checkbox';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { observer } from 'mobx-react';
 import { Link } from 'gatsby';
 
 import Auth, { Group } from '../../components/Auth';
@@ -11,16 +12,21 @@ import { navigate } from 'gatsby';
 import Alert from '@paljs/ui/Alert';
 import { LoginStore } from '../../stores/login-store';
 
-export default function Login() {
-  const [checkbox, setCheckbox] = useState({
-    1: false,
-  });
-
+const Login = () => {
+  const [checkbox, setCheckbox] = useState({ 1: false });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [toggle, setToggle] = useState(false);
   const [keypassword, setKeyPassword] = useState(false);
   const [keyemail, setKeyEmail] = useState(false);
   const [keyemailpassword, setKeyEmailPassword] = useState(false);
+
+  useEffect(() => {
+    console.log('login :> ', LoginStore.loginData);
+  }, []);
+
+  console.log('out side :> ', LoginStore.data_signin);
+
   const onChangeCheckbox = (value: boolean, name: number) => {
     // v will be true or false
     setCheckbox({ ...checkbox, [name]: value });
@@ -37,22 +43,14 @@ export default function Login() {
   };
 
   const submit = () => {
+    setToggle(true);
     if (email && password) {
       LoginStore.requestLogin({
-        loginId: '+660474572889',
-        password: 'Tham1234',
+        loginId: email,
+        password: password,
         userType: 0,
       });
       // navigate('/dashboard');
-    } else if (email && !password) {
-      console.log('key password');
-      setKeyPassword(true);
-    } else if (!email && password) {
-      console.log('key email');
-      setKeyEmail(true);
-    } else {
-      console.log('key email and password');
-      setKeyEmailPassword(true);
     }
   };
 
@@ -60,38 +58,40 @@ export default function Login() {
     <Auth title="Login" subTitle="Hello! Login with your email">
       <SEO title="Login" />
       <form>
-        {keyemail && !email ? (
-          <span style={{ color: 'red' }}>Please Input Email Information</span>
-        ) : keyemailpassword && !email ? (
-          <span style={{ color: 'red' }}>Please Input Email Information</span>
-        ) : null}
-        <InputGroup fullWidth>
+        <InputGroup
+          status={toggle && !email ? 'Danger' : 'Basic'}
+          style={{ marginBottom: toggle && !email ? 0 : '2rem', marginTop: toggle && !email ? '2rem' : 0 }}
+          fullWidth
+        >
           <input
             type="email"
-            placeholder="Email Address"
+            placeholder="Phone Number"
             value={email}
-            style={{
-              borderColor: keyemail && !email ? 'red' : keyemailpassword && !email ? 'red' : '',
-            }}
             onChange={(event) => setEmail(event.target.value)}
           />
         </InputGroup>
-        {keypassword && !password ? (
-          <span style={{ color: 'red' }}>Please Input password Information</span>
-        ) : keyemailpassword && !password ? (
-          <span style={{ color: 'red' }}>Please Input password Information</span>
+        {toggle && !email ? (
+          <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>
+            * Please Input Phone Number Information
+          </span>
         ) : null}
-        <InputGroup fullWidth>
+        <InputGroup
+          status={toggle && !password ? 'Danger' : 'Basic'}
+          style={{ marginBottom: toggle && !password ? 0 : '2rem', marginTop: toggle && !password ? '2rem' : 0 }}
+          fullWidth
+        >
           <input
             type="password"
             placeholder="Password"
             value={password}
-            style={{
-              borderColor: keypassword && !password ? 'red' : keyemailpassword && !password ? 'red' : '',
-            }}
             onChange={(event) => setPassword(event.target.value)}
           />
         </InputGroup>
+        {toggle && !password ? (
+          <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>
+            * Please Input Password Information
+          </span>
+        ) : null}
         <Group>
           <Checkbox checked={checkbox[1]} onChange={(value) => onChangeCheckbox(value, 1)}>
             Remember me
@@ -108,4 +108,6 @@ export default function Login() {
       </p>
     </Auth>
   );
-}
+};
+
+export default observer(Login);

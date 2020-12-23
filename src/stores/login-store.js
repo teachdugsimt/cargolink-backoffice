@@ -49,12 +49,11 @@ export const LoginStore = types
     };
   })
   .views((self) => ({
-    getLoginData() {
+    get loginData() {
       return self;
     },
   }))
   .create({
-    loading: false,
     data_signin: {
       idToken: '',
     },
