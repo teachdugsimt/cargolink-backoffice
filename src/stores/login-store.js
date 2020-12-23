@@ -20,7 +20,6 @@ export const LoginStore = types
           // ... yield can be used in async/await style
           const response = yield LoginApi.LoginApi(params);
           console.log('requestLogin response :> ', response);
-          console.log(response.data.validMsgList['']);
           if (response && response.ok) {
             const responseHeader = response.headers.authorization;
             self.data_signin = {
@@ -50,7 +49,7 @@ export const LoginStore = types
     };
   })
   .views((self) => ({
-    getCarriers() {
+    getLoginData() {
       return self;
     },
   }))
