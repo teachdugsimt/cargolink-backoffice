@@ -9,6 +9,7 @@ import Socials from '../../components/Auth/Socials';
 import SEO from '../../components/SEO';
 import { navigate } from 'gatsby';
 import Alert from '@paljs/ui/Alert';
+import { LoginStore } from '../../stores/login-store';
 
 export default function Login() {
   const [checkbox, setCheckbox] = useState({
@@ -25,9 +26,6 @@ export default function Login() {
     setCheckbox({ ...checkbox, [name]: value });
   };
 
-  console.log('email', email);
-  console.log('password', password);
-
   const AlertLogin = () => {
     if (keypassword && !password) {
       return <Alert status="Danger">key password</Alert>;
@@ -40,7 +38,12 @@ export default function Login() {
 
   const submit = () => {
     if (email && password) {
-      navigate('/dashboard');
+      LoginStore.requestLogin({
+        loginId: '+660474572889',
+        password: 'Tham1234',
+        userType: 0,
+      });
+      // navigate('/dashboard');
     } else if (email && !password) {
       console.log('key password');
       setKeyPassword(true);
