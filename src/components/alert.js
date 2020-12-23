@@ -72,46 +72,4 @@ const Alert = (props) => {
 
 export default Alert;
 
-// <Alert setting.type={3} show={true} onConfirm={() => ""} content="THIS CONTENT" />
-//#region  this.props
-// setting.type  : 1 = Success
-//                 2 = Error
-//                 3 = Confirm
-//                 4 = Information
-//                 5 = Loading
-//                 6 = Processing
-// show         : show alert modal
-// content      : content
-//#endregion
-
-// #ALERT
-// 1. Success
-//          btn : OK
-//          title : Success
-//          content : [Add/Update/Delete] Driver Successed
-
-// 2. Error
-//          btn : OK
-//          title : Error
-//          content :  [Add/Update/Delete] Driver Failed
-//          errorMessage : ???
-
-// 3. Confirm
-//          btn : Cancel/Yes
-//          title : Confirm?
-//          content : Are you sure to [Add/Update/Delete] Driver
-
-// 4. Information
-//          btn : OK
-//          title : Informaion
-//          content : ???
-
-// 5. Loading
-//          btn : OK
-//          content : Loading
-
-// 6. Processing
-//          btn : OK
-//          content : Processing
-
 // REF : https://sweetalert2.github.io/
