@@ -1,26 +1,9 @@
-import { createServer, Model } from 'miragejs';
+import ExcuteApi from './api-integrations/excute-api';
 
-export function makeServer({ environment = 'test' } = {}) {
-  let server = createServer({
-    environment,
-
-    models: {
-      user: Model,
-    },
-
-    seeds(server) {
-      server.create('user', { name: 'Bob' });
-      server.create('user', { name: 'Alice' });
-    },
-
-    routes() {
-      this.namespace = 'api';
-
-      this.get('/users', (schema) => {
-        return schema.users.all();
-      });
-    },
-  });
-
-  return server;
+class CarrierApi {
+  getDrivers = async (params) => {
+    const response = await ExcuteApi('api/backoffice/v1/audit-log', params, 'get', 600000);
+    return response;
+  };
 }
+export default new CarrierApi();

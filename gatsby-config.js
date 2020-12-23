@@ -1,12 +1,35 @@
+const activeEnv = process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || 'development';
+
+console.log(`Using environment config: '${activeEnv}'`);
+
+require('dotenv').config({
+  path: `.env.${activeEnv}`,
+});
+
 module.exports = {
   siteMetadata: {
     title: 'Free React Admin dashboard template based on Gatsby',
     description: 'Admin dashboard template based on Gatsby with @paljs/ui component package.',
     author: 'Ahmed Elywa',
+    apiUrl: process.env.API_ENDPOINT,
   },
   plugins: [
     'gatsby-plugin-styled-components',
     'gatsby-plugin-typescript',
+    {
+      resolve: `gatsby-source-sugarcrm`,
+      options: {
+        endpoint: 'API_ENDPOINT',
+        configOptions: {
+          client_id: 'sugar',
+          client_secret: '',
+          username: 'SUGAR_USERNAME',
+          password: 'PASSWORD',
+          platform: 'base',
+        },
+        modules: ['MODULE_NAME'],
+      },
+    },
     {
       resolve: `gatsby-plugin-layout`,
       options: {

@@ -22,7 +22,7 @@ const Input = styled(InputGroup)`
   margin-bottom: 0px;
 `;
 
-const DriverForApproval = observer((props: any) => {
+const DriverForApproval = (props: any) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   const [rowData, setRowData] = useState(rows);
@@ -150,5 +150,6 @@ const DriverForApproval = observer((props: any) => {
       </CardBody>
     </Card>
   );
-});
-export default DriverForApproval;
+};
+
+export default observer(DriverForApproval);

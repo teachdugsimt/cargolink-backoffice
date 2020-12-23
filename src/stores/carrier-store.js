@@ -16,7 +16,7 @@ const Carrier = types.model({
   carrier_name: types.string,
   otp: types.number,
   carrier_status: types.string,
-  status: types.string,
+  status: types.union(types.literal('PENDING'), types.literal('APPROVED')),
 });
 
 export const CarrierStore = types
@@ -35,9 +35,9 @@ export const CarrierStore = types
   })
   .views((self) => ({
     getCarriers() {
-      axios.get(`/api/users`).then((res) => {
-        console.log('get-carriers :> ', res);
-      });
+      // axios.get(`/api/users`).then((res) => {
+      //   console.log('get-carriers :> ', res);
+      // });
       return self;
     },
   }))
