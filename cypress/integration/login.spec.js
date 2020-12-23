@@ -6,6 +6,7 @@ context('Window', () => {
   });
 
   it('key password', () => {
+    cy.wait(1000);
     cy.get('form > :nth-child(1) > input').type('notwirachai@gmail.com', { delay: 200 });
     cy.get('.sc-bkbjAj').click();
     cy.get('.custom-checkbox');
@@ -14,14 +15,15 @@ context('Window', () => {
   });
 
   it('key email', () => {
+    cy.wait(1000);
     cy.get(':nth-child(2) > input').type('230240wewe', { delay: 200 });
     cy.get('.sc-bkbjAj').click().click();
     cy.get('h1').should('contain', 'Login');
-    cy.get('.Socials__SocialsStyle-fMyIPa', { timeout: 30000 });
     cy.wait(2000);
   });
 
   it('key email and password', () => {
+    cy.wait(1000);
     cy.get('.sc-bkbjAj').click().click();
     cy.wait(3000);
   });
