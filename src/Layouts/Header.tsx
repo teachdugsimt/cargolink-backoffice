@@ -78,7 +78,6 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = (props) => {
-  console.log('Props header :: ', props);
   const { t, i18n } = useTranslation();
 
   const themeOptions = [

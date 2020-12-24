@@ -2,7 +2,7 @@ import { Button } from '@paljs/ui/Button';
 import { InputGroup } from '@paljs/ui/Input';
 import { Checkbox } from '@paljs/ui/Checkbox';
 import React, { useEffect, useState } from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { Link } from 'gatsby';
 import { navigate } from 'gatsby';
 
@@ -10,8 +10,8 @@ import Auth, { Group } from '../../components/Auth';
 import Socials from '../../components/Auth/Socials';
 import SEO from '../../components/SEO';
 import Spinner from '@paljs/ui/Spinner';
-import { LoginStore } from '../../stores/login-store';
 import Alert from '../../components/alert';
+import { useMst } from '../../stores/root-store';
 
 const defaultAlertSetting = {
   icon: '',
@@ -21,7 +21,9 @@ const defaultAlertSetting = {
   content: '',
 };
 
-const Login = () => {
+const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageContext }) => {
+  const { loginStore } = useMst();
+
   const [checkbox, setCheckbox] = useState({ 1: false });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,21 +31,24 @@ const Login = () => {
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
   useEffect(() => {
-    console.log('LoginStore :> ', JSON.parse(JSON.stringify(LoginStore)));
-    if (LoginStore.error_login && !LoginStore.data_signin.idToken) {
+    if (pageContext.layout === 'auth') {
+      loginStore.requestLogout();
+    }
+  }, [pageContext]);
+
+  useEffect(() => {
+    if (loginStore.error_login && !loginStore.data_signin.idToken) {
       setAlertSetting({
         icon: 'error',
         show: true,
         type: 'general',
         title: '',
-        content: LoginStore.error_login,
+        content: loginStore.error_login,
       });
-    } else if (LoginStore.data_signin.idToken && !LoginStore.error_login) {
+    } else if (loginStore.data_signin.idToken && !loginStore.error_login) {
       navigate('/dashboard');
-    } else {
-      navigate('/auth/login');
     }
-  }, [LoginStore.data_signin.idToken, LoginStore.error_login]);
+  }, [loginStore.data_signin.idToken, loginStore.error_login]);
 
   const onChangeCheckbox = (value: boolean, name: number) => {
     // v will be true or false
@@ -65,7 +70,7 @@ const Login = () => {
   const submit = () => {
     setToggle(true);
     if (email && password) {
-      LoginStore.requestLogin({
+      loginStore.requestLogin({
         loginId: email,
         password: password,
         userType: 0,
@@ -120,14 +125,14 @@ const Login = () => {
           <Link to="/auth/request-password">Forgot Password?</Link>
         </Group>
         <Button
-          style={{ position: LoginStore.fetching_login ? 'relative' : 'initial' }}
+          style={{ position: loginStore.fetching_login ? 'relative' : 'initial' }}
           status="Success"
           type="button"
           shape="SemiRound"
           onClick={() => submit()}
           fullWidth
         >
-          {LoginStore.fetching_login ? (
+          {loginStore.fetching_login ? (
             <div>
               <Spinner status="Basic">
                 <span style={{ color: 'white' }}>Loading...</span>
@@ -145,6 +150,6 @@ const Login = () => {
       </p>
     </Auth>
   );
-};
+});
 
-export default observer(Login);
+export default Login;

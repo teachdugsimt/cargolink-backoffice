@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 import { DefaultTheme, ThemeProvider } from 'styled-components';
 import themes from './themes';
 import { Layout, LayoutContent, LayoutFooter, LayoutContainer, LayoutColumns, LayoutColumn } from '@paljs/ui/Layout';
@@ -8,7 +9,7 @@ import Header from './Header';
 import SimpleLayout from './SimpleLayout';
 import SidebarCustom from './Sidebar';
 import { withTrans } from '../i18n/withTrans';
-import { LoginStore } from '../stores/login-store';
+import { Provider, rootStore } from '../stores/root-store';
 import './Custom.css';
 
 const getDefaultTheme = (): DefaultTheme['name'] => {
@@ -25,12 +26,6 @@ const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ children, p
   const [theme, setTheme] = useState<DefaultTheme['name']>('default');
   const [dir, setDir] = useState<'ltr' | 'rtl'>('ltr');
   const sidebarRef = useRef<SidebarRefObject>(null);
-
-  useEffect(() => {
-    if (pageContext.layout === 'auth') {
-      LoginStore.requestLogout();
-    }
-  }, [pageContext]);
 
   const changeTheme = (newTheme: DefaultTheme['name']) => {
     setTheme(newTheme);
@@ -50,30 +45,32 @@ const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ children, p
   };
 
   return (
-    <ThemeProvider theme={themes(theme, dir)}>
-      <div>
-        <SimpleLayout />
-        <Layout evaIcons={icons} dir={dir} className={pageContext.layout === 'auth' ? 'auth-layout' : ''}>
-          {pageContext.layout !== 'auth' && (
-            <Header
-              dir={dir}
-              changeDir={changeDir}
-              theme={{ set: changeTheme, value: theme }}
-              toggleSidebar={() => sidebarRef.current?.toggle()}
-            />
-          )}
-          <LayoutContainer>
-            {pageContext.layout !== 'auth' && <SidebarCustom ref={sidebarRef} />}
-            <LayoutContent>
-              <LayoutColumns>
-                <LayoutColumn className="main-content">{children}</LayoutColumn>
-              </LayoutColumns>
-              {pageContext.layout !== 'auth' && <LayoutFooter>Footer</LayoutFooter>}
-            </LayoutContent>
-          </LayoutContainer>
-        </Layout>
-      </div>
-    </ThemeProvider>
+    <Provider value={rootStore}>
+      <ThemeProvider theme={themes(theme, dir)}>
+        <div>
+          <SimpleLayout />
+          <Layout evaIcons={icons} dir={dir} className={pageContext.layout === 'auth' ? 'auth-layout' : ''}>
+            {pageContext.layout !== 'auth' && (
+              <Header
+                dir={dir}
+                changeDir={changeDir}
+                theme={{ set: changeTheme, value: theme }}
+                toggleSidebar={() => sidebarRef.current?.toggle()}
+              />
+            )}
+            <LayoutContainer>
+              {pageContext.layout !== 'auth' && <SidebarCustom ref={sidebarRef} />}
+              <LayoutContent>
+                <LayoutColumns>
+                  <LayoutColumn className="main-content">{children}</LayoutColumn>
+                </LayoutColumns>
+                {pageContext.layout !== 'auth' && <LayoutFooter>Footer</LayoutFooter>}
+              </LayoutContent>
+            </LayoutContainer>
+          </Layout>
+        </div>
+      </ThemeProvider>
+    </Provider>
   );
 };
 
