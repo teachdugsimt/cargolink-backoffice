@@ -6,7 +6,7 @@ import Truck30 from '../../../../images/Truck30.png';
 import Truck9 from '../../../../images/Truck9.png';
 import Truck20 from '../../../../images/Truck20.png';
 import Truck12 from '../../../../images/Truck12.png';
-import 'moment/locale/th'; // without this line it didn't work
+import 'moment/locale/th';
 moment.locale('th');
 interface Truck {
   id: number;

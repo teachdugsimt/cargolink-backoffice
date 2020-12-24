@@ -10,7 +10,7 @@ const Header = async (api_gw_id = null, is_login = null, is_upload = null, timeo
 
   let baseURL = process.env.API_ENDPOINT;
   let header = {};
-  let token = JSON.parse(localStorage.getItem('profileLocal'));
+  let token = await JSON.parse(localStorage.getItem('profileLocal'));
   if (!token) {
     token = {
       idToken: '',

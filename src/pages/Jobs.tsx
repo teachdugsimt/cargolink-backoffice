@@ -1,5 +1,5 @@
 import React from 'react';
-import JobContainer from '../components/Shipper/JobContainer/JobContainer';
+import JobContainer from '../components/shipper/job-container/job-container';
 
 const Jobs = () => {
   return <JobContainer />;

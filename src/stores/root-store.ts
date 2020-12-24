@@ -17,12 +17,17 @@ let initialState = RootModel.create({
   },
 });
 
-const data = localStorage.getItem('rootState');
-if (data) {
-  const json = JSON.parse(data);
-  if (RootModel.is(json)) {
-    initialState = RootModel.create(json);
+if (typeof window !== 'undefined') {
+  console.log('we are running on the client');
+  const data = localStorage.getItem('rootState');
+  if (data) {
+    const json = JSON.parse(data);
+    if (RootModel.is(json)) {
+      initialState = RootModel.create(json);
+    }
   }
+} else {
+  console.log('we are running on the server');
 }
 
 export const rootStore = initialState;

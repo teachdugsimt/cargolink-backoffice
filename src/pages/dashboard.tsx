@@ -1,9 +1,9 @@
 import React from 'react';
-import SEO from '../components/SEO';
+import SEO from '../components/seo';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
-import ChartCar from '../components/Dashboard/Chartcar/ChartCar';
-import ChartArea from '../components/Dashboard/ChartCarArea/ChartArea';
-import ChartRegion from '../components/Dashboard/ChartRegion/ChartRegion';
+import ChartCar from '../components/dashboard/chart-car/chart-car';
+import ChartArea from '../components/dashboard/chart-car-area/chart-area';
+import ChartRegion from '../components/dashboard/chart-region/chart-region';
 import { useTranslation } from 'react-i18next';
 
 const Home = () => {

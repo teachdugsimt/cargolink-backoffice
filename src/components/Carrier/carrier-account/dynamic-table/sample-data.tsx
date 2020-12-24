@@ -7,7 +7,7 @@ import { Icon } from 'react-icons-kit';
 import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
 import moment from 'moment';
-import 'moment/locale/th'; // without this line it didn't work
+import 'moment/locale/th';
 moment.locale('th');
 interface Carrier {
   id: number;
