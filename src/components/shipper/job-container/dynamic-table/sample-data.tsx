@@ -8,6 +8,7 @@ import { jobpost } from './jobpost';
 import { Icon } from 'react-icons-kit';
 import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
 import moment from 'moment';
+import 'moment/locale/th';
 moment.locale('th');
 import vegetables from '../../../../images/vegetables.png';
 import charcoal from '../../../../images/charcoal.png';

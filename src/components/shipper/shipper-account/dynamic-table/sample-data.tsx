@@ -8,6 +8,7 @@ import moment from 'moment';
 import { Icon } from 'react-icons-kit';
 import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
+import 'moment/locale/th';
 moment.locale('th');
 interface Shipper {
   id: number;

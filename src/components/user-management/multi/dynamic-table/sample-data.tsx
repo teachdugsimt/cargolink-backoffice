@@ -6,6 +6,7 @@ import { users } from './users';
 
 import { Icon } from 'react-icons-kit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
+import 'moment/locale/th';
 moment.locale('th');
 interface User {
   id: number;
