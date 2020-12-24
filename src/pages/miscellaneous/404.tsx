@@ -4,7 +4,7 @@ import { ButtonLink } from '@paljs/ui/Button';
 import { navigate } from 'gatsby';
 import styled from 'styled-components';
 
-import SEO from '../../components/SEO';
+import SEO from '../../components/seo';
 
 const ErrorStyle = styled.div`
   width: 100%;

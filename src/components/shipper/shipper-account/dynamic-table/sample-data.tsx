@@ -1,20 +1,22 @@
 import React from 'react';
+
 import { Button, ButtonLink } from '@paljs/ui/Button';
+
+import { shippers } from './shippers';
 import moment from 'moment';
 
-import { users } from './users';
-
 import { Icon } from 'react-icons-kit';
+import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
-import 'moment/locale/th'; // without this line it didn't work
 moment.locale('th');
-interface User {
+interface Shipper {
   id: number;
   full_name: string;
-  status: string;
+  member_type: string;
   phone: string;
   register_date: string;
   date_approve: string;
+  sales_code: string;
 }
 
 function createKey(input: string) {
@@ -25,16 +27,16 @@ function sortByDate(input: string) {
   return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
 
-export const caption = `Results found: ${users.length}`;
+export const caption = `Results found: ${shippers.length}`;
 
 export const createHead = (withWidth: boolean) => {
   return {
     cells: [
       {
         key: 'id',
-        content: 'Id',
+        content: 'ID',
         isSortable: true,
-        width: withWidth ? 5 : undefined,
+        // width: withWidth ? 10 : undefined,
       },
       {
         key: 'phone',
@@ -48,7 +50,13 @@ export const createHead = (withWidth: boolean) => {
         content: 'Full name',
         shouldTruncate: true,
         isSortable: true,
-        // width: withWidth ? 10 : undefined,
+        // width: withWidth ? 15 : undefined,
+      },
+      {
+        key: 'member_type',
+        content: 'Member Type',
+        shouldTruncate: true,
+        isSortable: true,
       },
       {
         key: 'register_date',
@@ -57,14 +65,14 @@ export const createHead = (withWidth: boolean) => {
         isSortable: true,
       },
       {
-        key: 'status',
-        content: 'Status',
+        key: 'date_approve',
+        content: 'Date of approval',
         shouldTruncate: true,
         isSortable: true,
       },
       {
-        key: 'date_approve',
-        content: 'Date of approval',
+        key: 'sales_code',
+        content: 'Sales code',
         shouldTruncate: true,
         isSortable: true,
       },
@@ -79,39 +87,48 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const rows = users.map((user: User, index: number) => ({
-  key: `row-${index}-${user.id}`,
+export const rows = shippers.map((shipper: Shipper, index: number) => ({
+  key: `row-${index}-${shipper.id}`,
   cells: [
     {
-      key: user.id,
-      content: user.id,
+      key: shipper.id,
+      content: shipper.id,
     },
     {
-      key: user.phone,
-      content: user.phone,
+      key: shipper.phone,
+      content: shipper.phone,
     },
     {
-      key: user.full_name,
-      content: user.full_name,
+      key: shipper.full_name,
+      content: shipper.full_name,
     },
     {
-      key: sortByDate(user.register_date),
-      content: moment(user.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
+      key: shipper.member_type,
+      content: shipper.member_type,
     },
     {
-      key: user.status,
-      content: user.status,
+      key: sortByDate(shipper.register_date),
+      content: moment(shipper.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
     },
     {
-      key: sortByDate(user.date_approve),
-      content: moment(user.date_approve, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
+      key: shipper.date_approve,
+      content: shipper.date_approve,
     },
     {
-      key: user.id,
+      key: shipper.sales_code,
+      content: shipper.sales_code,
+    },
+    {
+      key: shipper.id,
       content: (
-        <Button appearance="ghost" status="Basic" size="Small">
-          <Icon icon={ic_delete} />
-        </Button>
+        <div>
+          <Button appearance="ghost" status="Basic" size="Small">
+            <Icon icon={edit} />
+          </Button>
+          <Button appearance="ghost" status="Basic" size="Small">
+            <Icon icon={ic_delete} />
+          </Button>
+        </div>
       ),
     },
   ],

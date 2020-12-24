@@ -1,34 +1,32 @@
 import React from 'react';
-
 import { Button, ButtonLink } from '@paljs/ui/Button';
 
-import { shippers } from './shippers';
-import moment from 'moment';
+import { carriers } from './carriers';
 
 import { Icon } from 'react-icons-kit';
 import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
-import 'moment/locale/th'; // without this line it didn't work
+import moment from 'moment';
 moment.locale('th');
-interface Shipper {
+interface Carrier {
   id: number;
   full_name: string;
   member_type: string;
   phone: string;
   register_date: string;
-  date_approve: string;
   sales_code: string;
-}
-
-function createKey(input: string) {
-  return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
+  date_approve: string;
 }
 
 function sortByDate(input: string) {
   return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
 
-export const caption = `Results found: ${shippers.length}`;
+function createKey(input: string) {
+  return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
+}
+
+export const caption = `Results found: ${carriers.length}`;
 
 export const createHead = (withWidth: boolean) => {
   return {
@@ -37,45 +35,41 @@ export const createHead = (withWidth: boolean) => {
         key: 'id',
         content: 'ID',
         isSortable: true,
-        // width: withWidth ? 10 : undefined,
+        width: withWidth ? 5 : undefined,
       },
       {
         key: 'phone',
         content: 'Phone number',
         shouldTruncate: true,
         isSortable: true,
-        // width: withWidth ? 15 : undefined,
+        width: withWidth ? 12 : undefined,
       },
       {
         key: 'full_name',
         content: 'Full name',
         shouldTruncate: true,
         isSortable: true,
-        // width: withWidth ? 15 : undefined,
+        width: withWidth ? 15 : undefined,
       },
       {
         key: 'member_type',
         content: 'Member Type',
         shouldTruncate: true,
-        isSortable: true,
       },
       {
         key: 'register_date',
         content: 'Register Date',
         shouldTruncate: true,
-        isSortable: true,
       },
       {
-        key: 'date_approve',
-        content: 'Date of approval',
+        key: 'date_approval',
+        content: 'Approve Date',
         shouldTruncate: true,
-        isSortable: true,
       },
       {
         key: 'sales_code',
         content: 'Sales code',
         shouldTruncate: true,
-        isSortable: true,
       },
       {
         key: 'action',
@@ -88,39 +82,39 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const rows = shippers.map((shipper: Shipper, index: number) => ({
-  key: `row-${index}-${shipper.id}`,
+export const rows = carriers.map((carrier: Carrier, index: number) => ({
+  key: `row-${index}-${carrier.id}`,
   cells: [
     {
-      key: shipper.id,
-      content: shipper.id,
+      key: carrier.id,
+      content: carrier.id,
     },
     {
-      key: shipper.phone,
-      content: shipper.phone,
+      key: carrier.phone,
+      content: carrier.phone,
     },
     {
-      key: shipper.full_name,
-      content: shipper.full_name,
+      key: carrier.full_name,
+      content: carrier.full_name,
     },
     {
-      key: shipper.member_type,
-      content: shipper.member_type,
+      key: carrier.member_type,
+      content: carrier.member_type,
     },
     {
-      key: sortByDate(shipper.register_date),
-      content: moment(shipper.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
+      key: sortByDate(carrier.register_date),
+      content: moment(carrier.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
     },
     {
-      key: shipper.date_approve,
-      content: shipper.date_approve,
+      key: carrier.date_approve,
+      content: carrier.date_approve,
     },
     {
-      key: shipper.sales_code,
-      content: shipper.sales_code,
+      key: carrier.sales_code,
+      content: carrier.sales_code,
     },
     {
-      key: shipper.id,
+      key: carrier.id,
       content: (
         <div>
           <Button appearance="ghost" status="Basic" size="Small">

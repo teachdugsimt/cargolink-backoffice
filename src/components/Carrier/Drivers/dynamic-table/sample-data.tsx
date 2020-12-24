@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 
 import { drivers } from './drivers';
-import 'moment/locale/th'; // without this line it didn't work
+
 moment.locale('th');
 interface Driver {
   id: number;

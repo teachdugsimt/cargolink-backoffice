@@ -6,9 +6,9 @@ import { observer } from 'mobx-react-lite';
 import { Link } from 'gatsby';
 import { navigate } from 'gatsby';
 
-import Auth, { Group } from '../../components/Auth';
-import Socials from '../../components/Auth/Socials';
-import SEO from '../../components/SEO';
+import Auth, { Group } from '../../components/auth';
+import Socials from '../../components/auth/socials';
+import SEO from '../../components/seo';
 import Spinner from '@paljs/ui/Spinner';
 import Alert from '../../components/alert';
 import { useMst } from '../../stores/root-store';

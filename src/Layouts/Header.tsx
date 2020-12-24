@@ -8,11 +8,11 @@ import { EvaIcon } from '@paljs/ui/Icon';
 import { Actions } from '@paljs/ui/Actions';
 import ContextMenu from '@paljs/ui/ContextMenu';
 import User from '@paljs/ui/User';
-import { getPathReady } from './Sidebar';
+import { getPathReady } from './sidebar';
 import { Location } from '@reach/router';
 import { breakpointDown } from '@paljs/ui/breakpoints';
 import { useTranslation } from 'react-i18next';
-import LanguageMenu from '../components/LanguageMenu';
+import LanguageMenu from '../components/language-menu';
 import Logo from '../images/logo Cargolink white.png';
 
 const HeaderStyle = styled.div`
@@ -174,7 +174,7 @@ const Header: React.FC<HeaderProps> = (props) => {
                       placement="bottom"
                       currentPath={getPathReady(location.pathname)}
                       items={[
-                        { title: 'Profile', link: { to: '/profile/Profile' } },
+                        { title: 'Profile', link: { to: '/profile' } },
                         { title: 'Log out', link: { to: '/auth/login' } },
                       ]}
                       Link={Link}

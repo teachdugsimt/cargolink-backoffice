@@ -5,12 +5,12 @@ import themes from './themes';
 import { Layout, LayoutContent, LayoutFooter, LayoutContainer, LayoutColumns, LayoutColumn } from '@paljs/ui/Layout';
 import icons from '@paljs/icons';
 import { SidebarRefObject } from '@paljs/ui/Sidebar';
-import Header from './Header';
-import SimpleLayout from './SimpleLayout';
-import SidebarCustom from './Sidebar';
+import Header from './header';
+import SimpleLayout from './simple-layout';
+import SidebarCustom from './sidebar';
 import { withTrans } from '../i18n/withTrans';
 import { Provider, rootStore } from '../stores/root-store';
-import './Custom.css';
+import './custom.css';
 
 const getDefaultTheme = (): DefaultTheme['name'] => {
   if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {

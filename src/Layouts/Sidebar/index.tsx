@@ -3,7 +3,7 @@ import { SidebarBody, SidebarRefObject, SidebarProps, Sidebar } from '@paljs/ui/
 import { Menu, MenuRefObject } from '@paljs/ui/Menu';
 import { Button } from '@paljs/ui/Button';
 import { EvaIcon } from '@paljs/ui/Icon';
-import menuItems from '../menuItem';
+import menuItems from '../menu-item';
 import { Link } from 'gatsby';
 import { Location } from '@reach/router';
 
