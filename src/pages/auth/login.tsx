@@ -40,8 +40,10 @@ const Login = () => {
       });
     } else if (LoginStore.data_signin.idToken && !LoginStore.error_login) {
       navigate('/dashboard');
+    } else {
+      navigate('/auth/login');
     }
-  }, [LoginStore.data_signin, LoginStore.error_login]);
+  }, [LoginStore.data_signin.idToken, LoginStore.error_login]);
 
   const onChangeCheckbox = (value: boolean, name: number) => {
     // v will be true or false

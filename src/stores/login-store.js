@@ -28,10 +28,12 @@ export const LoginStore = types
           if (response && response.ok) {
             const responseHeader = response.headers.authorization;
             self.fetching_login = false;
-            self.data_signin = {
+            const data_signin = {
               idToken: responseHeader,
             };
+            self.data_signin = data_signin;
             self.error_login = '';
+            localStorage.setItem('profileLocal', JSON.stringify(data_signin));
           } else {
             self.fetching_login = false;
             self.data_signin = {
@@ -50,6 +52,13 @@ export const LoginStore = types
           };
           self.error_login = 'Failed to request login store';
         }
+      }),
+      requestLogout: flow(function* requestLogout() {
+        console.log('requestLogout response :> success');
+        self.data_signin = {
+          idToken: '',
+        };
+        self.error_login = '';
       }),
     };
   })

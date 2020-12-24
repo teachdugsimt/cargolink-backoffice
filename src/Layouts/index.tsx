@@ -8,6 +8,7 @@ import Header from './Header';
 import SimpleLayout from './SimpleLayout';
 import SidebarCustom from './Sidebar';
 import { withTrans } from '../i18n/withTrans';
+import { LoginStore } from '../stores/login-store';
 import './Custom.css';
 
 const getDefaultTheme = (): DefaultTheme['name'] => {
@@ -15,8 +16,8 @@ const getDefaultTheme = (): DefaultTheme['name'] => {
     return localStorage.getItem('theme') as DefaultTheme['name'];
   } else {
     // const hours = new Date().getHours();
-    return 'default';
     // return hours > 6 && hours < 19 ? 'default' : 'dark';
+    return 'default';
   }
 };
 
@@ -24,6 +25,12 @@ const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ children, p
   const [theme, setTheme] = useState<DefaultTheme['name']>('default');
   const [dir, setDir] = useState<'ltr' | 'rtl'>('ltr');
   const sidebarRef = useRef<SidebarRefObject>(null);
+
+  useEffect(() => {
+    if (pageContext.layout === 'auth') {
+      LoginStore.requestLogout();
+    }
+  }, [pageContext]);
 
   const changeTheme = (newTheme: DefaultTheme['name']) => {
     setTheme(newTheme);
