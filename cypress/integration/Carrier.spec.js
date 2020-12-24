@@ -15,9 +15,9 @@ context('Window', () => {
     cy.wait(2000);
     cy.get('body').click({ force: true });
     cy.wait(2000);
-    cy.get('.sc-iBzFoy > :nth-child(2)').click();
+    cy.get('.sc-efHXLn > :nth-child(2)').click();
     cy.wait(2000);
-    cy.get('.sc-iBzFoy > :nth-child(3)').click();
+    cy.get('.sc-efHXLn > :nth-child(3)').click();
     cy.wait(2000);
     cy.get('.Lnyfd').click();
     cy.wait(2000);

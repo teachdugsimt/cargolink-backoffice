@@ -29,8 +29,22 @@ context('Window', () => {
   });
 
   it('login', () => {
-    cy.get('form > :nth-child(1) > input').type('notwirachai@gmail.com', { delay: 200 });
-    cy.get(':nth-child(2) > input').type('230240wewe', { delay: 200 });
+    cy.get('form > :nth-child(1) > input').type('+660474572889', { delay: 200 });
+    cy.get(':nth-child(2) > input').type('Tham1234', { delay: 200 });
+    cy.get('.sc-bkbjAj').click();
+    cy.wait(2000);
+    cy.get('.swal2-confirm').click();
+    cy.wait(1000);
+    cy.get('.sc-dIvqjp > input').clear('');
+    cy.get('form > :nth-child(1) > input').type('+66047457288', { delay: 200 });
+    cy.get(':nth-child(2) > input').type('Tham12345', { delay: 200 });
+    cy.get('.sc-bkbjAj').click();
+    cy.wait(2000);
+    cy.get('.swal2-confirm').click();
+    cy.wait(1000);
+    cy.get('.sc-dIvqjp > input').clear('');
+    cy.get('form > :nth-child(1) > input').type('+660474572889', { delay: 200 });
+    cy.get(':nth-child(2) > input').type('Tham12345', { delay: 200 });
     cy.get('.sc-bkbjAj').click();
     cy.get('.Header__HeaderStyle-hhdliK > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();
     cy.wait(2000);
