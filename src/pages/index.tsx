@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import { navigate } from 'gatsby';
-import { LoginStore } from '../stores/login-store';
+import { useMst } from '../stores/root-store';
 
-export default function Index() {
+interface Props {}
+
+const Index: React.FC<Props> = observer(() => {
+  const { loginStore } = useMst();
+
   const [token, setToken] = useState(true);
 
   useEffect(() => {
-    if (!LoginStore.data_signin.idToken) {
+    if (!loginStore.data_signin.idToken) {
       setToken(false);
     }
-  }, [LoginStore.data_signin.idToken]);
+  }, [loginStore.data_signin.idToken]);
 
   useEffect(() => {
     if (token) {
@@ -20,4 +25,6 @@ export default function Index() {
   }, [token]);
 
   return <div />;
-}
+});
+
+export default Index;

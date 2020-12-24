@@ -1,6 +1,5 @@
-import { types, flow, castToSnapshot } from 'mobx-state-tree';
+import { types, flow } from 'mobx-state-tree';
 import { LoginApi } from '../services';
-import { persist } from 'mobx-persist';
 
 const token = types.model({
   idToken: types.string,
@@ -66,10 +65,4 @@ export const LoginStore = types
     get loginData() {
       return self;
     },
-  }))
-  .create({
-    data_signin: {
-      idToken: '',
-    },
-    error_login: '',
-  });
+  }));

@@ -1,5 +1,4 @@
 import https from 'https';
-import localForage from 'localforage';
 
 const Header = async (api_gw_id = null, is_login = null, is_upload = null, timeout = 20000) => {
   const httpsAgent = new https.Agent({
@@ -11,8 +10,7 @@ const Header = async (api_gw_id = null, is_login = null, is_upload = null, timeo
 
   let baseURL = process.env.API_ENDPOINT;
   let header = {};
-  let token = await localForage.getItem('profileLocal');
-  console.log('token :> ', token);
+  let token = JSON.parse(localStorage.getItem('profileLocal'));
   if (!token) {
     token = {
       idToken: '',
@@ -77,4 +75,5 @@ const Header = async (api_gw_id = null, is_login = null, is_upload = null, timeo
   console.log('HEADER :> ', header);
   return header;
 };
+
 export default Header;
