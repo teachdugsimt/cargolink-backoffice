@@ -11,8 +11,8 @@ const Index: React.FC<Props> = observer(() => {
   const [token, setToken] = useState(false);
 
   useEffect(() => {
-    if (!loginStore.data_signin.idToken) {
-      setToken(false);
+    if (loginStore.data_signin.idToken) {
+      setToken(true);
     }
   }, [loginStore.data_signin.idToken]);
 
