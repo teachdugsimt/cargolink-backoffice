@@ -5,9 +5,9 @@
     "passes": 1,
     "pending": 0,
     "failures": 0,
-    "start": "2020-12-25T08:29:22.605Z",
-    "end": "2020-12-25T08:30:38.188Z",
-    "duration": 75583,
+    "start": "2020-12-25T08:50:34.457Z",
+    "end": "2020-12-25T08:51:51.334Z",
+    "duration": 76877,
     "testsRegistered": 1,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "19d2a16a-912a-4531-986f-4b3861058554",
+      "uuid": "df6c3872-60ee-458f-bdf5-f3541ece8c08",
       "title": "",
       "fullFile": "cypress\\integration\\trucks.spec.js",
       "file": "cypress\\integration\\trucks.spec.js",
@@ -27,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "8707ad16-b70a-4618-9eee-89e3777041f9",
+          "uuid": "f7194c5e-260b-472f-8ac4-546ce0da7dca",
           "title": "Window",
           "fullFile": "",
           "file": "",
@@ -38,7 +38,7 @@
               "title": "ทดสอบหน้า เมนู Trucks",
               "fullTitle": "Window ทดสอบหน้า เมนู Trucks",
               "timedOut": null,
-              "duration": 74312,
+              "duration": 75589,
               "state": "passed",
               "speed": "slow",
               "pass": true,
@@ -47,20 +47,20 @@
               "context": null,
               "code": "cy.wait(1000);\ncy.get('.header__HeaderStyle-dHeagC > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();\ncy.wait(1000);\ncy.get(':nth-child(3) > [href=\"#\"]').click();\ncy.wait(2000);\ncy.get(':nth-child(3) > .menu-items > :nth-child(2) > a > .menu-title').click();\ncy.wait(2000);\ncy.get('body').click({\n  force: true\n});\ncy.wait(1000);\ncy.get('.sc-efHXLn > :nth-child(2)').click();\ncy.wait(2000);\ncy.get('.sc-efHXLn > :nth-child(3)').click();\ncy.wait(2000);\ncy.get('.sc-efHXLn > :nth-child(1)').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('hino', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('hino');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('ISUZU', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('ISUZU');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('SCANIA', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('SCANIA');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('ขอนแก่น', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('ขอนแก่น');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('นครราชสีมา', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('นครราชสีมา');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('กรุงเทพ', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('กรุงเทพ');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('ซี', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('ซี');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('อัพธาม', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('อัพธาม');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.css-sqyeu9-ButtonBase > .css-1tl7tmz-ButtonBase > .sc-cBoprd').click();\ncy.wait(2000);\ncy.get('.css-sqyeu9-ButtonBase > .css-1tl7tmz-ButtonBase > .sc-cBoprd').click();\ncy.wait(2000);",
               "err": {},
-              "uuid": "68be8571-eabf-430d-bb5a-fd3457eb9c74",
-              "parentUUID": "8707ad16-b70a-4618-9eee-89e3777041f9",
+              "uuid": "d40783b1-af67-459f-a4e3-5a78ebf31a24",
+              "parentUUID": "f7194c5e-260b-472f-8ac4-546ce0da7dca",
               "isHook": false,
               "skipped": false
             }
           ],
           "suites": [],
           "passes": [
-            "68be8571-eabf-430d-bb5a-fd3457eb9c74"
+            "d40783b1-af67-459f-a4e3-5a78ebf31a24"
           ],
           "failures": [],
           "pending": [],
           "skipped": [],
-          "duration": 74312,
+          "duration": 75589,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000
@@ -95,7 +95,7 @@
     "marge": {
       "options": {
         "reportDir": "cypress/report/mochawesome-report",
-        "overwrite": false,
+        "overwrite": true,
         "html": true,
         "json": true,
         "timestamp": "mmddyyyy_HHMMss"
