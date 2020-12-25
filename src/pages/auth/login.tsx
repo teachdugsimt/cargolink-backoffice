@@ -86,11 +86,11 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
       <form>
         <InputGroup
           status={toggle && !email ? 'Danger' : 'Basic'}
-          style={{ marginBottom: toggle && !email ? 0 : '2rem', marginTop: toggle && !email ? '2rem' : 0 }}
+          style={{ marginBottom: toggle && !email ? 0 : '2rem' }}
           fullWidth
         >
           <input
-            type="email"
+            type="text"
             placeholder="Phone Number"
             value={email}
             onChange={(event) => onChangeEmail(event.target.value)}
@@ -103,7 +103,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
         ) : null}
         <InputGroup
           status={toggle && !password ? 'Danger' : 'Basic'}
-          style={{ marginBottom: toggle && !password ? 0 : '2rem', marginTop: toggle && !password ? '2rem' : 0 }}
+          style={{ marginBottom: toggle && !password ? 0 : '2rem', marginTop: toggle && !email ? '2rem' : 0 }}
           fullWidth
         >
           <input
