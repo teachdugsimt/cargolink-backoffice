@@ -5,7 +5,7 @@ context('Window', () => {
     cy.visit('http://localhost:8000/dashboard');
   });
 
-  it('key jobs', () => {
+  it('ทดสอบหน้า เมนู Jobs', () => {
     cy.wait(1000);
     cy.get('.header__HeaderStyle-dHeagC > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();
     cy.wait(1000);

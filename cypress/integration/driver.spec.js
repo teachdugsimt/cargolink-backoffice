@@ -5,13 +5,13 @@ context('Window', () => {
     cy.visit('http://localhost:8000/dashboard');
   });
 
-  it('key carrier', () => {
+  it('ทดสอบหน้า เมนู Drivers', () => {
     cy.wait(1000);
     cy.get('.header__HeaderStyle-dHeagC > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();
     cy.wait(1000);
     cy.get(':nth-child(3) > [href="#"]').click();
     cy.wait(2000);
-    cy.get(':nth-child(3) > .menu-items > :nth-child(3) > a > .menu-title').click();
+    cy.get(':nth-child(3) > .menu-items > :nth-child(3) > a').click();
     cy.wait(2000);
     cy.get('body').click({ force: true });
     cy.wait(1000);

@@ -5,7 +5,7 @@ context('Window', () => {
     cy.visit('http://localhost:8000/dashboard');
   });
 
-  it('key shipper', () => {
+  it('ทดสอบหน้า เมนู Shipper account', () => {
     cy.wait(1000);
     cy.get('.header__HeaderStyle-dHeagC > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();
     cy.wait(1000);
@@ -15,26 +15,17 @@ context('Window', () => {
     cy.wait(1000);
     cy.get('body').click();
     cy.wait(2000);
-    cy.get('.sc-iBzFoy > :nth-child(2)').click();
+    cy.get('.sc-efHXLn > :nth-child(2)').click();
     cy.wait(2000);
-    cy.get('.sc-iBzFoy > :nth-child(3)').click();
+    cy.get('.sc-efHXLn > :nth-child(3)').click();
     cy.wait(2000);
     cy.get('.Lnyfd').click();
-    cy.wait(2000);
-  });
-
-  it('key search john', () => {
-    cy.wait(2000);
-    cy.visit('http://localhost:8000/shipper-account');
     cy.wait(2000);
     cy.get('.sc-dIvqjp > input').type('john', { delay: 300 });
     cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
     cy.wait(2000);
-  });
-
-  it('key search Company', () => {
-    cy.wait(2000);
-    cy.visit('http://localhost:8000/shipper-account');
+    cy.get('.sc-dIvqjp > input').clear('john');
+    cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
     cy.wait(2000);
     cy.get('.sc-dIvqjp > input').type('Company', { delay: 300 });
     cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
