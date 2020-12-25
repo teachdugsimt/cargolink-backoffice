@@ -8,7 +8,7 @@ interface Props {}
 const Index: React.FC<Props> = observer(() => {
   const { loginStore } = useMst();
 
-  const [token, setToken] = useState(true);
+  const [token, setToken] = useState(false);
 
   useEffect(() => {
     if (!loginStore.data_signin.idToken) {

@@ -7,7 +7,7 @@ context('Window', () => {
 
   it('key password', () => {
     cy.wait(1000);
-    cy.get('form > :nth-child(1) > input').type('notwirachai@gmail.com', { delay: 200 });
+    cy.get('form > :nth-child(1) > input').type('+660474572889', { delay: 200 });
     cy.get('.sc-bkbjAj').click();
     cy.get('.custom-checkbox');
     cy.get('h1').should('contain', 'Login');
