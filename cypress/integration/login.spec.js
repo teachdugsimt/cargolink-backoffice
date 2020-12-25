@@ -5,7 +5,7 @@ context('Window', () => {
     cy.visit('http://localhost:8000/auth/login');
   });
 
-  it('key password', () => {
+  it('ทดสอบการไม่กรอก รหัสผ่าน', () => {
     cy.wait(1000);
     cy.get('form > :nth-child(1) > input').type('+660474572889', { delay: 200 });
     cy.get('.sc-bkbjAj').click();
@@ -14,7 +14,7 @@ context('Window', () => {
     cy.wait(2000);
   });
 
-  it('key email', () => {
+  it('ทดสอบการไม่กรอก เบอร์โทร', () => {
     cy.wait(1000);
     cy.get(':nth-child(2) > input').type('230240wewe', { delay: 200 });
     cy.get('.sc-bkbjAj').click().click();
@@ -22,31 +22,38 @@ context('Window', () => {
     cy.wait(2000);
   });
 
-  it('key email and password', () => {
+  it('ทดสอบการไม่กรอก เบอร์โทร และ รหัสผ่าน', () => {
     cy.wait(1000);
     cy.get('.sc-bkbjAj').click().click();
     cy.wait(3000);
   });
 
-  it('login', () => {
+  it('ทดสอบการกรอก รหัสผ่าน ผิด', () => {
+    cy.wait(1000);
     cy.get('form > :nth-child(1) > input').type('+660474572889', { delay: 200 });
     cy.get(':nth-child(2) > input').type('Tham1234', { delay: 200 });
     cy.get('.sc-bkbjAj').click();
     cy.wait(2000);
     cy.get('.swal2-confirm').click();
     cy.wait(1000);
-    cy.get('.sc-dIvqjp > input').clear('');
+  });
+
+  it('ทดสอบการกรอก เบอร์โทร ผิด', () => {
+    cy.wait(1000);
     cy.get('form > :nth-child(1) > input').type('+66047457288', { delay: 200 });
     cy.get(':nth-child(2) > input').type('Tham12345', { delay: 200 });
     cy.get('.sc-bkbjAj').click();
     cy.wait(2000);
     cy.get('.swal2-confirm').click();
     cy.wait(1000);
-    cy.get('.sc-dIvqjp > input').clear('');
+  });
+
+  it('ล็อคอินสำเร็จ ทดสอบเลือกเมนู และเลือกภาษา', () => {
     cy.get('form > :nth-child(1) > input').type('+660474572889', { delay: 200 });
     cy.get(':nth-child(2) > input').type('Tham12345', { delay: 200 });
     cy.get('.sc-bkbjAj').click();
-    cy.get('.Header__HeaderStyle-hhdliK > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();
+    cy.wait(2000);
+    cy.get('.header__HeaderStyle-dHeagC > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();
     cy.wait(2000);
     cy.get(':nth-child(2) > [href="#"]').click();
     cy.wait(2000);
