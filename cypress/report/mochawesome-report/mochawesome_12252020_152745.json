@@ -1,0 +1,201 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 6,
+    "passes": 6,
+    "pending": 0,
+    "failures": 0,
+    "start": "2020-12-25T08:26:23.447Z",
+    "end": "2020-12-25T08:27:45.705Z",
+    "duration": 82258,
+    "testsRegistered": 6,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "96c37c97-a06e-456e-8896-e09bcadce642",
+      "title": "",
+      "fullFile": "cypress\\integration\\login.spec.js",
+      "file": "cypress\\integration\\login.spec.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "92e1ab71-7f43-4902-bc56-41ef9d476cb7",
+          "title": "Window",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "ทดสอบการไม่กรอก รหัสผ่าน",
+              "fullTitle": "Window ทดสอบการไม่กรอก รหัสผ่าน",
+              "timedOut": null,
+              "duration": 7940,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.wait(1000);\ncy.get('form > :nth-child(1) > input').type('+660474572889', {\n  delay: 200\n});\ncy.get('.sc-bkbjAj').click();\ncy.get('.custom-checkbox');\ncy.get('h1').should('contain', 'Login');\ncy.wait(2000);",
+              "err": {},
+              "uuid": "14807d70-d318-44ac-8d42-fc0a3b83d3e2",
+              "parentUUID": "92e1ab71-7f43-4902-bc56-41ef9d476cb7",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "ทดสอบการไม่กรอก เบอร์โทร",
+              "fullTitle": "Window ทดสอบการไม่กรอก เบอร์โทร",
+              "timedOut": null,
+              "duration": 6324,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.wait(1000);\ncy.get(':nth-child(2) > input').type('230240wewe', {\n  delay: 200\n});\ncy.get('.sc-bkbjAj').click().click();\ncy.get('h1').should('contain', 'Login');\ncy.wait(2000);",
+              "err": {},
+              "uuid": "0e898b3f-d139-4687-98eb-1102f9bf9332",
+              "parentUUID": "92e1ab71-7f43-4902-bc56-41ef9d476cb7",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "ทดสอบการไม่กรอก เบอร์โทร และ รหัสผ่าน",
+              "fullTitle": "Window ทดสอบการไม่กรอก เบอร์โทร และ รหัสผ่าน",
+              "timedOut": null,
+              "duration": 5251,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.wait(1000);\ncy.get('.sc-bkbjAj').click().click();\ncy.wait(3000);",
+              "err": {},
+              "uuid": "3da5b0f7-d065-41b0-b91a-14c2cff43ffa",
+              "parentUUID": "92e1ab71-7f43-4902-bc56-41ef9d476cb7",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "ทดสอบการกรอก รหัสผ่าน ผิด",
+              "fullTitle": "Window ทดสอบการกรอก รหัสผ่าน ผิด",
+              "timedOut": null,
+              "duration": 9656,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.wait(1000);\ncy.get('form > :nth-child(1) > input').type('+660474572889', {\n  delay: 200\n});\ncy.get(':nth-child(2) > input').type('Tham1234', {\n  delay: 200\n});\ncy.get('.sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.swal2-confirm').click();\ncy.wait(1000);",
+              "err": {},
+              "uuid": "61b2f90a-7c72-442a-bc19-33b22cba4198",
+              "parentUUID": "92e1ab71-7f43-4902-bc56-41ef9d476cb7",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "ทดสอบการกรอก เบอร์โทร ผิด",
+              "fullTitle": "Window ทดสอบการกรอก เบอร์โทร ผิด",
+              "timedOut": null,
+              "duration": 9962,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.wait(1000);\ncy.get('form > :nth-child(1) > input').type('+66047457288', {\n  delay: 200\n});\ncy.get(':nth-child(2) > input').type('Tham12345', {\n  delay: 200\n});\ncy.get('.sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.swal2-confirm').click();\ncy.wait(1000);",
+              "err": {},
+              "uuid": "58d4d6ca-16e3-4b1b-be76-7cb323158871",
+              "parentUUID": "92e1ab71-7f43-4902-bc56-41ef9d476cb7",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "ล็อคอินสำเร็จ ทดสอบเลือกเมนู และเลือกภาษา",
+              "fullTitle": "Window ล็อคอินสำเร็จ ทดสอบเลือกเมนู และเลือกภาษา",
+              "timedOut": null,
+              "duration": 41836,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('form > :nth-child(1) > input').type('+660474572889', {\n  delay: 200\n});\ncy.get(':nth-child(2) > input').type('Tham12345', {\n  delay: 200\n});\ncy.get('.sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.header__HeaderStyle-dHeagC > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();\ncy.wait(2000);\ncy.get(':nth-child(2) > [href=\"#\"]').click();\ncy.wait(2000);\ncy.get(':nth-child(2) > .menu-items > :nth-child(1) > a').click();\ncy.wait(2000);\ncy.get(':nth-child(2) > .menu-items > :nth-child(2) > a').click();\ncy.wait(2000);\ncy.get(':nth-child(3) > [href=\"#\"]').click();\ncy.wait(2000);\ncy.get(':nth-child(3) > .menu-items > :nth-child(1) > a').click();\ncy.wait(2000);\ncy.get(':nth-child(3) > .menu-items > :nth-child(2) > a').click();\ncy.wait(2000);\ncy.get(':nth-child(3) > .menu-items > :nth-child(3) > a').click();\ncy.wait(2000);\ncy.get(':nth-child(4) > a').click();\ncy.wait(2000);\ncy.get('.sc-bdnylx > :nth-child(1) > :nth-child(1) > a').click();\ncy.wait(2000);\ncy.get('#mui-component-select-language').click();\ncy.wait(2000);\ncy.get('.MuiList-root > [tabindex=\"-1\"]').click();\ncy.wait(2000);\ncy.get('#mui-component-select-language').click();\ncy.wait(2000);\ncy.get('.MuiList-root > [tabindex=\"-1\"]').click();\ncy.wait(2000);",
+              "err": {},
+              "uuid": "bdcbecee-caae-4c2a-bfbf-697c2f68008b",
+              "parentUUID": "92e1ab71-7f43-4902-bc56-41ef9d476cb7",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "14807d70-d318-44ac-8d42-fc0a3b83d3e2",
+            "0e898b3f-d139-4687-98eb-1102f9bf9332",
+            "3da5b0f7-d065-41b0-b91a-14c2cff43ffa",
+            "61b2f90a-7c72-442a-bc19-33b22cba4198",
+            "58d4d6ca-16e3-4b1b-be76-7cb323158871",
+            "bdcbecee-caae-4c2a-bfbf-697c2f68008b"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 80969,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "6.2.1"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/report/mochawesome-report",
+        "overwrite": false,
+        "html": true,
+        "json": true,
+        "timestamp": "mmddyyyy_HHMMss"
+      },
+      "version": "5.1.0"
+    }
+  }
+}
