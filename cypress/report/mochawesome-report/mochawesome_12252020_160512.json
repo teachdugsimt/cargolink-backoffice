@@ -5,9 +5,9 @@
     "passes": 1,
     "pending": 0,
     "failures": 0,
-    "start": "2020-12-25T08:49:05.050Z",
-    "end": "2020-12-25T08:49:40.989Z",
-    "duration": 35939,
+    "start": "2020-12-25T09:04:37.718Z",
+    "end": "2020-12-25T09:05:12.354Z",
+    "duration": 34636,
     "testsRegistered": 1,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "06889883-52b0-4f0d-a56a-38f7f047e0cc",
+      "uuid": "97acb7df-8d40-47a4-a5ad-11d45b79f77e",
       "title": "",
       "fullFile": "cypress\\integration\\Management.spec.js",
       "file": "cypress\\integration\\Management.spec.js",
@@ -27,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "738c3e3f-3957-41ca-9e19-884c161ef67b",
+          "uuid": "fce6a3ec-5ae0-40f9-a84c-c274babdea5b",
           "title": "Window",
           "fullFile": "",
           "file": "",
@@ -38,7 +38,7 @@
               "title": "ทดสอบหน้า เมนู User Management",
               "fullTitle": "Window ทดสอบหน้า เมนู User Management",
               "timedOut": null,
-              "duration": 34442,
+              "duration": 33437,
               "state": "passed",
               "speed": "slow",
               "pass": true,
@@ -47,20 +47,20 @@
               "context": null,
               "code": "cy.wait(1000);\ncy.get('.header__HeaderStyle-dHeagC > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();\ncy.wait(1000);\ncy.get(':nth-child(4) > a').click();\ncy.wait(2000);\ncy.get('body').click({\n  force: true\n});\ncy.wait(1000);\ncy.get('.sc-dIvqjp > input').type('docu', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('docu');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('0000', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('0000');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('a', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('w');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('[page=\"1\"]').click();\ncy.wait(2000);\ncy.get('[page=\"2\"]').click();\ncy.wait(2000);\ncy.get('[page=\"3\"]').click();\ncy.wait(2000);\ncy.get('[page=\"1\"]').click();\ncy.wait(2000);",
               "err": {},
-              "uuid": "f67902ad-489d-4b87-ad1f-fa219a71914c",
-              "parentUUID": "738c3e3f-3957-41ca-9e19-884c161ef67b",
+              "uuid": "bb6809f8-a15f-40c7-9c24-f7cd03e7e7cb",
+              "parentUUID": "fce6a3ec-5ae0-40f9-a84c-c274babdea5b",
               "isHook": false,
               "skipped": false
             }
           ],
           "suites": [],
           "passes": [
-            "f67902ad-489d-4b87-ad1f-fa219a71914c"
+            "bb6809f8-a15f-40c7-9c24-f7cd03e7e7cb"
           ],
           "failures": [],
           "pending": [],
           "skipped": [],
-          "duration": 34442,
+          "duration": 33437,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000

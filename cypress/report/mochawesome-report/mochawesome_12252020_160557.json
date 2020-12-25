@@ -5,9 +5,9 @@
     "passes": 1,
     "pending": 0,
     "failures": 0,
-    "start": "2020-12-25T08:49:47.389Z",
-    "end": "2020-12-25T08:50:27.932Z",
-    "duration": 40543,
+    "start": "2020-12-25T09:05:17.670Z",
+    "end": "2020-12-25T09:05:57.224Z",
+    "duration": 39554,
     "testsRegistered": 1,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "c97cc95c-40f6-4b55-9c27-c8ac33ee24f6",
+      "uuid": "19f97d38-059d-4d9f-afb0-3b7d52620da6",
       "title": "",
       "fullFile": "cypress\\integration\\shipper.spec.js",
       "file": "cypress\\integration\\shipper.spec.js",
@@ -27,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "33fa0727-ab30-42cc-b90e-021573d77d41",
+          "uuid": "b3eb9f8c-aa8f-4915-bf98-d92a6decaae2",
           "title": "Window",
           "fullFile": "",
           "file": "",
@@ -38,7 +38,7 @@
               "title": "ทดสอบหน้า เมนู Shipper account",
               "fullTitle": "Window ทดสอบหน้า เมนู Shipper account",
               "timedOut": null,
-              "duration": 39256,
+              "duration": 38363,
               "state": "passed",
               "speed": "slow",
               "pass": true,
@@ -47,20 +47,20 @@
               "context": null,
               "code": "cy.wait(1000);\ncy.get('.header__HeaderStyle-dHeagC > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();\ncy.wait(1000);\ncy.get(':nth-child(2) > [href=\"#\"]').click();\ncy.wait(2000);\ncy.get(':nth-child(2) > .menu-items > :nth-child(1) > a').click();\ncy.wait(1000);\ncy.get('body').click();\ncy.wait(2000);\ncy.get('.sc-efHXLn > :nth-child(2)').click();\ncy.wait(2000);\ncy.get('.sc-efHXLn > :nth-child(3)').click();\ncy.wait(2000);\ncy.get('.Lnyfd').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('john', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('john');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('Company', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('Company');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('[page=\"1\"]').click();\ncy.wait(2000);\ncy.get('[page=\"2\"]').click();\ncy.wait(2000);\ncy.get('[page=\"3\"]').click();\ncy.wait(2000);\ncy.get('[page=\"1\"]').click();\ncy.wait(2000);",
               "err": {},
-              "uuid": "5bca48cd-ca3e-4a94-ab1a-b2097791c250",
-              "parentUUID": "33fa0727-ab30-42cc-b90e-021573d77d41",
+              "uuid": "e0613c77-7644-4b2a-a624-456f72719c31",
+              "parentUUID": "b3eb9f8c-aa8f-4915-bf98-d92a6decaae2",
               "isHook": false,
               "skipped": false
             }
           ],
           "suites": [],
           "passes": [
-            "5bca48cd-ca3e-4a94-ab1a-b2097791c250"
+            "e0613c77-7644-4b2a-a624-456f72719c31"
           ],
           "failures": [],
           "pending": [],
           "skipped": [],
-          "duration": 39256,
+          "duration": 38363,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000
