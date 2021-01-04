@@ -6,6 +6,7 @@ import { Layout, LayoutContent, LayoutFooter, LayoutContainer, LayoutColumns, La
 import icons from '@paljs/icons';
 import { SidebarRefObject } from '@paljs/ui/Sidebar';
 import Header from './header';
+import NotFound from '../pages/404';
 import SimpleLayout from './simple-layout';
 import SidebarCustom from './sidebar';
 import { withTrans } from '../i18n/withTrans';
@@ -22,7 +23,7 @@ const getDefaultTheme = (): DefaultTheme['name'] => {
   }
 };
 
-const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ children, pageContext }) => {
+const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ custom404, children, pageContext }) => {
   const [theme, setTheme] = useState<DefaultTheme['name']>('default');
   const [dir, setDir] = useState<'ltr' | 'rtl'>('ltr');
   const sidebarRef = useRef<SidebarRefObject>(null);
@@ -50,7 +51,7 @@ const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ children, p
         <div>
           <SimpleLayout />
           <Layout evaIcons={icons} dir={dir} className={pageContext.layout === 'auth' ? 'auth-layout' : ''}>
-            {pageContext.layout !== 'auth' && (
+            {pageContext.layout !== 'auth' && !custom404 && (
               <Header
                 dir={dir}
                 changeDir={changeDir}
@@ -59,12 +60,16 @@ const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ children, p
               />
             )}
             <LayoutContainer>
-              {pageContext.layout !== 'auth' && <SidebarCustom ref={sidebarRef} />}
+              {pageContext.layout !== 'auth' && !custom404 && <SidebarCustom ref={sidebarRef} />}
               <LayoutContent>
-                <LayoutColumns>
-                  <LayoutColumn className="main-content">{children}</LayoutColumn>
-                </LayoutColumns>
-                {pageContext.layout !== 'auth' && <LayoutFooter>Footer</LayoutFooter>}
+                {custom404 ? (
+                  <NotFound />
+                ) : (
+                  <LayoutColumns>
+                    <LayoutColumn className="main-content">{children}</LayoutColumn>
+                  </LayoutColumns>
+                )}
+                {pageContext.layout !== 'auth' && !custom404 && <LayoutFooter>Footer</LayoutFooter>}
               </LayoutContent>
             </LayoutContainer>
           </Layout>
