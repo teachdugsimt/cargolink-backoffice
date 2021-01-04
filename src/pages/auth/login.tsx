@@ -80,7 +80,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
   };
 
   return (
-    <Auth title="Login" subTitle="Hello! Login with your email">
+    <Auth title="Login" subTitle="Hello! Login with your phone number">
       <Alert setting={alertSetting} />
       <SEO title="Login" />
       <form>
@@ -98,7 +98,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
         </InputGroup>
         {toggle && !email ? (
           <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>
-            * Please Input Phone Number Information
+            * Please input a valid phone number
           </span>
         ) : null}
         <InputGroup
@@ -114,9 +114,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           />
         </InputGroup>
         {toggle && !password ? (
-          <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>
-            * Please Input Password Information
-          </span>
+          <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>* Please input a valid password</span>
         ) : null}
         <Group>
           <Checkbox checked={checkbox[1]} onChange={(value) => onChangeCheckbox(value, 1)}>
