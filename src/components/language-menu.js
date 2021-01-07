@@ -45,16 +45,16 @@ const LanguageMenu = (props) => {
         select: classes.selectFocus,
       }}
     >
-      <MenuItem value={'en'}>
-        <div style={{ display: 'flex' }}>
-          <img src={united_kingdom} style={{ width: 20, height: 20, margin: '0px 5px', alignItems: 'center' }} />
-          <span>EN</span>
-        </div>
-      </MenuItem>
       <MenuItem value={'th'}>
         <div style={{ display: 'flex' }}>
           <img src={thailand} style={{ width: 20, height: 20, margin: '0px 5px', alignItems: 'center' }} />
           <span>TH</span>
+        </div>
+      </MenuItem>
+      <MenuItem value={'en'}>
+        <div style={{ display: 'flex' }}>
+          <img src={united_kingdom} style={{ width: 20, height: 20, margin: '0px 5px', alignItems: 'center' }} />
+          <span>EN</span>
         </div>
       </MenuItem>
     </Select>
