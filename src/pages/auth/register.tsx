@@ -5,9 +5,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'gatsby';
 
-import Auth from '../../components/auth';
+import Auth from '../../components/Auth';
 import SEO from '../../components/SEO';
-import Socials from '../../components/auth/socials';
+import Socials from '../../components/auth/Socials';
 
 const Input = styled(InputGroup)`
   margin-bottom: 2rem;
