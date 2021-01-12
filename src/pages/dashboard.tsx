@@ -1,5 +1,5 @@
 import React from 'react';
-import SEO from '../components/seo';
+import SEO from '../components/SEO';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import ChartCar from '../components/dashboard/chart-car/chart-car';
 import ChartArea from '../components/dashboard/chart-car-area/chart-area';
