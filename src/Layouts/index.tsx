@@ -5,13 +5,13 @@ import themes from './themes';
 import { Layout, LayoutContent, LayoutFooter, LayoutContainer, LayoutColumns, LayoutColumn } from '@paljs/ui/Layout';
 import icons from '@paljs/icons';
 import { SidebarRefObject } from '@paljs/ui/Sidebar';
-import Header from './header';
+import Header from './Header';
 import NotFound from '../pages/404';
 import SimpleLayout from './simple-layout';
-import SidebarCustom from './sidebar';
+import SidebarCustom from './Sidebar';
 import { withTrans } from '../i18n/withTrans';
 import { Provider, rootStore } from '../stores/root-store';
-import './custom.css';
+import './Custom.css';
 
 const getDefaultTheme = (): DefaultTheme['name'] => {
   if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
