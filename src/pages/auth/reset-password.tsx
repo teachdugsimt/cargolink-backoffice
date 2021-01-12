@@ -3,7 +3,7 @@ import { Button } from '@paljs/ui/Button';
 import { InputGroup } from '@paljs/ui/Input';
 import { Link } from 'gatsby';
 
-import SEO from '../../components/seo';
+import SEO from '../../components/SEO';
 import Auth, { Group } from '../../components/auth';
 
 export default function ResetPassword() {

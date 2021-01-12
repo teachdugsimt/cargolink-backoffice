@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Link } from 'gatsby';
 
 import Auth from '../../components/auth';
-import SEO from '../../components/seo';
+import SEO from '../../components/SEO';
 import Socials from '../../components/auth/socials';
 
 const Input = styled(InputGroup)`
