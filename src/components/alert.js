@@ -1,7 +1,7 @@
 import React from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import Swal from 'sweetalert2';
-import images from './themes/images';
+import images from './Themes/images';
 
 const Alert = (props) => {
   const { setting } = props;
