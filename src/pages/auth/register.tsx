@@ -7,7 +7,7 @@ import { Link } from 'gatsby';
 
 import Auth from '../../components/Auth';
 import SEO from '../../components/SEO';
-import Socials from '../../components/auth/Socials';
+import Socials from '../../components/Auth/Socials';
 
 const Input = styled(InputGroup)`
   margin-bottom: 2rem;

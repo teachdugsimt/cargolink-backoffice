@@ -8,6 +8,8 @@ import { search } from 'react-icons-kit/icomoon/search';
 import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
+import { observer } from 'mobx-react-lite';
+import { useMst } from '../../../stores/root-store';
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -19,13 +21,18 @@ const Input = styled(InputGroup)`
   margin-bottom: 10px;
 `;
 
-const TruckForApproval = (props: any) => {
+const TruckForApproval: React.FC<{}> = observer(({}) => {
+  const { carrierStore } = useMst();
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   const [rowData, setRowData] = useState(rows);
   const [panding, setPanding] = useState(false);
   const [approved, setApproved] = useState(false);
   const [all, setAll] = useState(false);
+
+  // useEffect(() => {
+  //   CarrierStore
+  // }, []);
 
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();
@@ -143,5 +150,5 @@ const TruckForApproval = (props: any) => {
       </CardBody>
     </Card>
   );
-};
+});
 export default TruckForApproval;
