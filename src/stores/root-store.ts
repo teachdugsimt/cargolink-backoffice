@@ -2,9 +2,11 @@ import { useContext, createContext } from 'react';
 import { types, Instance, onSnapshot } from 'mobx-state-tree';
 
 import { LoginStore } from './login-store';
+import { CarrierStore } from './carrier-store';
 
 const RootModel = types.model({
   loginStore: LoginStore,
+  carrierStore: CarrierStore,
 });
 
 let initialState = RootModel.create({
@@ -14,6 +16,9 @@ let initialState = RootModel.create({
       idToken: '',
     },
     error_login: '',
+  },
+  carrierStore: {
+    trucks_carrier: [],
   },
 });
 

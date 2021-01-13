@@ -17,7 +17,7 @@ const trucks = types.model({
 });
 export const CarrierStore = types
   .model('CarrierStore', {
-    trucks_carrier: types.array(trucks),
+    trucks_carrier: types.maybeNull(types.array(trucks)),
   })
   .actions((self) => {
     return {
@@ -27,10 +27,14 @@ export const CarrierStore = types
           const response = yield CarrierApi.getAllTrucks();
           console.log('getAllTrucksByCarrier response :> ', response);
           if (response && response.ok) {
+            self.trucks_carrier = response.data;
           } else {
+            self.trucks_carrier = null;
           }
         } catch (error) {
           // ... including try/catch error handling
+          console.error('Failed to getAllTrucksByCarrier :> ', error);
+          self.trucks_carrier = null;
         }
       }),
     };

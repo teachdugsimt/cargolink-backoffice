@@ -1,23 +1,24 @@
 import https from 'https';
 
 const Header = async (api_gw_id = null, is_login = null, is_upload = null, timeout = 20000) => {
-  const httpsAgent = new https.Agent({
-    rejectUnauthorized: false,
-    requestCert: false,
-  });
+  // const httpsAgent = new https.Agent({
+  //   rejectUnauthorized: false,
+  //   requestCert: false,
+  // });
 
   //   const apigw = api_gw_id || process.env.APIGW_ID_UAM
 
   let baseURL = process.env.API_ENDPOINT;
   let header = {};
   let token = await JSON.parse(localStorage.getItem('profileLocal'));
+
   if (!token) {
     token = {
       idToken: '',
     };
   } else {
-    if (typeof token.data_signin === 'object' && token.data_signin !== null) {
-      token = { ...token.data_signin };
+    if (typeof token === 'object' && token) {
+      token = { ...token };
     } else {
       token = {
         idToken: '',
@@ -29,7 +30,7 @@ const Header = async (api_gw_id = null, is_login = null, is_upload = null, timeo
 
   if (is_login) {
     header = {
-      httpsAgent,
+      // httpsAgent,
       baseURL,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded;application/json',
@@ -40,7 +41,7 @@ const Header = async (api_gw_id = null, is_login = null, is_upload = null, timeo
     };
   } else if (is_upload) {
     header = {
-      httpsAgent,
+      // httpsAgent,
       baseURL,
       headers: {
         // 'Content-Type': 'application/pdf', // !! IMPORTANT FOR UPLOAD PDF
@@ -53,7 +54,7 @@ const Header = async (api_gw_id = null, is_login = null, is_upload = null, timeo
     };
   } else {
     header = {
-      httpsAgent,
+      // httpsAgent,
       baseURL,
       headers: {
         // 'Content-Type': 'application/x-www-form-urlencoded',
@@ -66,7 +67,7 @@ const Header = async (api_gw_id = null, is_login = null, is_upload = null, timeo
         // 'Access-Control-Allow-Headers': 'Content-Type',
         // 'Access-Control-Max-Age': '86400',
 
-        Authorization: token.idToken,
+        Authorization: 'Bearer ' + token.idToken,
         // "Upgrade-Insecure-Requests": "1",
       },
       timeout: timeout,

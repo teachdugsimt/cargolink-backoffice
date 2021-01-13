@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
@@ -30,9 +30,11 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
   const [approved, setApproved] = useState(false);
   const [all, setAll] = useState(false);
 
-  // useEffect(() => {
-  //   CarrierStore
-  // }, []);
+  useEffect(() => {
+    carrierStore.getAllTrucksByCarrier();
+    carrierStore.trucks_carrier;
+    console.log('data :>>', JSON.parse(JSON.stringify(carrierStore.trucks_carrier)));
+  }, []);
 
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();

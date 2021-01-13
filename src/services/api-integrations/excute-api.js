@@ -13,6 +13,7 @@ const ExcuteApi = async (url, params, method, timeout = 20000) => {
         timeout,
       ),
     );
+
     let response;
     if (method == 'get' || method == 'GET') {
       response = await api.get(url, params || { filter: {} });
