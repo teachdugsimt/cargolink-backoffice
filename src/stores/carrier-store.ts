@@ -15,9 +15,24 @@ const trucks = types.model({
   insurancePolicyExpDate: types.maybeNull(types.string),
   dltStickerExpiredDate: types.maybeNull(types.string),
 });
+
+const drivers = types.model({
+  id: types.maybeNull(types.string),
+  email: types.maybeNull(types.string),
+  fullname: types.maybeNull(types.string),
+  phoneNumber: types.maybeNull(types.string),
+  driverLicenseNumber: types.maybeNull(types.string),
+  enabled: types.maybeNull(types.boolean),
+  approveStatus: types.maybeNull(types.number),
+  createdAt: types.maybeNull(types.string),
+  drivingLicenseExpiredDate: types.maybeNull(types.string),
+  driverLicenseExpDate: types.maybeNull(types.string),
+});
+
 export const CarrierStore = types
   .model('CarrierStore', {
     trucks_carrier: types.maybeNull(types.array(trucks)),
+    drivers_carrier: types.maybeNull(types.array(drivers)),
   })
   .actions((self) => {
     return {
@@ -35,6 +50,22 @@ export const CarrierStore = types
           // ... including try/catch error handling
           console.error('Failed to getAllTrucksByCarrier :> ', error);
           self.trucks_carrier = null;
+        }
+      }),
+      getAllDriversByCarrier: flow(function* getAllDriversByCarrier() {
+        try {
+          // ... yield can be used in async/await style
+          const response = yield CarrierApi.getAllDrivers();
+          console.log('getAllDriversByCarrier response :> ', response);
+          if (response && response.ok) {
+            // self.trucks_carrier = response.data;
+          } else {
+            // self.trucks_carrier = null;
+          }
+        } catch (error) {
+          // ... including try/catch error handling
+          console.error('Failed to getAllDriversByCarrier :> ', error);
+          //   self.trucks_carrier = null;
         }
       }),
     };

@@ -8,9 +8,12 @@ import { search } from 'react-icons-kit/icomoon/search';
 import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
-import { inject, observer } from 'mobx-react';
+import { inject } from 'mobx-react';
 import { CarrierStore } from '../../../stores/carrier-store';
 import { getSnapshot } from 'mobx-state-tree';
+import { useMst } from '../../../stores/root-store';
+import { observer } from 'mobx-react-lite';
+
 const Wrapper = styled.div`
   margin-top: 10px;
   min-width: 600px;
@@ -22,7 +25,8 @@ const Input = styled(InputGroup)`
   margin-bottom: 0px;
 `;
 
-const DriverForApproval = (props: any) => {
+const DriverForApproval: React.FC<{}> = observer(({}) => {
+  const { carrierStore } = useMst();
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   const [rowData, setRowData] = useState(rows);
@@ -31,9 +35,10 @@ const DriverForApproval = (props: any) => {
   const [all, setAll] = useState(false);
 
   useEffect(() => {
-    console.log('carriers :> ', JSON.parse(JSON.stringify(CarrierStore.getCarriers())));
+    carrierStore.getAllDriversByCarrier();
+    // carrierStore.trucks_carrier;
+    // console.log('data :>>', JSON.parse(JSON.stringify(carrierStore.trucks_carrier)));
   }, []);
-
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();
     if (lowercasedValue === '') setRowData(rows);
@@ -150,6 +155,6 @@ const DriverForApproval = (props: any) => {
       </CardBody>
     </Card>
   );
-};
+});
 
-export default observer(DriverForApproval);
+export default DriverForApproval;
