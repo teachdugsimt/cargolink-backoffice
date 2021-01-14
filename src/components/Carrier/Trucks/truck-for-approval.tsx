@@ -31,9 +31,9 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
   const [all, setAll] = useState(false);
 
   useEffect(() => {
-    carrierStore.getAllTrucksByCarrier();
-    carrierStore.trucks_carrier;
-    console.log('data :>>', JSON.parse(JSON.stringify(carrierStore.trucks_carrier)));
+    carrierStore.getAllTruckTypes();
+    carrierStore.trucks_types;
+    console.log('data :>>', JSON.parse(JSON.stringify(carrierStore.trucks_types)));
   }, []);
 
   const onClickSearch = () => {

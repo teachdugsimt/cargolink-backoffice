@@ -16,6 +16,17 @@ const trucks = types.model({
   dltStickerExpiredDate: types.maybeNull(types.string),
 });
 
+const trucksTypes = types.model({
+  version: types.maybeNull(types.number),
+  createdAt: types.maybeNull(types.string),
+  updatedAt: types.maybeNull(types.string),
+  createdUser: types.maybeNull(types.string),
+  updatedUser: types.maybeNull(types.string),
+  id: types.maybeNull(types.number),
+  name: types.maybeNull(types.string),
+  deleted: types.maybeNull(types.boolean),
+});
+
 const drivers = types.model({
   id: types.maybeNull(types.string),
   email: types.maybeNull(types.string),
@@ -32,6 +43,7 @@ const drivers = types.model({
 export const CarrierStore = types
   .model('CarrierStore', {
     trucks_carrier: types.maybeNull(types.array(trucks)),
+    trucks_types: types.maybeNull(types.array(trucksTypes)),
     drivers_carrier: types.maybeNull(types.array(drivers)),
   })
   .actions((self) => {
@@ -58,14 +70,30 @@ export const CarrierStore = types
           const response = yield CarrierApi.getAllDrivers();
           console.log('getAllDriversByCarrier response :> ', response);
           if (response && response.ok) {
-            // self.trucks_carrier = response.data;
+            self.drivers_carrier = response.data;
           } else {
-            // self.trucks_carrier = null;
+            self.drivers_carrier = null;
           }
         } catch (error) {
           // ... including try/catch error handling
           console.error('Failed to getAllDriversByCarrier :> ', error);
-          //   self.trucks_carrier = null;
+          self.drivers_carrier = null;
+        }
+      }),
+      getAllTruckTypes: flow(function* getAllTruckTypes() {
+        try {
+          // ... yield can be used in async/await style
+          const response = yield CarrierApi.getAllTruckTypes();
+          console.log('getAllTruckTypes response :> ', response);
+          if (response && response.ok) {
+            self.trucks_types = response.data;
+          } else {
+            self.trucks_types = null;
+          }
+        } catch (error) {
+          // ... including try/catch error handling
+          console.error('Failed to getAllTruckTypes :> ', error);
+          self.trucks_types = null;
         }
       }),
     };
