@@ -7,7 +7,7 @@ context('Window', () => {
 
   it('ทดสอบหน้า เมนู User Management', () => {
     cy.wait(1000);
-    cy.get('.header__HeaderStyle-dHeagC > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();
+    cy.get('.Header__HeaderStyle-hhdliK > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();
     cy.wait(1000);
     cy.get(':nth-child(4) > a').click();
     cy.wait(2000);
