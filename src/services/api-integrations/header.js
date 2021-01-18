@@ -48,7 +48,7 @@ const Header = async (api_gw_id = null, is_login = null, is_upload = null, timeo
         'Content-Type': is_upload.toString(), // !! IMPORTANT FOR UPLOAD PDF
         Accept: '*/*', // !! IMPORTANT FOR UPLOAD PDF
         // 'x-apigw-api-id': apigw,
-        Authorization: token.idToken,
+        Authorization: 'Bearer ' + token.idToken,
       },
       timeout: timeout,
     };
