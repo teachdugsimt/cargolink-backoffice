@@ -1,15 +1,22 @@
 import { types, flow } from 'mobx-state-tree';
 import { CarrierApi } from '../services';
 
+const objectWorking = types.model({
+  region: types.maybeNull(types.string),
+  province: types.maybeNull(types.string),
+});
+
 const trucks = types.model({
   id: types.maybeNull(types.string),
   name: types.maybeNull(types.string),
-  registrationNumber: types.maybeNull(types.string),
+  registrationNumber: types.array(types.maybeNull(types.string)),
+  workingZones: types.map(objectWorking),
   vehicleRegistrationYear: types.maybeNull(types.string),
   createdAt: types.maybeNull(types.string),
+  updatedAt: types.maybeNull(types.string),
   truckType: types.maybeNull(types.number),
   loadingWeight: types.maybeNull(types.number),
-  approveStatus: types.maybeNull(types.number),
+  approveStatus: types.maybeNull(types.string),
   vehiculeRegCertExpDate: types.maybeNull(types.string),
   logBookExpDate: types.maybeNull(types.string),
   insurancePolicyExpDate: types.maybeNull(types.string),

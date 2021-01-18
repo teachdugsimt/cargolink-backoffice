@@ -1,7 +1,7 @@
 import ExcuteApi from './api-integrations/excute-api';
 class CarrierApi {
   getAllTrucks = async (params) => {
-    const response = await ExcuteApi('/api/v1/carriers/getAllTrucksByCarrier', params, 'get', 600000);
+    const response = await ExcuteApi('/api/v1/mobile/carriers/truck', params, 'get', 600000);
     return response;
   };
 
