@@ -52,7 +52,7 @@ context('Window', () => {
     cy.get('form > :nth-child(1) > input').type('+660474572889', { delay: 200 });
     cy.get(':nth-child(2) > input').type('Tham12345', { delay: 200 });
     cy.get('.sc-bkbjAj').click();
-    cy.wait(2000);
+    cy.wait(3000);
     cy.get('.Header__HeaderStyle-hhdliK > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();
     cy.wait(2000);
     cy.get(':nth-child(2) > [href="#"]').click();
