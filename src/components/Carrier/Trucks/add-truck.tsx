@@ -10,27 +10,45 @@ const Input = styled(InputGroup)`
   margin-bottom: 2rem;
 `;
 
-const AddTruck = (props: any) => {
-  const [checkbox, setCheckbox] = useState({ 1: false });
-  const useForceUpdate = () => useState()[1];
-  const onChangeCheckbox = (value: boolean, name: number) => {
-    // v will be true or false
-    setCheckbox({ ...checkbox, [name]: value });
-  };
+const positionOptions: { value: any; label: any }[] = [
+  { value: 1, label: 'รถขนสินค้าแบบกระบะตู้' },
+  { value: 'topLeft', label: 'Top-Left' },
+  { value: 'bottomRight', label: 'Bottom-Right' },
+  { value: 'bottomLeft', label: 'Bottom-Left' },
+];
 
+const region: { value: any; label: any }[] = [
+  { label: 'สินค้าการเกษตร', value: 'สินค้าการเกษตร' },
+  { value: 'Info', label: 'Info' },
+  { value: 'Success', label: 'Success' },
+  { value: 'Danger', label: 'Danger' },
+  { value: 'Primary', label: 'Primary' },
+];
+
+const province: { value: any; label: any }[] = [
+  { label: 'สินค้าการเกษตร', value: 'สินค้าการเกษตร' },
+  { value: 'Info', label: 'Info' },
+  { value: 'Success', label: 'Success' },
+  { value: 'Danger', label: 'Danger' },
+  { value: 'Primary', label: 'Primary' },
+];
+
+const AddTruck = (props: any) => {
   const fileInput = useRef(null);
+  const [checkbox, setCheckbox] = useState(false);
+  const useForceUpdate = () => useState()[1];
   const forceUpdate = useForceUpdate();
 
-  useEffect((e) => {
+  useEffect(() => {
     window.addEventListener('keyup', clickFileInput);
     return () => window.removeEventListener('keyup', clickFileInput);
-  });
+  }, []);
 
-  const clickFileInput = (e) => {
-    if (fileInput.current.nextSibling.contains(document.activeElement)) {
+  const clickFileInput = (e: any) => {
+    if (fileInput?.current.nextSibling.contains(document.activeElement)) {
       // Bind space to trigger clicking of the button when focused
       if (e.keyCode === 32) {
-        fileInput.current.click();
+        fileInput?.current.click();
       }
     }
   };
@@ -48,29 +66,6 @@ const AddTruck = (props: any) => {
     return null;
   };
 
-  const positionOptions: { value: any; label: any }[] = [
-    { value: 1, label: 'รถขนสินค้าแบบกระบะตู้' },
-    { value: 'topLeft', label: 'Top-Left' },
-    { value: 'bottomRight', label: 'Bottom-Right' },
-    { value: 'bottomLeft', label: 'Bottom-Left' },
-  ];
-
-  const region: { value: any; label: any }[] = [
-    { label: 'สินค้าการเกษตร', value: 'สินค้าการเกษตร' },
-    { value: 'Info', label: 'Info' },
-    { value: 'Success', label: 'Success' },
-    { value: 'Danger', label: 'Danger' },
-    { value: 'Primary', label: 'Primary' },
-  ];
-
-  const province: { value: any; label: any }[] = [
-    { label: 'สินค้าการเกษตร', value: 'สินค้าการเกษตร' },
-    { value: 'Info', label: 'Info' },
-    { value: 'Success', label: 'Success' },
-    { value: 'Danger', label: 'Danger' },
-    { value: 'Primary', label: 'Primary' },
-  ];
-
   return (
     <Card>
       <CardBody>
@@ -78,7 +73,12 @@ const AddTruck = (props: any) => {
           <span>เลือกประเภทของรถของคุณ</span>
           <Select options={positionOptions} isMulti placeholder="Select multiple" fullWidth />
           <span>รถมีที่ดั้มหรือไม่</span>
-          <Switch checked={checkbox[1]} onChange={(value) => onChangeCheckbox(value, 1)} color="success" />
+          <Switch
+            checked={checkbox}
+            onChange={() => setCheckbox(!checkbox)}
+            color="primary"
+            style={{ color: '#00d68f' }}
+          />
           <br />
           <span>ความสูงของคอกรถ (หน่วยเป็นเมตร)</span>
           <Input fullWidth>
@@ -94,51 +94,15 @@ const AddTruck = (props: any) => {
           <span>อัพโหลดรูปภาพรถ</span>
           <br />
           <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <input
-              id="file"
-              type="file"
-              ref={fileInput}
-              // The onChange should trigger updates whenever
-              // the value changes?
-              // Try to select a file, then try selecting another one.
-              onChange={forceUpdate}
-              multiple
-            />
+            <input id="file" type="file" ref={fileInput} onChange={forceUpdate} multiple />
             {fileNames()}
-            <input
-              id="file"
-              type="file"
-              ref={fileInput}
-              // The onChange should trigger updates whenever
-              // the value changes?
-              // Try to select a file, then try selecting another one.
-              onChange={forceUpdate}
-              multiple
-            />
+            <input id="file" type="file" ref={fileInput} onChange={forceUpdate} multiple />
             {fileNames()}
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <input
-              id="file"
-              type="file"
-              ref={fileInput}
-              // The onChange should trigger updates whenever
-              // the value changes?
-              // Try to select a file, then try selecting another one.
-              onChange={forceUpdate}
-              multiple
-            />
+            <input id="file" type="file" ref={fileInput} onChange={forceUpdate} multiple />
             {fileNames()}
-            <input
-              id="file"
-              type="file"
-              ref={fileInput}
-              // The onChange should trigger updates whenever
-              // the value changes?
-              // Try to select a file, then try selecting another one.
-              onChange={forceUpdate}
-              multiple
-            />
+            <input id="file" type="file" ref={fileInput} onChange={forceUpdate} multiple />
             {fileNames()}
           </div>
           <hr />
