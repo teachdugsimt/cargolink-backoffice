@@ -15,6 +15,7 @@ import Row from '@paljs/ui/Row';
 import { useMst } from '../../../stores/root-store';
 import moment from 'moment';
 import 'moment/locale/th';
+import { navigate } from 'gatsby';
 moment.locale('th');
 
 const Wrapper = styled.div`
@@ -165,6 +166,7 @@ const JobContainer: React.FC<Props> = observer(() => {
                 display: 'flex',
                 alignItems: 'center',
               }}
+              onClick={() => navigate('/add-job')}
             >
               <Icon icon={ic_add} /> ADD NEW JOB
             </Button>
