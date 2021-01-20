@@ -1,42 +1,42 @@
 import { types, flow } from 'mobx-state-tree';
 import { ShipperApi } from '../services';
 
-const arrayTo = types.model({
-  contactMobileNo: types.maybeNull(types.string),
-  contactName: types.maybeNull(types.string),
+const arrayFrom = types.model({
+  name: types.maybeNull(types.string),
   dateTime: types.maybeNull(types.string),
+  contactName: types.maybeNull(types.string),
+  contactMobileNo: types.maybeNull(types.string),
   lat: types.maybeNull(types.string),
   lng: types.maybeNull(types.string),
-  name: types.maybeNull(types.string),
 });
 
-const arrayFrom = types.model({
-  contactMobileNo: types.maybeNull(types.string),
-  contactName: types.maybeNull(types.string),
+const arrayTo = types.model({
+  name: types.maybeNull(types.string),
   dateTime: types.maybeNull(types.string),
+  contactName: types.maybeNull(types.string),
+  contactMobileNo: types.maybeNull(types.string),
   lat: types.maybeNull(types.string),
   lng: types.maybeNull(types.string),
-  name: types.maybeNull(types.string),
 });
 
 const objectOwner = types.model({
-  companyName: types.maybeNull(types.string),
-  email: types.maybeNull(types.string),
-  fullName: types.maybeNull(types.string),
   id: types.maybeNull(types.number),
+  companyName: types.maybeNull(types.string),
+  fullName: types.maybeNull(types.string),
   mobileNo: types.maybeNull(types.string),
+  email: types.maybeNull(types.string),
 });
 
 const jobs = types.model({
-  from: types.map(arrayFrom),
   id: types.maybeNull(types.string),
-  owner: types.map(objectOwner),
-  productName: types.maybeNull(types.string),
   productTypeId: types.maybeNull(types.number),
-  requiredTruckAmount: types.maybeNull(types.number),
-  to: types.maybeNull(types.array(arrayTo)),
+  productName: types.maybeNull(types.string),
   truckType: types.maybeNull(types.string),
   weight: types.maybeNull(types.number),
+  requiredTruckAmount: types.maybeNull(types.number),
+  from: types.map(arrayFrom),
+  to: types.maybeNull(types.array(arrayTo)),
+  owner: types.map(objectOwner),
 });
 
 export const ShipperStore = types
@@ -45,10 +45,9 @@ export const ShipperStore = types
   })
   .actions((self) => {
     return {
-      getAllJobsByShipper: flow(function* getAllJobsByShipper() {
+      getAllJobsByShipper: flow(function* getAllJobsByShipper(params) {
         try {
-          // ... yield can be used in async/await style
-          const response = yield ShipperApi.getAllJobs();
+          const response = yield ShipperApi.getAllJobs(params);
           console.log('getAllJobsByShipper response :> ', response);
           if (response && response.ok) {
             self.jobs_shipper = response.data;
@@ -56,11 +55,9 @@ export const ShipperStore = types
             self.jobs_shipper = null;
           }
         } catch (error) {
-          // ... including try/catch error handling
           console.error('Failed to getAllJobsByShipper :> ', error);
           self.jobs_shipper = null;
         }
       }),
     };
-  })
-  .views((self) => ({}));
+  });

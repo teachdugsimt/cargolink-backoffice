@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
@@ -9,6 +10,7 @@ import { search } from 'react-icons-kit/icomoon/search';
 import styled from 'styled-components';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
+import { useMst } from '../../../stores/root-store';
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -16,17 +18,22 @@ const Wrapper = styled.div`
   min-width: 600px;
 `;
 
-const Input = styled(InputGroup)`
-  margin-bottom: 10px;
-`;
-
-const JobContainer = (props: any) => {
+interface Props {}
+const JobContainer: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
+  const { shipperStore, loginStore } = useMst();
   const [searchValue, setSearchValue] = useState('');
   const [rowData, setRowData] = useState(rows);
   const [panding, setPanding] = useState(false);
   const [approved, setApproved] = useState(false);
   const [all, setAll] = useState(false);
+
+  useEffect(() => {
+    shipperStore.getAllJobsByShipper({
+      descending: true,
+      page: 0,
+    });
+  }, []);
 
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();
@@ -144,5 +151,5 @@ const JobContainer = (props: any) => {
       </CardBody>
     </Card>
   );
-};
+});
 export default JobContainer;
