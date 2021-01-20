@@ -83,9 +83,18 @@ export const ShipperStore = types
           self.jobs_shipper = null;
         }
       }),
-
       clearShipperStore: flow(function* clearShipperStore() {
         self.jobs_shipper = null;
+      }),
+      PostJobs: flow(function* PostJobs() {
+        try {
+          // ... yield can be used in async/await style
+          const response = yield ShipperApi.AddJobs();
+          console.log('PostJobs response :> ', response);
+        } catch (error) {
+          // ... including try/catch error handling
+          console.error('Failed to PostJobs :> ', error);
+        }
       }),
     };
   });

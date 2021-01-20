@@ -12,9 +12,7 @@ const Input = styled(InputGroup)`
 `;
 
 const AddJobs = (props: any) => {
-  const onCheckbox = () => {
-    // v will be true or false
-  };
+  const submit = () => {};
 
   const positionOptions: { value: any; label: any }[] = [
     { value: 1, label: 'รถขนสินค้าแบบกระบะตู้' },
@@ -102,7 +100,7 @@ const AddJobs = (props: any) => {
           <Input fullWidth>
             <input type="text" />
           </Input>
-          <Button status="Success" type="button" shape="SemiRound" fullWidth>
+          <Button status="Success" type="submit" shape="SemiRound" onClick={() => submit()} fullWidth>
             ยืนยัน
           </Button>
         </form>
