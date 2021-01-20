@@ -16,6 +16,7 @@ const Wrapper = styled.div`
   min-width: 600px;
 `;
 import styled from 'styled-components';
+import { navigate } from 'gatsby';
 
 const Input = styled(InputGroup)`
   margin-bottom: 10px;
@@ -142,6 +143,7 @@ const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
                 display: 'flex',
                 alignItems: 'center',
               }}
+              onClick={() => navigate('/add-trucks')}
             >
               <Icon icon={ic_add} /> ADD NEW TRUCK
             </Button>
