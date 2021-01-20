@@ -1,26 +1,42 @@
 import { types, flow } from 'mobx-state-tree';
 import { ShipperApi } from '../services';
 
-const objectWorking = types.model({
-  region: types.maybeNull(types.string),
-  province: types.maybeNull(types.string),
+const arrayTo = types.model({
+  contactMobileNo: types.maybeNull(types.string),
+  contactName: types.maybeNull(types.string),
+  dateTime: types.maybeNull(types.string),
+  lat: types.maybeNull(types.string),
+  lng: types.maybeNull(types.string),
+  name: types.maybeNull(types.string),
+});
+
+const arrayFrom = types.model({
+  contactMobileNo: types.maybeNull(types.string),
+  contactName: types.maybeNull(types.string),
+  dateTime: types.maybeNull(types.string),
+  lat: types.maybeNull(types.string),
+  lng: types.maybeNull(types.string),
+  name: types.maybeNull(types.string),
+});
+
+const objectOwner = types.model({
+  companyName: types.maybeNull(types.string),
+  email: types.maybeNull(types.string),
+  fullName: types.maybeNull(types.string),
+  id: types.maybeNull(types.number),
+  mobileNo: types.maybeNull(types.string),
 });
 
 const jobs = types.model({
+  from: types.map(arrayFrom),
   id: types.maybeNull(types.string),
-  name: types.maybeNull(types.string),
-  registrationNumber: types.array(types.maybeNull(types.string)),
-  workingZones: types.map(objectWorking),
-  vehicleRegistrationYear: types.maybeNull(types.string),
-  createdAt: types.maybeNull(types.string),
-  updatedAt: types.maybeNull(types.string),
-  truckType: types.maybeNull(types.number),
-  loadingWeight: types.maybeNull(types.number),
-  approveStatus: types.maybeNull(types.string),
-  vehiculeRegCertExpDate: types.maybeNull(types.string),
-  logBookExpDate: types.maybeNull(types.string),
-  insurancePolicyExpDate: types.maybeNull(types.string),
-  dltStickerExpiredDate: types.maybeNull(types.string),
+  owner: types.map(objectOwner),
+  productName: types.maybeNull(types.string),
+  productTypeId: types.maybeNull(types.number),
+  requiredTruckAmount: types.maybeNull(types.number),
+  to: types.maybeNull(types.array(arrayTo)),
+  truckType: types.maybeNull(types.string),
+  weight: types.maybeNull(types.number),
 });
 
 export const ShipperStore = types

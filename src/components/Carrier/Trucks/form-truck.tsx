@@ -130,7 +130,7 @@ const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
             APPROVED
           </Button>
         </Row>
-        <span>{`Results found: ${rowData.length}`}</span>
+        <span>{`Results found: ${rowData ? rowData.length : 0}`}</span>
         <Wrapper>
           <DynamicTable
             // caption={caption}
