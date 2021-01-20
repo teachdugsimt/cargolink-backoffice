@@ -5,6 +5,7 @@ import DynamicTable from '@atlaskit/dynamic-table';
 import { Button, ButtonLink } from '@paljs/ui/Button';
 import { caption, head, rows } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
+import { ic_add } from 'react-icons-kit/md/ic_add';
 import { search } from 'react-icons-kit/icomoon/search';
 import styled from 'styled-components';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
@@ -91,37 +92,54 @@ const JobContainer = (props: any) => {
         </div>
       </CardHeader>
       <CardBody>
-        <Row style={{ padding: 5, marginBottom: 10 }}>
-          <Button
-            appearance={all == true ? 'filled' : 'outline'}
-            status="Success"
-            size="Small"
-            onClick={() => onClickAll()}
-            style={{
-              marginRight: 10,
-            }}
-          >
-            ALL
-          </Button>
-          <Button
-            appearance={panding == true ? 'filled' : 'outline'}
-            status="Warning"
-            size="Small"
-            style={{
-              marginRight: 10,
-            }}
-            onClick={() => onClickPending()}
-          >
-            PENDING
-          </Button>
-          <Button
-            appearance={approved == true ? 'filled' : 'outline'}
-            status="Warning"
-            size="Small"
-            onClick={() => onClickApproved()}
-          >
-            APPROVED
-          </Button>
+        <Row style={{ padding: 5, marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
+          <div>
+            <Button
+              appearance={all == true ? 'filled' : 'outline'}
+              status="Success"
+              size="Small"
+              onClick={() => onClickAll()}
+              style={{
+                marginRight: 10,
+              }}
+            >
+              ALL
+            </Button>
+            <Button
+              appearance={panding == true ? 'filled' : 'outline'}
+              status="Warning"
+              size="Small"
+              style={{
+                marginRight: 10,
+              }}
+              onClick={() => onClickPending()}
+            >
+              PENDING
+            </Button>
+            <Button
+              appearance={approved == true ? 'filled' : 'outline'}
+              status="Warning"
+              size="Small"
+              onClick={() => onClickApproved()}
+            >
+              APPROVED
+            </Button>
+          </div>
+          <div>
+            {' '}
+            <Button
+              appearance="outline"
+              status="Success"
+              size="Small"
+              style={{
+                marginRight: 10,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Icon icon={ic_add} /> ADD NEW ACCOUNT
+            </Button>
+          </div>
         </Row>
         <span>{`Results found: ${rowData.length}`}</span>
         <Wrapper>

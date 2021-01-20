@@ -4,6 +4,7 @@ import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
 import { caption, head } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
+import { ic_add } from 'react-icons-kit/md/ic_add';
 import { search } from 'react-icons-kit/icomoon/search';
 import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
@@ -98,37 +99,53 @@ const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
         </div>
       </CardHeader>
       <CardBody>
-        <Row style={{ padding: 5, marginBottom: 10 }}>
-          <Button
-            appearance={all == true ? 'filled' : 'outline'}
-            status="Success"
-            size="Small"
-            onClick={() => onClickAll()}
-            style={{
-              marginRight: 10,
-            }}
-          >
-            ALL
-          </Button>
-          <Button
-            appearance={panding == true ? 'filled' : 'outline'}
-            status="Warning"
-            size="Small"
-            style={{
-              marginRight: 10,
-            }}
-            onClick={() => onClickPending()}
-          >
-            PENDING
-          </Button>
-          <Button
-            appearance={approved == true ? 'filled' : 'outline'}
-            status="Warning"
-            size="Small"
-            onClick={() => onClickApproved()}
-          >
-            APPROVED
-          </Button>
+        <Row style={{ padding: 5, marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
+          <div>
+            <Button
+              appearance={all == true ? 'filled' : 'outline'}
+              status="Success"
+              size="Small"
+              onClick={() => onClickAll()}
+              style={{
+                marginRight: 10,
+              }}
+            >
+              ALL
+            </Button>
+            <Button
+              appearance={panding == true ? 'filled' : 'outline'}
+              status="Warning"
+              size="Small"
+              style={{
+                marginRight: 10,
+              }}
+              onClick={() => onClickPending()}
+            >
+              PENDING
+            </Button>
+            <Button
+              appearance={approved == true ? 'filled' : 'outline'}
+              status="Warning"
+              size="Small"
+              onClick={() => onClickApproved()}
+            >
+              APPROVED
+            </Button>
+          </div>
+          <div>
+            <Button
+              appearance="outline"
+              status="Success"
+              size="Small"
+              style={{
+                marginRight: 10,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Icon icon={ic_add} /> ADD NEW TRUCK
+            </Button>
+          </div>
         </Row>
         <span>{`Results found: ${rowData ? rowData.length : 0}`}</span>
         <Wrapper>
