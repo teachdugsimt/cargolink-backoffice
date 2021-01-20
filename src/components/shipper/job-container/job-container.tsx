@@ -4,14 +4,18 @@ import { useTranslation } from 'react-i18next';
 import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
 import { Button, ButtonLink } from '@paljs/ui/Button';
-import { caption, head, rows } from './dynamic-table/sample-data';
+import { caption, head, createRow } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
 import { ic_add } from 'react-icons-kit/md/ic_add';
 import { search } from 'react-icons-kit/icomoon/search';
+import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
 import styled from 'styled-components';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
 import { useMst } from '../../../stores/root-store';
+import moment from 'moment';
+import 'moment/locale/th';
+moment.locale('th');
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -22,30 +26,43 @@ const Wrapper = styled.div`
 interface Props {}
 const JobContainer: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
-  const { shipperStore, loginStore } = useMst();
+  const { shipperStore } = useMst();
   const [searchValue, setSearchValue] = useState('');
-  const [rowData, setRowData] = useState(rows);
+  const [rows, setRows] = useState([]);
+  const [rowData, setRowData] = useState([]);
   const [panding, setPanding] = useState(false);
   const [approved, setApproved] = useState(false);
   const [all, setAll] = useState(false);
 
   useEffect(() => {
+    shipperStore.clearShipperStore();
     shipperStore.getAllJobsByShipper({
       descending: true,
       page: 0,
     });
   }, []);
 
+  useEffect(() => {
+    const jobs_shipper = JSON.parse(JSON.stringify(shipperStore.jobs_shipper));
+    console.log('jobs_shipper :> ', jobs_shipper);
+    if (jobs_shipper?.length) {
+      const rows = createRow(jobs_shipper);
+      setRows(rows);
+      setRowData(rows);
+    }
+  }, [shipperStore.jobs_shipper?.length]);
+
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();
     if (lowercasedValue === '') setRowData(rows);
     else {
       const filteredData = rows.filter((item) => {
-        const data = item.cells.filter((key) => key.key.toString().toLowerCase().includes(lowercasedValue));
+        const data = item.cells.filter((cell) => cell.key?.toString().toLowerCase().includes(lowercasedValue));
         return data && data.length ? true : false;
       });
       setRowData(filteredData);
     }
+    console.log('rows :> ', rows);
   };
 
   const onClickPending = () => {
@@ -163,7 +180,15 @@ const JobContainer: React.FC<Props> = observer(() => {
             defaultSortKey="term"
             defaultSortOrder="ASC"
             onSort={() => console.log('onSort')}
-            onSetPage={() => console.log('onSetPage')}
+            onSetPage={(pagination) => {
+              if (rowData.length % 10 === 0 && pagination % 2 === 0) {
+                shipperStore.clearShipperStore();
+                shipperStore.getAllJobsByShipper({
+                  descending: true,
+                  page: rowData.length,
+                });
+              }
+            }}
           />
         </Wrapper>
       </CardBody>

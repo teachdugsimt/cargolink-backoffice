@@ -61,6 +61,12 @@ export const createHead = (withWidth: boolean) => {
         // width: withWidth ? 10 : undefined,
       },
       {
+        key: 'product_name',
+        content: 'Product Name',
+        shouldTruncate: true,
+        isSortable: true,
+      },
+      {
         key: 'name_shipper',
         content: 'Name of  shipper',
         shouldTruncate: true,
@@ -80,15 +86,10 @@ export const createHead = (withWidth: boolean) => {
         // width: withWidth ? 50 : undefined,
       },
       {
-        key: 'valid_unit',
-        content: 'Valid unit',
+        key: 'weight',
+        content: 'Weight',
         shouldTruncate: true,
         isSortable: true,
-      },
-      {
-        key: 'status',
-        content: 'Status',
-        shouldTruncate: true,
       },
     ],
   };
@@ -96,75 +97,57 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const rows = jobpost.map((jobpost: Jobpost, index: number) => ({
-  key: `row-${index}-${jobpost.id}`,
-  cells: [
-    {
-      key: jobpost.job_no,
-      content: (
-        <NameWrapper>
-          <span style={{ padding: '10px 0px', color: '#f8bc18', fontWeight: 'bold' }}>{jobpost.job_no}</span>
-          <Button status="Success" size="Tiny" shape="Round">{`Frieght: ${nf.format(jobpost.freight)} Baht`}</Button>
-        </NameWrapper>
-      ),
-    },
-    {
-      key: jobpost.name_shipper,
-      content: jobpost.name_shipper,
-    },
-    {
-      key: jobpost.type,
-      content: (
-        <div>
-          {jobpost.type == 'vegetable' ? (
-            <img style={{ width: '50%' }} src={vegetables} />
-          ) : jobpost.type == 'carbon' ? (
-            <img style={{ width: '50%' }} src={charcoal} />
-          ) : (
-            <img style={{ width: '50%' }} src={woods} />
-          )}
-        </div>
-      ),
-    },
-    {
-      key: jobpost.route.from.address,
-      content: (
-        <div style={{ borderBottom: '2px solid black' }}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <span style={{ padding: 2 }}>
-              <span style={{ fontWeight: 'bold' }}>From: </span>
-              {`${jobpost.route.from.address}`}
-            </span>
-            <span>
-              <Icon style={{ color: '#f8bc18' }} icon={ic_access_time} />
-              {` ${moment(jobpost.route.from.date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
-            </span>
+export const createRow = (jobs: any) => {
+  return jobs.map((jobpost: any, index: number) => ({
+    key: `row-${index}-${jobpost.id}`,
+    cells: [
+      {
+        key: jobpost.id,
+        content: <span style={{ padding: '10px 0px', color: '#f8bc18', fontWeight: 'bold' }}>{jobpost.id}</span>,
+      },
+      {
+        key: jobpost.productName,
+        content: jobpost.productName,
+      },
+      {
+        key: jobpost.owner?.companyName,
+        content: jobpost.owner?.companyName,
+      },
+      {
+        key: jobpost.productTypeId,
+        content: jobpost.productTypeId,
+      },
+      {
+        key: jobpost.from?.name,
+        content: (
+          <div style={{ borderBottom: '2px solid black' }}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span style={{ padding: 2 }}>
+                <span style={{ fontWeight: 'bold' }}>From: </span>
+                {`${jobpost.from?.name}`}
+              </span>
+              <span>
+                <Icon style={{ color: '#f8bc18' }} icon={ic_access_time} />
+                {` ${moment(jobpost.from?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
+              </span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
+              <span style={{ padding: 2, marginTop: 8 }}>
+                <span style={{ fontWeight: 'bold' }}>To: </span>
+                {`${jobpost.to[0]?.name}`}
+              </span>
+              <span>
+                <Icon style={{ color: '#f8bc18' }} icon={ic_access_time} />
+                {` ${moment(jobpost.to[0]?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
+              </span>
+            </div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ padding: 2 }}>
-              <span style={{ fontWeight: 'bold' }}>To: </span>
-              {`${jobpost.route.to.address}`}
-            </span>
-            <span>
-              <Icon style={{ color: '#f8bc18' }} icon={ic_access_time} />
-              {` ${moment(jobpost.route.to.date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
-            </span>
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: moment(jobpost.valid_unit, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
-      content: moment(jobpost.valid_unit, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
-    },
-    {
-      key: jobpost.status,
-      content: jobpost.status,
-    },
-  ],
-}));
+        ),
+      },
+      {
+        key: jobpost.weight,
+        content: <span>{jobpost.weight}</span>,
+      },
+    ],
+  }));
+};

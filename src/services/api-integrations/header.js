@@ -58,7 +58,7 @@ const Header = async (api_gw_id = null, is_login = null, is_upload = null, timeo
       baseURL,
       headers: {
         // 'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Type': 'application/x-www-form-urlencoded;application/json',
+        'Content-Type': 'application/json',
         Accept: 'application/json',
         // 'Accept': 'text/plain',
         // 'x-apigw-api-id': apigw,
