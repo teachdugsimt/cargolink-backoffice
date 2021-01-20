@@ -143,7 +143,7 @@ const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
                 display: 'flex',
                 alignItems: 'center',
               }}
-              onClick={() => navigate('/add-trucks')}
+              onClick={() => navigate('/add-truck')}
             >
               <Icon icon={ic_add} /> ADD NEW TRUCK
             </Button>
