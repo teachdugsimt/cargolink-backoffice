@@ -23,6 +23,13 @@ const Wrapper = styled.div`
   min-width: 600px;
 `;
 
+const CardHeaderStyled = styled(CardHeader)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 interface Props {}
 const JobContainer: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
@@ -96,9 +103,7 @@ const JobContainer: React.FC<Props> = observer(() => {
 
   return (
     <Card>
-      <CardHeader
-        style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-      >
+      <CardHeaderStyled>
         <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}>{t('jobs')}</span>
         <div style={{ display: 'flex' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -115,7 +120,7 @@ const JobContainer: React.FC<Props> = observer(() => {
             </Button>
           </div>
         </div>
-      </CardHeader>
+      </CardHeaderStyled>
       <CardBody>
         <Row style={{ padding: 5, marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
           <div>
@@ -151,7 +156,6 @@ const JobContainer: React.FC<Props> = observer(() => {
             </Button>
           </div>
           <div>
-            {' '}
             <Button
               appearance="outline"
               status="Success"
