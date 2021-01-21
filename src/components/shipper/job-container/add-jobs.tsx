@@ -1,106 +1,116 @@
+import React, { useEffect, useState } from 'react';
 import { Button } from '@paljs/ui/Button';
 import { InputGroup } from '@paljs/ui/Input';
-import { Checkbox } from '@paljs/ui/Checkbox';
-import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'gatsby';
 import { Card, CardBody } from '@paljs/ui/Card';
 import Select from '@paljs/ui/Select';
+import { useForm } from 'react-hook-form';
 
 const Input = styled(InputGroup)`
   margin-bottom: 2rem;
 `;
 
 const AddJobs = (props: any) => {
-  const submit = () => {};
+  const { register, handleSubmit } = useForm();
+  const [truckType, setTruckType] = useState([]);
+  const [productTypeId, setProductTypeId] = useState([]);
 
-  const positionOptions: { value: any; label: any }[] = [
-    { value: 1, label: 'รถขนสินค้าแบบกระบะตู้' },
-    { value: 'topLeft', label: 'Top-Left' },
-    { value: 'bottomRight', label: 'Bottom-Right' },
-    { value: 'bottomLeft', label: 'Bottom-Left' },
+  const truckTypeOptions: { value: any; label: any }[] = [
+    { value: 1, label: 'รถขนสินค้าแบบกระบะตู้1' },
+    { value: 2, label: 'รถขนสินค้าแบบกระบะตู้2' },
+    { value: 3, label: 'รถขนสินค้าแบบกระบะตู้3' },
+    { value: 4, label: 'รถขนสินค้าแบบกระบะตู้4' },
   ];
 
-  const statusOption: { value: any; label: any }[] = [
-    { label: 'สินค้าการเกษตร', value: 'สินค้าการเกษตร' },
-    { value: 'Info', label: 'Info' },
-    { value: 'Success', label: 'Success' },
-    { value: 'Danger', label: 'Danger' },
-    { value: 'Primary', label: 'Primary' },
+  const productTypeIdOption: { value: any; label: any }[] = [
+    { value: 1, label: 'สินค้าการเกษตร1' },
+    { value: 2, label: 'สินค้าการเกษตร2' },
+    { value: 3, label: 'สินค้าการเกษตร3' },
+    { value: 4, label: 'สินค้าการเกษตร4' },
+    { value: 5, label: 'สินค้าการเกษตร5' },
   ];
+
+  const onSubmit = (data) => {
+    console.log(data);
+    console.log(truckType.value, productTypeId.value);
+  };
 
   return (
     <Card>
       <CardBody>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <span>ประเภทของรถที่คุณต้องการ *</span>
-          <Select options={positionOptions} isMulti placeholder="Select multiple" fullWidth />
+          <Select
+            name="truckType"
+            options={truckTypeOptions}
+            placeholder="Select multiple"
+            onChange={(value) => setTruckType(value)}
+            fullWidth
+          />
           <span>จำนวนคันรถที่ต้องการ</span>
           <Input fullWidth>
-            <input type="text" />
+            <input type="number" ref={register} name="truckAmount" />
           </Input>
           <hr />
           <span>ข้อมูลสินค้าที่ต้องการส่ง *</span>
-          <Select options={statusOption} isMulti placeholder="Select multiple" fullWidth />
+          <Select
+            name="productTypeId"
+            options={productTypeIdOption}
+            placeholder="Select multiple"
+            onChange={(value) => setProductTypeId(value)}
+            fullWidth
+          />
           <span>ระบุชื่อสินค้าของคุณ</span>
           <Input fullWidth>
-            <input type="text" />
+            <input type="text" name="productName" ref={register} />
           </Input>
           <span>ระบุจำนวนน้ำหนัก (ตัน)</span>
           <Input fullWidth>
-            <input type="text" />
+            <input type="number" name="weight" ref={register} />
           </Input>
           <hr />
           <span>จุดรับสินค้า *</span>
           <br />
           <span>ระบุสถานที่ที่เข้ารับสินค้า</span>
           <Input fullWidth>
-            <input type="text" />
+            <input type="text" name="contactName" ref={register} />
           </Input>
-          <span>วันรับสินค้าที่ต้องการ</span>
+          <span>วัน-เวลา รับสินค้าที่ต้องการ</span>
           <Input fullWidth>
-            <input type="text" />
-          </Input>
-          <span>เวลารับสินค้าที่ต้องการ</span>
-          <Input fullWidth>
-            <input type="text" />
+            <input type="text" name="dateTime" ref={register} />
           </Input>
           <span>ข้อมูลติดต่อจุดรับสินค้า</span>
           <br />
           <span>ชื่อผู้รับสินค้า</span>
           <Input fullWidth>
-            <input type="text" />
+            <input type="text" name="name" ref={register} />
           </Input>
           <span>เบอร์ติดต่อ</span>
           <Input fullWidth>
-            <input type="text" />
+            <input type="text" name="contactMobileNo" ref={register} />
           </Input>
           <hr />
           <span>จุดรับสินค้าที่1 *</span>
           <br />
           <span>ระบุสถานที่ที่เข้ารับสินค้า</span>
           <Input fullWidth>
-            <input type="text" />
+            <input type="text" name="contactName1" ref={register} />
           </Input>
-          <span>วันรับสินค้าที่ต้องการ</span>
+          <span>วัน-เวลา รับสินค้าที่ต้องการ</span>
           <Input fullWidth>
-            <input type="text" />
-          </Input>
-          <span>เวลารับสินค้าที่ต้องการ</span>
-          <Input fullWidth>
-            <input type="text" />
+            <input type="text" name="dateTime1" ref={register} />
           </Input>
           <span>ข้อมูลติดต่อจุดรับสินค้า</span>
           <br />
           <span>ชื่อผู้รับสินค้า</span>
           <Input fullWidth>
-            <input type="text" />
+            <input type="text" name="name1" ref={register} />
           </Input>
           <span>เบอร์ติดต่อ</span>
           <Input fullWidth>
-            <input type="text" />
+            <input type="text" name="contactMobileNo1" ref={register} />
           </Input>
-          <Button status="Success" type="submit" shape="SemiRound" onClick={() => submit()} fullWidth>
+          <Button status="Success" type="submit" shape="SemiRound" fullWidth>
             ยืนยัน
           </Button>
         </form>
