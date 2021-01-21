@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
-import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
-import { Button, ButtonLink } from '@paljs/ui/Button';
+import { Button } from '@paljs/ui/Button';
 import { caption, head, createRow } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
 import { ic_add } from 'react-icons-kit/md/ic_add';
-import { search } from 'react-icons-kit/icomoon/search';
-import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
 import styled from 'styled-components';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
@@ -36,7 +33,6 @@ interface Props {}
 const JobContainer: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
   const { shipperStore } = useMst();
-  const [searchValue, setSearchValue] = useState('');
   const [rows, setRows] = useState([]);
   const [rowData, setRowData] = useState([]);
   const [panding, setPanding] = useState(false);
