@@ -187,7 +187,7 @@ const JobContainer: React.FC<Props> = observer(() => {
             defaultSortOrder="ASC"
             onSort={() => console.log('onSort')}
             onSetPage={(pagination) => {
-              if (rowData.length % 10 === 0 && pagination % 2 === 0) {
+              if (rowData.length % 10 === 0 && pagination % 2 === 0 && rowData.length === rows.length) {
                 shipperStore.clearShipperStore();
                 shipperStore.getAllJobsByShipper({
                   descending: true,
