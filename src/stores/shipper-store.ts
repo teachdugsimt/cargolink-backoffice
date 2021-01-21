@@ -86,10 +86,10 @@ export const ShipperStore = types
       clearShipperStore: flow(function* clearShipperStore() {
         self.jobs_shipper = null;
       }),
-      PostJobs: flow(function* PostJobs() {
+      PostJobs: flow(function* PostJobs(params) {
         try {
           // ... yield can be used in async/await style
-          const response = yield ShipperApi.AddJobs();
+          const response = yield ShipperApi.AddJobs(params);
           console.log('PostJobs response :> ', response);
         } catch (error) {
           // ... including try/catch error handling
