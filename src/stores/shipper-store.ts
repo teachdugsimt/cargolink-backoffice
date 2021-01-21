@@ -68,7 +68,7 @@ export const ShipperStore = types
             self.jobs_shipper = jobs;
 
             //? in th second time, we get jobs
-            if (data?.length % 10 === 0) {
+            if (data?.length && data?.length % 10 === 0) {
               //? change page parameter
               let newParams = JSON.parse(JSON.stringify(params));
               newParams.page = jobs?.length;
@@ -94,12 +94,10 @@ export const ShipperStore = types
 
       postJobs: flow(function* postJobs(params) {
         try {
-          // ... yield can be used in async/await style
           const response = yield ShipperApi.addJobs(params);
           console.log('postJobs response :> ', response);
         } catch (error) {
-          // ... including try/catch error handling
-          console.error('Failed to postJobs :> ', error);
+          console.error('Failed to post job :> ', error);
         }
       }),
 

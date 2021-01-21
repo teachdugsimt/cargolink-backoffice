@@ -16,6 +16,7 @@ import { useMst } from '../../../stores/root-store';
 import moment from 'moment';
 import 'moment/locale/th';
 import { navigate } from 'gatsby';
+import SearchForm from '../../search-form';
 moment.locale('th');
 
 const Wrapper = styled.div`
@@ -66,24 +67,12 @@ const JobContainer: React.FC<Props> = observer(() => {
     if (product_types?.length) setProductTypes(product_types);
   }, [shipperStore.product_types]);
 
-  const onClickSearch = () => {
-    const lowercasedValue = searchValue.toLowerCase().trim();
-    if (lowercasedValue === '') setRowData(rows);
-    else {
-      const filteredData = rows.filter((item) => {
-        const data = item.cells.filter((cell) => cell.key?.toString().toLowerCase().includes(lowercasedValue));
-        return data && data.length ? true : false;
-      });
-      setRowData(filteredData);
-    }
-  };
-
   const onClickPending = () => {
     setPanding(true);
     setApproved(false);
     setAll(false);
-    const filteredData = rows.filter((item) => {
-      const data = item.cells.filter((key) => key.key == 'Pending');
+    const filteredData = rows.filter((item: any) => {
+      const data = item.cells.filter((key: any) => key.key.toString().toLowerCase() == 'pending');
       return data && data.length ? true : false;
     });
     setRowData(filteredData);
@@ -93,8 +82,8 @@ const JobContainer: React.FC<Props> = observer(() => {
     setApproved(true);
     setPanding(false);
     setAll(false);
-    const filteredData = rows.filter((item) => {
-      const data = item.cells.filter((key) => key.key == 'Approved');
+    const filteredData = rows.filter((item: any) => {
+      const data = item.cells.filter((key: any) => key.key.toString().toLowerCase() == 'approved');
       return data && data.length ? true : false;
     });
     setRowData(filteredData);
@@ -112,19 +101,7 @@ const JobContainer: React.FC<Props> = observer(() => {
       <CardHeaderStyled>
         <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}>{t('jobs')}</span>
         <div style={{ display: 'flex' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <InputGroup>
-              <input
-                type="text"
-                placeholder="Enter your search here"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-            </InputGroup>
-            <Button appearance="filled" status="Basic" onClick={() => onClickSearch()}>
-              <Icon size={18} icon={search} />
-            </Button>
-          </div>
+          <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
         </div>
       </CardHeaderStyled>
       <CardBody>
@@ -193,7 +170,6 @@ const JobContainer: React.FC<Props> = observer(() => {
             onSort={() => console.log('onSort')}
             onSetPage={(pagination) => {
               if (rowData.length % 10 === 0 && pagination % 2 === 0 && rowData.length === rows.length) {
-                shipperStore.clearShipperStore();
                 shipperStore.getAllJobsByShipper({
                   descending: true,
                   page: rowData.length,
