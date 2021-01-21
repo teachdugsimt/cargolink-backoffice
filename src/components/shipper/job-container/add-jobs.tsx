@@ -7,6 +7,8 @@ import Select from '@paljs/ui/Select';
 import { useForm } from 'react-hook-form';
 import { observer } from 'mobx-react-lite';
 import { useMst } from '../../../stores/root-store';
+import { navigate } from 'gatsby';
+import moment from 'moment';
 
 const Input = styled(InputGroup)`
   margin-bottom: 2rem;
@@ -45,8 +47,8 @@ const AddJobs: React.FC<{}> = observer(({}) => {
           contactMobileNo: data.contactMobileNo,
           contactName: data.contactName,
           dateTime: data.dateTime,
-          lat: '13.788485',
-          lng: '100.6079443',
+          // lat: "13.788485",
+          // lng: "100.6079443",
           name: data.contactName,
         },
         to: [
@@ -54,18 +56,19 @@ const AddJobs: React.FC<{}> = observer(({}) => {
             contactMobileNo: data.contactMobileNo1,
             contactName: data.contactName1,
             dateTime: data.dateTime1,
-            lat: '13.7532001',
-            lng: '100.4878687',
+            // lat: "13.7532001",
+            // lng: "100.4878687",
             name: data.name1,
           },
         ],
         truckAmount: 1000,
         productTypeId: productTypeId.value,
         productName: data.productName,
-        expiredTime: '24-01-2021 17:38',
+        expiredTime: moment(new Date().toDateString()).add(3, 'days').format('DD-MM-YYYY HH:mm'),
       });
     }
   };
+  console.log(moment(new Date().toDateString()).add(3, 'days').format('DD-MM-YYYY HH:mm'));
 
   return (
     <Card>
@@ -142,9 +145,14 @@ const AddJobs: React.FC<{}> = observer(({}) => {
           <Input fullWidth>
             <input type="text" name="contactMobileNo1" ref={register} />
           </Input>
-          <Button status="Success" type="submit" shape="SemiRound" fullWidth>
-            ยืนยัน
-          </Button>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button status="Success" type="submit" shape="SemiRound" fullWidth>
+              ยืนยัน
+            </Button>
+            <Button status="Warning" type="button" onClick={() => navigate('/jobs')} fullWidth>
+              กลับ
+            </Button>
+          </div>
         </form>
       </CardBody>
     </Card>
