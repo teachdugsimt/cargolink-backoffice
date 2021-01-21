@@ -49,11 +49,11 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        name: 'oah-admin',
-        short_name: 'OAH',
+        name: 'cargolink-admin',
+        short_name: 'Cargolink',
         start_url: '/dashboard',
         display: 'minimal-ui',
-        icon: 'src/images/OAH.png', // This path is relative to the root of the site.
+        icon: 'src/images/logo.png', // This path is relative to the root of the site.
       },
     },
     {

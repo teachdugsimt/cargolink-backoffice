@@ -38,6 +38,7 @@ const images = {
   Truck34: require('../../images/Truck34.png'),
   Truck35: require('../../images/Truck35.png'),
   Truck36: require('../../images/Truck36.png'),
+  cargolinkLogo: require('../../images/logo-Cargolink-white.png'),
 };
 
 export default images;

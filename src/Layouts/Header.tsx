@@ -13,7 +13,7 @@ import { Location } from '@reach/router';
 import { breakpointDown } from '@paljs/ui/breakpoints';
 import { useTranslation } from 'react-i18next';
 import LanguageMenu from '../components/language-menu';
-import Logo from '../images/logo Cargolink white.png';
+import images from '../components/Themes/images';
 
 const HeaderStyle = styled.div`
   display: flex;
@@ -138,7 +138,7 @@ const Header: React.FC<HeaderProps> = (props) => {
                 },
               },
               {
-                content: <div></div>,
+                content: <div />,
               },
               // {
               //   content: (
@@ -155,7 +155,7 @@ const Header: React.FC<HeaderProps> = (props) => {
             ]}
           />
           <div style={{ display: 'flex', alignItems: 'center', marginLeft: -20, width: 230 }}>
-            <img src={Logo} style={{ maxWidth: '100%', height: 'auto' }} />
+            <img src={images.cargolinkLogo} style={{ maxWidth: '100%', height: 'auto' }} />
           </div>
         </div>
         <Actions
@@ -163,7 +163,7 @@ const Header: React.FC<HeaderProps> = (props) => {
           className="right"
           actions={[
             {
-              content: <LanguageMenu></LanguageMenu>,
+              content: <LanguageMenu />,
             },
             {
               content: (
