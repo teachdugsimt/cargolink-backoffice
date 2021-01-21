@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useMst } from '../../../stores/root-store';
-import TruckForm from './form-truck';
+import TruckForm from './truck-form';
 import moment from 'moment';
 import images from '../../Themes/images';
 
