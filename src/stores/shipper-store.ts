@@ -27,7 +27,7 @@ const OwnerObject = types.model({
   email: types.maybeNull(types.string),
 });
 
-const jobs = types.model({
+const Jobs = types.model({
   id: types.maybeNull(types.string),
   productTypeId: types.maybeNull(types.number),
   productName: types.maybeNull(types.string),
@@ -39,9 +39,17 @@ const jobs = types.model({
   owner: types.maybeNull(OwnerObject),
 });
 
+const Products = types.model({
+  id: types.maybeNull(types.number),
+  name: types.maybeNull(types.string),
+  image: types.maybeNull(types.string),
+  groupId: types.maybeNull(types.number),
+});
+
 export const ShipperStore = types
   .model('ShipperStore', {
-    jobs_shipper: types.maybeNull(types.array(jobs)),
+    jobs_shipper: types.maybeNull(types.array(Jobs)),
+    product_types: types.maybeNull(types.array(Products)),
   })
   .actions((self) => {
     return {
@@ -83,18 +91,35 @@ export const ShipperStore = types
           self.jobs_shipper = null;
         }
       }),
-      clearShipperStore: flow(function* clearShipperStore() {
-        self.jobs_shipper = null;
-      }),
-      PostJobs: flow(function* PostJobs(params) {
+
+      postJobs: flow(function* postJobs(params) {
         try {
           // ... yield can be used in async/await style
-          const response = yield ShipperApi.AddJobs(params);
-          console.log('PostJobs response :> ', response);
+          const response = yield ShipperApi.addJobs(params);
+          console.log('postJobs response :> ', response);
         } catch (error) {
           // ... including try/catch error handling
-          console.error('Failed to PostJobs :> ', error);
+          console.error('Failed to postJobs :> ', error);
         }
+      }),
+
+      getProductTypes: flow(function* getProductTypes() {
+        try {
+          const response = yield ShipperApi.getAllProductType();
+          console.log('getProductTypes response :> ', response);
+          if (response && response.ok) {
+            self.product_types = response.data;
+          } else {
+            self.product_types = null;
+          }
+        } catch (error) {
+          console.error('Failed to get product types :> ', error);
+          self.product_types = null;
+        }
+      }),
+
+      clearShipperStore: flow(function* clearShipperStore() {
+        self.jobs_shipper = null;
       }),
     };
   });

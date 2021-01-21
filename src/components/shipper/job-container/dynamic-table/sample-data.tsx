@@ -77,7 +77,7 @@ export const createHead = (withWidth: boolean) => {
         content: 'Type of goods',
         shouldTruncate: true,
         isSortable: true,
-        width: withWidth ? 15 : undefined,
+        // width: withWidth ? 15 : undefined,
       },
       {
         key: 'route',
@@ -97,57 +97,61 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const createRow = (jobs: any) => {
-  return jobs.map((jobpost: any, index: number) => ({
-    key: `row-${index}-${jobpost.id}`,
-    cells: [
-      {
-        key: jobpost.id,
-        content: <span style={{ padding: '10px 0px', color: '#f8bc18', fontWeight: 'bold' }}>{jobpost.id}</span>,
-      },
-      {
-        key: jobpost.productName,
-        content: jobpost.productName,
-      },
-      {
-        key: jobpost.owner?.companyName,
-        content: jobpost.owner?.companyName,
-      },
-      {
-        key: jobpost.productTypeId,
-        content: jobpost.productTypeId,
-      },
-      {
-        key: jobpost.from?.name,
-        content: (
-          <div style={{ borderBottom: '2px solid black' }}>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ padding: 2 }}>
-                <span style={{ fontWeight: 'bold' }}>From: </span>
-                {`${jobpost.from?.name}`}
-              </span>
-              <span>
-                <Icon style={{ color: '#f8bc18' }} icon={ic_access_time} />
-                {` ${moment(jobpost.from?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
-              </span>
+export const createRow = (jobs: any, products: any) => {
+  return jobs.map((jobpost: any, index: number) => {
+    const productType = products?.length && products.find((prod: any) => prod.id === jobpost.productTypeId);
+    const typeName = productType ? productType.name : '';
+    return {
+      key: `row-${index}-${jobpost.id}`,
+      cells: [
+        {
+          key: jobpost.id,
+          content: <span style={{ padding: '10px 0px', color: '#f8bc18', fontWeight: 'bold' }}>{jobpost.id}</span>,
+        },
+        {
+          key: jobpost.productName,
+          content: jobpost.productName,
+        },
+        {
+          key: jobpost.owner?.companyName,
+          content: jobpost.owner?.companyName,
+        },
+        {
+          key: typeName,
+          content: typeName,
+        },
+        {
+          key: jobpost.from?.name,
+          content: (
+            <div style={{ borderBottom: '2px solid black' }}>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ padding: 2 }}>
+                  <span style={{ fontWeight: 'bold' }}>From: </span>
+                  {`${jobpost.from?.name}`}
+                </span>
+                <span>
+                  <Icon style={{ color: '#f8bc18' }} icon={ic_access_time} />
+                  {` ${moment(jobpost.from?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
+                </span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
+                <span style={{ padding: 2, marginTop: 8 }}>
+                  <span style={{ fontWeight: 'bold' }}>To: </span>
+                  {`${jobpost.to[0]?.name}`}
+                </span>
+                <span>
+                  <Icon style={{ color: '#f8bc18' }} icon={ic_access_time} />
+                  {` ${moment(jobpost.to[0]?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
+                </span>
+              </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
-              <span style={{ padding: 2, marginTop: 8 }}>
-                <span style={{ fontWeight: 'bold' }}>To: </span>
-                {`${jobpost.to[0]?.name}`}
-              </span>
-              <span>
-                <Icon style={{ color: '#f8bc18' }} icon={ic_access_time} />
-                {` ${moment(jobpost.to[0]?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
-              </span>
-            </div>
-          </div>
-        ),
-      },
-      {
-        key: jobpost.weight,
-        content: <span>{jobpost.weight}</span>,
-      },
-    ],
-  }));
+          ),
+        },
+        {
+          key: jobpost.weight,
+          content: <span>{jobpost.weight}</span>,
+        },
+      ],
+    };
+  });
 };

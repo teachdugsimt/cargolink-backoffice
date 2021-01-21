@@ -4,8 +4,12 @@ class ShipperApi {
     const response = await ExcuteApi('/api/v1/mobile/carriers/job', params, 'post', 600000);
     return response;
   };
-  AddJobs = async (params) => {
+  addJobs = async (params) => {
     const response = await ExcuteApi('/api/v1/mobile/shippers/jobs', params, 'post', 600000);
+    return response;
+  };
+  getAllProductType = async () => {
+    const response = await ExcuteApi('/api/v1/mobile/shippers/product-type', {}, 'get', 600000);
     return response;
   };
 }

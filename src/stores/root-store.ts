@@ -24,6 +24,7 @@ let initialState = RootModel.create({
   },
   shipperStore: {
     jobs_shipper: [],
+    product_types: [],
   },
 });
 

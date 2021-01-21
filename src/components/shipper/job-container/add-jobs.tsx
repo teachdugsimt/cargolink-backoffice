@@ -40,7 +40,7 @@ const AddJobs: React.FC<{}> = observer(({}) => {
     console.log(data);
     console.log(truckType.value, productTypeId.value);
     if (data && truckType && productTypeId) {
-      shipperStore.PostJobs({
+      shipperStore.postJobs({
         truckType: truckType.value,
         weight: data.weight,
         from: {

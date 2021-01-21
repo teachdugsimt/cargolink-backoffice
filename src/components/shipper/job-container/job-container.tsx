@@ -41,8 +41,10 @@ const JobContainer: React.FC<Props> = observer(() => {
   const [panding, setPanding] = useState(false);
   const [approved, setApproved] = useState(false);
   const [all, setAll] = useState(false);
+  const [productTypes, setProductTypes] = useState([]);
 
   useEffect(() => {
+    shipperStore.getProductTypes();
     shipperStore.clearShipperStore();
     shipperStore.getAllJobsByShipper({
       descending: true,
@@ -52,13 +54,17 @@ const JobContainer: React.FC<Props> = observer(() => {
 
   useEffect(() => {
     const jobs_shipper = JSON.parse(JSON.stringify(shipperStore.jobs_shipper));
-    console.log('jobs_shipper :> ', jobs_shipper);
     if (jobs_shipper?.length) {
-      const rows = createRow(jobs_shipper);
+      const rows = createRow(jobs_shipper, productTypes);
       setRows(rows);
       setRowData(rows);
     }
-  }, [shipperStore.jobs_shipper?.length]);
+  }, [shipperStore.jobs_shipper?.length, productTypes]);
+
+  useEffect(() => {
+    const product_types = JSON.parse(JSON.stringify(shipperStore.product_types));
+    if (product_types?.length) setProductTypes(product_types);
+  }, [shipperStore.product_types]);
 
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();
@@ -70,7 +76,6 @@ const JobContainer: React.FC<Props> = observer(() => {
       });
       setRowData(filteredData);
     }
-    console.log('rows :> ', rows);
   };
 
   const onClickPending = () => {
