@@ -103,11 +103,11 @@ export const CarrierStore = types
           self.trucks_types = null;
         }
       }),
-      addTruck: flow(function* addTruck() {
+      postTruck: flow(function* postTruck() {
         try {
           // ... yield can be used in async/await style
           const response = yield CarrierApi.addTruck();
-          console.log('addTruck response :> ', response);
+          console.log('postTruck response :> ', response);
           // if (response && response.ok) {
           //   self.trucks_types = response.data;
           // } else {
@@ -115,7 +115,7 @@ export const CarrierStore = types
           // }
         } catch (error) {
           // ... including try/catch error handling
-          console.error('Failed to addTruck :> ', error);
+          console.error('Failed to postTruck :> ', error);
           // self.trucks_types = null;
         }
       }),

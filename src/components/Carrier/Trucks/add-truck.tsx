@@ -9,6 +9,7 @@ import Switch from '@material-ui/core/Switch';
 import Icon from 'react-icons-kit';
 import { cloudUpload } from 'react-icons-kit/fa/cloudUpload';
 import { timesCircleO } from 'react-icons-kit/fa/timesCircleO';
+import { useForm } from 'react-hook-form';
 import { UploadFileStore } from '../../../stores/upload-file-store';
 import '../../../Layouts/css/style.css';
 
@@ -22,14 +23,14 @@ const Input = styled(InputGroup)`
   margin-bottom: 2rem;
 `;
 
-const positionOptions: { value: any; label: any }[] = [
+const truckTypeOptions: { value: any; label: any }[] = [
   { value: 1, label: 'รถขนสินค้าแบบกระบะตู้' },
-  { value: 'topLeft', label: 'Top-Left' },
-  { value: 'bottomRight', label: 'Bottom-Right' },
-  { value: 'bottomLeft', label: 'Bottom-Left' },
+  { value: 2, label: 'Top-Left' },
+  { value: 3, label: 'Bottom-Right' },
+  { value: 4, label: 'Bottom-Left' },
 ];
 
-const region: { value: any; label: any }[] = [
+const regionOptions: { value: any; label: any }[] = [
   { label: 'สินค้าการเกษตร', value: 'สินค้าการเกษตร' },
   { value: 'Info', label: 'Info' },
   { value: 'Success', label: 'Success' },
@@ -37,7 +38,7 @@ const region: { value: any; label: any }[] = [
   { value: 'Primary', label: 'Primary' },
 ];
 
-const province: { value: any; label: any }[] = [
+const provinceOptions: { value: any; label: any }[] = [
   { label: 'สินค้าการเกษตร', value: 'สินค้าการเกษตร' },
   { value: 'Info', label: 'Info' },
   { value: 'Success', label: 'Success' },
@@ -48,11 +49,15 @@ const province: { value: any; label: any }[] = [
 interface Props {}
 
 const AddTruck: React.FC<Props> = observer((props: any) => {
+  const { register, handleSubmit } = useForm();
   const [checkbox, setCheckbox] = useState(false);
   const [pictures, setPictures] = useState([]);
   const [haveImage, setHaveImage] = useState(false);
   const [render, setRender] = useState(false);
   const [disable, setDisable] = useState(false);
+  const [truckType, setTruckType] = useState();
+  const [region, setRegion] = useState();
+  const [province, setProvince] = useState();
 
   const onChangePicture1 = (e: any) => {
     if (e.target.files[0]) {
@@ -76,6 +81,11 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
     }
   };
 
+  const onSubmit = (data) => {
+    console.log(data);
+    console.log(checkbox);
+  };
+
   const onRemoveImg = (index: number) => {
     const images = pictures.filter((img, i) => i != index);
     setPictures(images);
@@ -84,9 +94,15 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   return (
     <Card>
       <CardBody>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <span>เลือกประเภทของรถของคุณ</span>
-          <Select options={positionOptions} isMulti placeholder="Select multiple" fullWidth />
+          <Select
+            options={truckTypeOptions}
+            isMulti
+            placeholder="Select multiple"
+            fullWidth
+            onChange={(value) => setTruckType(value)}
+          />
           <span>รถมีที่ดั้มหรือไม่</span>
           <Switch
             checked={checkbox}
@@ -97,13 +113,13 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
           <br />
           <span>ความสูงของคอกรถ (หน่วยเป็นเมตร)</span>
           <Input fullWidth>
-            <input type="text" />
+            <input name="stallHeight" type="text" ref={register} />
           </Input>
           <hr />
           <span>ข้อมูลรถของคุณ</span>
           <span>เลขทะเบียนรถ</span>
           <Input fullWidth>
-            <input type="text" />
+            <input name="registrationNumber" type="text" ref={register} />
           </Input>
           <hr />
           <span>อัพโหลดรูปภาพรถ</span>
@@ -158,10 +174,22 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
           </div>
           <hr />
           <span>โซนที่วิ่งงาน</span>
-          <Select options={region} isMulti placeholder="ภูมิภาค" fullWidth />
-          <Select options={province} isMulti placeholder="จังหวัด" fullWidth />
+          <Select
+            options={regionOptions}
+            isMulti
+            placeholder="ภูมิภาค"
+            fullWidth
+            onChange={(value) => setRegion(value)}
+          />
+          <Select
+            options={provinceOptions}
+            isMulti
+            placeholder="จังหวัด"
+            fullWidth
+            onChange={(value) => setProvince(value)}
+          />
           <br />
-          <Button status="Success" type="button" shape="SemiRound" fullWidth>
+          <Button status="Success" type="submit" shape="SemiRound" fullWidth>
             ยืนยัน
           </Button>
         </form>

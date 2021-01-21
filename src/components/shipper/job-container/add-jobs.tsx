@@ -149,7 +149,7 @@ const AddJobs: React.FC<{}> = observer(({}) => {
             <Button status="Success" type="submit" shape="SemiRound" fullWidth>
               ยืนยัน
             </Button>
-            <Button status="Warning" type="button" onClick={() => navigate('/jobs')} fullWidth>
+            <Button status="Warning" shape="SemiRound" type="button" onClick={() => navigate('/jobs')} fullWidth>
               กลับ
             </Button>
           </div>
