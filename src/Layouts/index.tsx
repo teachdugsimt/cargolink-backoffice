@@ -11,7 +11,7 @@ import SimpleLayout from './simple-layout';
 import SidebarCustom from './Sidebar';
 import { withTrans } from '../i18n/withTrans';
 import { Provider, rootStore } from '../stores/root-store';
-import './Custom.css';
+import '../Layouts/css/style.css';
 
 const getDefaultTheme = (): DefaultTheme['name'] => {
   if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
