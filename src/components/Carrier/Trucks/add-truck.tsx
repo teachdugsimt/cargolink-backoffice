@@ -54,6 +54,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   const [truckType, setTruckType] = useState();
   const [region, setRegion] = useState();
   const [province, setProvince] = useState();
+  const [filterProvince, setFilterProvince] = useState(provinceOptions);
 
   const onChangePicture1 = (e: any) => {
     if (e.target.files[0]) {
@@ -85,6 +86,12 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   const onRemoveImg = (index: number) => {
     const images = pictures.filter((img, i) => i != index);
     setPictures(images);
+  };
+
+  const onChangeRegion = (value) => {
+    setRegion(value);
+    const filterRegion = provinceOptions.filter((e) => e.area == value.value);
+    setFilterProvince(filterRegion);
   };
 
   return (
@@ -227,8 +234,8 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
               </div>
             </div>
           </div> */}
-          <Select options={regionOptions} placeholder="ภูมิภาค" fullWidth onChange={(value) => setRegion(value)} />
-          <Select options={provinceOptions} placeholder="จังหวัด" fullWidth onChange={(value) => setProvince(value)} />
+          <Select options={regionOptions} placeholder="ภูมิภาค" fullWidth onChange={(value) => onChangeRegion(value)} />
+          <Select options={filterProvince} placeholder="จังหวัด" fullWidth onChange={(value) => setProvince(value)} />
           <br />
           <Button status="Success" type="submit" shape="SemiRound" fullWidth>
             ยืนยัน
