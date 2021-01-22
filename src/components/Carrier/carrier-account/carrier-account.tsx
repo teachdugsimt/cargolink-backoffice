@@ -101,7 +101,7 @@ const CarrierAccount = (props: any) => {
               marginRight: 10,
             }}
           >
-            ALL
+            {t('all')}
           </Button>
           <Button
             appearance={panding == true ? 'filled' : 'outline'}
@@ -112,7 +112,7 @@ const CarrierAccount = (props: any) => {
             }}
             onClick={() => onClickPending()}
           >
-            PENDING
+            {t('pending')}
           </Button>
           <Button
             appearance={approved == true ? 'filled' : 'outline'}
@@ -120,7 +120,7 @@ const CarrierAccount = (props: any) => {
             size="Small"
             onClick={() => onClickApproved()}
           >
-            APPROVED
+            {t('approved')}
           </Button>
         </Row>
         <span>{`Results found: ${rowData.length}`}</span>

@@ -30,6 +30,11 @@ const items: MenuItemType[] = [
     icon: { name: 'people' },
     link: { to: '/user-management' },
   },
+  {
+    title: 'Job Status',
+    icon: { name: 'briefcase' },
+    link: { to: '/user-management' },
+  },
 ];
 
 export default items;

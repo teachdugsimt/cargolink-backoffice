@@ -101,7 +101,7 @@ const AddJobs: React.FC<{}> = observer(() => {
         truckAmount: 1000,
         productTypeId: productTypeId.value,
         productName: data.productName,
-        expiredTime: moment(toDate).add(3, 'days').format('DD-MM-YYYY HH:mm'),
+        expiredTime: moment(toDate).subtract(1, 'days').format('DD-MM-YYYY HH:mm'),
       });
     }
   };
