@@ -48,18 +48,29 @@ const Products = types.model({
 
 export const ShipperStore = types
   .model('ShipperStore', {
+    loading: false,
     jobs_shipper: types.maybeNull(types.array(Jobs)),
     product_types: types.maybeNull(types.array(Products)),
+    error_response: types.maybeNull(
+      types.model({
+        title: types.maybeNull(types.string),
+        content: types.maybeNull(types.string),
+      }),
+    ),
   })
   .actions((self) => {
     return {
       getAllJobsByShipper: flow(function* getAllJobsByShipper(params) {
+        self.loading = true;
+        self.error_response = null;
         try {
           const response = yield ShipperApi.getAllJobs(params);
           console.log('getAllJobsByShipper response :> ', response);
 
           if (response && response.ok) {
             const { data } = response;
+            self.loading = false;
+            self.error_response = null;
             //? in th first time, we get jobs
             let jobs = JSON.parse(JSON.stringify(self.jobs_shipper));
             if (self.jobs_shipper?.length) jobs.push(...data);
@@ -84,40 +95,82 @@ export const ShipperStore = types
               }
             }
           } else {
+            self.loading = false;
             self.jobs_shipper = null;
+            self.error_response = {
+              title: response.problem,
+              content: response.originalError.message,
+            };
           }
         } catch (error) {
           console.error('Failed to getAllJobsByShipper :> ', error);
+          self.loading = false;
           self.jobs_shipper = null;
+          self.error_response = {
+            title: '',
+            content: 'Failed to get all jobs by shipper',
+          };
         }
       }),
 
       postJobs: flow(function* postJobs(params) {
+        self.loading = true;
+        self.error_response = null;
         try {
           const response = yield ShipperApi.addJobs(params);
           console.log('postJobs response :> ', response);
+          if (response && response.ok) {
+            self.loading = false;
+            self.error_response = null;
+          } else {
+            self.loading = false;
+            self.error_response = {
+              title: response.problem,
+              content: response.originalError.message,
+            };
+          }
         } catch (error) {
           console.error('Failed to post job :> ', error);
+          self.loading = false;
+          self.error_response = {
+            title: '',
+            content: 'Failed to post job ',
+          };
         }
       }),
 
       getProductTypes: flow(function* getProductTypes() {
+        self.loading = true;
+        self.error_response = null;
         try {
           const response = yield ShipperApi.getAllProductType();
           console.log('getProductTypes response :> ', response);
           if (response && response.ok) {
+            self.loading = false;
             self.product_types = response.data;
+            self.error_response = null;
           } else {
+            self.loading = false;
             self.product_types = null;
+            self.error_response = {
+              title: response.problem,
+              content: response.originalError.message,
+            };
           }
         } catch (error) {
           console.error('Failed to get product types :> ', error);
+          self.loading = false;
           self.product_types = null;
+          self.error_response = {
+            title: '',
+            content: 'Failed to get product types ',
+          };
         }
       }),
 
       clearShipperStore: flow(function* clearShipperStore() {
         self.jobs_shipper = null;
+        self.error_response = null;
       }),
     };
   });
