@@ -154,16 +154,12 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
             onChange={(value: any) => setStallHeight(value)}
           />
           <span>ระบุจำนวนน้ำหนัก (ตัน)</span>
-          <Input fullWidth>
-            <input name="loadingWeight" type="number" ref={register} />
-          </Input>
+          <input className="new-input-component" name="loadingWeight" type="number" ref={register} />
           <hr />
           <span>ข้อมูลรถของคุณ</span>
           <br />
           <span>เลขทะเบียนรถ</span>
-          <Input fullWidth>
-            <input name="registrationNumber" type="text" ref={register} />
-          </Input>
+          <input className="new-input-component" name="registrationNumber" type="text" ref={register} />
           <hr />
           <span>อัพโหลดรูปภาพรถ</span>
           <br />
