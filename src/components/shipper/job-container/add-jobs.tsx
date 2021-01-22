@@ -49,7 +49,6 @@ const AddJobs: React.FC<{}> = observer(({}) => {
   }, [shipperStore.product_types]);
 
   const onSubmit = (data: any) => {
-    console.log('startDate :>>', moment(toDate).add(3, 'days').format('DD-MM-YYYY HH:mm'));
     if (data && truckType && productTypeId) {
       shipperStore.postJobs({
         truckType: truckType.value,
