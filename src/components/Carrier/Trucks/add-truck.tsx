@@ -33,9 +33,9 @@ const truckTypeOptions: { value: any; label: any }[] = [
 
 const regionOptions: { value: any; label: any }[] = [
   { value: 1, label: 'ภาคเหนือ' },
-  { value: 2, label: 'ภาคตะวันออกเฉียงเหนือ' },
-  { value: 3, label: 'ภาคตะวันตก' },
-  { value: 4, label: 'ภาคกลาง' },
+  { value: 2, label: 'ภาคกลาง' },
+  { value: 3, label: 'ภาคตะวันออกเฉียงเหนือ' },
+  { value: 4, label: 'ภาคตะวันตก' },
   { value: 5, label: 'ภาคตะวันออก' },
   { value: 6, label: 'ภาคใต้' },
 ];
