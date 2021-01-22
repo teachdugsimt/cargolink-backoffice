@@ -9,30 +9,11 @@ import Switch from '@material-ui/core/Switch';
 import { useForm } from 'react-hook-form';
 import { UploadFileStore } from '../../../stores/upload-file-store';
 import ImageUpload from './image-upload';
-import provinceOptions from './province-options';
 import { useMst } from '../../../stores/root-store';
 import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
+import { regionOptions, stallHeightOption, provinceOptions } from './dynamic-table/sample-data';
 import '../../../Layouts/css/style.css';
-
-const Input = styled(InputGroup)`
-  margin-bottom: 2rem;
-`;
-
-const regionOptions: { value: any; label: any }[] = [
-  { value: 1, label: 'ภาคเหนือ' },
-  { value: 2, label: 'ภาคกลาง' },
-  { value: 3, label: 'ภาคตะวันออกเฉียงเหนือ' },
-  { value: 4, label: 'ภาคตะวันตก' },
-  { value: 5, label: 'ภาคตะวันออก' },
-  { value: 6, label: 'ภาคใต้' },
-];
-
-const stallHeightOption: { value: any; label: any }[] = [
-  { value: 'LOW', label: 'LOW' },
-  { value: 'MEDIUM', label: 'MEDIUM' },
-  { value: 'HIGH', label: 'HIGH' },
-];
 
 interface Props {}
 
@@ -43,7 +24,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   const [truckType, setTruckType] = useState({ value: 0, label: '' });
   const [region, setRegion] = useState({ value: 0, label: '' });
   const [province, setProvince] = useState({ value: 0, label: '' });
-  const [stallHeight, setStallHeight] = useState({ value: 0, label: '' });
+  const [stallHeight, setStallHeight] = useState({ value: '', label: '' });
   const [filterProvince, setFilterProvince] = useState(provinceOptions);
   const [filterRegion, setFilterRegion] = useState(regionOptions);
   const [truckTypeOptions, setTruckTypeOptions] = useState();
@@ -107,15 +88,15 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
     }
   };
 
-  const onChangeRegion = (value: any) => {
-    setRegion(value);
-    const Region = provinceOptions.filter((e) => e.area == value.value);
+  const onChangeRegion = (event: { value: number; label: string }) => {
+    setRegion(event);
+    const Region = provinceOptions.filter((e) => e.area === event.value);
     setFilterProvince(Region);
   };
 
-  const onChangeProvince = (value: any) => {
-    setProvince(value);
-    const Province = regionOptions.filter((e) => e.value == value.area);
+  const onChangeProvince = (event: { value: number; label: string; area: number }) => {
+    setProvince(event);
+    const Province = regionOptions.filter((e) => e.value === event.area);
     setFilterRegion(Province);
   };
 
@@ -159,12 +140,17 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
           <ImageUpload />
           <hr />
           <span>โซนที่วิ่งงาน</span>
-          <Select options={filterRegion} placeholder="ภูมิภาค" fullWidth onChange={(value) => onChangeRegion(value)} />
+          <Select
+            options={filterRegion}
+            placeholder="ภูมิภาค"
+            fullWidth
+            onChange={(event: any) => onChangeRegion(event)}
+          />
           <Select
             options={filterProvince}
             placeholder="จังหวัด"
             fullWidth
-            onChange={(value) => onChangeProvince(value)}
+            onChange={(event: any) => onChangeProvince(event)}
           />
           <br />
           <Button status="Success" type="submit" shape="SemiRound" fullWidth>

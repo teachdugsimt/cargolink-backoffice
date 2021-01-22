@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
-import { caption, head } from './dynamic-table/sample-data';
+import { head } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
 import { ic_add } from 'react-icons-kit/md/ic_add';
-import { search } from 'react-icons-kit/icomoon/search';
 import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
@@ -29,7 +27,7 @@ const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
   useEffect(() => {
     setRowData(rows);
   }, [rows]);
-  console.log('rows:>>', rows);
+
   const onClickPending = () => {
     setPanding(true);
     setApproved(false);
