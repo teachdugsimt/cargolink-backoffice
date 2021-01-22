@@ -53,6 +53,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   const [region, setRegion] = useState();
   const [province, setProvince] = useState();
   const [filterProvince, setFilterProvince] = useState(provinceOptions);
+  const [filterRegion, setFilterRegion] = useState(regionOptions);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -66,8 +67,8 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
 
   const onChangeRegion = (value) => {
     setRegion(value);
-    const filterRegion = provinceOptions.filter((e) => e.area == value.value);
-    setFilterProvince(filterRegion);
+    const Region = provinceOptions.filter((e) => e.area == value.value);
+    setFilterProvince(Region);
   };
 
   return (
