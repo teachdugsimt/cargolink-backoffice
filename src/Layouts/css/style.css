@@ -92,13 +92,34 @@ input[type='file'] {
   margin-left: -20px;
   width: 90%;
 }
+.block-data-header {
+  display: grid;
+}
+.font-data-header {
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  padding-bottom: 0.785rem;
+}
 
 @media screen and (min-width: 399.8px) {
+  .header-logo {
+    width: 230px;
+  }
+}
+
+@media screen and (min-width: 450px) {
   .block-upload-image-form {
     display: flex;
   }
-  .header-logo {
-    width: 230px;
+  .block-data-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .font-data-header {
+    padding: 0px;
   }
 }
 

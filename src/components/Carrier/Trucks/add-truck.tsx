@@ -2,7 +2,6 @@ import { Button } from '@paljs/ui/Button';
 import { InputGroup } from '@paljs/ui/Input';
 import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import styled from 'styled-components';
 import { Card, CardHeader, CardBody } from '@paljs/ui/Card';
 import Select from '@paljs/ui/Select';
 import Switch from '@material-ui/core/Switch';
@@ -118,7 +117,12 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
           />
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <p>รถมีที่ดั้มหรือไม่</p>
-            <Switch checked={checkbox} onChange={() => setCheckbox(!checkbox)} color="primary" />
+            <Switch
+              checked={checkbox}
+              onChange={() => setCheckbox(!checkbox)}
+              color="primary"
+              style={{ color: checkbox ? '#00B132' : '' }}
+            />
           </div>
           <p>ความสูงของคอกรถ (หน่วยเป็นเมตร)</p>
           <Select
@@ -160,19 +164,19 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
             <Button
               type="button"
               status="Warning"
-              shape="SemiRound"
+              shape="Rectangle"
               fullWidth
-              style={{ marginRight: 20, backgroundColor: '#FBBC12', borderColor: '#FBBC12' }}
               onClick={() => navigate('/trucks')}
+              style={{ marginRight: 10, backgroundColor: '#FBBC12', borderColor: '#FBBC12' }}
             >
               กลับ
             </Button>
             <Button
               status="Success"
               type="submit"
-              shape="SemiRound"
+              shape="Rectangle"
               fullWidth
-              style={{ backgroundColor: '#3f51b5', borderColor: '#3f51b5' }}
+              style={{ backgroundColor: '#00B132', borderColor: '#00B132' }}
             >
               ยืนยัน
             </Button>
