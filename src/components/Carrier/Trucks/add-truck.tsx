@@ -15,6 +15,7 @@ import { UploadFileStore } from '../../../stores/upload-file-store';
 import images from '../../Themes/images';
 import '../../../Layouts/css/style.css';
 import provinceOptions from './province-options';
+import { useMst } from '../../../stores/root-store';
 
 const ButtonGroup = styled(Button)`
   height: fit-content;
@@ -45,6 +46,7 @@ const regionOptions: { value: any; label: any }[] = [
 interface Props {}
 
 const AddTruck: React.FC<Props> = observer((props: any) => {
+  const { carrierStore } = useMst();
   const { register, handleSubmit } = useForm();
   const [checkbox, setCheckbox] = useState(false);
   const [pictures, setPictures] = useState([]);

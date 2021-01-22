@@ -27,14 +27,10 @@ const trucks = types.model({
 });
 
 const trucksTypes = types.model({
-  version: types.maybeNull(types.number),
-  createdAt: types.maybeNull(types.string),
-  updatedAt: types.maybeNull(types.string),
-  createdUser: types.maybeNull(types.string),
-  updatedUser: types.maybeNull(types.string),
+  groupId: types.maybeNull(types.number),
   id: types.maybeNull(types.number),
+  image: types.maybeNull(types.string),
   name: types.maybeNull(types.string),
-  deleted: types.maybeNull(types.boolean),
 });
 
 const drivers = types.model({
