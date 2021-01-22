@@ -60,7 +60,7 @@ const AddJobs: React.FC<{}> = observer(({}) => {
           dateTime: moment(startDate).format('DD-MM-YYYY HH:mm'),
           // lat: "13.788485",
           // lng: "100.6079443",
-          name: data.contactName,
+          name: data.name,
         },
         to: [
           {
