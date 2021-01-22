@@ -14,6 +14,7 @@ import moment from 'moment';
 import 'moment/locale/th';
 import { navigate } from 'gatsby';
 import SearchForm from '../../search-form';
+import Alert from '../../alert';
 moment.locale('th');
 
 const Wrapper = styled.div`
@@ -29,6 +30,14 @@ const CardHeaderStyled = styled(CardHeader)`
   align-items: center;
 `;
 
+const defaultAlertSetting = {
+  icon: '',
+  show: false,
+  type: '',
+  title: '',
+  content: '',
+};
+
 interface Props {}
 const JobContainer: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
@@ -39,6 +48,7 @@ const JobContainer: React.FC<Props> = observer(() => {
   const [approved, setApproved] = useState(false);
   const [all, setAll] = useState(false);
   const [productTypes, setProductTypes] = useState([]);
+  const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
   useEffect(() => {
     shipperStore.getProductTypes();
@@ -48,6 +58,30 @@ const JobContainer: React.FC<Props> = observer(() => {
       page: 0,
     });
   }, []);
+
+  useEffect(() => {
+    const { loading } = shipperStore;
+    setAlertSetting({
+      icon: '',
+      show: loading,
+      type: 'loading',
+      title: '',
+      content: 'Loading',
+    });
+  }, [shipperStore.loading]);
+
+  useEffect(() => {
+    const { error_response } = shipperStore;
+    if (error_response) {
+      setAlertSetting({
+        icon: 'error',
+        show: true,
+        type: 'general',
+        title: error_response.title || '',
+        content: error_response.content || '',
+      });
+    }
+  }, [shipperStore.error_response]);
 
   useEffect(() => {
     const jobs_shipper = JSON.parse(JSON.stringify(shipperStore.jobs_shipper));
@@ -94,6 +128,7 @@ const JobContainer: React.FC<Props> = observer(() => {
 
   return (
     <Card>
+      <Alert setting={alertSetting} />
       <CardHeaderStyled>
         <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}>{t('jobs')}</span>
         <div style={{ display: 'flex' }}>
