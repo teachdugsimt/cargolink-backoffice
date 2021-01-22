@@ -88,7 +88,6 @@ export const CarrierStore = types
       }),
       getAllTruckTypes: flow(function* getAllTruckTypes() {
         try {
-          // ... yield can be used in async/await style
           const response = yield CarrierApi.listTruckTypes();
           console.log('listTruckTypes response :> ', response);
           if (response && response.ok) {
@@ -97,7 +96,6 @@ export const CarrierStore = types
             self.trucks_types = null;
           }
         } catch (error) {
-          // ... including try/catch error handling
           console.error('Failed to listTruckTypes :> ', error);
           self.trucks_types = null;
         }

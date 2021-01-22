@@ -9,34 +9,51 @@ import { observer } from 'mobx-react-lite';
 import { useMst } from '../../../stores/root-store';
 import { navigate } from 'gatsby';
 import moment from 'moment';
+import { trucks } from '../../Carrier/Trucks/dynamic-table/trucks';
 
 const Input = styled(InputGroup)`
   margin-bottom: 2rem;
 `;
 
 const AddJobs: React.FC<{}> = observer(({}) => {
-  const { shipperStore } = useMst();
+  const { shipperStore, carrierStore } = useMst();
 
   const { register, handleSubmit } = useForm();
   const [truckType, setTruckType] = useState([]);
   const [productTypeId, setProductTypeId] = useState([]);
+  const [truckTypeOptions, setTruckTypeOptions] = useState();
+  const [productTypeIdOptions, setProductTypeIdOptions] = useState();
 
-  const truckTypeOptions: { value: any; label: any }[] = [
-    { value: 1, label: 'รถขนสินค้าแบบกระบะตู้1' },
-    { value: 2, label: 'รถขนสินค้าแบบกระบะตู้2' },
-    { value: 3, label: 'รถขนสินค้าแบบกระบะตู้3' },
-    { value: 4, label: 'รถขนสินค้าแบบกระบะตู้4' },
-  ];
+  useEffect(() => {
+    carrierStore.getAllTruckTypes();
+    shipperStore.getProductTypes();
+  }, []);
 
-  const productTypeIdOption: { value: any; label: any }[] = [
-    { value: 1, label: 'สินค้าการเกษตร1' },
-    { value: 2, label: 'สินค้าการเกษตร2' },
-    { value: 3, label: 'สินค้าการเกษตร3' },
-    { value: 4, label: 'สินค้าการเกษตร4' },
-    { value: 5, label: 'สินค้าการเกษตร5' },
-  ];
+  useEffect(() => {
+    const allTrucksTypes = JSON.parse(JSON.stringify(carrierStore.trucks_types));
+    console.log('allTrucksTypes :>>', allTrucksTypes);
+    const array =
+      allTrucksTypes &&
+      allTrucksTypes.map((truck: any) => ({
+        value: truck.id,
+        label: truck.name,
+      }));
+    setTruckTypeOptions(array);
+  }, [carrierStore.trucks_types]);
 
-  const onSubmit = (data) => {
+  useEffect(() => {
+    const allProductTypeId = JSON.parse(JSON.stringify(shipperStore.product_types));
+    console.log('allProductTypeId :>>', allProductTypeId);
+    const array =
+      allProductTypeId &&
+      allProductTypeId.map((product: any) => ({
+        value: product.id,
+        label: product.name,
+      }));
+    setProductTypeIdOptions(array);
+  }, [shipperStore.product_types]);
+
+  const onSubmit = (data: any) => {
     console.log(data);
     console.log(truckType.value, productTypeId.value);
     if (data && truckType && productTypeId) {
@@ -68,8 +85,6 @@ const AddJobs: React.FC<{}> = observer(({}) => {
       });
     }
   };
-  console.log(moment(new Date().toDateString()).add(3, 'days').format('DD-MM-YYYY HH:mm'));
-
   return (
     <Card>
       <CardBody>
@@ -90,7 +105,7 @@ const AddJobs: React.FC<{}> = observer(({}) => {
           <span>ข้อมูลสินค้าที่ต้องการส่ง *</span>
           <Select
             name="productTypeId"
-            options={productTypeIdOption}
+            options={productTypeIdOptions}
             placeholder="Select multiple"
             onChange={(value) => setProductTypeId(value)}
             fullWidth
