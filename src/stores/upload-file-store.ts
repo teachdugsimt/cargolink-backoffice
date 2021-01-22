@@ -4,20 +4,17 @@ import { UploadFileApi } from '../services';
 export const UploadFileStore = types
   .model('UploadFileStore', {
     loading: false,
-    files: types.array(
-      types.model({
-        fileName: types.maybeNull(types.string),
-        fileType: types.maybeNull(types.string),
-        fileUrl: types.maybeNull(types.string),
-        token: types.maybeNull(types.string),
-        uploadedDate: types.maybeNull(types.string),
-      }),
-    ),
+    truckPhotos: types.model({
+      front: types.maybeNull(types.string),
+      back: types.maybeNull(types.string),
+      left: types.maybeNull(types.string),
+      right: types.maybeNull(types.string),
+    }),
     error_file: types.string,
   })
   .actions((self) => {
     return {
-      uploadImage: flow(function* uploadImage(params) {
+      uploadImage: flow(function* uploadImage(params, imageName) {
         self.loading = true;
 
         const formData = new FormData();
@@ -28,24 +25,23 @@ export const UploadFileStore = types
           console.log('uploadPicture response :> ', response);
           if (response && response.ok) {
             const { data } = response;
-            let files = JSON.parse(JSON.stringify(self.files));
-            if (self.files?.length) files.push(data);
-            else files = data;
+            let images = JSON.parse(JSON.stringify(self.truckPhotos));
+            images[`{imageName}`] = data.fileUrl;
 
-            self.files = files;
+            self.truckPhotos = images;
           } else {
             self.error_file = 'Error call api for upload images';
           }
         } catch (error) {
-          console.error('Failed to request upload files store :> ', error);
+          console.error('Failed to request upload images store :> ', error);
           self.loading = false;
-          self.error_file = 'Failed to request upload files store';
+          self.error_file = 'Failed to request upload images store';
         }
       }),
     };
   })
   .create({
     loading: false,
-    files: [],
+    truckPhotos: { front: null, back: null, left: null, right: null },
     error_file: '',
   });

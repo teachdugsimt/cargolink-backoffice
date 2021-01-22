@@ -64,6 +64,17 @@ input[type='file'] {
   justify-content: center;
   align-items: center;
 }
+.image-size {
+  width: 125px;
+  display: flex;
+  justify-content: center;
+}
+.delete-image-button {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+}
 
 .upload-image {
   max-width: 100%;
@@ -71,11 +82,11 @@ input[type='file'] {
   border-radius: 4px;
 }
 
-.delete-image-button :focus {
+/* .delete-image-button :focus {
   background-color: white;
   border: 1px solid #0079a1;
   box-sizing: border-box;
   -webkit-transition: 0.5s;
   transition: 0.5s;
   outline: none;
-}
+} */

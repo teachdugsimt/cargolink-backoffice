@@ -9,15 +9,9 @@ import Switch from '@material-ui/core/Switch';
 import { useForm } from 'react-hook-form';
 import { UploadFileStore } from '../../../stores/upload-file-store';
 import ImageUpload from './image-upload';
-import '../../../Layouts/css/style.css';
 import provinceOptions from './province-options';
 import { useMst } from '../../../stores/root-store';
-
-const ButtonGroup = styled(Button)`
-  height: fit-content;
-  background-color: white;
-  padding: 2px 5px 0px;
-`;
+import '../../../Layouts/css/style.css';
 
 const Input = styled(InputGroup)`
   margin-bottom: 2rem;
@@ -57,11 +51,6 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   const onSubmit = (data) => {
     console.log(data);
     console.log(checkbox);
-  };
-
-  const onRemoveImg = (index: number) => {
-    const images = pictures.filter((img, i) => i != index);
-    setPictures(images);
   };
 
   const onChangeRegion = (value) => {
