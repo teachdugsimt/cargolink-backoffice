@@ -8,9 +8,11 @@ import Select from '@paljs/ui/Select';
 import Switch from '@material-ui/core/Switch';
 import Icon from 'react-icons-kit';
 import { cloudUpload } from 'react-icons-kit/fa/cloudUpload';
+import { camera } from 'react-icons-kit/fa/camera';
 import { timesCircleO } from 'react-icons-kit/fa/timesCircleO';
 import { useForm } from 'react-hook-form';
 import { UploadFileStore } from '../../../stores/upload-file-store';
+import images from '../../Themes/images';
 import '../../../Layouts/css/style.css';
 import provinceOptions from './province-options';
 
@@ -167,6 +169,64 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
           </div>
           <hr />
           <span>โซนที่วิ่งงาน</span>
+          {/* <div>
+            <div className="block-upload-image">
+              <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
+                <label for="file-upload" className="custom-file-upload-photo">
+                  <Icon icon={camera} style={{ marginRight: 5 }} />
+                </label>
+                <input id="file-upload" type="file" accept="image/*" onChange={onChangePicture1} disabled={disable} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ height: 75 }}>
+                  <img src={images.frontTruck} style={{ maxHeight: '100%', width: 'auto' }} />
+                </div>
+                <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านหน้า</span>
+              </div>
+            </div>
+            <div className="block-upload-image">
+              <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
+                <label for="file-upload" className="custom-file-upload-photo">
+                  <Icon icon={camera} style={{ marginRight: 5 }} />
+                </label>
+                <input id="file-upload" type="file" accept="image/*" onChange={onChangePicture1} disabled={disable} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ height: 75 }}>
+                  <img src={images.backTruck} style={{ maxHeight: '100%', width: 'auto' }} />
+                </div>
+                <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านหลัง</span>
+              </div>
+            </div>
+            <div className="block-upload-image">
+              <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
+                <label for="file-upload" className="custom-file-upload-photo">
+                  <Icon icon={camera} style={{ marginRight: 5 }} />
+                </label>
+                <input id="file-upload" type="file" accept="image/*" onChange={onChangePicture1} disabled={disable} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ width: 125 }}>
+                  <img src={images.leftTruck} style={{ maxWidth: '100%', height: 'auto' }} />
+                </div>
+                <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านซ้าย</span>
+              </div>
+            </div>
+            <div className="block-upload-image">
+              <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
+                <label for="file-upload" className="custom-file-upload-photo">
+                  <Icon icon={camera} style={{ marginRight: 5 }} />
+                </label>
+                <input id="file-upload" type="file" accept="image/*" onChange={onChangePicture1} disabled={disable} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ width: 125 }}>
+                  <img src={images.rightTruck} style={{ maxWidth: '100%', height: 'auto' }} />
+                </div>
+                <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านขวา</span>
+              </div>
+            </div>
+          </div> */}
           <Select options={regionOptions} placeholder="ภูมิภาค" fullWidth onChange={(value) => setRegion(value)} />
           <Select options={provinceOptions} placeholder="จังหวัด" fullWidth onChange={(value) => setProvince(value)} />
           <br />

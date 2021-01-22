@@ -39,6 +39,10 @@ const images = {
   Truck35: require('../../images/Truck35.png'),
   Truck36: require('../../images/Truck36.png'),
   cargolinkLogo: require('../../images/logo-Cargolink-white.png'),
+  frontTruck: require('../../images/Ftruck.png'),
+  backTruck: require('../../images/BTruck.png'),
+  leftTruck: require('../../images/S1Truck.png'),
+  rightTruck: require('../../images/S2Truck.png'),
 };
 
 export default images;
