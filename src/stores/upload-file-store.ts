@@ -5,10 +5,10 @@ export const UploadFileStore = types
   .model('UploadFileStore', {
     loading: false,
     truckPhotos: types.model({
-      front: types.maybeNull(types.string),
-      back: types.maybeNull(types.string),
-      left: types.maybeNull(types.string),
-      right: types.maybeNull(types.string),
+      front: types.string,
+      back: types.string,
+      left: types.string,
+      right: types.string,
     }),
     error_file: types.string,
   })
@@ -41,6 +41,6 @@ export const UploadFileStore = types
   })
   .create({
     loading: false,
-    truckPhotos: { front: null, back: null, left: null, right: null },
+    truckPhotos: { front: '', back: '', left: '', right: '' },
     error_file: '',
   });

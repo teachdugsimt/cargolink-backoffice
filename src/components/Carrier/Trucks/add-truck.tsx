@@ -107,7 +107,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
       carrierStore.postTruck({
         loadingWeight: data.loadingWeight,
         registrationNumber: [data.registrationNumber],
-        stallHeight: stallHeight,
+        stallHeight: stallHeight.value,
         tipper: checkbox,
         truckPhotos: UploadFileStore.truckPhotos,
         truckType: truckType.value,
