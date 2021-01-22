@@ -73,7 +73,6 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
 
   useEffect(() => {
     const { error_response } = carrierStore;
-    console.log('error_response :> ', error_response);
     if (error_response) {
       setAlertSetting({
         icon: 'error',
@@ -87,7 +86,6 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
 
   useEffect(() => {
     const allTrucksTypes = JSON.parse(JSON.stringify(carrierStore.trucks_types));
-    console.log('allTrucksTypes :>>', allTrucksTypes);
     const array =
       allTrucksTypes &&
       allTrucksTypes.map((truck: any) => ({
@@ -98,11 +96,6 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   }, [carrierStore.trucks_types]);
 
   const onSubmit = (data: any) => {
-    console.log(data);
-    console.log(checkbox);
-    console.log(region);
-    console.log(province);
-    console.log(truckType);
     if (data && region && truckType && province) {
       carrierStore.postTruck({
         loadingWeight: data.loadingWeight,
