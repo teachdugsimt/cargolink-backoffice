@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import { UploadFileStore } from '../../../stores/upload-file-store';
 import images from '../../Themes/images';
 import '../../../Layouts/css/style.css';
+import provinceOptions from './province-options';
 
 const ButtonGroup = styled(Button)`
   height: fit-content;
@@ -33,19 +34,12 @@ const truckTypeOptions: { value: any; label: any }[] = [
 ];
 
 const regionOptions: { value: any; label: any }[] = [
-  { label: 'สินค้าการเกษตร', value: 'สินค้าการเกษตร' },
-  { value: 'Info', label: 'Info' },
-  { value: 'Success', label: 'Success' },
-  { value: 'Danger', label: 'Danger' },
-  { value: 'Primary', label: 'Primary' },
-];
-
-const provinceOptions: { value: any; label: any }[] = [
-  { label: 'สินค้าการเกษตร', value: 'สินค้าการเกษตร' },
-  { value: 'Info', label: 'Info' },
-  { value: 'Success', label: 'Success' },
-  { value: 'Danger', label: 'Danger' },
-  { value: 'Primary', label: 'Primary' },
+  { value: 1, label: 'ภาคเหนือ' },
+  { value: 2, label: 'ภาคตะวันออกเฉียงเหนือ' },
+  { value: 3, label: 'ภาคตะวันตก' },
+  { value: 4, label: 'ภาคกลาง' },
+  { value: 5, label: 'ภาคตะวันออก' },
+  { value: 6, label: 'ภาคใต้' },
 ];
 
 interface Props {}
@@ -100,7 +94,6 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
           <span>เลือกประเภทของรถของคุณ</span>
           <Select
             options={truckTypeOptions}
-            isMulti
             placeholder="Select multiple"
             fullWidth
             onChange={(value) => setTruckType(value)}
@@ -234,20 +227,8 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
               </div>
             </div>
           </div> */}
-          <Select
-            options={regionOptions}
-            isMulti
-            placeholder="ภูมิภาค"
-            fullWidth
-            onChange={(value) => setRegion(value)}
-          />
-          <Select
-            options={provinceOptions}
-            isMulti
-            placeholder="จังหวัด"
-            fullWidth
-            onChange={(value) => setProvince(value)}
-          />
+          <Select options={regionOptions} placeholder="ภูมิภาค" fullWidth onChange={(value) => setRegion(value)} />
+          <Select options={provinceOptions} placeholder="จังหวัด" fullWidth onChange={(value) => setProvince(value)} />
           <br />
           <Button status="Success" type="submit" shape="SemiRound" fullWidth>
             ยืนยัน

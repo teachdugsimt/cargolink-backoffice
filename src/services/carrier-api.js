@@ -10,8 +10,8 @@ class CarrierApi {
     return response;
   };
 
-  getAllTruckTypes = async (params) => {
-    const response = await ExcuteApi('/api/v1/carriers/getAllTruckTypes', params, 'get', 600000);
+  listTruckTypes = async (params) => {
+    const response = await ExcuteApi('/api/v1/mobile/carriers/truck/truck-type', params, 'get', 600000);
     return response;
   };
 
