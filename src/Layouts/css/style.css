@@ -56,6 +56,13 @@ input[type='file'] {
   height: 150px;
   border: 1px dashed #d8d8d8;
   border-radius: 0.75rem;
+  margin: 10px;
+}
+.block-image {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .upload-image {
