@@ -9,24 +9,35 @@ import { observer } from 'mobx-react-lite';
 import { useMst } from '../../../stores/root-store';
 import { navigate } from 'gatsby';
 import moment from 'moment';
+import { trucks } from '../../Carrier/Trucks/dynamic-table/trucks';
 
 const Input = styled(InputGroup)`
   margin-bottom: 2rem;
 `;
 
 const AddJobs: React.FC<{}> = observer(({}) => {
-  const { shipperStore } = useMst();
+  const { shipperStore, carrierStore } = useMst();
 
   const { register, handleSubmit } = useForm();
   const [truckType, setTruckType] = useState([]);
+  const [truckTypeOptions, setTruckTypeOptions] = useState();
   const [productTypeId, setProductTypeId] = useState([]);
 
-  const truckTypeOptions: { value: any; label: any }[] = [
-    { value: 1, label: 'รถขนสินค้าแบบกระบะตู้1' },
-    { value: 2, label: 'รถขนสินค้าแบบกระบะตู้2' },
-    { value: 3, label: 'รถขนสินค้าแบบกระบะตู้3' },
-    { value: 4, label: 'รถขนสินค้าแบบกระบะตู้4' },
-  ];
+  useEffect(() => {
+    carrierStore.getAllTruckTypes();
+  }, []);
+
+  useEffect(() => {
+    const allTrucksTypes = JSON.parse(JSON.stringify(carrierStore.trucks_types));
+    console.log('data :>>', allTrucksTypes);
+    const array =
+      allTrucksTypes &&
+      allTrucksTypes.map((truck: any) => ({
+        value: truck.id,
+        label: truck.name,
+      }));
+    setTruckTypeOptions(array);
+  }, [carrierStore.trucks_types]);
 
   const productTypeIdOption: { value: any; label: any }[] = [
     { value: 1, label: 'สินค้าการเกษตร1' },
@@ -68,8 +79,6 @@ const AddJobs: React.FC<{}> = observer(({}) => {
       });
     }
   };
-  console.log(moment(new Date().toDateString()).add(3, 'days').format('DD-MM-YYYY HH:mm'));
-
   return (
     <Card>
       <CardBody>
