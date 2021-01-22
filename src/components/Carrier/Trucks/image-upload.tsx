@@ -20,7 +20,7 @@ const ImageUpload: React.FC<Props> = observer((props) => {
       images[`${imageName}`] = URL.createObjectURL(e.target.files[0]);
       setImageUpload(images);
       setRender(!render);
-      // UploadFileStore.uploadImage(e.target.files[0], imageName);   //! for upload image
+      UploadFileStore.uploadImage(e.target.files[0], imageName); //! for upload image
     }
   };
 

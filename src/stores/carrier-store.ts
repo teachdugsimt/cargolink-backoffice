@@ -100,10 +100,10 @@ export const CarrierStore = types
           self.trucks_types = null;
         }
       }),
-      postTruck: flow(function* postTruck() {
+      postTruck: flow(function* postTruck(params) {
         try {
           // ... yield can be used in async/await style
-          const response = yield CarrierApi.addTruck();
+          const response = yield CarrierApi.addTruck(params);
           console.log('postTruck response :> ', response);
           // if (response && response.ok) {
           //   self.trucks_types = response.data;

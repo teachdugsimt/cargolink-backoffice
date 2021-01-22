@@ -17,13 +17,6 @@ const Input = styled(InputGroup)`
   margin-bottom: 2rem;
 `;
 
-const truckTypeOptions: { value: any; label: any }[] = [
-  { value: 1, label: 'รถขนสินค้าแบบกระบะตู้' },
-  { value: 2, label: 'Top-Left' },
-  { value: 3, label: 'Bottom-Right' },
-  { value: 4, label: 'Bottom-Left' },
-];
-
 const regionOptions: { value: any; label: any }[] = [
   { value: 1, label: 'ภาคเหนือ' },
   { value: 2, label: 'ภาคกลาง' },
@@ -31,6 +24,12 @@ const regionOptions: { value: any; label: any }[] = [
   { value: 4, label: 'ภาคตะวันตก' },
   { value: 5, label: 'ภาคตะวันออก' },
   { value: 6, label: 'ภาคใต้' },
+];
+
+const stallHeightOption: { value: any; label: any }[] = [
+  { value: 'LOW', label: 'LOW' },
+  { value: 'MEDIUM', label: 'MEDIUM' },
+  { value: 'HIGH', label: 'HIGH' },
 ];
 
 interface Props {}
@@ -43,21 +42,64 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   const [haveImage, setHaveImage] = useState(false);
   const [render, setRender] = useState(false);
   const [disable, setDisable] = useState(false);
-  const [truckType, setTruckType] = useState();
-  const [region, setRegion] = useState();
-  const [province, setProvince] = useState();
+  const [truckType, setTruckType] = useState({ value: 0, label: '' });
+  const [region, setRegion] = useState({ value: 0, label: '' });
+  const [province, setProvince] = useState({ value: 0, label: '' });
+  const [stallHeight, setStallHeight] = useState({ value: 0, label: '' });
   const [filterProvince, setFilterProvince] = useState(provinceOptions);
   const [filterRegion, setFilterRegion] = useState(regionOptions);
+  const [truckTypeOptions, setTruckTypeOptions] = useState();
 
-  const onSubmit = (data) => {
+  useEffect(() => {
+    carrierStore.getAllTruckTypes();
+  }, []);
+
+  useEffect(() => {
+    const allTrucksTypes = JSON.parse(JSON.stringify(carrierStore.trucks_types));
+    console.log('allTrucksTypes :>>', allTrucksTypes);
+    const array =
+      allTrucksTypes &&
+      allTrucksTypes.map((truck: any) => ({
+        value: truck.id,
+        label: truck.name,
+      }));
+    setTruckTypeOptions(array);
+  }, [carrierStore.trucks_types]);
+
+  const onSubmit = (data: any) => {
     console.log(data);
     console.log(checkbox);
+    console.log(region);
+    console.log(province);
+    console.log(truckType);
+    if (data && region && truckType && province) {
+      carrierStore.postTruck({
+        loadingWeight: data.loadingWeight,
+        registrationNumber: [data.registrationNumber],
+        stallHeight: stallHeight,
+        tipper: checkbox,
+        truckPhotos: UploadFileStore.truckPhotos,
+        truckType: truckType.value,
+        workingZones: [
+          {
+            province: province.value,
+            region: region.value,
+          },
+        ],
+      });
+    }
   };
 
-  const onChangeRegion = (value) => {
+  const onChangeRegion = (value: any) => {
     setRegion(value);
     const Region = provinceOptions.filter((e) => e.area == value.value);
     setFilterProvince(Region);
+  };
+
+  const onChangeProvince = (value: any) => {
+    setProvince(value);
+    const Province = regionOptions.filter((e) => e.value == value.area);
+    setFilterRegion(Province);
   };
 
   return (
@@ -69,7 +111,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
             options={truckTypeOptions}
             placeholder="Select multiple"
             fullWidth
-            onChange={(value) => setTruckType(value)}
+            onChange={(value: any) => setTruckType(value)}
           />
           <span>รถมีที่ดั้มหรือไม่</span>
           <Switch
@@ -80,11 +122,19 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
           />
           <br />
           <span>ความสูงของคอกรถ (หน่วยเป็นเมตร)</span>
+          <Select
+            options={stallHeightOption}
+            placeholder="Select multiple"
+            fullWidth
+            onChange={(value: any) => setStallHeight(value)}
+          />
+          <span>ระบุจำนวนน้ำหนัก (ตัน)</span>
           <Input fullWidth>
-            <input name="stallHeight" type="text" ref={register} />
+            <input name="loadingWeight" type="number" ref={register} />
           </Input>
           <hr />
           <span>ข้อมูลรถของคุณ</span>
+          <br />
           <span>เลขทะเบียนรถ</span>
           <Input fullWidth>
             <input name="registrationNumber" type="text" ref={register} />
@@ -95,8 +145,13 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
           <ImageUpload />
           <hr />
           <span>โซนที่วิ่งงาน</span>
-          <Select options={regionOptions} placeholder="ภูมิภาค" fullWidth onChange={(value) => onChangeRegion(value)} />
-          <Select options={filterProvince} placeholder="จังหวัด" fullWidth onChange={(value) => setProvince(value)} />
+          <Select options={filterRegion} placeholder="ภูมิภาค" fullWidth onChange={(value) => onChangeRegion(value)} />
+          <Select
+            options={filterProvince}
+            placeholder="จังหวัด"
+            fullWidth
+            onChange={(value) => onChangeProvince(value)}
+          />
           <br />
           <Button status="Success" type="submit" shape="SemiRound" fullWidth>
             ยืนยัน
