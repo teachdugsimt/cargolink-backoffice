@@ -25,6 +25,7 @@ const ImageUpload: React.FC<Props> = observer((props) => {
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
   useEffect(() => {
+    UploadFileStore.clearUploadFileStore();
     setAlertSetting(defaultAlertSetting);
   }, []);
 

@@ -52,6 +52,11 @@ export const UploadFileStore = types
           };
         }
       }),
+
+      clearUploadFileStore: flow(function* clearUploadFileStore() {
+        self.truckPhotos = { front: '', back: '', left: '', right: '' };
+        self.error_response = null;
+      }),
     };
   })
   .create({
