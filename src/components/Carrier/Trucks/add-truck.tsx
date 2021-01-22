@@ -11,6 +11,7 @@ import { UploadFileStore } from '../../../stores/upload-file-store';
 import ImageUpload from './image-upload';
 import provinceOptions from './province-options';
 import { useMst } from '../../../stores/root-store';
+import Alert from '../../alert';
 import '../../../Layouts/css/style.css';
 
 const Input = styled(InputGroup)`
@@ -32,16 +33,20 @@ const stallHeightOption: { value: any; label: any }[] = [
   { value: 'HIGH', label: 'HIGH' },
 ];
 
+const defaultAlertSetting = {
+  icon: '',
+  show: false,
+  type: '',
+  title: '',
+  content: '',
+};
+
 interface Props {}
 
 const AddTruck: React.FC<Props> = observer((props: any) => {
   const { carrierStore } = useMst();
   const { register, handleSubmit } = useForm();
   const [checkbox, setCheckbox] = useState(false);
-  const [pictures, setPictures] = useState([]);
-  const [haveImage, setHaveImage] = useState(false);
-  const [render, setRender] = useState(false);
-  const [disable, setDisable] = useState(false);
   const [truckType, setTruckType] = useState({ value: 0, label: '' });
   const [region, setRegion] = useState({ value: 0, label: '' });
   const [province, setProvince] = useState({ value: 0, label: '' });
@@ -49,10 +54,36 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   const [filterProvince, setFilterProvince] = useState(provinceOptions);
   const [filterRegion, setFilterRegion] = useState(regionOptions);
   const [truckTypeOptions, setTruckTypeOptions] = useState();
+  const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
   useEffect(() => {
     carrierStore.getAllTruckTypes();
   }, []);
+
+  useEffect(() => {
+    const { loading } = carrierStore;
+    setAlertSetting({
+      icon: '',
+      show: loading,
+      type: 'loading',
+      title: '',
+      content: 'Loading',
+    });
+  }, [carrierStore.loading]);
+
+  useEffect(() => {
+    const { error_response } = carrierStore;
+    console.log('error_response :> ', error_response);
+    if (error_response) {
+      setAlertSetting({
+        icon: 'error',
+        show: true,
+        type: 'general',
+        title: error_response.title || '',
+        content: error_response.content || '',
+      });
+    }
+  }, [carrierStore.error_response]);
 
   useEffect(() => {
     const allTrucksTypes = JSON.parse(JSON.stringify(carrierStore.trucks_types));
@@ -104,6 +135,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
 
   return (
     <Card>
+      <Alert setting={alertSetting} />
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)}>
           <span>เลือกประเภทของรถของคุณ</span>

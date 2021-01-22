@@ -6,7 +6,7 @@ import images from './Themes/images';
 const Alert = (props) => {
   const { setting } = props;
 
-  // icon = {success, error, info}
+  // icon = {success, error, warning, info}
   const alertGeneral = (icon = '', show = false, title = '', content = '') => {
     {
       show &&

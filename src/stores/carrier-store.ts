@@ -48,72 +48,129 @@ const drivers = types.model({
 
 export const CarrierStore = types
   .model('CarrierStore', {
+    loading: false,
     trucks_carrier: types.maybeNull(types.array(trucks)),
     trucks_types: types.maybeNull(types.array(trucksTypes)),
     drivers_carrier: types.maybeNull(types.array(drivers)),
+    error_response: types.maybeNull(
+      types.model({
+        title: types.maybeNull(types.string),
+        content: types.maybeNull(types.string),
+      }),
+    ),
   })
   .actions((self) => {
     return {
       getAllTrucksByCarrier: flow(function* getAllTrucksByCarrier() {
+        self.loading = true;
+        self.error_response = null;
         try {
-          // ... yield can be used in async/await style
           const response = yield CarrierApi.getAllTrucks();
           console.log('getAllTrucksByCarrier response :> ', response);
           if (response && response.ok) {
+            self.loading = false;
             self.trucks_carrier = response.data;
+            self.error_response = null;
           } else {
+            self.loading = false;
             self.trucks_carrier = null;
+            self.error_response = {
+              title: response.problem,
+              content: response.originalError.message,
+            };
           }
         } catch (error) {
-          // ... including try/catch error handling
           console.error('Failed to getAllTrucksByCarrier :> ', error);
+          self.loading = false;
           self.trucks_carrier = null;
+          self.error_response = {
+            title: '',
+            content: 'Failed to get all trucks by carrier',
+          };
         }
       }),
+
       getAllDriversByCarrier: flow(function* getAllDriversByCarrier() {
+        self.loading = true;
+        self.error_response = null;
         try {
-          // ... yield can be used in async/await style
           const response = yield CarrierApi.getAllDrivers();
           console.log('getAllDriversByCarrier response :> ', response);
           if (response && response.ok) {
+            self.loading = false;
             self.drivers_carrier = response.data;
+            self.error_response = null;
           } else {
             self.drivers_carrier = null;
+            self.loading = false;
+            self.error_response = {
+              title: response.problem,
+              content: response.originalError.message,
+            };
           }
         } catch (error) {
-          // ... including try/catch error handling
           console.error('Failed to getAllDriversByCarrier :> ', error);
+          self.loading = false;
           self.drivers_carrier = null;
+          self.error_response = {
+            title: '',
+            content: 'Failed to get all drivers by carrier',
+          };
         }
       }),
+
       getAllTruckTypes: flow(function* getAllTruckTypes() {
+        self.loading = true;
+        self.error_response = null;
         try {
           const response = yield CarrierApi.listTruckTypes();
-          console.log('listTruckTypes response :> ', response);
+          console.log('getAllTruckTypes response :> ', response);
           if (response && response.ok) {
+            self.loading = false;
             self.trucks_types = response.data;
+            self.error_response = null;
           } else {
+            self.loading = false;
             self.trucks_types = null;
+            self.error_response = {
+              title: response.problem,
+              content: response.originalError.message,
+            };
           }
         } catch (error) {
-          console.error('Failed to listTruckTypes :> ', error);
+          console.error('Failed to getAllTruckTypes :> ', error);
+          self.loading = false;
           self.trucks_types = null;
+          self.error_response = {
+            title: '',
+            content: 'Failed to get all truck types',
+          };
         }
       }),
+
       postTruck: flow(function* postTruck(params) {
+        self.loading = true;
+        self.error_response = null;
         try {
-          // ... yield can be used in async/await style
           const response = yield CarrierApi.addTruck(params);
           console.log('postTruck response :> ', response);
-          // if (response && response.ok) {
-          //   self.trucks_types = response.data;
-          // } else {
-          //   self.trucks_types = null;
-          // }
+          if (response && response.ok) {
+            self.loading = false;
+            self.error_response = null;
+          } else {
+            self.loading = false;
+            self.error_response = {
+              title: response.problem,
+              content: response.originalError.message,
+            };
+          }
         } catch (error) {
-          // ... including try/catch error handling
           console.error('Failed to postTruck :> ', error);
-          // self.trucks_types = null;
+          self.loading = false;
+          self.error_response = {
+            title: '',
+            content: 'Failed to post truck',
+          };
         }
       }),
     };
