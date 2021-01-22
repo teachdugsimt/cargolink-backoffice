@@ -12,8 +12,8 @@ const AddJobs: React.FC<{}> = observer(({}) => {
   const { shipperStore, carrierStore } = useMst();
 
   const { register, handleSubmit } = useForm();
-  const [truckType, setTruckType] = useState([]);
-  const [productTypeId, setProductTypeId] = useState([]);
+  const [truckType, setTruckType] = useState({ value: 0, label: '' });
+  const [productTypeId, setProductTypeId] = useState({ value: 0, label: '' });
   const [truckTypeOptions, setTruckTypeOptions] = useState();
   const [productTypeIdOptions, setProductTypeIdOptions] = useState();
 
@@ -24,7 +24,6 @@ const AddJobs: React.FC<{}> = observer(({}) => {
 
   useEffect(() => {
     const allTrucksTypes = JSON.parse(JSON.stringify(carrierStore.trucks_types));
-    console.log('allTrucksTypes :>>', allTrucksTypes);
     const array =
       allTrucksTypes &&
       allTrucksTypes.map((truck: any) => ({
@@ -36,7 +35,6 @@ const AddJobs: React.FC<{}> = observer(({}) => {
 
   useEffect(() => {
     const allProductTypeId = JSON.parse(JSON.stringify(shipperStore.product_types));
-    console.log('allProductTypeId :>>', allProductTypeId);
     const array =
       allProductTypeId &&
       allProductTypeId.map((product: any) => ({
@@ -47,8 +45,6 @@ const AddJobs: React.FC<{}> = observer(({}) => {
   }, [shipperStore.product_types]);
 
   const onSubmit = (data: any) => {
-    console.log(data);
-    console.log(truckType.value, productTypeId.value);
     if (data && truckType && productTypeId) {
       shipperStore.postJobs({
         truckType: truckType.value,
@@ -87,7 +83,7 @@ const AddJobs: React.FC<{}> = observer(({}) => {
             name="truckType"
             options={truckTypeOptions}
             placeholder="Select multiple"
-            onChange={(value) => setTruckType(value)}
+            onChange={(value: any) => setTruckType(value)}
             fullWidth
           />
           <span>จำนวนคันรถที่ต้องการ</span>
@@ -98,7 +94,7 @@ const AddJobs: React.FC<{}> = observer(({}) => {
             name="productTypeId"
             options={productTypeIdOptions}
             placeholder="Select multiple"
-            onChange={(value) => setProductTypeId(value)}
+            onChange={(value: any) => setProductTypeId(value)}
             fullWidth
           />
           <span>ระบุชื่อสินค้าของคุณ</span>
