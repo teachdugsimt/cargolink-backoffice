@@ -10,21 +10,17 @@ import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
 import { observer } from 'mobx-react-lite';
+import SearchForm from '../../search-form';
+import styled from 'styled-components';
+import { navigate } from 'gatsby';
 
 const Wrapper = styled.div`
   margin-top: 10px;
   min-width: 600px;
 `;
-import styled from 'styled-components';
-import { navigate } from 'gatsby';
-
-const Input = styled(InputGroup)`
-  margin-bottom: 10px;
-`;
 
 const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
   const { t } = useTranslation();
-  const [searchValue, setSearchValue] = useState('');
   const [rowData, setRowData] = useState([]);
   const [panding, setPanding] = useState(false);
   const [approved, setApproved] = useState(false);
@@ -34,24 +30,12 @@ const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
     setRowData(rows);
   }, [rows]);
 
-  const onClickSearch = () => {
-    const lowercasedValue = searchValue.toLowerCase().trim();
-    if (lowercasedValue === '') setRowData(rows);
-    else {
-      const filteredData = rows.filter((item) => {
-        const data = item.cells.filter((key) => key.key.toString().toLowerCase().includes(lowercasedValue));
-        return data && data.length ? true : false;
-      });
-      setRowData(filteredData);
-    }
-  };
-
   const onClickPending = () => {
     setPanding(true);
     setApproved(false);
     setAll(false);
-    const filteredData = rows.filter((item) => {
-      const data = item.cells.filter((key) => key.key == 'Pending');
+    const filteredData = rows.filter((item: any) => {
+      const data = item.cells.filter((cell: any) => cell.key.toString().toLowerCase() === 'pending');
       return data && data.length ? true : false;
     });
     setRowData(filteredData);
@@ -61,8 +45,8 @@ const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
     setApproved(true);
     setPanding(false);
     setAll(false);
-    const filteredData = rows.filter((item) => {
-      const data = item.cells.filter((key) => key.key == 'Approved');
+    const filteredData = rows.filter((item: any) => {
+      const data = item.cells.filter((cell: any) => cell.key.toString().toLowerCase() === 'approved');
       return data && data.length ? true : false;
     });
     setRowData(filteredData);
@@ -74,8 +58,6 @@ const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
     setApproved(false);
     setRowData(rows);
   };
-  console.log('row:>>', rows);
-  console.log('rowData:>>', rowData);
 
   return (
     <Card>
@@ -84,19 +66,7 @@ const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
       >
         <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}>{t('trucks')}</span>
         <div style={{ display: 'flex' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <InputGroup>
-              <input
-                type="text"
-                placeholder="Enter your search here"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-            </InputGroup>
-            <Button appearance="filled" status="Basic" onClick={() => onClickSearch()}>
-              <Icon size={18} icon={search} />
-            </Button>
-          </div>
+          <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
         </div>
       </CardHeader>
       <CardBody>
