@@ -1,9 +1,7 @@
-import { Button } from '@paljs/ui/Button';
-import { InputGroup } from '@paljs/ui/Input';
+import IconButton from '@material-ui/core/IconButton';
 import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import Icon from 'react-icons-kit';
-import { cloudUpload } from 'react-icons-kit/fa/cloudUpload';
 import { camera } from 'react-icons-kit/fa/camera';
 import { timesCircleO } from 'react-icons-kit/fa/timesCircleO';
 import { UploadFileStore } from '../../../stores/upload-file-store';
@@ -13,12 +11,25 @@ import '../../../Layouts/css/style.css';
 interface Props {}
 
 const ImageUpload: React.FC<Props> = observer((props) => {
-  const [checkbox, setCheckbox] = useState(false);
-  const [pictures, setPictures] = useState([]);
-  const [haveImage, setHaveImage] = useState(false);
   const [render, setRender] = useState(false);
-  const [disable, setDisable] = useState(false);
-  const [imageUpload, setImageUpload] = useState({});
+  const [imageUpload, setImageUpload] = useState({ front: '', back: '', left: '', right: '' });
+
+  const onChangePicture = (e: any, imageName: string) => {
+    if (e.target.files[0]) {
+      let images = JSON.parse(JSON.stringify(imageUpload));
+      images[`${imageName}`] = URL.createObjectURL(e.target.files[0]);
+      setImageUpload(images);
+      setRender(!render);
+      // UploadFileStore.uploadImage(e.target.files[0], imageName);   //! for upload image
+    }
+  };
+
+  const onRemoveImg = (imageName: string) => {
+    let images = JSON.parse(JSON.stringify(imageUpload));
+    images[`${imageName}`] = '';
+    setImageUpload(images);
+    setRender(!render);
+  };
 
   // const onChangePicture = (e: any) => {
   //   if (e.target.files[0]) {
@@ -42,138 +53,151 @@ const ImageUpload: React.FC<Props> = observer((props) => {
   //   }
   // };
 
-  const onChangePicture = (e: any, name: string) => {
-    if (e.target.files[0]) {
-      setHaveImage(true);
-      setRender(!render);
-      let images = pictures;
-      images.push(URL.createObjectURL(e.target.files[0]));
-      setPictures(images);
-      // UploadFileStore.uploadImage(e.target.files[0]);   //! for upload image
-
-      if (images.length === 4) setDisable(true);
-
-      // images &&
-      //   images.forEach((e, i) => {
-      //     const outputImage = document.getElementById(`outputImage${i + 1}`);
-      //     outputImage.src = URL.createObjectURL(e);
-      //     // outputImage.onload = function () {
-      //     //   URL.revokeObjectURL(outputImage.src); // free memory
-      //     // };
-      //   });
-    }
-  };
-
   return (
     <div>
+      {render ? <></> : <></>}
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div className="block-upload-image">
-          <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-            <label for="file-upload" className="custom-file-upload-photo">
-              <Icon icon={camera} style={{ marginRight: 5 }} />
-            </label>
-            <input id="file-upload" type="file" accept="image/*" onChange={(e: any) => onChangePicture(e, 'front')} />
-          </div>
-          <div className="block-image">
-            <div style={{ height: 75 }}>
-              <img src={images.frontTruck} style={{ maxHeight: '100%', width: 'auto' }} />
+        {imageUpload.front ? (
+          <div className="block-upload-image">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '5px 5px 0' }}>
+              <IconButton style={{ padding: 0 }} onClick={() => onRemoveImg('front')}>
+                <Icon icon={timesCircleO} style={{ color: '#9f9f9f', display: 'flex' }} />
+              </IconButton>
             </div>
-            <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านหน้า</span>
-          </div>
-        </div>
-        <div className="block-upload-image">
-          <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-            <label for="file-upload" className="custom-file-upload-photo">
-              <Icon icon={camera} style={{ marginRight: 5 }} />
-            </label>
-            <input id="file-upload" type="file" accept="image/*" onChange={(e: any) => onChangePicture(e, 'back')} />
-          </div>
-          <div className="block-image">
-            <div style={{ height: 75 }}>
-              <img src={images.backTruck} style={{ maxHeight: '100%', width: 'auto' }} />
+            <div className="block-image">
+              <div className="image-size">
+                <img src={imageUpload.front} style={{ maxWidth: '100%', maxHeight: 110 }} />
+              </div>
             </div>
-            <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านหลัง</span>
-          </div>
-        </div>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div className="block-upload-image">
-          <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-            <label for="file-upload" className="custom-file-upload-photo">
-              <Icon icon={camera} style={{ marginRight: 5 }} />
-            </label>
-            <input id="file-upload" type="file" accept="image/*" onChange={(e: any) => onChangePicture(e, 'left')} />
-          </div>
-          <div className="block-image">
-            <div style={{ width: 125 }}>
-              <img src={images.leftTruck} style={{ maxWidth: '100%', height: 'auto' }} />
-            </div>
-            <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านซ้าย</span>
-          </div>
-        </div>
-        <div className="block-upload-image">
-          <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-            <label for="file-upload" className="custom-file-upload-photo">
-              <Icon icon={camera} style={{ marginRight: 5 }} />
-            </label>
-            <input id="file-upload" type="file" accept="image/*" onChange={(e: any) => onChangePicture(e, 'right')} />
-          </div>
-          <div className="block-image">
-            <div style={{ width: 125 }}>
-              <img src={images.rightTruck} style={{ maxWidth: '100%', height: 'auto' }} />
-            </div>
-            <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านขวา</span>
-          </div>
-        </div>
-      </div>
-      {/* <div style={{ display: 'flex', padding: '10px 0' }}>
-        <div style={{ marginRight: 10 }}>
-          <label for="file-upload" className="custom-file-upload">
-            <Icon icon={cloudUpload} style={{ marginRight: 5 }} />
-            Upload Image
-          </label>
-          <input id="file-upload" type="file" accept="image/*" onChange={onChangePicture} disabled={disable} />
-        </div>
-        {render ? (
-          <div style={{ display: haveImage ? 'flex' : 'none' }}>
-            {pictures.map((im, i) => {
-              return (
-                <div style={{ height: 150, margin: '0 10px', display: 'flex' }} key={i}>
-                  <img id="outputImage1" src={im} className="upload-image" />
-                  <ButtonGroup
-                    status="Basic"
-                    appearance="ghost"
-                    size="Tiny"
-                    type="button"
-                    onClick={() => onRemoveImg(i)}
-                  >
-                    <Icon icon={timesCircleO} style={{ color: '#9f9f9f' }} />
-                  </ButtonGroup>
-                </div>
-              );
-            })}
           </div>
         ) : (
-          <div style={{ display: haveImage ? 'flex' : 'none' }}>
-            {pictures.map((im, i) => {
-              return (
-                <div style={{ height: 150, margin: '0 10px', display: 'flex' }} key={i}>
-                  <img id="outputImage1" src={im} className="upload-image" />
-                  <ButtonGroup
-                    status="Basic"
-                    appearance="ghost"
-                    size="Tiny"
-                    type="button"
-                    onClick={() => onRemoveImg(i)}
-                  >
-                    <Icon icon={timesCircleO} style={{ color: '#9f9f9f' }} />
-                  </ButtonGroup>
-                </div>
-              );
-            })}
+          <div className="block-upload-image">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
+              <label for="file-upload-front" className="custom-file-upload-photo">
+                <Icon icon={camera} style={{ marginRight: 5 }} />
+              </label>
+              <input
+                id="file-upload-front"
+                type="file"
+                accept="image/*"
+                onChange={(e: any) => onChangePicture(e, 'front')}
+              />
+            </div>
+            <div className="block-image">
+              <div style={{ height: 75 }}>
+                <img src={images.frontTruck} style={{ maxHeight: '100%', width: 'auto' }} />
+              </div>
+              <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านหน้า</span>
+            </div>
           </div>
         )}
-      </div> */}
+
+        {imageUpload.back ? (
+          <div className="block-upload-image">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '5px 5px 0' }}>
+              <IconButton style={{ padding: 0 }} onClick={() => onRemoveImg('back')}>
+                <Icon icon={timesCircleO} style={{ color: '#9f9f9f', display: 'flex' }} />
+              </IconButton>
+            </div>
+            <div className="block-image">
+              <div className="image-size">
+                <img src={imageUpload.back} style={{ maxWidth: '100%', maxHeight: 110 }} />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="block-upload-image">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
+              <label for="file-upload-back" className="custom-file-upload-photo">
+                <Icon icon={camera} style={{ marginRight: 5 }} />
+              </label>
+              <input
+                id="file-upload-back"
+                type="file"
+                accept="image/*"
+                onChange={(e: any) => onChangePicture(e, 'back')}
+              />
+            </div>
+            <div className="block-image">
+              <div style={{ height: 75 }}>
+                <img src={images.backTruck} style={{ maxHeight: '100%', width: 'auto' }} />
+              </div>
+              <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านหลัง</span>
+            </div>
+          </div>
+        )}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        {imageUpload.left ? (
+          <div className="block-upload-image">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '5px 5px 0' }}>
+              <IconButton style={{ padding: 0 }} onClick={() => onRemoveImg('left')}>
+                <Icon icon={timesCircleO} style={{ color: '#9f9f9f', display: 'flex' }} />
+              </IconButton>
+            </div>
+            <div className="block-image">
+              <div className="image-size">
+                <img src={imageUpload.left} style={{ maxWidth: '100%', maxHeight: 110 }} />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="block-upload-image">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
+              <label for="file-upload-left" className="custom-file-upload-photo">
+                <Icon icon={camera} style={{ marginRight: 5 }} />
+              </label>
+              <input
+                id="file-upload-left"
+                type="file"
+                accept="image/*"
+                onChange={(e: any) => onChangePicture(e, 'left')}
+              />
+            </div>
+            <div className="block-image">
+              <div style={{ width: 125 }}>
+                <img src={images.leftTruck} style={{ maxWidth: '100%', height: 'auto' }} />
+              </div>
+              <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านซ้าย</span>
+            </div>
+          </div>
+        )}
+
+        {imageUpload.right ? (
+          <div className="block-upload-image">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '5px 5px 0' }}>
+              <IconButton style={{ padding: 0 }} onClick={() => onRemoveImg('right')}>
+                <Icon icon={timesCircleO} style={{ color: '#9f9f9f', display: 'flex' }} />
+              </IconButton>
+            </div>
+            <div className="block-image">
+              <div className="image-size">
+                <img src={imageUpload.right} style={{ maxWidth: '100%', maxHeight: 110 }} />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="block-upload-image">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
+              <label for="file-upload-right" className="custom-file-upload-photo">
+                <Icon icon={camera} style={{ marginRight: 5 }} />
+              </label>
+              <input
+                id="file-upload-right"
+                type="file"
+                accept="image/*"
+                onChange={(e: any) => onChangePicture(e, 'right')}
+              />
+            </div>
+            <div className="block-image">
+              <div style={{ width: 125 }}>
+                <img src={images.rightTruck} style={{ maxWidth: '100%', height: 'auto' }} />
+              </div>
+              <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านขวา</span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 });
