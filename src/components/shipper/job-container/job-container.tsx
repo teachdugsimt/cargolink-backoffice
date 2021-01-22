@@ -102,38 +102,7 @@ const JobContainer: React.FC<Props> = observer(() => {
       </CardHeaderStyled>
       <CardBody>
         <Row style={{ padding: 5, marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
-          <div>
-            <Button
-              appearance={all == true ? 'filled' : 'outline'}
-              status="Success"
-              size="Small"
-              onClick={() => onClickAll()}
-              style={{
-                marginRight: 10,
-              }}
-            >
-              ALL
-            </Button>
-            <Button
-              appearance={panding == true ? 'filled' : 'outline'}
-              status="Warning"
-              size="Small"
-              style={{
-                marginRight: 10,
-              }}
-              onClick={() => onClickPending()}
-            >
-              PENDING
-            </Button>
-            <Button
-              appearance={approved == true ? 'filled' : 'outline'}
-              status="Warning"
-              size="Small"
-              onClick={() => onClickApproved()}
-            >
-              APPROVED
-            </Button>
-          </div>
+          <div></div>
           <div>
             <Button
               appearance="outline"
