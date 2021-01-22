@@ -8,10 +8,11 @@ import { useMst } from '../../../stores/root-store';
 import { navigate } from 'gatsby';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
-
 import 'react-datepicker/dist/react-datepicker.css';
+import Alert from '../../alert';
+import { defaultAlertSetting } from '../../simple-data';
 
-const AddJobs: React.FC<{}> = observer(({}) => {
+const AddJobs: React.FC<{}> = observer(() => {
   const { shipperStore, carrierStore } = useMst();
 
   const { register, handleSubmit } = useForm();
@@ -21,10 +22,36 @@ const AddJobs: React.FC<{}> = observer(({}) => {
   const [productTypeIdOptions, setProductTypeIdOptions] = useState();
   const [startDate, setStartDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
+  const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
+
   useEffect(() => {
     carrierStore.getAllTruckTypes();
     shipperStore.getProductTypes();
   }, []);
+
+  useEffect(() => {
+    const { loading } = shipperStore;
+    setAlertSetting({
+      icon: '',
+      show: loading,
+      type: 'loading',
+      title: '',
+      content: 'Loading',
+    });
+  }, [shipperStore.loading]);
+
+  useEffect(() => {
+    const { error_response } = shipperStore;
+    if (error_response) {
+      setAlertSetting({
+        icon: 'error',
+        show: true,
+        type: 'general',
+        title: error_response.title || '',
+        content: error_response.content || '',
+      });
+    }
+  }, [shipperStore.error_response]);
 
   useEffect(() => {
     const allTrucksTypes = JSON.parse(JSON.stringify(carrierStore.trucks_types));
@@ -80,6 +107,7 @@ const AddJobs: React.FC<{}> = observer(({}) => {
   };
   return (
     <Card>
+      <Alert setting={alertSetting} />
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)}>
           <span>ประเภทของรถที่คุณต้องการ *</span>

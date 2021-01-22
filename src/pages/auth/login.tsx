@@ -12,14 +12,7 @@ import SEO from '../../components/SEO';
 import Spinner from '@paljs/ui/Spinner';
 import Alert from '../../components/alert';
 import { useMst } from '../../stores/root-store';
-
-const defaultAlertSetting = {
-  icon: '',
-  show: false,
-  type: '',
-  title: '',
-  content: '',
-};
+import { defaultAlertSetting } from '../../components/simple-data';
 
 const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageContext }) => {
   const { loginStore } = useMst();

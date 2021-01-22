@@ -12,6 +12,7 @@ import ImageUpload from './image-upload';
 import provinceOptions from './province-options';
 import { useMst } from '../../../stores/root-store';
 import Alert from '../../alert';
+import { defaultAlertSetting } from '../../simple-data';
 import '../../../Layouts/css/style.css';
 
 const Input = styled(InputGroup)`
@@ -32,14 +33,6 @@ const stallHeightOption: { value: any; label: any }[] = [
   { value: 'MEDIUM', label: 'MEDIUM' },
   { value: 'HIGH', label: 'HIGH' },
 ];
-
-const defaultAlertSetting = {
-  icon: '',
-  show: false,
-  type: '',
-  title: '',
-  content: '',
-};
 
 interface Props {}
 

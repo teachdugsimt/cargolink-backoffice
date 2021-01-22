@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import DynamicTable from '@atlaskit/dynamic-table';
 import { Button } from '@paljs/ui/Button';
-import { caption, head, createRow } from './dynamic-table/sample-data';
+import { head, createRow } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
 import { ic_add } from 'react-icons-kit/md/ic_add';
 import styled from 'styled-components';
@@ -15,6 +15,7 @@ import 'moment/locale/th';
 import { navigate } from 'gatsby';
 import SearchForm from '../../search-form';
 import Alert from '../../alert';
+import { defaultAlertSetting } from '../../simple-data';
 moment.locale('th');
 
 const Wrapper = styled.div`
@@ -29,14 +30,6 @@ const CardHeaderStyled = styled(CardHeader)`
   justify-content: space-between;
   align-items: center;
 `;
-
-const defaultAlertSetting = {
-  icon: '',
-  show: false,
-  type: '',
-  title: '',
-  content: '',
-};
 
 interface Props {}
 const JobContainer: React.FC<Props> = observer(() => {

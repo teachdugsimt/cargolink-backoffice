@@ -7,15 +7,8 @@ import { timesCircleO } from 'react-icons-kit/fa/timesCircleO';
 import { UploadFileStore } from '../../../stores/upload-file-store';
 import images from '../../Themes/images';
 import Alert from '../../alert';
+import { defaultAlertSetting } from '../../simple-data';
 import '../../../Layouts/css/style.css';
-
-const defaultAlertSetting = {
-  icon: '',
-  show: false,
-  type: '',
-  title: '',
-  content: '',
-};
 
 interface Props {}
 
