@@ -9,5 +9,8 @@
     "JobsRegion":"Jobs in each region",
     "shipperaccount":"Shipper account",
     "carrieraccount":"Carrier account",
-    "dashboard":"Dashboard"
+    "dashboard":"Dashboard",
+    "all":"ALL",
+    "pending":"PENDING",
+    "approved":"APPROVED"
   }

@@ -2,15 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
-import { caption, head, rows } from './dynamic-table/sample-data';
+import { head, rows } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
 import { search } from 'react-icons-kit/icomoon/search';
 import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
-import { inject } from 'mobx-react';
-import { CarrierStore } from '../../../stores/carrier-store';
-import { getSnapshot } from 'mobx-state-tree';
 import { useMst } from '../../../stores/root-store';
 import { observer } from 'mobx-react-lite';
 
@@ -113,7 +110,7 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
               marginRight: 10,
             }}
           >
-            ALL
+            {t('all')}
           </Button>
           <Button
             appearance={panding == true ? 'filled' : 'outline'}
@@ -124,7 +121,7 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
             }}
             onClick={() => onClickPending()}
           >
-            PENDING
+            {t('pending')}
           </Button>
           <Button
             appearance={approved == true ? 'filled' : 'outline'}
@@ -132,7 +129,7 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
             size="Small"
             onClick={() => onClickApproved()}
           >
-            APPROVED
+            {t('approved')}
           </Button>
         </Row>
         <span>{`Results found: ${rowData.length}`}</span>

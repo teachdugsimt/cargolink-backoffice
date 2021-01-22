@@ -9,5 +9,8 @@
     "JobsRegion":"งานทั้งหมด",
     "shipperaccount":"บัญชีผู้จัดส่ง",
     "carrieraccount":"บัญชีผู้ให้บริการ",
-    "dashboard":"แดชบอร์ด"
+    "dashboard":"แดชบอร์ด",
+    "all":"ทั่้งหมด",
+    "pending":"อยู่ระหว่างการดำเนินการ",
+    "approved":"อนุมัติแล้ว"
   }
