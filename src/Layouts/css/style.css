@@ -19,22 +19,6 @@ input {
 input[type='file'] {
   display: none;
 }
-.custom-file-upload {
-  display: inline-block;
-  background-color: #f7f9fc;
-  border: 1px solid #e4e9f2;
-  color: #2f2b45;
-  border-radius: 0.75rem;
-  padding: 0.6875rem 1.125rem;
-  outline: none;
-  white-space: nowrap;
-  cursor: pointer;
-  text-shadow: 1px 1px #fff;
-  font-weight: 700;
-  font-size: 0.875rem;
-  line-height: 1rem;
-  height: fit-content;
-}
 .custom-file-upload-photo {
   display: inline-block;
   background-color: white;
@@ -69,24 +53,3 @@ input[type='file'] {
   display: flex;
   justify-content: center;
 }
-.delete-image-button {
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.upload-image {
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 4px;
-}
-
-/* .delete-image-button :focus {
-  background-color: white;
-  border: 1px solid #0079a1;
-  box-sizing: border-box;
-  -webkit-transition: 0.5s;
-  transition: 0.5s;
-  outline: none;
-} */
