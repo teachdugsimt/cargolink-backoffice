@@ -6,13 +6,10 @@ const items: MenuItemType[] = [
     icon: { name: 'home' },
     link: { to: '/dashboard' },
   },
-  // {
-  //   title: 'FEATURES',
-  //   group: true,
-  // },
   {
     title: 'Shipper',
     icon: { name: 'archive' },
+    expanded: true,
     children: [
       { title: 'Shipper account', link: { to: '/shipper-account' } },
       { title: 'Jobs', link: { to: '/jobs' } },
@@ -21,6 +18,7 @@ const items: MenuItemType[] = [
   {
     title: 'Carrier',
     icon: { name: 'car' },
+    expanded: true,
     children: [
       { title: 'Carrier account', link: { to: '/carrier-account' } },
       { title: 'Trucks', link: { to: '/trucks' } },
