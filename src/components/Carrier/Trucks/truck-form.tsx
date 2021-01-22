@@ -10,6 +10,7 @@ import Row from '@paljs/ui/Row';
 import { observer } from 'mobx-react-lite';
 import SearchForm from '../../search-form';
 import styled from 'styled-components';
+import Alert from '../../alert';
 import { navigate } from 'gatsby';
 
 const Wrapper = styled.div`
@@ -17,7 +18,7 @@ const Wrapper = styled.div`
   min-width: 600px;
 `;
 
-const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
+const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, alertSetting }) => {
   const { t } = useTranslation();
   const [rowData, setRowData] = useState([]);
   const [panding, setPanding] = useState(false);
@@ -59,6 +60,7 @@ const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
 
   return (
     <Card>
+      <Alert setting={alertSetting} />
       <CardHeader
         style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
       >

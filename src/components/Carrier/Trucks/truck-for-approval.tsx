@@ -4,19 +4,10 @@ import { useMst } from '../../../stores/root-store';
 import TruckForm from './truck-form';
 import moment from 'moment';
 import images from '../../Themes/images';
+import { defaultAlertSetting } from '../../simple-data';
 
 import 'moment/locale/th';
 moment.locale('th');
-
-interface Truck {
-  id: number;
-  name: string;
-  plate_number: string;
-  type: string;
-  weigth: number;
-  carrier_name: string;
-  register_date: string;
-}
 
 function sortByDate(input: string) {
   return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
@@ -25,15 +16,38 @@ function sortByDate(input: string) {
 const TruckForApproval: React.FC<{}> = observer(({}) => {
   const { carrierStore } = useMst();
   const [rowData, setRowData] = useState([]);
+  const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
   useEffect(() => {
     carrierStore.getAllTrucksByCarrier();
   }, []);
 
   useEffect(() => {
-    const trucks = JSON.parse(JSON.stringify(carrierStore.trucks_carrier));
-    console.log('data :>>', trucks);
+    const { loading } = carrierStore;
+    setAlertSetting({
+      icon: '',
+      show: loading,
+      type: 'loading',
+      title: '',
+      content: 'Loading',
+    });
+  }, [carrierStore.loading]);
 
+  useEffect(() => {
+    const { error_response } = carrierStore;
+    if (error_response) {
+      setAlertSetting({
+        icon: 'error',
+        show: true,
+        type: 'general',
+        title: error_response.title || '',
+        content: error_response.content || '',
+      });
+    }
+  }, [carrierStore.error_response]);
+
+  useEffect(() => {
+    const trucks = JSON.parse(JSON.stringify(carrierStore.trucks_carrier));
     const rows =
       trucks &&
       trucks.map((truck: any) => ({
@@ -57,8 +71,8 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
             ),
           },
           {
-            key: truck.registrationNumber.map((e) => e),
-            content: truck.registrationNumber.map((e) => e),
+            key: truck.registrationNumber.map((e: any) => e),
+            content: truck.registrationNumber.map((e: any) => e),
           },
           {
             key: truck.truckType,
@@ -159,6 +173,6 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
     setRowData(rows);
   }, [carrierStore.trucks_carrier]);
 
-  return <TruckForm rows={rowData} />;
+  return <TruckForm rows={rowData} alertSetting={alertSetting} />;
 });
 export default TruckForApproval;
