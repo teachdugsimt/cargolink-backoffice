@@ -7,6 +7,9 @@ import { observer } from 'mobx-react-lite';
 import { useMst } from '../../../stores/root-store';
 import { navigate } from 'gatsby';
 import moment from 'moment';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 const AddJobs: React.FC<{}> = observer(({}) => {
   const { shipperStore, carrierStore } = useMst();
@@ -16,7 +19,8 @@ const AddJobs: React.FC<{}> = observer(({}) => {
   const [productTypeId, setProductTypeId] = useState({ value: 0, label: '' });
   const [truckTypeOptions, setTruckTypeOptions] = useState();
   const [productTypeIdOptions, setProductTypeIdOptions] = useState();
-
+  const [startDate, setStartDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date());
   useEffect(() => {
     carrierStore.getAllTruckTypes();
     shipperStore.getProductTypes();
@@ -45,6 +49,7 @@ const AddJobs: React.FC<{}> = observer(({}) => {
   }, [shipperStore.product_types]);
 
   const onSubmit = (data: any) => {
+    console.log('startDate :>>', moment(toDate).add(3, 'days').format('DD-MM-YYYY HH:mm'));
     if (data && truckType && productTypeId) {
       shipperStore.postJobs({
         truckType: truckType.value,
@@ -52,7 +57,7 @@ const AddJobs: React.FC<{}> = observer(({}) => {
         from: {
           contactMobileNo: data.contactMobileNo,
           contactName: data.contactName,
-          dateTime: data.dateTime,
+          dateTime: moment(startDate).format('DD-MM-YYYY HH:mm'),
           // lat: "13.788485",
           // lng: "100.6079443",
           name: data.contactName,
@@ -61,7 +66,7 @@ const AddJobs: React.FC<{}> = observer(({}) => {
           {
             contactMobileNo: data.contactMobileNo1,
             contactName: data.contactName1,
-            dateTime: data.dateTime1,
+            dateTime: moment(toDate).format('DD-MM-YYYY HH:mm'),
             // lat: "13.7532001",
             // lng: "100.4878687",
             name: data.name1,
@@ -70,7 +75,7 @@ const AddJobs: React.FC<{}> = observer(({}) => {
         truckAmount: 1000,
         productTypeId: productTypeId.value,
         productName: data.productName,
-        expiredTime: moment(new Date().toDateString()).add(3, 'days').format('DD-MM-YYYY HH:mm'),
+        expiredTime: moment(toDate).add(3, 'days').format('DD-MM-YYYY HH:mm'),
       });
     }
   };
@@ -107,7 +112,15 @@ const AddJobs: React.FC<{}> = observer(({}) => {
           <span>ระบุสถานที่ที่เข้ารับสินค้า</span>
           <input className="new-input-component" type="text" name="contactName" ref={register} />
           <span>วัน-เวลา รับสินค้าที่ต้องการ</span>
-          <input className="new-input-component" type="text" name="dateTime" ref={register} />
+          <br />
+          <DatePicker
+            className="new-input-component"
+            showTimeSelect
+            dateFormat="Pp"
+            selected={startDate}
+            onChange={(date: any) => setStartDate(date)}
+          />
+          <br />
           <span>ข้อมูลติดต่อจุดรับสินค้า</span>
           <br />
           <span>ชื่อผู้รับสินค้า</span>
@@ -120,7 +133,15 @@ const AddJobs: React.FC<{}> = observer(({}) => {
           <span>ระบุสถานที่ที่เข้ารับสินค้า</span>
           <input className="new-input-component" type="text" name="contactName1" ref={register} />
           <span>วัน-เวลา รับสินค้าที่ต้องการ</span>
-          <input className="new-input-component" type="text" name="dateTime1" ref={register} />
+          <br />
+          <DatePicker
+            className="new-input-component"
+            showTimeSelect
+            dateFormat="Pp"
+            selected={toDate}
+            onChange={(date: any) => setToDate(date)}
+          />
+          <br />
           <span>ข้อมูลติดต่อจุดรับสินค้า</span>
           <br />
           <span>ชื่อผู้รับสินค้า</span>
