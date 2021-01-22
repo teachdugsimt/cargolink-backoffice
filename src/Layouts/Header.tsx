@@ -154,7 +154,7 @@ const Header: React.FC<HeaderProps> = (props) => {
               // },
             ]}
           />
-          <div style={{ display: 'flex', alignItems: 'center', marginLeft: -20, width: 230 }}>
+          <div className="header-logo">
             <img src={images.cargolinkLogo} style={{ maxWidth: '100%', height: 'auto' }} />
           </div>
         </div>

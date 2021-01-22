@@ -3,7 +3,7 @@ import { InputGroup } from '@paljs/ui/Input';
 import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import { Card, CardBody } from '@paljs/ui/Card';
+import { Card, CardHeader, CardBody } from '@paljs/ui/Card';
 import Select from '@paljs/ui/Select';
 import Switch from '@material-ui/core/Switch';
 import { useForm } from 'react-hook-form';
@@ -13,6 +13,7 @@ import { useMst } from '../../../stores/root-store';
 import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
 import { regionOptions, stallHeightOption, provinceOptions } from './dynamic-table/sample-data';
+import { navigate } from 'gatsby';
 import '../../../Layouts/css/style.css';
 
 interface Props {}
@@ -103,49 +104,50 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   return (
     <Card>
       <Alert setting={alertSetting} />
+      <CardHeader>
+        <span>เพิ่มข้อมูลรถ</span>
+      </CardHeader>
       <CardBody>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <span>เลือกประเภทของรถของคุณ</span>
+        <form onSubmit={handleSubmit(onSubmit)} className="form-add-truck">
+          <p>เลือกประเภทของรถของคุณ</p>
           <Select
             options={truckTypeOptions}
             placeholder="Select multiple"
             fullWidth
             onChange={(value: any) => setTruckType(value)}
           />
-          <span>รถมีที่ดั้มหรือไม่</span>
-          <Switch
-            checked={checkbox}
-            onChange={() => setCheckbox(!checkbox)}
-            color="primary"
-            style={{ color: checkbox ? '#00d68f' : '' }}
-          />
-          <br />
-          <span>ความสูงของคอกรถ (หน่วยเป็นเมตร)</span>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <p>รถมีที่ดั้มหรือไม่</p>
+            <Switch checked={checkbox} onChange={() => setCheckbox(!checkbox)} color="primary" />
+          </div>
+          <p>ความสูงของคอกรถ (หน่วยเป็นเมตร)</p>
           <Select
             options={stallHeightOption}
             placeholder="Select multiple"
             fullWidth
             onChange={(value: any) => setStallHeight(value)}
           />
-          <span>ระบุจำนวนน้ำหนัก (ตัน)</span>
+          <p>ระบุจำนวนน้ำหนัก (ตัน)</p>
           <input className="new-input-component" name="loadingWeight" type="number" ref={register} />
-          <hr />
-          <span>ข้อมูลรถของคุณ</span>
-          <br />
-          <span>เลขทะเบียนรถ</span>
+          <hr style={{ margin: '1.125rem 0 0' }} />
+          <div style={{ display: 'flex' }}>
+            <p style={{ fontWeight: 'bold', marginRight: 5 }}>ข้อมูลรถของคุณ: </p>
+            <p>เลขทะเบียนรถ</p>
+          </div>
           <input className="new-input-component" name="registrationNumber" type="text" ref={register} />
-          <hr />
-          <span>อัพโหลดรูปภาพรถ</span>
+          <hr style={{ margin: '1.125rem 0' }} />
+          <p>อัพโหลดรูปภาพรถ</p>
           <br />
           <ImageUpload />
-          <hr />
-          <span>โซนที่วิ่งงาน</span>
+          <hr style={{ margin: '1.125rem 0' }} />
+          <p>โซนที่วิ่งงาน</p>
           <Select
             options={filterRegion}
             placeholder="ภูมิภาค"
             fullWidth
             onChange={(event: any) => onChangeRegion(event)}
           />
+          <br />
           <Select
             options={filterProvince}
             placeholder="จังหวัด"
@@ -153,9 +155,28 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
             onChange={(event: any) => onChangeProvince(event)}
           />
           <br />
-          <Button status="Success" type="submit" shape="SemiRound" fullWidth>
-            ยืนยัน
-          </Button>
+          <br />
+          <div style={{ display: 'flex' }}>
+            <Button
+              type="button"
+              status="Warning"
+              shape="SemiRound"
+              fullWidth
+              style={{ marginRight: 20, backgroundColor: '#FBBC12', borderColor: '#FBBC12' }}
+              onClick={() => navigate('/trucks')}
+            >
+              กลับ
+            </Button>
+            <Button
+              status="Success"
+              type="submit"
+              shape="SemiRound"
+              fullWidth
+              style={{ backgroundColor: '#3f51b5', borderColor: '#3f51b5' }}
+            >
+              ยืนยัน
+            </Button>
+          </div>
         </form>
       </CardBody>
     </Card>
