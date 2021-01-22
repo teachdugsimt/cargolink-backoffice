@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
-import { InputGroup } from '@paljs/ui/Input';
 import { Button } from '@paljs/ui/Button';
 import { Icon } from 'react-icons-kit';
 import { search } from 'react-icons-kit/icomoon/search';
-
 interface SearchProps {
   data: any;
   onSearch: any;
@@ -30,15 +28,19 @@ const SearchForm: React.FC<SearchProps> = observer((props) => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
-      <InputGroup>
-        <input
-          type="text"
-          placeholder="Enter your search here"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-        />
-      </InputGroup>
-      <Button appearance="filled" status="Basic" onClick={() => onClickSearch()}>
+      <input
+        className="new-input-component"
+        type="text"
+        placeholder="Enter your search here"
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
+      />
+      <Button
+        appearance="filled"
+        status="Basic"
+        style={{ padding: '0.5875rem 0.8125rem' }}
+        onClick={() => onClickSearch()}
+      >
         <Icon size={18} icon={search} />
       </Button>
     </div>

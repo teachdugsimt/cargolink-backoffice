@@ -53,3 +53,29 @@ input[type='file'] {
   display: flex;
   justify-content: center;
 }
+.new-input-component {
+  padding: 0.3875rem 0.8125rem;
+  border-style: solid;
+  border-width: 1px;
+  transition-duration: 0.15s;
+  transition-property: border, background-color, color, box-shadow;
+  transition-timing-function: ease-in;
+  width: 100%;
+  background-color: #f7f9fc;
+  border-color: #e4e9f2;
+  color: #222b45;
+  border-radius: 0.25rem;
+  font-size: 0.8325rem;
+  line-height: 1.5rem;
+}
+.new-input-component:hover {
+  background-color: rgba(100, 150, 200, 0.1);
+}
+.new-input-component:focus {
+  background-color: white;
+  border: 1px solid rgb(0 149 255);
+  box-sizing: border-box;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
+}

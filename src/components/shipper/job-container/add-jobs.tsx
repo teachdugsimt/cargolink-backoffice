@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@paljs/ui/Button';
-import { InputGroup } from '@paljs/ui/Input';
-import styled from 'styled-components';
 import { Card, CardBody } from '@paljs/ui/Card';
 import Select from '@paljs/ui/Select';
 import { useForm } from 'react-hook-form';
@@ -9,11 +7,6 @@ import { observer } from 'mobx-react-lite';
 import { useMst } from '../../../stores/root-store';
 import { navigate } from 'gatsby';
 import moment from 'moment';
-import { trucks } from '../../Carrier/Trucks/dynamic-table/trucks';
-
-const Input = styled(InputGroup)`
-  margin-bottom: 2rem;
-`;
 
 const AddJobs: React.FC<{}> = observer(({}) => {
   const { shipperStore, carrierStore } = useMst();
@@ -98,9 +91,7 @@ const AddJobs: React.FC<{}> = observer(({}) => {
             fullWidth
           />
           <span>จำนวนคันรถที่ต้องการ</span>
-          <Input fullWidth>
-            <input type="number" ref={register} name="truckAmount" />
-          </Input>
+          <input className="new-input-component" type="number" ref={register} name="truckAmount" />
           <hr />
           <span>ข้อมูลสินค้าที่ต้องการส่ง *</span>
           <Select
@@ -111,55 +102,35 @@ const AddJobs: React.FC<{}> = observer(({}) => {
             fullWidth
           />
           <span>ระบุชื่อสินค้าของคุณ</span>
-          <Input fullWidth>
-            <input type="text" name="productName" ref={register} />
-          </Input>
+          <input className="new-input-component" type="text" name="productName" ref={register} />
           <span>ระบุจำนวนน้ำหนัก (ตัน)</span>
-          <Input fullWidth>
-            <input type="number" name="weight" ref={register} />
-          </Input>
+          <input className="new-input-component" type="number" name="weight" ref={register} />
           <hr />
           <span>จุดรับสินค้า *</span>
           <br />
           <span>ระบุสถานที่ที่เข้ารับสินค้า</span>
-          <Input fullWidth>
-            <input type="text" name="contactName" ref={register} />
-          </Input>
+          <input className="new-input-component" type="text" name="contactName" ref={register} />
           <span>วัน-เวลา รับสินค้าที่ต้องการ</span>
-          <Input fullWidth>
-            <input type="text" name="dateTime" ref={register} />
-          </Input>
+          <input className="new-input-component" type="text" name="dateTime" ref={register} />
           <span>ข้อมูลติดต่อจุดรับสินค้า</span>
           <br />
           <span>ชื่อผู้รับสินค้า</span>
-          <Input fullWidth>
-            <input type="text" name="name" ref={register} />
-          </Input>
+          <input className="new-input-component" type="text" name="name" ref={register} />
           <span>เบอร์ติดต่อ</span>
-          <Input fullWidth>
-            <input type="text" name="contactMobileNo" ref={register} />
-          </Input>
+          <input className="new-input-component" type="text" name="contactMobileNo" ref={register} />
           <hr />
           <span>จุดรับสินค้าที่1 *</span>
           <br />
           <span>ระบุสถานที่ที่เข้ารับสินค้า</span>
-          <Input fullWidth>
-            <input type="text" name="contactName1" ref={register} />
-          </Input>
+          <input className="new-input-component" type="text" name="contactName1" ref={register} />
           <span>วัน-เวลา รับสินค้าที่ต้องการ</span>
-          <Input fullWidth>
-            <input type="text" name="dateTime1" ref={register} />
-          </Input>
+          <input className="new-input-component" type="text" name="dateTime1" ref={register} />
           <span>ข้อมูลติดต่อจุดรับสินค้า</span>
           <br />
           <span>ชื่อผู้รับสินค้า</span>
-          <Input fullWidth>
-            <input type="text" name="name1" ref={register} />
-          </Input>
+          <input className="new-input-component" type="text" name="name1" ref={register} />
           <span>เบอร์ติดต่อ</span>
-          <Input fullWidth>
-            <input type="text" name="contactMobileNo1" ref={register} />
-          </Input>
+          <input className="new-input-component" type="text" name="contactMobileNo1" ref={register} />
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button status="Success" type="submit" shape="SemiRound" fullWidth>
               ยืนยัน
