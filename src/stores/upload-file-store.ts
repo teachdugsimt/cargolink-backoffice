@@ -26,8 +26,7 @@ export const UploadFileStore = types
           if (response && response.ok) {
             const { data } = response;
             let images = JSON.parse(JSON.stringify(self.truckPhotos));
-            images[`{imageName}`] = data.fileUrl;
-
+            images[`${imageName}`] = data.fileUrl;
             self.truckPhotos = images;
           } else {
             self.error_file = 'Error call api for upload images';
