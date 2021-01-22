@@ -29,13 +29,13 @@ const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
   useEffect(() => {
     setRowData(rows);
   }, [rows]);
-
+  console.log('rows:>>', rows);
   const onClickPending = () => {
     setPanding(true);
     setApproved(false);
     setAll(false);
     const filteredData = rows.filter((item: any) => {
-      const data = item.cells.filter((cell: any) => cell.key.toString().toLowerCase() === 'pending');
+      const data = item.cells.filter((cell: any) => cell.key === 'อนุมัติแล้ว');
       return data && data.length ? true : false;
     });
     setRowData(filteredData);
@@ -46,7 +46,7 @@ const TruckForm: React.FC<{ rows: any }> = observer(({ rows }) => {
     setPanding(false);
     setAll(false);
     const filteredData = rows.filter((item: any) => {
-      const data = item.cells.filter((cell: any) => cell.key.toString().toLowerCase() === 'approved');
+      const data = item.cells.filter((cell: any) => cell.key === 'อยู่ระหว่างการดำเนินการ');
       return data && data.length ? true : false;
     });
     setRowData(filteredData);
