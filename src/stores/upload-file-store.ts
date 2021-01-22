@@ -10,12 +10,18 @@ export const UploadFileStore = types
       left: types.string,
       right: types.string,
     }),
-    error_file: types.string,
+    error_response: types.maybeNull(
+      types.model({
+        title: types.maybeNull(types.string),
+        content: types.maybeNull(types.string),
+      }),
+    ),
   })
   .actions((self) => {
     return {
       uploadImage: flow(function* uploadImage(params, imageName) {
         self.loading = true;
+        self.error_response = null;
 
         const formData = new FormData();
         formData.append('file', params);
@@ -25,16 +31,25 @@ export const UploadFileStore = types
           console.log('uploadPicture response :> ', response);
           if (response && response.ok) {
             const { data } = response;
+            self.loading = false;
             let images = JSON.parse(JSON.stringify(self.truckPhotos));
             images[`${imageName}`] = data.fileUrl;
             self.truckPhotos = images;
+            self.error_response = null;
           } else {
-            self.error_file = 'Error call api for upload images';
+            self.loading = false;
+            self.error_response = {
+              title: response.problem,
+              content: response.originalError.message,
+            };
           }
         } catch (error) {
           console.error('Failed to request upload images store :> ', error);
           self.loading = false;
-          self.error_file = 'Failed to request upload images store';
+          self.error_response = {
+            title: '',
+            content: 'Failed to request upload images store',
+          };
         }
       }),
     };
@@ -42,5 +57,5 @@ export const UploadFileStore = types
   .create({
     loading: false,
     truckPhotos: { front: '', back: '', left: '', right: '' },
-    error_file: '',
+    error_response: null,
   });

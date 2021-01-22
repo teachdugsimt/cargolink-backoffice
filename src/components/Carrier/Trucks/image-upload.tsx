@@ -6,13 +6,51 @@ import { camera } from 'react-icons-kit/fa/camera';
 import { timesCircleO } from 'react-icons-kit/fa/timesCircleO';
 import { UploadFileStore } from '../../../stores/upload-file-store';
 import images from '../../Themes/images';
+import Alert from '../../alert';
 import '../../../Layouts/css/style.css';
+
+const defaultAlertSetting = {
+  icon: '',
+  show: false,
+  type: '',
+  title: '',
+  content: '',
+};
 
 interface Props {}
 
 const ImageUpload: React.FC<Props> = observer((props) => {
   const [render, setRender] = useState(false);
   const [imageUpload, setImageUpload] = useState({ front: '', back: '', left: '', right: '' });
+  const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
+
+  useEffect(() => {
+    setAlertSetting(defaultAlertSetting);
+  }, []);
+
+  useEffect(() => {
+    const { loading } = UploadFileStore;
+    setAlertSetting({
+      icon: '',
+      show: loading,
+      type: 'loading',
+      title: '',
+      content: 'Loading',
+    });
+  }, [UploadFileStore.loading]);
+
+  useEffect(() => {
+    const { error_response } = UploadFileStore;
+    if (error_response) {
+      setAlertSetting({
+        icon: 'error',
+        show: true,
+        type: 'general',
+        title: error_response.title || '',
+        content: error_response.content || '',
+      });
+    }
+  }, [UploadFileStore.error_response]);
 
   const onChangePicture = (e: any, imageName: string) => {
     if (e.target.files[0]) {
@@ -55,6 +93,7 @@ const ImageUpload: React.FC<Props> = observer((props) => {
 
   return (
     <div>
+      <Alert setting={alertSetting} />
       {render ? <></> : <></>}
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         {imageUpload.front ? (
