@@ -89,7 +89,7 @@ const ImageUpload: React.FC<Props> = observer((props) => {
     <div>
       <Alert setting={alertSetting} />
       {render ? <></> : <></>}
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div className="block-upload-image-form">
         {imageUpload.front ? (
           <div className="block-upload-image">
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '5px 5px 0' }}>
@@ -160,7 +160,7 @@ const ImageUpload: React.FC<Props> = observer((props) => {
           </div>
         )}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div className="block-upload-image-form">
         {imageUpload.left ? (
           <div className="block-upload-image">
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '5px 5px 0' }}>

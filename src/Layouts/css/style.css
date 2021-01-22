@@ -13,7 +13,7 @@ a,
 li,
 b,
 input {
-  font-family: 'Prompt', sans-serif;
+  font-family: 'Prompt', sans-serif !important;
 }
 
 input[type='file'] {
@@ -40,7 +40,7 @@ input[type='file'] {
   height: 150px;
   border: 1px dashed #d8d8d8;
   border-radius: 0.75rem;
-  margin: 10px;
+  margin: 0 1.125rem 1.125rem;
 }
 .block-image {
   display: flex;
@@ -73,9 +73,40 @@ input[type='file'] {
 }
 .new-input-component:focus {
   background-color: white;
-  border: 1px solid rgb(0 149 255);
+  border: 1px solid #3f51b5;
   box-sizing: border-box;
   -webkit-transition: 0.5s;
   transition: 0.5s;
   outline: none;
+}
+.form-add-truck {
+  padding: 0px;
+}
+.block-upload-image-form {
+  display: grid;
+  justify-content: center;
+}
+.header-logo {
+  display: flex;
+  align-items: center;
+  margin-left: -20px;
+  width: 90%;
+}
+
+@media screen and (min-width: 399.8px) {
+  .block-upload-image-form {
+    display: flex;
+  }
+  .header-logo {
+    width: 230px;
+  }
+}
+
+@media screen and (min-width: 767.8px) {
+}
+
+@media screen and (min-width: 991.8px) {
+  .form-add-truck {
+    padding: 10px 5rem;
+  }
 }
