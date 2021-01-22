@@ -6,13 +6,9 @@ import styled from 'styled-components';
 import { Card, CardBody } from '@paljs/ui/Card';
 import Select from '@paljs/ui/Select';
 import Switch from '@material-ui/core/Switch';
-import Icon from 'react-icons-kit';
-import { cloudUpload } from 'react-icons-kit/fa/cloudUpload';
-import { camera } from 'react-icons-kit/fa/camera';
-import { timesCircleO } from 'react-icons-kit/fa/timesCircleO';
 import { useForm } from 'react-hook-form';
 import { UploadFileStore } from '../../../stores/upload-file-store';
-import images from '../../Themes/images';
+import ImageUpload from './image-upload';
 import '../../../Layouts/css/style.css';
 import provinceOptions from './province-options';
 
@@ -54,28 +50,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   const [truckType, setTruckType] = useState();
   const [region, setRegion] = useState();
   const [province, setProvince] = useState();
-
-  const onChangePicture1 = (e: any) => {
-    if (e.target.files[0]) {
-      setHaveImage(true);
-      setRender(!render);
-      let images = pictures;
-      images.push(URL.createObjectURL(e.target.files[0]));
-      setPictures(images);
-      // UploadFileStore.uploadImage(e.target.files[0]);   //! for upload image
-
-      if (images.length === 4) setDisable(true);
-
-      // images &&
-      //   images.forEach((e, i) => {
-      //     const outputImage = document.getElementById(`outputImage${i + 1}`);
-      //     outputImage.src = URL.createObjectURL(e);
-      //     // outputImage.onload = function () {
-      //     //   URL.revokeObjectURL(outputImage.src); // free memory
-      //     // };
-      //   });
-    }
-  };
+  const [imageUpload, setImageUpload] = useState({});
 
   const onSubmit = (data) => {
     console.log(data);
@@ -119,114 +94,9 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
           <hr />
           <span>อัพโหลดรูปภาพรถ</span>
           <br />
-          <div style={{ display: 'flex', padding: '10px 0' }}>
-            <div style={{ marginRight: 10 }}>
-              <label for="file-upload" className="custom-file-upload">
-                <Icon icon={cloudUpload} style={{ marginRight: 5 }} />
-                Upload Image
-              </label>
-              <input id="file-upload" type="file" accept="image/*" onChange={onChangePicture1} disabled={disable} />
-            </div>
-            {render ? (
-              <div style={{ display: haveImage ? 'flex' : 'none' }}>
-                {pictures.map((im, i) => {
-                  return (
-                    <div style={{ height: 150, margin: '0 10px', display: 'flex' }} key={i}>
-                      <img id="outputImage1" src={im} className="upload-image" />
-                      <ButtonGroup
-                        status="Basic"
-                        appearance="ghost"
-                        size="Tiny"
-                        type="button"
-                        onClick={() => onRemoveImg(i)}
-                      >
-                        <Icon icon={timesCircleO} style={{ color: '#9f9f9f' }} />
-                      </ButtonGroup>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div style={{ display: haveImage ? 'flex' : 'none' }}>
-                {pictures.map((im, i) => {
-                  return (
-                    <div style={{ height: 150, margin: '0 10px', display: 'flex' }} key={i}>
-                      <img id="outputImage1" src={im} className="upload-image" />
-                      <ButtonGroup
-                        status="Basic"
-                        appearance="ghost"
-                        size="Tiny"
-                        type="button"
-                        onClick={() => onRemoveImg(i)}
-                      >
-                        <Icon icon={timesCircleO} style={{ color: '#9f9f9f' }} />
-                      </ButtonGroup>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          <ImageUpload />
           <hr />
           <span>โซนที่วิ่งงาน</span>
-          {/* <div>
-            <div className="block-upload-image">
-              <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-                <label for="file-upload" className="custom-file-upload-photo">
-                  <Icon icon={camera} style={{ marginRight: 5 }} />
-                </label>
-                <input id="file-upload" type="file" accept="image/*" onChange={onChangePicture1} disabled={disable} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ height: 75 }}>
-                  <img src={images.frontTruck} style={{ maxHeight: '100%', width: 'auto' }} />
-                </div>
-                <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านหน้า</span>
-              </div>
-            </div>
-            <div className="block-upload-image">
-              <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-                <label for="file-upload" className="custom-file-upload-photo">
-                  <Icon icon={camera} style={{ marginRight: 5 }} />
-                </label>
-                <input id="file-upload" type="file" accept="image/*" onChange={onChangePicture1} disabled={disable} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ height: 75 }}>
-                  <img src={images.backTruck} style={{ maxHeight: '100%', width: 'auto' }} />
-                </div>
-                <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านหลัง</span>
-              </div>
-            </div>
-            <div className="block-upload-image">
-              <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-                <label for="file-upload" className="custom-file-upload-photo">
-                  <Icon icon={camera} style={{ marginRight: 5 }} />
-                </label>
-                <input id="file-upload" type="file" accept="image/*" onChange={onChangePicture1} disabled={disable} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ width: 125 }}>
-                  <img src={images.leftTruck} style={{ maxWidth: '100%', height: 'auto' }} />
-                </div>
-                <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านซ้าย</span>
-              </div>
-            </div>
-            <div className="block-upload-image">
-              <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-                <label for="file-upload" className="custom-file-upload-photo">
-                  <Icon icon={camera} style={{ marginRight: 5 }} />
-                </label>
-                <input id="file-upload" type="file" accept="image/*" onChange={onChangePicture1} disabled={disable} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ width: 125 }}>
-                  <img src={images.rightTruck} style={{ maxWidth: '100%', height: 'auto' }} />
-                </div>
-                <span style={{ marginTop: 10, fontSize: '0.75rem' }}>ตัวอย่างรูปภาพด้านขวา</span>
-              </div>
-            </div>
-          </div> */}
           <Select options={regionOptions} placeholder="ภูมิภาค" fullWidth onChange={(value) => setRegion(value)} />
           <Select options={provinceOptions} placeholder="จังหวัด" fullWidth onChange={(value) => setProvince(value)} />
           <br />
