@@ -13,6 +13,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
 import { Box } from 'theme-ui';
+import { EvaIcon } from '@paljs/ui/Icon';
 
 const AddJobs: React.FC<{}> = observer(() => {
   const { shipperStore, carrierStore } = useMst();
@@ -142,7 +143,9 @@ const AddJobs: React.FC<{}> = observer(() => {
             onChange={(value: any) => setTruckType(value)}
             fullWidth
           />
-          <p>จำนวนคันรถที่ต้องการ</p>
+          <p>
+            จำนวนคันรถที่ต้องการ <span style={{ color: '#ff3d71' }}>*</span>
+          </p>
           <input className="new-input-component" type="number" ref={register} name="truckAmount" />
           <hr style={{ margin: '1.125rem 0' }} />
           <p>
@@ -155,9 +158,13 @@ const AddJobs: React.FC<{}> = observer(() => {
             onChange={(value: any) => setProductTypeId(value)}
             fullWidth
           />
-          <p>ระบุชื่อสินค้าของคุณ</p>
+          <p>
+            ระบุชื่อสินค้าของคุณ<span style={{ color: '#ff3d71' }}>*</span>
+          </p>
           <input className="new-input-component" type="text" name="productName" ref={register} />
-          <p>ระบุจำนวนน้ำหนัก (ตัน)</p>
+          <p>
+            ระบุจำนวนน้ำหนัก (ตัน)<span style={{ color: '#ff3d71' }}>*</span>
+          </p>
           <input className="new-input-component" type="number" name="weight" ref={register} />
           <hr style={{ margin: '1.125rem 0 0' }} />
           <p style={{ fontWeight: 'bold', backgroundColor: '#253858', padding: 10, color: 'white' }}>จุดส่งสินค้า</p>
@@ -165,7 +172,9 @@ const AddJobs: React.FC<{}> = observer(() => {
             ระบุสถานที่ที่ส่งสินค้า <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <input className="new-input-component" type="text" name="contactName" ref={register} />
-          <p>วัน-เวลา ส่งที่ต้องการ</p>
+          <p>
+            วัน-เวลา ส่งที่ต้องการ<span style={{ color: '#ff3d71' }}>*</span>
+          </p>
           <Box sx={{ maxWidth: '400px' }} as="form" onSubmit={handleSubmit((data) => console.log(data))}>
             <Controller
               as={
@@ -192,10 +201,14 @@ const AddJobs: React.FC<{}> = observer(() => {
           </Box>
           <div style={{ display: 'flex' }}>
             <p style={{ fontWeight: 'bold', marginRight: 5 }}>ข้อมูลติดต่อจุดส่งสินค้า: </p>
-            <p>ชื่อผู้ส่งสินค้า</p>
+            <p>
+              ชื่อผู้ส่งสินค้า<span style={{ color: '#ff3d71' }}>*</span>
+            </p>
           </div>
           <input className="new-input-component" type="text" name="name" ref={register} />
-          <p>เบอร์ติดต่อ</p>
+          <p>
+            เบอร์ติดต่อ<span style={{ color: '#ff3d71' }}>*</span>
+          </p>
           <input className="new-input-component" type="text" name="contactMobileNo" ref={register} />
           {fields.map(({ id, contactName, name, contactMobileNo, exdate }, index) => {
             const toDate = watch(`items[${index}].exdate`);
@@ -211,7 +224,7 @@ const AddJobs: React.FC<{}> = observer(() => {
                     marginBottom: 0,
                   }}
                 >
-                  จุดรับสินค้า
+                  จุดรับสินค้า<span style={{ color: '#ff3d71' }}>*</span>
                 </p>
                 <div style={{ display: 'flex' }}>
                   <p style={{ fontWeight: 'bold', marginRight: 5 }}>จุดรับสินค้าที่ {index == 0 ? 1 : index + 1}: </p>
@@ -226,7 +239,9 @@ const AddJobs: React.FC<{}> = observer(() => {
                   name={`items[${index}].contactName`}
                   defaultValue={contactName}
                 />
-                <p>วัน-เวลา รับสินค้าที่ต้องการ</p>
+                <p>
+                  วัน-เวลา รับสินค้าที่ต้องการ<span style={{ color: '#ff3d71' }}>*</span>
+                </p>
                 <Box sx={{ maxWidth: '400px' }} as="form" onSubmit={handleSubmit((data) => console.log(data))}>
                   <Controller
                     as={
@@ -247,6 +262,7 @@ const AddJobs: React.FC<{}> = observer(() => {
                     name={`items[${index}].exdate`}
                     defaultValue={toDate}
                     onChange={([selected]: any) => {
+                      console.log('selected:>>', selected);
                       return { value: selected };
                     }}
                     required
@@ -254,7 +270,9 @@ const AddJobs: React.FC<{}> = observer(() => {
                 </Box>
                 <div style={{ display: 'flex' }}>
                   <p style={{ fontWeight: 'bold', marginRight: 5 }}>ข้อมูลติดต่อจุดรับสินค้า: </p>
-                  <p>ชื่อผู้รับสินค้า</p>
+                  <p>
+                    ชื่อผู้รับสินค้า<span style={{ color: '#ff3d71' }}>*</span>
+                  </p>
                 </div>
                 <input
                   className="new-input-component"
@@ -263,7 +281,9 @@ const AddJobs: React.FC<{}> = observer(() => {
                   name={`items[${index}].name`}
                   defaultValue={name}
                 />
-                <p>เบอร์ติดต่อ</p>
+                <p>
+                  เบอร์ติดต่อ<span style={{ color: '#ff3d71' }}>*</span>
+                </p>
                 <input
                   className="new-input-component"
                   type="text"
@@ -271,14 +291,18 @@ const AddJobs: React.FC<{}> = observer(() => {
                   defaultValue={contactMobileNo}
                   ref={register()}
                 />
-                <Button type="button" onClick={() => remove(index)}>
-                  Remove
-                </Button>
+                <br />
+                <br />
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button type="button" onClick={() => remove(index)}>
+                    <EvaIcon name="minus-outline" />
+                  </Button>
+                </div>
               </div>
             );
           })}
           <Button type="button" onClick={() => append({})}>
-            Append
+            <EvaIcon name="plus-outline" />
           </Button>
           <br />
           <br />
