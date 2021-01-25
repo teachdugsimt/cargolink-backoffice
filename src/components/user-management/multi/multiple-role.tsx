@@ -27,6 +27,7 @@ const MultipleRole = () => {
   const [rowData, setRowData] = useState(rows);
   // const [panding, setPanding] = useState(false)
   // const [approved, setApproved] = useState(false)
+  const [submit, setSubmit] = useState(false);
 
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();
@@ -94,9 +95,12 @@ const MultipleRole = () => {
               marginRight: 10,
               display: 'flex',
               alignItems: 'center',
+              borderColor: '#00B132',
+              backgroundColor: submit ? '#00B132' : 'white',
+              color: submit ? 'white' : '#00B132',
             }}
           >
-            <Icon icon={ic_add} /> ADD NEW ACCOUNT
+            <Icon icon={ic_add} /> {t('AddNewAccount')}
           </Button>
         </Row>
         <Wrapper>

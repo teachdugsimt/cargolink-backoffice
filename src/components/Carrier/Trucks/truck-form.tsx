@@ -83,7 +83,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
                 color: all ? 'white' : 'black',
               }}
             >
-              ALL
+              {t('all')}
             </Button>
             <Button
               status="Warning"
@@ -96,7 +96,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
               }}
               onClick={() => onClickPending()}
             >
-              PENDING
+              {t('pending')}
             </Button>
             <Button
               status="Warning"
@@ -108,27 +108,29 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
                 color: approved ? 'white' : 'black',
               }}
             >
-              APPROVED
+              {t('approved')}
             </Button>
           </div>
-          <Button
-            appearance="outline"
-            status="Success"
-            size="Small"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              borderColor: '#00B132',
-              backgroundColor: submit ? '#00B132' : 'white',
-              color: submit ? 'white' : '#00B132',
-            }}
-            onClick={() => {
-              setSubmit(true);
-              navigate('/add-truck');
-            }}
-          >
-            <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> ADD NEW TRUCK
-          </Button>
+          <div>
+            <Button
+              appearance="outline"
+              status="Success"
+              size="Small"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                borderColor: '#00B132',
+                backgroundColor: submit ? '#00B132' : 'white',
+                color: submit ? 'white' : '#00B132',
+              }}
+              onClick={() => {
+                setSubmit(true);
+                navigate('/add-truck');
+              }}
+            >
+              <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> {t('AddNewTruck')}
+            </Button>
+          </div>
         </Row>
         <span>{`Results found: ${rowData ? rowData.length : 0}`}</span>
         <Wrapper>

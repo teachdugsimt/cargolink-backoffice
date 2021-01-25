@@ -125,25 +125,28 @@ const JobContainer: React.FC<Props> = observer(() => {
         </div>
       </CardHeader>
       <CardBody>
-        <Row style={{ padding: 10, marginBottom: 10, display: 'flex', justifyContent: 'flex-end', minWidth: 600 }}>
-          <Button
-            appearance="outline"
-            status="Success"
-            size="Small"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              borderColor: '#00B132',
-              backgroundColor: submit ? '#00B132' : 'white',
-              color: submit ? 'white' : '#00B132',
-            }}
-            onClick={() => {
-              setSubmit(true);
-              navigate('/add-job');
-            }}
-          >
-            <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> ADD NEW JOB
-          </Button>
+        <Row style={{ padding: 5, marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
+          <div></div>
+          <div>
+            <Button
+              appearance="outline"
+              status="Success"
+              size="Small"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                borderColor: '#00B132',
+                backgroundColor: submit ? '#00B132' : 'white',
+                color: submit ? 'white' : '#00B132',
+              }}
+              onClick={() => {
+                setSubmit(true);
+                navigate('/add-job');
+              }}
+            >
+              <Icon icon={ic_add} /> {t('AddNewJob')}
+            </Button>
+          </div>
         </Row>
         <span>{`Results found: ${rowData.length}`}</span>
         <Wrapper>
