@@ -107,7 +107,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
         <span>เพิ่มข้อมูลรถ</span>
       </CardHeader>
       <CardBody>
-        <form onSubmit={handleSubmit(onSubmit)} className="form-add-truck">
+        <form onSubmit={handleSubmit(onSubmit)} className="form-add-data">
           <p>เลือกประเภทของรถของคุณ</p>
           <Select
             options={truckTypeOptions}
