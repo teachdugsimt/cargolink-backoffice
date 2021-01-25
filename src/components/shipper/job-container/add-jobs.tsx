@@ -113,7 +113,9 @@ const AddJobs: React.FC<{}> = observer(() => {
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)} className="form-add-data">
-          <p>ประเภทของรถที่คุณต้องการ *</p>
+          <p>
+            ประเภทของรถที่คุณต้องการ <span style={{ color: '#ff3d71' }}>*</span>
+          </p>
           <Select
             name="truckType"
             options={truckTypeOptions}
@@ -124,7 +126,9 @@ const AddJobs: React.FC<{}> = observer(() => {
           <p>จำนวนคันรถที่ต้องการ</p>
           <input className="new-input-component" type="number" ref={register} name="truckAmount" />
           <hr style={{ margin: '1.125rem 0' }} />
-          <p>ข้อมูลสินค้าที่ต้องการส่ง *</p>
+          <p>
+            ข้อมูลสินค้าที่ต้องการส่ง <span style={{ color: '#ff3d71' }}>*</span>
+          </p>
           <Select
             name="productTypeId"
             options={productTypeIdOptions}
@@ -138,7 +142,9 @@ const AddJobs: React.FC<{}> = observer(() => {
           <input className="new-input-component" type="number" name="weight" ref={register} />
           <hr style={{ margin: '1.125rem 0 0' }} />
           <p style={{ fontWeight: 'bold', backgroundColor: '#253858', padding: 10, color: 'white' }}>จุดส่งสินค้า</p>
-          <p>ระบุสถานที่ที่ส่งสินค้า *</p>
+          <p>
+            ระบุสถานที่ที่ส่งสินค้า <span style={{ color: '#ff3d71' }}>*</span>
+          </p>
           <input className="new-input-component" type="text" name="contactName" ref={register} />
           <p>วัน-เวลา ส่งที่ต้องการ</p>
           <DatePicker
@@ -161,7 +167,9 @@ const AddJobs: React.FC<{}> = observer(() => {
           </p>
           <div style={{ display: 'flex' }}>
             <p style={{ fontWeight: 'bold', marginRight: 5 }}>จุดรับสินค้าที่ 1: </p>
-            <p>ระบุสถานที่ที่เข้ารับสินค้า *</p>
+            <p>
+              ระบุสถานที่ที่เข้ารับสินค้า <span style={{ color: '#ff3d71' }}>*</span>
+            </p>
           </div>
           <input className="new-input-component" type="text" name="contactName1" ref={register} />
           <p>วัน-เวลา รับสินค้าที่ต้องการ</p>

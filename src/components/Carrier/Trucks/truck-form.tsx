@@ -111,26 +111,24 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
               {t('approved')}
             </Button>
           </div>
-          <div>
-            <Button
-              appearance="outline"
-              status="Success"
-              size="Small"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                borderColor: '#00B132',
-                backgroundColor: submit ? '#00B132' : 'white',
-                color: submit ? 'white' : '#00B132',
-              }}
-              onClick={() => {
-                setSubmit(true);
-                navigate('/add-truck');
-              }}
-            >
-              <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> {t('AddNewTruck')}
-            </Button>
-          </div>
+          <Button
+            appearance="outline"
+            status="Success"
+            size="Small"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              borderColor: '#00B132',
+              backgroundColor: submit ? '#00B132' : 'white',
+              color: submit ? 'white' : '#00B132',
+            }}
+            onClick={() => {
+              setSubmit(true);
+              navigate('/add-truck');
+            }}
+          >
+            <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> {t('AddNewTruck')}
+          </Button>
         </Row>
         <span>{`Results found: ${rowData ? rowData.length : 0}`}</span>
         <Wrapper>
