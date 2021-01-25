@@ -79,7 +79,7 @@ input[type='file'] {
   transition: 0.5s;
   outline: none;
 }
-.form-add-truck {
+.form-add-data {
   padding: 0px;
 }
 .block-upload-image-form {
@@ -138,7 +138,7 @@ input[type='file'] {
 }
 
 @media screen and (min-width: 991.8px) {
-  .form-add-truck {
+  .form-add-data {
     padding: 10px 5rem;
   }
 }
