@@ -11,6 +11,7 @@ import SimpleLayout from './simple-layout';
 import SidebarCustom from './Sidebar';
 import { withTrans } from '../i18n/withTrans';
 import { Provider, rootStore } from '../stores/root-store';
+import MainLayout from '../components/main-layout';
 import '../Layouts/css/style.css';
 
 const getDefaultTheme = (): DefaultTheme['name'] => {
@@ -66,7 +67,7 @@ const LayoutPage: React.FC<{ pageContext: { layout: string } }> = ({ custom404, 
                   <NotFound />
                 ) : (
                   <LayoutColumns>
-                    <LayoutColumn className="main-content">{children}</LayoutColumn>
+                    <MainLayout children={children} />
                   </LayoutColumns>
                 )}
                 {pageContext.layout !== 'auth' && !custom404 && <LayoutFooter>Footer</LayoutFooter>}
