@@ -24,13 +24,6 @@ const Wrapper = styled.div`
   min-width: 600px;
 `;
 
-const CardHeaderStyled = styled(CardHeader)`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 interface Props {}
 const JobContainer: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
@@ -123,12 +116,14 @@ const JobContainer: React.FC<Props> = observer(() => {
   return (
     <Card>
       <Alert setting={alertSetting} />
-      <CardHeaderStyled>
-        <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}>{t('jobs')}</span>
-        <div style={{ display: 'flex' }}>
-          <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
+      <CardHeader>
+        <div className="block-data-header">
+          <span className="font-data-header">{t('jobs')}</span>
+          <div style={{ display: 'flex' }}>
+            <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
+          </div>
         </div>
-      </CardHeaderStyled>
+      </CardHeader>
       <CardBody>
         <Row style={{ padding: 5, marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
           <div></div>
