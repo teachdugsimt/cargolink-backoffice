@@ -24,7 +24,7 @@ const compacted = css<SidebarStyleProps>`
         top: 0;
         height: 100%;
         width: 4px;
-        background: ${({ theme }) => '#0079a1'};
+        background: ${({ theme }) => '#253858'};
         ${({ theme }) => (theme.dir === 'rtl' ? 'right' : 'left')}: 0;
       }
     }
