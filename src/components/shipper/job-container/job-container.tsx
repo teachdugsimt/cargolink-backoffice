@@ -36,6 +36,7 @@ const JobContainer: React.FC<Props> = observer(() => {
   const [productTypes, setProductTypes] = useState([]);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
   const [submit, setSubmit] = useState(false);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     shipperStore.getProductTypes();
@@ -159,7 +160,9 @@ const JobContainer: React.FC<Props> = observer(() => {
             defaultSortKey="term"
             defaultSortOrder="ASC"
             onSort={() => console.log('onSort')}
+            page={page}
             onSetPage={(pagination) => {
+              setPage(pagination);
               if (rowData.length % 10 === 0 && pagination % 2 === 0 && rowData.length === rows.length) {
                 shipperStore.getAllJobsByShipper({
                   descending: true,
