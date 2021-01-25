@@ -45,7 +45,7 @@ const HeaderStyle = styled.div`
 `;
 
 const StyleHeader = styled(LayoutHeader)`
-  background: rgb(34, 43, 69);
+  background: #253858;
   & header {
     padding-bottom: 0.5rem;
     text-align: center;
