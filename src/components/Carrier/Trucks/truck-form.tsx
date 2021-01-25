@@ -83,7 +83,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
                 color: all ? 'white' : 'black',
               }}
             >
-              ALL
+              {t('all')}
             </Button>
             <Button
               status="Warning"
@@ -96,7 +96,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
               }}
               onClick={() => onClickPending()}
             >
-              PENDING
+              {t('pending')}
             </Button>
             <Button
               status="Warning"
@@ -108,7 +108,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
                 color: approved ? 'white' : 'black',
               }}
             >
-              APPROVED
+              {t('approved')}
             </Button>
           </div>
           <div>
@@ -128,7 +128,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
                 navigate('/add-truck');
               }}
             >
-              <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> ADD NEW TRUCK
+              <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> {t('AddNewTruck')}
             </Button>
           </div>
         </Row>

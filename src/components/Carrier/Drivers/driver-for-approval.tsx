@@ -108,6 +108,9 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
             onClick={() => onClickAll()}
             style={{
               marginRight: 10,
+              borderColor: '#FBBC12',
+              backgroundColor: all ? '#FBBC12' : 'white',
+              color: all ? 'white' : 'black',
             }}
           >
             {t('all')}
@@ -118,6 +121,9 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
             size="Small"
             style={{
               marginRight: 10,
+              borderColor: '#FBBC12',
+              backgroundColor: panding ? '#FBBC12' : 'white',
+              color: panding ? 'white' : 'black',
             }}
             onClick={() => onClickPending()}
           >
@@ -127,6 +133,11 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
             appearance={approved == true ? 'filled' : 'outline'}
             status="Warning"
             size="Small"
+            style={{
+              borderColor: '#FBBC12',
+              backgroundColor: approved ? '#FBBC12' : 'white',
+              color: approved ? 'white' : 'black',
+            }}
             onClick={() => onClickApproved()}
           >
             {t('approved')}

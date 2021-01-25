@@ -12,5 +12,8 @@
     "dashboard":"Dashboard",
     "all":"ALL",
     "pending":"PENDING",
-    "approved":"APPROVED"
+    "approved":"APPROVED",
+    "AddNewTruck":"ADD NEW TRUCK",
+    "AddNewAccount":"ADD NEW ACCOUNT",
+    "AddNewJob":"ADD NEW JOB"
   }

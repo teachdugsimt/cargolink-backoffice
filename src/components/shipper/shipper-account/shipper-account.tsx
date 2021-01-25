@@ -27,6 +27,7 @@ const JobContainer = (props: any) => {
   const [panding, setPanding] = useState(false);
   const [approved, setApproved] = useState(false);
   const [all, setAll] = useState(false);
+  const [submit, setSubmit] = useState(false);
 
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();
@@ -92,52 +93,25 @@ const JobContainer = (props: any) => {
         </div>
       </CardHeader>
       <CardBody>
-        <Row style={{ padding: 5, marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
+        <Row style={{ padding: 5, marginBottom: 10, display: 'flex', justifyContent: 'space-between', minWidth: 600 }}>
+          <div></div>
           <div>
-            <Button
-              appearance={all == true ? 'filled' : 'outline'}
-              status="Success"
-              size="Small"
-              onClick={() => onClickAll()}
-              style={{
-                marginRight: 10,
-              }}
-            >
-              ALL
-            </Button>
-            <Button
-              appearance={panding == true ? 'filled' : 'outline'}
-              status="Warning"
-              size="Small"
-              style={{
-                marginRight: 10,
-              }}
-              onClick={() => onClickPending()}
-            >
-              PENDING
-            </Button>
-            <Button
-              appearance={approved == true ? 'filled' : 'outline'}
-              status="Warning"
-              size="Small"
-              onClick={() => onClickApproved()}
-            >
-              APPROVED
-            </Button>
-          </div>
-          <div>
-            {' '}
             <Button
               appearance="outline"
               status="Success"
               size="Small"
               style={{
-                marginRight: 10,
                 display: 'flex',
                 alignItems: 'center',
+                borderColor: '#00B132',
+                backgroundColor: submit ? '#00B132' : 'white',
+                color: submit ? 'white' : '#00B132',
+              }}
+              onClick={() => {
+                setSubmit(true);
               }}
             >
-              <Icon icon={ic_add} /> ADD NEW ACCOUNT
+              <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> {t('AddNewAccount')}
             </Button>
           </div>
         </Row>

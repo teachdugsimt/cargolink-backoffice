@@ -42,6 +42,7 @@ const JobContainer: React.FC<Props> = observer(() => {
   const [all, setAll] = useState(false);
   const [productTypes, setProductTypes] = useState([]);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
+  const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
     shipperStore.getProductTypes();
@@ -137,13 +138,18 @@ const JobContainer: React.FC<Props> = observer(() => {
               status="Success"
               size="Small"
               style={{
-                marginRight: 10,
                 display: 'flex',
                 alignItems: 'center',
+                borderColor: '#00B132',
+                backgroundColor: submit ? '#00B132' : 'white',
+                color: submit ? 'white' : '#00B132',
               }}
-              onClick={() => navigate('/add-job')}
+              onClick={() => {
+                setSubmit(true);
+                navigate('/add-job');
+              }}
             >
-              <Icon icon={ic_add} /> ADD NEW JOB
+              <Icon icon={ic_add} /> {t('AddNewJob')}
             </Button>
           </div>
         </Row>
