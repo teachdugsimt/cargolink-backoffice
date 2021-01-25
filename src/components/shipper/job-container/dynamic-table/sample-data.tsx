@@ -62,7 +62,7 @@ export const createRow = (jobs: any, products: any) => {
       cells: [
         {
           key: jobpost.id,
-          content: <span style={{ padding: '10px 0px', color: '#f8bc18', fontWeight: 'bold' }}>{jobpost.id}</span>,
+          content: <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{jobpost.id}</span>,
         },
         {
           key: jobpost.productName,
@@ -86,7 +86,7 @@ export const createRow = (jobs: any, products: any) => {
                   {`${jobpost.from?.name}`}
                 </span>
                 <span>
-                  <Icon style={{ color: '#f8bc18' }} icon={ic_access_time} />
+                  <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />
                   {` ${moment(jobpost.from?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
                 </span>
               </div>
@@ -96,7 +96,7 @@ export const createRow = (jobs: any, products: any) => {
                   {`${jobpost.to[0]?.name}`}
                 </span>
                 <span>
-                  <Icon style={{ color: '#f8bc18' }} icon={ic_access_time} />
+                  <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />
                   {` ${moment(jobpost.to[0]?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
                 </span>
               </div>

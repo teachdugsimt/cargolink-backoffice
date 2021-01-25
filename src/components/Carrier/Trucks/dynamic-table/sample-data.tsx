@@ -8,7 +8,7 @@ export const createHead = (withWidth: boolean) => {
     cells: [
       {
         key: 'id',
-        content: 'Id',
+        content: 'ID',
         isSortable: true,
         // width: withWidth ? 5 : undefined,
       },

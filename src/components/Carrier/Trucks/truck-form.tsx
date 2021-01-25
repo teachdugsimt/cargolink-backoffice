@@ -71,7 +71,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
         </div>
       </CardHeader>
       <CardBody>
-        <Row style={{ padding: 5, marginBottom: 10, display: 'flex', justifyContent: 'space-between', minWidth: 600 }}>
+        <Row style={{ padding: 10, marginBottom: 10, display: 'flex', justifyContent: 'space-between', minWidth: 600 }}>
           <div>
             <Button
               size="Small"
@@ -111,26 +111,24 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
               APPROVED
             </Button>
           </div>
-          <div>
-            <Button
-              appearance="outline"
-              status="Success"
-              size="Small"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                borderColor: '#00B132',
-                backgroundColor: submit ? '#00B132' : 'white',
-                color: submit ? 'white' : '#00B132',
-              }}
-              onClick={() => {
-                setSubmit(true);
-                navigate('/add-truck');
-              }}
-            >
-              <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> ADD NEW TRUCK
-            </Button>
-          </div>
+          <Button
+            appearance="outline"
+            status="Success"
+            size="Small"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              borderColor: '#00B132',
+              backgroundColor: submit ? '#00B132' : 'white',
+              color: submit ? 'white' : '#00B132',
+            }}
+            onClick={() => {
+              setSubmit(true);
+              navigate('/add-truck');
+            }}
+          >
+            <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> ADD NEW TRUCK
+          </Button>
         </Row>
         <span>{`Results found: ${rowData ? rowData.length : 0}`}</span>
         <Wrapper>

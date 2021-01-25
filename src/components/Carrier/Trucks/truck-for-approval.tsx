@@ -55,7 +55,7 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
         cells: [
           {
             key: truck.id,
-            content: truck.id,
+            content: <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{truck.id}</span>,
           },
           {
             key: truck.name,

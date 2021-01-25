@@ -24,13 +24,6 @@ const Wrapper = styled.div`
   min-width: 600px;
 `;
 
-const CardHeaderStyled = styled(CardHeader)`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 interface Props {}
 const JobContainer: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
@@ -42,6 +35,7 @@ const JobContainer: React.FC<Props> = observer(() => {
   const [all, setAll] = useState(false);
   const [productTypes, setProductTypes] = useState([]);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
+  const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
     shipperStore.getProductTypes();
@@ -122,30 +116,34 @@ const JobContainer: React.FC<Props> = observer(() => {
   return (
     <Card>
       <Alert setting={alertSetting} />
-      <CardHeaderStyled>
-        <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}>{t('jobs')}</span>
-        <div style={{ display: 'flex' }}>
-          <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
-        </div>
-      </CardHeaderStyled>
-      <CardBody>
-        <Row style={{ padding: 5, marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
-          <div></div>
-          <div>
-            <Button
-              appearance="outline"
-              status="Success"
-              size="Small"
-              style={{
-                marginRight: 10,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-              onClick={() => navigate('/add-job')}
-            >
-              <Icon icon={ic_add} /> ADD NEW JOB
-            </Button>
+      <CardHeader>
+        <div className="block-data-header">
+          <span className="font-data-header">{t('jobs')}</span>
+          <div style={{ display: 'flex' }}>
+            <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
           </div>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <Row style={{ padding: 10, marginBottom: 10, display: 'flex', justifyContent: 'flex-end', minWidth: 600 }}>
+          <Button
+            appearance="outline"
+            status="Success"
+            size="Small"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              borderColor: '#00B132',
+              backgroundColor: submit ? '#00B132' : 'white',
+              color: submit ? 'white' : '#00B132',
+            }}
+            onClick={() => {
+              setSubmit(true);
+              navigate('/add-job');
+            }}
+          >
+            <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> ADD NEW JOB
+          </Button>
         </Row>
         <span>{`Results found: ${rowData.length}`}</span>
         <Wrapper>
