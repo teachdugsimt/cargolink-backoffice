@@ -7,12 +7,17 @@ const token = types.model({
 
 export const LoginStore = types
   .model('LoginStore', {
+    language: types.string,
     fetching_login: false,
     data_signin: token,
     error_login: types.string,
   })
   .actions((self) => {
     return {
+      setLanguage: flow(function* setLanguage(param) {
+        self.language = param;
+      }),
+
       requestLogin: flow(function* requestLogin(params) {
         self.fetching_login = true;
         self.data_signin = {

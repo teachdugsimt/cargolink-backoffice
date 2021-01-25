@@ -13,7 +13,7 @@ const RootModel = types.model({
 
 let initialState = RootModel.create({
   loginStore: {
-    // fetching_login: false,
+    language: 'th',
     data_signin: {
       idToken: '',
     },

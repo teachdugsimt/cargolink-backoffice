@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import united_kingdom from '../images/united-kingdom.png';
 import thailand from '../images/thailand.png';
+import { useMst } from '../stores/root-store';
 
 const useStyles = makeStyles({
   selectFocus: {
@@ -16,12 +17,17 @@ const useStyles = makeStyles({
 
 const LanguageMenu = (props) => {
   const { t, i18n } = useTranslation();
+  const { loginStore } = useMst();
   console.log('i18n :>', i18n);
   const classes = useStyles();
 
   const [values, setValues] = useState({
     language: 'th',
   });
+
+  useEffect(() => {
+    setValues({ language: loginStore.language });
+  }, []);
 
   function handleChange(event) {
     i18n.changeLanguage(event.target.value);
@@ -30,6 +36,7 @@ const LanguageMenu = (props) => {
       ...oldValues,
       [event.target.name]: event.target.value,
     }));
+    loginStore.setLanguage(event.target.value);
   }
 
   return (
