@@ -30,9 +30,6 @@ const JobContainer: React.FC<Props> = observer(() => {
   const { shipperStore } = useMst();
   const [rows, setRows] = useState([]);
   const [rowData, setRowData] = useState([]);
-  const [panding, setPanding] = useState(false);
-  const [approved, setApproved] = useState(false);
-  const [all, setAll] = useState(false);
   const [productTypes, setProductTypes] = useState([]);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
   const [submit, setSubmit] = useState(false);
@@ -84,35 +81,6 @@ const JobContainer: React.FC<Props> = observer(() => {
     const product_types = JSON.parse(JSON.stringify(shipperStore.product_types));
     if (product_types?.length) setProductTypes(product_types);
   }, [shipperStore.product_types]);
-
-  const onClickPending = () => {
-    setPanding(true);
-    setApproved(false);
-    setAll(false);
-    const filteredData = rows.filter((item: any) => {
-      const data = item.cells.filter((key: any) => key.key.toString().toLowerCase() == 'pending');
-      return data && data.length ? true : false;
-    });
-    setRowData(filteredData);
-  };
-
-  const onClickApproved = () => {
-    setApproved(true);
-    setPanding(false);
-    setAll(false);
-    const filteredData = rows.filter((item: any) => {
-      const data = item.cells.filter((key: any) => key.key.toString().toLowerCase() == 'approved');
-      return data && data.length ? true : false;
-    });
-    setRowData(filteredData);
-  };
-
-  const onClickAll = () => {
-    setAll(true);
-    setPanding(false);
-    setApproved(false);
-    setRowData(rows);
-  };
 
   return (
     <Card>
