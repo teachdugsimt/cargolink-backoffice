@@ -43,6 +43,8 @@ const images = {
   backTruck: require('../../images/BTruck.png'),
   leftTruck: require('../../images/S1Truck.png'),
   rightTruck: require('../../images/S2Truck.png'),
+  pinDrop: require('../../images/pin-drop.png'),
+  pinDrop2: require('../../images/pin-drop2.png'),
 };
 
 export default images;

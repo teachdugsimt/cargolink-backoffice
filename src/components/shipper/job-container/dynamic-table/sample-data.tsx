@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon } from 'react-icons-kit';
 import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
+import images from '../../../Themes/images';
 import moment from 'moment';
 import 'moment/locale/th';
 moment.locale('th');
@@ -79,31 +80,36 @@ export const createRow = (jobs: any, products: any) => {
         {
           key: jobpost.from?.name,
           content: (
-            <div style={{ borderBottom: '2px solid black' }}>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ padding: 2 }}>
-                  <span style={{ fontWeight: 'bold' }}>From: </span>
+            <div style={{ borderBottom: '2px solid #253858' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
+                <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
+                  <img src={images.pinDrop2} style={{ width: 18 }} />
+                  <span style={{ fontWeight: 'bold', margin: '0 5px' }}>From:</span>
                   {`${jobpost.from?.name}`}
                 </span>
-                <span>
-                  <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />
+                <span style={{ padding: '2px 0', display: 'flex' }}>
+                  <div style={{ border: '1px dashed black', margin: '0 13px 0 10px' }} />
+                  <Icon style={{ color: '#FBBC12', marginRight: 5 }} icon={ic_access_time} />
                   {` ${moment(jobpost.from?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
                 </span>
               </div>
-              {jobpost.to.map((e, i) => {
-                return (
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span style={{ padding: 2, marginTop: 5 }}>
-                      <span style={{ fontWeight: 'bold' }}>To: </span>
-                      {`${e?.name}`}
-                    </span>
-                    <span>
-                      <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />
-                      {` ${moment(e?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
-                    </span>
-                  </div>
-                );
-              })}
+              <div style={{ marginBottom: 5 }}>
+                {jobpost.to.map((e: any, i: number) => {
+                  return (
+                    <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 5 }} key={i}>
+                      <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
+                        {i === 0 ? <img src={images.pinDrop} style={{ width: 18 }} /> : <div style={{ width: 18 }} />}
+                        <span style={{ fontWeight: 'bold', margin: '0 5px' }}>To:</span>
+                        {`${e?.name}`}
+                      </span>
+                      <span style={{ padding: 2, marginLeft: 23 }}>
+                        <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />
+                        {` ${moment(e?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           ),
         },
