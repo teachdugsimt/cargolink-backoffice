@@ -90,25 +90,20 @@ export const createRow = (jobs: any, products: any) => {
                   {` ${moment(jobpost.from?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
                 </span>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
-                <span style={{ padding: 2, marginTop: 8 }}>
-                  <span style={{ fontWeight: 'bold' }}>To: </span>
-                  {`${jobpost.to.map((e, i) => {
-                    return e?.name;
-                  })}`}
-                </span>
-                <span>
-                  <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />
-                  {` ${moment(
-                    jobpost.to.map((e, i) => {
-                      return e?.dateTime;
-                    }),
-                    'DD-MM-YYYY HH:mm',
-                  )
-                    .add(543, 'year')
-                    .format('LLL')}`}
-                </span>
-              </div>
+              {jobpost.to.map((e, i) => {
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span style={{ padding: 2, marginTop: 5 }}>
+                      <span style={{ fontWeight: 'bold' }}>To: </span>
+                      {`${e?.name}`}
+                    </span>
+                    <span>
+                      <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />
+                      {` ${moment(e?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           ),
         },

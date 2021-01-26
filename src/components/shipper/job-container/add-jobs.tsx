@@ -38,7 +38,7 @@ const AddJobs: React.FC<{}> = observer(() => {
     name: 'items',
   });
 
-  const startDate = watch('strat');
+  const startDate = watch('start');
 
   useEffect(() => {
     carrierStore.getAllTruckTypes();
@@ -90,18 +90,15 @@ const AddJobs: React.FC<{}> = observer(() => {
       }));
     setProductTypeIdOptions(array);
   }, [shipperStore.product_types]);
-
   const onSubmit = (data: any) => {
-    console.log(data);
-    console.log(truckType);
-    if (data && truckType.value && productTypeId.value) {
+    if (data && data.truckType.value && data.productTypeId.value) {
       shipperStore.postJobs({
-        truckType: truckType.value,
+        truckType: data.truckType.value,
         weight: data.weight,
         from: {
           contactMobileNo: data.contactMobileNo,
           contactName: data.contactName,
-          dateTime: moment(data.strat).format('DD-MM-YYYY HH:mm'),
+          dateTime: moment(data.start).format('DD-MM-YYYY HH:mm'),
           // lat: "13.788485",
           // lng: "100.6079443",
           name: data.name,
@@ -118,13 +115,11 @@ const AddJobs: React.FC<{}> = observer(() => {
             };
           }),
         truckAmount: data.truckAmount,
-        productTypeId: productTypeId.value,
+        productTypeId: data.productTypeId.value,
         productName: data.productName,
         // expiredTime: moment(new Date().toDateString()).subtract(1, 'days').format('DD-MM-YYYY HH:mm'),
         expiredTime: moment(new Date().toDateString()).add(2, 'days').format('DD-MM-YYYY HH:mm'),
       });
-    } else {
-      console.log('nodata');
     }
   };
   return (
@@ -138,50 +133,132 @@ const AddJobs: React.FC<{}> = observer(() => {
           <p>
             ประเภทของรถที่คุณต้องการ <span style={{ color: '#ff3d71' }}>*</span>
           </p>
-          <Select
+          <Controller
+            as={
+              <Select
+                options={truckTypeOptions}
+                status={errors.truckType ? 'Danger' : 'Basic'}
+                placeholder="Select multiple"
+                onChange={(value: any) => setTruckType(value)}
+                fullWidth
+              />
+            }
+            control={control}
+            valueName="selected"
+            rules={{ required: 'Department cannot be null.' }}
             name="truckType"
-            options={truckTypeOptions}
-            placeholder="Select multiple"
-            onChange={(value: any) => setTruckType(value)}
-            fullWidth
+            ref={register({ required: true })}
+            aria-invalid={errors.truckType ? 'true' : 'false'}
           />
+          {errors.truckType && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <p>
             จำนวนคันรถที่ต้องการ <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <input
             className="new-input-component"
             type="number"
-            id="firstName"
-            ref={register({ required: true })}
+            style={{
+              borderColor: errors.truckAmount ? '#ff3d71' : '',
+            }}
             name="truckAmount"
+            id="truckAmount"
+            ref={register({ required: true })}
             aria-invalid={errors.truckAmount ? 'true' : 'false'}
           />
-          {errors.truckAmount && <span role="alert">This field is required</span>}
+          {errors.truckAmount && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <hr style={{ margin: '1.125rem 0' }} />
           <p>
             ข้อมูลสินค้าที่ต้องการส่ง <span style={{ color: '#ff3d71' }}>*</span>
           </p>
-          <Select
+          <Controller
+            as={
+              <Select
+                options={productTypeIdOptions}
+                status={errors.productTypeId ? 'Danger' : 'Basic'}
+                placeholder="Select multiple"
+                onChange={(value: any) => setProductTypeId(value)}
+                fullWidth
+              />
+            }
+            control={control}
+            valueName="selected"
+            rules={{ required: 'Department cannot be null.' }}
             name="productTypeId"
-            options={productTypeIdOptions}
-            placeholder="Select multiple"
-            onChange={(value: any) => setProductTypeId(value)}
-            fullWidth
+            ref={register({ required: true })}
+            aria-invalid={errors.productTypeId ? 'true' : 'false'}
           />
+          {errors.productTypeId && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <p>
             ระบุชื่อสินค้าของคุณ<span style={{ color: '#ff3d71' }}>*</span>
           </p>
-          <input className="new-input-component" type="text" name="productName" ref={register} />
+          <input
+            className="new-input-component"
+            type="text"
+            name="productName"
+            id="productName"
+            ref={register({ required: true })}
+            style={{
+              borderColor: errors.productName ? '#ff3d71' : '',
+            }}
+            aria-invalid={errors.productName ? 'true' : 'false'}
+          />
+          {errors.productName && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <p>
             ระบุจำนวนน้ำหนัก (ตัน)<span style={{ color: '#ff3d71' }}>*</span>
           </p>
-          <input className="new-input-component" type="number" name="weight" ref={register} />
+          <input
+            className="new-input-component"
+            type="number"
+            name="weight"
+            id="weight"
+            style={{
+              borderColor: errors.weight ? '#ff3d71' : '',
+            }}
+            ref={register({ required: true })}
+            aria-invalid={errors.weight ? 'true' : 'false'}
+          />
+          {errors.weight && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <hr style={{ margin: '1.125rem 0 0' }} />
           <p style={{ fontWeight: 'bold', backgroundColor: '#253858', padding: 10, color: 'white' }}>จุดส่งสินค้า</p>
           <p>
             ระบุสถานที่ที่ส่งสินค้า <span style={{ color: '#ff3d71' }}>*</span>
           </p>
-          <input className="new-input-component" type="text" name="contactName" ref={register} />
+          <input
+            className="new-input-component"
+            type="text"
+            name="contactName"
+            id="contactName"
+            style={{
+              borderColor: errors.contactName ? '#ff3d71' : '',
+            }}
+            ref={register({ required: true })}
+            aria-invalid={errors.contactName ? 'true' : 'false'}
+          />
+          {errors.contactName && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <p>
             วัน-เวลา ส่งที่ต้องการ<span style={{ color: '#ff3d71' }}>*</span>
           </p>
@@ -189,7 +266,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             <Controller
               as={
                 <ReactDatePicker
-                  className="new-input-component"
+                  className={errors.start ? 'errors-input-component' : 'new-input-component'}
                   dateFormat="d MMM yyyy"
                   selected={startDate ? new Date(startDate) : null}
                   showTimeSelect
@@ -202,40 +279,75 @@ const AddJobs: React.FC<{}> = observer(() => {
               }
               control={control}
               register={register({ required: true })}
-              name="strat"
+              rules={{ required: 'Department cannot be null.' }}
+              name="start"
+              aria-invalid={errors.start ? 'true' : 'false'}
               onChange={([selected]: any) => {
                 return { value: selected };
               }}
-              required
             />
           </Box>
+          {errors.start && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <div style={{ display: 'flex' }}>
             <p style={{ fontWeight: 'bold', marginRight: 5 }}>ข้อมูลติดต่อจุดส่งสินค้า: </p>
             <p>
               ชื่อผู้ส่งสินค้า<span style={{ color: '#ff3d71' }}>*</span>
             </p>
           </div>
-          <input className="new-input-component" type="text" name="name" ref={register} />
+          <input
+            className="new-input-component"
+            type="text"
+            name="name"
+            id="name"
+            style={{
+              borderColor: errors.name ? '#ff3d71' : '',
+            }}
+            ref={register({ required: true })}
+            aria-invalid={errors.name ? 'true' : 'false'}
+          />
+          {errors.name && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <p>
-            เบอร์ติดต่อ<span style={{ color: '#ff3d71' }}>*</span>
+            เบอร์ติดต่อ <span style={{ color: '#ff3d71' }}>*</span>
           </p>
-          <input className="new-input-component" type="text" name="contactMobileNo" ref={register} />
+          <input
+            className="new-input-component"
+            type="text"
+            name="contactMobileNo"
+            style={{
+              borderColor: errors.contactMobileNo ? '#ff3d71' : '',
+            }}
+            ref={register({ required: true })}
+            aria-invalid={errors.contactMobileNo ? 'true' : 'false'}
+          />
+          {errors.contactMobileNo && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
+          <hr style={{ margin: '1.125rem 0 0' }} />
+          <p
+            style={{
+              fontWeight: 'bold',
+              backgroundColor: '#253858',
+              padding: 10,
+              color: 'white',
+              marginBottom: 0,
+            }}
+          >
+            จุดรับสินค้า<span style={{ color: '#ff3d71' }}>*</span>
+          </p>
           {fields.map(({ id, contactName, name, contactMobileNo, exdate }, index) => {
             const toDate = watch(`items[${index}].exdate`);
             return (
               <div key={id}>
-                <hr style={{ margin: '1.125rem 0 0' }} />
-                <p
-                  style={{
-                    fontWeight: 'bold',
-                    backgroundColor: '#253858',
-                    padding: 10,
-                    color: 'white',
-                    marginBottom: 0,
-                  }}
-                >
-                  จุดรับสินค้า<span style={{ color: '#ff3d71' }}>*</span>
-                </p>
                 <div style={{ display: 'flex' }}>
                   <p style={{ fontWeight: 'bold', marginRight: 5 }}>จุดรับสินค้าที่ {index == 0 ? 1 : index + 1}: </p>
                   <p>
@@ -245,10 +357,19 @@ const AddJobs: React.FC<{}> = observer(() => {
                 <input
                   className="new-input-component"
                   type="text"
-                  ref={register()}
+                  style={{
+                    borderColor: errors.items?.filter((e) => e.contactName) ? '#ff3d71' : '',
+                  }}
                   name={`items[${index}].contactName`}
                   defaultValue={contactName}
+                  ref={register({ required: true })}
+                  aria-invalid={errors.items?.filter((e) => e.contactName) ? 'true' : 'false'}
                 />
+                {errors.items?.filter((e) => e.contactName) && (
+                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+                    This field is required
+                  </span>
+                )}
                 <p>
                   วัน-เวลา รับสินค้าที่ต้องการ<span style={{ color: '#ff3d71' }}>*</span>
                 </p>
@@ -256,7 +377,9 @@ const AddJobs: React.FC<{}> = observer(() => {
                   <Controller
                     as={
                       <ReactDatePicker
-                        className="new-input-component"
+                        className={
+                          errors.items?.filter((e) => e.exdate) ? 'errors-input-component' : 'new-input-component'
+                        }
                         dateFormat="d MMM yyyy"
                         selected={toDate ? new Date(toDate) : null}
                         showTimeSelect
@@ -268,16 +391,21 @@ const AddJobs: React.FC<{}> = observer(() => {
                       />
                     }
                     control={control}
-                    ref={register()}
                     name={`items[${index}].exdate`}
+                    rules={{ required: 'Department cannot be null.' }}
+                    ref={register({ required: true })}
+                    aria-invalid={errors.items?.filter((e) => e.exdate) ? 'true' : 'false'}
                     defaultValue={toDate}
                     onChange={([selected]: any) => {
-                      console.log('selected:>>', selected);
                       return { value: selected };
                     }}
-                    required
                   />
                 </Box>
+                {errors.items?.filter((e) => e.exdate) && (
+                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+                    This field is required
+                  </span>
+                )}
                 <div style={{ display: 'flex' }}>
                   <p style={{ fontWeight: 'bold', marginRight: 5 }}>ข้อมูลติดต่อจุดรับสินค้า: </p>
                   <p>
@@ -287,10 +415,19 @@ const AddJobs: React.FC<{}> = observer(() => {
                 <input
                   className="new-input-component"
                   type="text"
-                  ref={register()}
                   name={`items[${index}].name`}
+                  style={{
+                    borderColor: errors.items?.filter((e) => e.name) ? '#ff3d71' : '',
+                  }}
+                  ref={register({ required: true })}
+                  aria-invalid={errors.items?.filter((e) => e.name) ? 'true' : 'false'}
                   defaultValue={name}
                 />
+                {errors.items?.filter((e) => e.name) && (
+                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+                    This field is required
+                  </span>
+                )}
                 <p>
                   เบอร์ติดต่อ<span style={{ color: '#ff3d71' }}>*</span>
                 </p>
@@ -298,16 +435,30 @@ const AddJobs: React.FC<{}> = observer(() => {
                   className="new-input-component"
                   type="text"
                   name={`items[${index}].contactMobileNo`}
+                  style={{
+                    borderColor: errors.items?.filter((e) => e.contactMobileNo) ? '#ff3d71' : '',
+                  }}
                   defaultValue={contactMobileNo}
-                  ref={register()}
+                  ref={register({ required: true })}
+                  aria-invalid={errors.items?.filter((e) => e.contactMobileNo) ? 'true' : 'false'}
                 />
-                <br />
-                <br />
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button type="button" onClick={() => remove(index)}>
-                    <EvaIcon name="minus-outline" />
-                  </Button>
-                </div>
+                {errors.items?.filter((e) => e.contactMobileNo) && (
+                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+                    This field is required
+                  </span>
+                )}
+                {index == 0 ? (
+                  <></>
+                ) : (
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <br />
+                    <br />
+                    <Button type="button" onClick={() => remove(index)}>
+                      <EvaIcon name="minus-outline" />
+                    </Button>
+                  </div>
+                )}
+                <hr style={{ margin: '1.125rem 0 ' }} />
               </div>
             );
           })}
