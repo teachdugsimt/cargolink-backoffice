@@ -201,7 +201,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             </span>
           )}
           <p>
-            ระบุชื่อสินค้าของคุณ<span style={{ color: '#ff3d71' }}>*</span>
+            ระบุชื่อสินค้าของคุณ <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <input
             className="new-input-component"
@@ -220,7 +220,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             </span>
           )}
           <p>
-            ระบุจำนวนน้ำหนัก (ตัน)<span style={{ color: '#ff3d71' }}>*</span>
+            ระบุจำนวนน้ำหนัก (ตัน) <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <input
             className="new-input-component"
@@ -260,7 +260,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             </span>
           )}
           <p>
-            วัน-เวลา ส่งที่ต้องการ<span style={{ color: '#ff3d71' }}>*</span>
+            วัน-เวลา ส่งที่ต้องการ <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <Box sx={{ maxWidth: '400px' }} as="form" onSubmit={handleSubmit((data) => console.log(data))}>
             <Controller
@@ -295,7 +295,7 @@ const AddJobs: React.FC<{}> = observer(() => {
           <div style={{ display: 'flex' }}>
             <p style={{ fontWeight: 'bold', marginRight: 5 }}>ข้อมูลติดต่อจุดส่งสินค้า: </p>
             <p>
-              ชื่อผู้ส่งสินค้า<span style={{ color: '#ff3d71' }}>*</span>
+              ชื่อผู้ส่งสินค้า <span style={{ color: '#ff3d71' }}>*</span>
             </p>
           </div>
           <input
@@ -342,7 +342,7 @@ const AddJobs: React.FC<{}> = observer(() => {
               marginBottom: 0,
             }}
           >
-            จุดรับสินค้า<span style={{ color: '#ff3d71' }}>*</span>
+            จุดรับสินค้า
           </p>
           {fields.map(({ id, contactName, name, contactMobileNo, exdate }, index) => {
             const toDate = watch(`items[${index}].exdate`);
@@ -371,7 +371,7 @@ const AddJobs: React.FC<{}> = observer(() => {
                   </span>
                 )}
                 <p>
-                  วัน-เวลา รับสินค้าที่ต้องการ<span style={{ color: '#ff3d71' }}>*</span>
+                  วัน-เวลา รับสินค้าที่ต้องการ <span style={{ color: '#ff3d71' }}>*</span>
                 </p>
                 <Box sx={{ maxWidth: '400px' }} as="form" onSubmit={handleSubmit((data) => console.log(data))}>
                   <Controller
@@ -409,7 +409,7 @@ const AddJobs: React.FC<{}> = observer(() => {
                 <div style={{ display: 'flex' }}>
                   <p style={{ fontWeight: 'bold', marginRight: 5 }}>ข้อมูลติดต่อจุดรับสินค้า: </p>
                   <p>
-                    ชื่อผู้รับสินค้า<span style={{ color: '#ff3d71' }}>*</span>
+                    ชื่อผู้รับสินค้า <span style={{ color: '#ff3d71' }}>*</span>
                   </p>
                 </div>
                 <input
@@ -429,7 +429,7 @@ const AddJobs: React.FC<{}> = observer(() => {
                   </span>
                 )}
                 <p>
-                  เบอร์ติดต่อ<span style={{ color: '#ff3d71' }}>*</span>
+                  เบอร์ติดต่อ <span style={{ color: '#ff3d71' }}>*</span>
                 </p>
                 <input
                   className="new-input-component"
@@ -450,19 +450,29 @@ const AddJobs: React.FC<{}> = observer(() => {
                 {index == 0 ? (
                   <></>
                 ) : (
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <br />
-                    <br />
-                    <Button type="button" onClick={() => remove(index)}>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.125rem' }}>
+                    <Button
+                      type="button"
+                      size="Small"
+                      shape="SemiRound"
+                      style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
+                      onClick={() => remove(index)}
+                    >
                       <EvaIcon name="minus-outline" />
                     </Button>
                   </div>
                 )}
-                <hr style={{ margin: '1.125rem 0 ' }} />
+                <hr style={{ margin: '1.125rem 0 0' }} />
               </div>
             );
           })}
-          <Button type="button" onClick={() => append({})}>
+          <Button
+            type="button"
+            size="Small"
+            shape="SemiRound"
+            style={{ backgroundColor: '#253858', borderColor: '#253858', marginTop: '1.125rem' }}
+            onClick={() => append({})}
+          >
             <EvaIcon name="plus-outline" />
           </Button>
           <br />
