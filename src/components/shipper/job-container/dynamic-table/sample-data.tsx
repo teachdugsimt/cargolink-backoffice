@@ -93,11 +93,20 @@ export const createRow = (jobs: any, products: any) => {
               <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
                 <span style={{ padding: 2, marginTop: 8 }}>
                   <span style={{ fontWeight: 'bold' }}>To: </span>
-                  {`${jobpost.to[0]?.name}`}
+                  {`${jobpost.to.map((e, i) => {
+                    return e?.name;
+                  })}`}
                 </span>
                 <span>
                   <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />
-                  {` ${moment(jobpost.to[0]?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
+                  {` ${moment(
+                    jobpost.to.map((e, i) => {
+                      return e?.dateTime;
+                    }),
+                    'DD-MM-YYYY HH:mm',
+                  )
+                    .add(543, 'year')
+                    .format('LLL')}`}
                 </span>
               </div>
             </div>

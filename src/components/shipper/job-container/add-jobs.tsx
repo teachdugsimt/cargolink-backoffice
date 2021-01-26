@@ -18,7 +18,7 @@ import { EvaIcon } from '@paljs/ui/Icon';
 const AddJobs: React.FC<{}> = observer(() => {
   const { shipperStore, carrierStore } = useMst();
 
-  const { register, control, handleSubmit, watch } = useForm({
+  const { register, control, handleSubmit, watch, errors } = useForm({
     mode: 'onChanges',
     reValidateMode: 'onChange',
     defaultValues: {
@@ -93,8 +93,8 @@ const AddJobs: React.FC<{}> = observer(() => {
 
   const onSubmit = (data: any) => {
     console.log(data);
-    console.log(data.items);
-    if (data && truckType && productTypeId) {
+    console.log(truckType);
+    if (data && truckType.value && productTypeId.value) {
       shipperStore.postJobs({
         truckType: truckType.value,
         weight: data.weight,
@@ -123,6 +123,8 @@ const AddJobs: React.FC<{}> = observer(() => {
         // expiredTime: moment(new Date().toDateString()).subtract(1, 'days').format('DD-MM-YYYY HH:mm'),
         expiredTime: moment(new Date().toDateString()).add(2, 'days').format('DD-MM-YYYY HH:mm'),
       });
+    } else {
+      console.log('nodata');
     }
   };
   return (
@@ -146,7 +148,15 @@ const AddJobs: React.FC<{}> = observer(() => {
           <p>
             จำนวนคันรถที่ต้องการ <span style={{ color: '#ff3d71' }}>*</span>
           </p>
-          <input className="new-input-component" type="number" ref={register} name="truckAmount" />
+          <input
+            className="new-input-component"
+            type="number"
+            id="firstName"
+            ref={register({ required: true })}
+            name="truckAmount"
+            aria-invalid={errors.truckAmount ? 'true' : 'false'}
+          />
+          {errors.truckAmount && <span role="alert">This field is required</span>}
           <hr style={{ margin: '1.125rem 0' }} />
           <p>
             ข้อมูลสินค้าที่ต้องการส่ง <span style={{ color: '#ff3d71' }}>*</span>
