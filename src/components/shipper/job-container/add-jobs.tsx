@@ -8,12 +8,14 @@ import { useMst } from '../../../stores/root-store';
 import { navigate } from 'gatsby';
 import moment from 'moment';
 // import DatePicker from 'react-datepicker';
-import ReactDatePicker from 'react-datepicker';
+import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
 import { Box } from 'theme-ui';
 import { EvaIcon } from '@paljs/ui/Icon';
+import th from 'date-fns/locale/th';
+registerLocale('th', th);
 
 const AddJobs: React.FC<{}> = observer(() => {
   const { shipperStore, carrierStore } = useMst();
@@ -267,13 +269,16 @@ const AddJobs: React.FC<{}> = observer(() => {
               as={
                 <ReactDatePicker
                   className={errors.start ? 'errors-input-component' : 'new-input-component'}
-                  dateFormat="d MMM yyyy"
+                  locale="th"
+                  dateFormat="d MMM yyyy HH:mm"
                   selected={startDate ? new Date(startDate) : null}
                   showTimeSelect
-                  todayButton="Today"
+                  // todayButton="Today"
                   dropdownMode="select"
                   isClearable
                   placeholderText="Click to select time"
+                  timeFormat="HH:mm"
+                  timeIntervals={1}
                   shouldCloseOnSelect
                 />
               }
@@ -380,13 +385,16 @@ const AddJobs: React.FC<{}> = observer(() => {
                         className={
                           errors.items?.filter((e) => e.exdate) ? 'errors-input-component' : 'new-input-component'
                         }
-                        dateFormat="d MMM yyyy"
+                        locale="th"
+                        dateFormat="d MMM yyyy HH:mm"
                         selected={toDate ? new Date(toDate) : null}
                         showTimeSelect
-                        todayButton="Today"
+                        // todayButton="Today"
                         dropdownMode="select"
                         isClearable
                         placeholderText="Click to select time"
+                        timeFormat="HH:mm"
+                        timeIntervals={1}
                         shouldCloseOnSelect
                       />
                     }
@@ -470,7 +478,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             type="button"
             size="Small"
             shape="SemiRound"
-            style={{ backgroundColor: '#253858', borderColor: '#253858', marginTop: '1.125rem' }}
+            style={{ backgroundColor: '#216ba5', borderColor: '#216ba5', marginTop: '1.125rem' }}
             onClick={() => append({})}
           >
             <EvaIcon name="plus-outline" />

@@ -18,6 +18,7 @@
     "apisauce": "^2.0.0",
     "axios": "^0.21.0",
     "cypress": "^6.1.0",
+    "date-fns": "^2.16.1",
     "devextreme": "20.2.4",
     "devextreme-react": "20.2.4",
     "font-awesome": "^4.7.0",

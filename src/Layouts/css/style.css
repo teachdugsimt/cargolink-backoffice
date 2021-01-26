@@ -127,6 +127,16 @@ input[type='file'] {
   color: white !important;
   font-weight: normal !important;
 }
+.css-m29kb {
+  max-width: 100% !important;
+  width: 100%;
+}
+.react-datepicker-wrapper {
+  width: 100%;
+}
+.react-datepicker__triangle {
+  left: 50px !important;
+}
 
 @media screen and (min-width: 399.8px) {
   .header-logo {
