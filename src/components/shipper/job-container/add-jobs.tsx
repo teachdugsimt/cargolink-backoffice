@@ -478,7 +478,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             type="button"
             size="Small"
             shape="SemiRound"
-            style={{ backgroundColor: '#216ba5', borderColor: '#216ba5', marginTop: '1.125rem' }}
+            style={{ backgroundColor: '#253858', borderColor: '#253858', marginTop: '1.125rem' }}
             onClick={() => append({})}
           >
             <EvaIcon name="plus-outline" />
