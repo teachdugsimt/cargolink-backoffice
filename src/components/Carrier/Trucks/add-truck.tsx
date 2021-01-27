@@ -76,7 +76,6 @@ const AddTruck: React.FC<Props> = observer((props) => {
   }, [carrierStore.trucks_types]);
 
   const onSubmit = (data: any) => {
-    console.log('data:>>', data);
     const { region, truckType, province } = data;
     if (
       data &&
@@ -107,7 +106,6 @@ const AddTruck: React.FC<Props> = observer((props) => {
 
   const onChangeRegion = (event: { value: number; label: string }) => {
     const provincesFillterByRegion = provinces.filter((e) => e.area === event.value);
-    console.log('onChangeRegion :> ', provincesFillterByRegion);
     setFilterProvince(provincesFillterByRegion);
   };
 
@@ -138,7 +136,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
             }
             control={control}
             valueName="selected"
-            rules={{ required: 'Department cannot be null.' }}
+            rules={{ required: 'Truck type cannot be null.' }}
             name="truckType"
             ref={register({ required: true })}
             aria-invalid={errors.truckType ? 'true' : 'false'}
@@ -171,7 +169,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
             }
             control={control}
             valueName="selected"
-            rules={{ required: 'Department cannot be null.' }}
+            rules={{ required: 'Stall height cannot be null.' }}
             name="stallHeight"
             ref={register({ required: true })}
             aria-invalid={errors.stallHeight ? 'true' : 'false'}
@@ -259,7 +257,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
             }}
             control={control}
             valueName="selected"
-            rules={{ required: 'Department cannot be null.' }}
+            rules={{ required: 'Region cannot be null.' }}
             name="region"
             ref={register({ required: true })}
             aria-invalid={errors.region ? 'true' : 'false'}
@@ -289,7 +287,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
             }}
             control={control}
             valueName="selected"
-            rules={{ required: 'Department cannot be null.' }}
+            rules={{ required: 'Province cannot be null.' }}
             name="province"
             ref={register({ required: true })}
             aria-invalid={errors.province ? 'true' : 'false'}
