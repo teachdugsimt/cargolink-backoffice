@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { Card, CardHeader, CardBody } from '@paljs/ui/Card';
 import Select from '@paljs/ui/Select';
 import Switch from '@material-ui/core/Switch';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { UploadFileStore } from '../../../stores/upload-file-store';
 import ImageUpload from './image-upload';
 import { useMst } from '../../../stores/root-store';
@@ -19,7 +19,7 @@ interface Props {}
 
 const AddTruck: React.FC<Props> = observer((props: any) => {
   const { carrierStore } = useMst();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, errors, control } = useForm();
   const [checkbox, setCheckbox] = useState(false);
   const [truckType, setTruckType] = useState({ value: 0, label: '' });
   const [region, setRegion] = useState({ value: 0, label: '' });
@@ -70,18 +70,19 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   }, [carrierStore.trucks_types]);
 
   const onSubmit = (data: any) => {
-    if (data && region && truckType && province) {
+    console.log('data:>>', data);
+    if (data && data.region.value && data.truckType.value && data.province.value) {
       carrierStore.postTruck({
         loadingWeight: data.loadingWeight,
         registrationNumber: [data.registrationNumber],
-        stallHeight: stallHeight.value,
+        stallHeight: data.stallHeight.value,
         tipper: checkbox,
         truckPhotos: UploadFileStore.truckPhotos,
-        truckType: truckType.value,
+        truckType: data.truckType.value,
         workingZones: [
           {
-            province: province.value,
-            region: region.value,
+            province: data.province.value,
+            region: data.region.value,
           },
         ],
       });
@@ -108,13 +109,31 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)} className="form-add-data">
-          <p>เลือกประเภทของรถของคุณ</p>
-          <Select
-            options={truckTypeOptions}
-            placeholder="Select multiple"
-            fullWidth
-            onChange={(value: any) => setTruckType(value)}
+          <p>
+            เลือกประเภทของรถของคุณ <span style={{ color: '#ff3d71' }}>*</span>
+          </p>
+          <Controller
+            as={
+              <Select
+                options={truckTypeOptions}
+                status={errors.truckType ? 'Danger' : 'Basic'}
+                placeholder="Select multiple"
+                fullWidth
+                onChange={(value: any) => setTruckType(value)}
+              />
+            }
+            control={control}
+            valueName="selected"
+            rules={{ required: 'Department cannot be null.' }}
+            name="truckType"
+            ref={register({ required: true })}
+            aria-invalid={errors.truckType ? 'true' : 'false'}
           />
+          {errors.truckType && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <p>รถมีที่ดั้มหรือไม่</p>
             <Switch
@@ -124,40 +143,128 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
               style={{ color: checkbox ? '#00B132' : '' }}
             />
           </div>
-          <p>ความสูงของคอกรถ (หน่วยเป็นเมตร)</p>
-          <Select
-            options={stallHeightOption}
-            placeholder="Select multiple"
-            fullWidth
-            onChange={(value: any) => setStallHeight(value)}
+          <p>
+            ความสูงของคอกรถ (หน่วยเป็นเมตร) <span style={{ color: '#ff3d71' }}>*</span>
+          </p>
+          <Controller
+            as={
+              <Select
+                options={stallHeightOption}
+                status={errors.stallHeight ? 'Danger' : 'Basic'}
+                placeholder="Select multiple"
+                fullWidth
+                onChange={(value: any) => setStallHeight(value)}
+              />
+            }
+            control={control}
+            valueName="selected"
+            rules={{ required: 'Department cannot be null.' }}
+            name="stallHeight"
+            ref={register({ required: true })}
+            aria-invalid={errors.stallHeight ? 'true' : 'false'}
           />
-          <p>ระบุจำนวนน้ำหนัก (ตัน)</p>
-          <input className="new-input-component" name="loadingWeight" type="number" ref={register} />
+          {errors.stallHeight && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
+          <p>
+            ระบุจำนวนน้ำหนัก (ตัน) <span style={{ color: '#ff3d71' }}>*</span>
+          </p>
+          <input
+            className="new-input-component"
+            name="loadingWeight"
+            type="number"
+            style={{
+              borderColor: errors.loadingWeight ? '#ff3d71' : '',
+            }}
+            ref={register({ required: true })}
+            aria-invalid={errors.loadingWeight ? 'true' : 'false'}
+          />
+          {errors.loadingWeight && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <hr style={{ margin: '1.125rem 0 0' }} />
           <div style={{ display: 'flex' }}>
             <p style={{ fontWeight: 'bold', marginRight: 5 }}>ข้อมูลรถของคุณ: </p>
-            <p>เลขทะเบียนรถ</p>
+            <p>
+              เลขทะเบียนรถ <span style={{ color: '#ff3d71' }}>*</span>
+            </p>
           </div>
-          <input className="new-input-component" name="registrationNumber" type="text" ref={register} />
+          <input
+            className="new-input-component"
+            name="registrationNumber"
+            type="text"
+            style={{
+              borderColor: errors.registrationNumber ? '#ff3d71' : '',
+            }}
+            ref={register({ required: true })}
+            aria-invalid={errors.registrationNumber ? 'true' : 'false'}
+          />
+          {errors.registrationNumber && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <hr style={{ margin: '1.125rem 0' }} />
-          <p>อัพโหลดรูปภาพรถ</p>
+          <p>
+            อัพโหลดรูปภาพรถ <span style={{ color: '#ff3d71' }}>*</span>
+          </p>
           <br />
           <ImageUpload />
           <hr style={{ margin: '1.125rem 0' }} />
-          <p>โซนที่วิ่งงาน</p>
-          <Select
-            options={filterRegion}
-            placeholder="ภูมิภาค"
-            fullWidth
-            onChange={(event: any) => onChangeRegion(event)}
+          <p>
+            โซนที่วิ่งงาน <span style={{ color: '#ff3d71' }}>*</span>
+          </p>
+
+          <Controller
+            as={
+              <Select
+                status={errors.stallHeight ? 'Danger' : 'Basic'}
+                options={filterRegion}
+                placeholder="ภูมิภาค"
+                fullWidth
+                onChange={(event: any) => onChangeRegion(event)}
+              />
+            }
+            control={control}
+            valueName="selected"
+            rules={{ required: 'Department cannot be null.' }}
+            name="region"
+            ref={register({ required: true })}
+            aria-invalid={errors.region ? 'true' : 'false'}
           />
+          {errors.region && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <br />
-          <Select
-            options={filterProvince}
-            placeholder="จังหวัด"
-            fullWidth
-            onChange={(event: any) => onChangeProvince(event)}
+          <Controller
+            as={
+              <Select
+                status={errors.province ? 'Danger' : 'Basic'}
+                options={filterProvince}
+                placeholder="จังหวัด"
+                fullWidth
+                onChange={(event: any) => onChangeProvince(event)}
+              />
+            }
+            control={control}
+            valueName="selected"
+            rules={{ required: 'Department cannot be null.' }}
+            name="province"
+            ref={register({ required: true })}
+            aria-invalid={errors.province ? 'true' : 'false'}
           />
+
+          {errors.province && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+              This field is required
+            </span>
+          )}
           <br />
           <br />
           <div style={{ display: 'flex' }}>
