@@ -116,8 +116,6 @@ const AddTruck: React.FC<Props> = observer((props) => {
     setFilterRegion(regionsFillterByProvince);
   };
 
-  console.log('truckPhotos :> ', truckPhotos);
-
   return (
     <Card>
       <Alert setting={alertSetting} />
@@ -193,12 +191,17 @@ const AddTruck: React.FC<Props> = observer((props) => {
             style={{
               borderColor: errors.loadingWeight ? '#ff3d71' : '',
             }}
-            ref={register({ required: true })}
+            ref={register({ required: true, min: 0 })}
             aria-invalid={errors.loadingWeight ? 'true' : 'false'}
           />
-          {errors.loadingWeight && (
+          {errors.loadingWeight && errors.loadingWeight.type === 'required' && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
+            </span>
+          )}
+          {errors.loadingWeight && errors.loadingWeight.type === 'min' && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+              ต้องมีค่ามากกว่าหรือเท่ากับ 0
             </span>
           )}
           <hr style={{ margin: '1.125rem 0 0' }} />
