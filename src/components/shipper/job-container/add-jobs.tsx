@@ -326,6 +326,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             className="new-input-component"
             type="text"
             name="contactMobileNo"
+            maxLength={10}
             style={{
               borderColor: errors.contactMobileNo ? '#ff3d71' : '',
             }}
@@ -443,6 +444,7 @@ const AddJobs: React.FC<{}> = observer(() => {
                   className="new-input-component"
                   type="text"
                   name={`items[${index}].contactMobileNo`}
+                  maxLength={10}
                   style={{
                     borderColor: errors.items?.filter((e) => e.contactMobileNo) ? '#ff3d71' : '',
                   }}
