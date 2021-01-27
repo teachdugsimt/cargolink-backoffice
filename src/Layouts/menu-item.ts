@@ -25,7 +25,7 @@ const items: MenuItemType[] = [
     children: [
       { title_th: 'บัญชีผู้ให้บริการ', title_en: 'Carrier account', link: { to: '/carrier-account' } },
       { title_th: 'รถบรรทุก', title_en: 'Trucks', link: { to: '/trucks' } },
-      { title_th: 'ไดรเวอร์', title_en: 'Drivers', link: { to: '/drivers' } },
+      { title_th: 'คนขับรถ', title_en: 'Drivers', link: { to: '/drivers' } },
     ],
   },
   {
