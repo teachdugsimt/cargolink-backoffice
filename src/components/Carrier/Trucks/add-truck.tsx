@@ -1,12 +1,10 @@
 import { Button } from '@paljs/ui/Button';
-import { InputGroup } from '@paljs/ui/Input';
 import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Card, CardHeader, CardBody } from '@paljs/ui/Card';
 import Select from '@paljs/ui/Select';
 import Switch from '@material-ui/core/Switch';
 import { useForm, Controller } from 'react-hook-form';
-import { UploadFileStore } from '../../../stores/upload-file-store';
 import ImageUpload from './image-upload';
 import { useMst } from '../../../stores/root-store';
 import Alert from '../../alert';
@@ -14,21 +12,29 @@ import { defaultAlertSetting } from '../../simple-data';
 import { regionOptions, stallHeightOption, provinceOptions } from './dynamic-table/sample-data';
 import { navigate } from 'gatsby';
 import '../../../Layouts/css/style.css';
+import { UploadFileStore } from '../../../stores/upload-file-store';
+
+const provinces = provinceOptions.sort((a, b) => {
+  if (a.label < b.label) return -1;
+  if (a.label > b.label) return 1;
+  return 0;
+});
 
 interface Props {}
 
-const AddTruck: React.FC<Props> = observer((props: any) => {
+const AddTruck: React.FC<Props> = observer((props) => {
   const { carrierStore } = useMst();
-  const { register, handleSubmit, errors, control } = useForm();
+  const truckPhotos = JSON.parse(JSON.stringify(UploadFileStore.truckPhotos));
+  const { register, handleSubmit, errors, control } = useForm({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+  });
   const [checkbox, setCheckbox] = useState(false);
-  const [truckType, setTruckType] = useState({ value: 0, label: '' });
-  const [region, setRegion] = useState({ value: 0, label: '' });
-  const [province, setProvince] = useState({ value: 0, label: '' });
-  const [stallHeight, setStallHeight] = useState({ value: '', label: '' });
-  const [filterProvince, setFilterProvince] = useState(provinceOptions);
+  const [filterProvince, setFilterProvince] = useState(provinces);
   const [filterRegion, setFilterRegion] = useState(regionOptions);
   const [truckTypeOptions, setTruckTypeOptions] = useState();
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
+  const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
     carrierStore.getAllTruckTypes();
@@ -71,7 +77,17 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
 
   const onSubmit = (data: any) => {
     console.log('data:>>', data);
-    if (data && data.region.value && data.truckType.value && data.province.value) {
+    const { region, truckType, province } = data;
+    if (
+      data &&
+      region.value &&
+      truckType.value &&
+      province.value &&
+      truckPhotos.front &&
+      truckPhotos.back &&
+      truckPhotos.left &&
+      truckPhotos.left
+    ) {
       carrierStore.postTruck({
         loadingWeight: data.loadingWeight,
         registrationNumber: [data.registrationNumber],
@@ -90,16 +106,17 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
   };
 
   const onChangeRegion = (event: { value: number; label: string }) => {
-    setRegion(event);
-    const Region = provinceOptions.filter((e) => e.area === event.value);
-    setFilterProvince(Region);
+    const provincesFillterByRegion = provinces.filter((e) => e.area === event.value);
+    console.log('onChangeRegion :> ', provincesFillterByRegion);
+    setFilterProvince(provincesFillterByRegion);
   };
 
   const onChangeProvince = (event: { value: number; label: string; area: number }) => {
-    setProvince(event);
-    const Province = regionOptions.filter((e) => e.value === event.area);
-    setFilterRegion(Province);
+    const regionsFillterByProvince = regionOptions.filter((e) => e.value === event.area);
+    setFilterRegion(regionsFillterByProvince);
   };
+
+  console.log('truckPhotos :> ', truckPhotos);
 
   return (
     <Card>
@@ -119,7 +136,6 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
                 status={errors.truckType ? 'Danger' : 'Basic'}
                 placeholder="Select multiple"
                 fullWidth
-                onChange={(value: any) => setTruckType(value)}
               />
             }
             control={control}
@@ -130,7 +146,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
             aria-invalid={errors.truckType ? 'true' : 'false'}
           />
           {errors.truckType && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -153,7 +169,6 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
                 status={errors.stallHeight ? 'Danger' : 'Basic'}
                 placeholder="Select multiple"
                 fullWidth
-                onChange={(value: any) => setStallHeight(value)}
               />
             }
             control={control}
@@ -164,7 +179,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
             aria-invalid={errors.stallHeight ? 'true' : 'false'}
           />
           {errors.stallHeight && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -182,7 +197,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
             aria-invalid={errors.loadingWeight ? 'true' : 'false'}
           />
           {errors.loadingWeight && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -204,7 +219,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
             aria-invalid={errors.registrationNumber ? 'true' : 'false'}
           />
           {errors.registrationNumber && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -213,22 +228,26 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
             อัพโหลดรูปภาพรถ <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <br />
-          <ImageUpload />
+          <ImageUpload submitted={toggle} />
+          {toggle && (!truckPhotos.front || !truckPhotos.back || !truckPhotos.left || !truckPhotos.left) && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+              This field is required
+            </span>
+          )}
           <hr style={{ margin: '1.125rem 0' }} />
           <p>
             โซนที่วิ่งงาน <span style={{ color: '#ff3d71' }}>*</span>
           </p>
-
           <Controller
             as={
               <Select
-                status={errors.stallHeight ? 'Danger' : 'Basic'}
+                status={errors.region ? 'Danger' : 'Basic'}
                 options={filterRegion}
                 placeholder="ภูมิภาค"
                 fullWidth
-                onChange={(event: any) => onChangeRegion(event)}
               />
             }
+            onChange={(event: any) => onChangeRegion(event)}
             control={control}
             valueName="selected"
             rules={{ required: 'Department cannot be null.' }}
@@ -237,8 +256,9 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
             aria-invalid={errors.region ? 'true' : 'false'}
           />
           {errors.region && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
+              <br />
             </span>
           )}
           <br />
@@ -261,7 +281,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
           />
 
           {errors.province && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -284,6 +304,7 @@ const AddTruck: React.FC<Props> = observer((props: any) => {
               shape="Rectangle"
               fullWidth
               style={{ backgroundColor: '#00B132', borderColor: '#00B132' }}
+              onClick={() => setToggle(true)}
             >
               ยืนยัน
             </Button>

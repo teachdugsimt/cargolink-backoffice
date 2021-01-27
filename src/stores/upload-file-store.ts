@@ -5,10 +5,10 @@ export const UploadFileStore = types
   .model('UploadFileStore', {
     loading: false,
     truckPhotos: types.model({
-      front: types.string,
-      back: types.string,
-      left: types.string,
-      right: types.string,
+      front: types.maybeNull(types.string),
+      back: types.maybeNull(types.string),
+      left: types.maybeNull(types.string),
+      right: types.maybeNull(types.string),
     }),
     error_response: types.maybeNull(
       types.model({
@@ -53,14 +53,20 @@ export const UploadFileStore = types
         }
       }),
 
+      removeImage: flow(function* removeImage(imageName) {
+        let images = JSON.parse(JSON.stringify(self.truckPhotos));
+        images[`${imageName}`] = null;
+        self.truckPhotos = images;
+      }),
+
       clearUploadFileStore: flow(function* clearUploadFileStore() {
-        self.truckPhotos = { front: '', back: '', left: '', right: '' };
+        self.truckPhotos = { front: null, back: null, left: null, right: null };
         self.error_response = null;
       }),
     };
   })
   .create({
     loading: false,
-    truckPhotos: { front: '', back: '', left: '', right: '' },
+    truckPhotos: { front: null, back: null, left: null, right: null },
     error_response: null,
   });

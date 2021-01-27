@@ -10,9 +10,11 @@ import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
 import '../../../Layouts/css/style.css';
 
-interface Props {}
+interface ImageProps {
+  submitted: boolean;
+}
 
-const ImageUpload: React.FC<Props> = observer((props) => {
+const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
   const [render, setRender] = useState(false);
   const [imageUpload, setImageUpload] = useState({ front: '', back: '', left: '', right: '' });
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
@@ -60,6 +62,7 @@ const ImageUpload: React.FC<Props> = observer((props) => {
     let images = JSON.parse(JSON.stringify(imageUpload));
     images[`${imageName}`] = '';
     setImageUpload(images);
+    UploadFileStore.removeImage(imageName);
     setRender(!render);
   };
 
@@ -104,7 +107,10 @@ const ImageUpload: React.FC<Props> = observer((props) => {
             </div>
           </div>
         ) : (
-          <div className="block-upload-image">
+          <div
+            className="block-upload-image"
+            style={{ borderColor: submitted && !imageUpload.front ? '#ff3d71' : ' #d8d8d8' }}
+          >
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
               <label for="file-upload-front" className="custom-file-upload-photo">
                 <Icon icon={camera} style={{ marginRight: 5 }} />
@@ -139,7 +145,10 @@ const ImageUpload: React.FC<Props> = observer((props) => {
             </div>
           </div>
         ) : (
-          <div className="block-upload-image">
+          <div
+            className="block-upload-image"
+            style={{ borderColor: submitted && !imageUpload.back ? '#ff3d71' : ' #d8d8d8' }}
+          >
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
               <label for="file-upload-back" className="custom-file-upload-photo">
                 <Icon icon={camera} style={{ marginRight: 5 }} />
@@ -175,7 +184,10 @@ const ImageUpload: React.FC<Props> = observer((props) => {
             </div>
           </div>
         ) : (
-          <div className="block-upload-image">
+          <div
+            className="block-upload-image"
+            style={{ borderColor: submitted && !imageUpload.left ? '#ff3d71' : ' #d8d8d8' }}
+          >
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
               <label for="file-upload-left" className="custom-file-upload-photo">
                 <Icon icon={camera} style={{ marginRight: 5 }} />
@@ -210,7 +222,10 @@ const ImageUpload: React.FC<Props> = observer((props) => {
             </div>
           </div>
         ) : (
-          <div className="block-upload-image">
+          <div
+            className="block-upload-image"
+            style={{ borderColor: submitted && !imageUpload.right ? '#ff3d71' : ' #d8d8d8' }}
+          >
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
               <label for="file-upload-right" className="custom-file-upload-photo">
                 <Icon icon={camera} style={{ marginRight: 5 }} />
