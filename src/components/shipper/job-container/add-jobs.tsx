@@ -18,21 +18,26 @@ import th from 'date-fns/locale/th';
 registerLocale('th', th);
 
 const AddJobs: React.FC<{}> = observer(() => {
-  const { shipperStore, carrierStore } = useMst();
+  const { shipperStore, carrierStore, loginStore } = useMst();
 
   const { register, control, handleSubmit, watch, errors } = useForm({
-    mode: 'onChanges',
+    mode: 'onChange',
     reValidateMode: 'onChange',
     defaultValues: {
-      items: [{ contactName: '' }],
+      contactMobileNo: null,
+      contactName: null,
+      name: null,
+      productName: null,
+      productTypeId: null,
+      start: null,
+      truckAmount: null,
+      truckType: null,
+      weight: null,
+      items: [{ contactMobileNo: null, contactName: null, exdate: null, name: null }],
     },
   });
-  const [truckType, setTruckType] = useState({ value: 0, label: '' });
-  const [productTypeId, setProductTypeId] = useState({ value: 0, label: '' });
   const [truckTypeOptions, setTruckTypeOptions] = useState();
   const [productTypeIdOptions, setProductTypeIdOptions] = useState();
-  // const [startDate, setStartDate] = useState(new Date());
-  // const [toDate, setToDate] = useState(new Date());
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
   const { fields, append, remove } = useFieldArray({
@@ -92,6 +97,7 @@ const AddJobs: React.FC<{}> = observer(() => {
       }));
     setProductTypeIdOptions(array);
   }, [shipperStore.product_types]);
+
   const onSubmit = (data: any) => {
     if (data && data.truckType.value && data.productTypeId.value) {
       shipperStore.postJobs({
@@ -124,6 +130,7 @@ const AddJobs: React.FC<{}> = observer(() => {
       });
     }
   };
+
   return (
     <Card>
       <Alert setting={alertSetting} />
@@ -140,20 +147,19 @@ const AddJobs: React.FC<{}> = observer(() => {
               <Select
                 options={truckTypeOptions}
                 status={errors.truckType ? 'Danger' : 'Basic'}
-                placeholder="Select multiple"
-                onChange={(value: any) => setTruckType(value)}
+                placeholder="Please select"
                 fullWidth
               />
             }
             control={control}
             valueName="selected"
-            rules={{ required: 'Department cannot be null.' }}
+            rules={{ required: 'Truck Type cannot be null.' }}
             name="truckType"
             ref={register({ required: true })}
             aria-invalid={errors.truckType ? 'true' : 'false'}
           />
           {errors.truckType && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -172,7 +178,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             aria-invalid={errors.truckAmount ? 'true' : 'false'}
           />
           {errors.truckAmount && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -185,20 +191,19 @@ const AddJobs: React.FC<{}> = observer(() => {
               <Select
                 options={productTypeIdOptions}
                 status={errors.productTypeId ? 'Danger' : 'Basic'}
-                placeholder="Select multiple"
-                onChange={(value: any) => setProductTypeId(value)}
+                placeholder="Please select"
                 fullWidth
               />
             }
             control={control}
             valueName="selected"
-            rules={{ required: 'Department cannot be null.' }}
+            rules={{ required: 'Product Type cannot be null.' }}
             name="productTypeId"
             ref={register({ required: true })}
             aria-invalid={errors.productTypeId ? 'true' : 'false'}
           />
           {errors.productTypeId && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -217,7 +222,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             aria-invalid={errors.productName ? 'true' : 'false'}
           />
           {errors.productName && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -232,12 +237,17 @@ const AddJobs: React.FC<{}> = observer(() => {
             style={{
               borderColor: errors.weight ? '#ff3d71' : '',
             }}
-            ref={register({ required: true })}
+            ref={register({ required: true, min: 0 })}
             aria-invalid={errors.weight ? 'true' : 'false'}
           />
-          {errors.weight && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+          {errors.weight && errors.weight.type === 'required' && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
+            </span>
+          )}
+          {errors.weight && errors.weight.type === 'min' && (
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+              ต้องมีค่ามากกว่าหรือเท่ากับ 0
             </span>
           )}
           <hr style={{ margin: '1.125rem 0 0' }} />
@@ -257,7 +267,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             aria-invalid={errors.contactName ? 'true' : 'false'}
           />
           {errors.contactName && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -269,7 +279,7 @@ const AddJobs: React.FC<{}> = observer(() => {
               as={
                 <ReactDatePicker
                   className={errors.start ? 'errors-input-component' : 'new-input-component'}
-                  locale="th"
+                  locale={loginStore.language}
                   dateFormat="d MMM yyyy HH:mm"
                   selected={startDate ? new Date(startDate) : null}
                   showTimeSelect
@@ -284,7 +294,7 @@ const AddJobs: React.FC<{}> = observer(() => {
               }
               control={control}
               register={register({ required: true })}
-              rules={{ required: 'Department cannot be null.' }}
+              rules={{ required: 'Start from cannot be null.' }}
               name="start"
               aria-invalid={errors.start ? 'true' : 'false'}
               onChange={([selected]: any) => {
@@ -293,7 +303,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             />
           </Box>
           {errors.start && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -315,7 +325,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             aria-invalid={errors.name ? 'true' : 'false'}
           />
           {errors.name && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -334,7 +344,7 @@ const AddJobs: React.FC<{}> = observer(() => {
             aria-invalid={errors.contactMobileNo ? 'true' : 'false'}
           />
           {errors.contactMobileNo && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               This field is required
             </span>
           )}
@@ -364,15 +374,15 @@ const AddJobs: React.FC<{}> = observer(() => {
                   className="new-input-component"
                   type="text"
                   style={{
-                    borderColor: errors.items?.filter((e) => e.contactName) ? '#ff3d71' : '',
+                    borderColor: errors.items && errors.items[index]?.contactName ? '#ff3d71' : '',
                   }}
                   name={`items[${index}].contactName`}
                   defaultValue={contactName}
                   ref={register({ required: true })}
-                  aria-invalid={errors.items?.filter((e) => e.contactName) ? 'true' : 'false'}
+                  aria-invalid={errors.items && errors.items[index]?.contactName ? 'true' : 'false'}
                 />
-                {errors.items?.filter((e) => e.contactName) && (
-                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+                {errors.items && errors.items[index]?.contactName && (
+                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
                     This field is required
                   </span>
                 )}
@@ -384,9 +394,9 @@ const AddJobs: React.FC<{}> = observer(() => {
                     as={
                       <ReactDatePicker
                         className={
-                          errors.items?.filter((e) => e.exdate) ? 'errors-input-component' : 'new-input-component'
+                          errors.items && errors.items[index]?.exdate ? 'errors-input-component' : 'new-input-component'
                         }
-                        locale="th"
+                        locale={loginStore.language}
                         dateFormat="d MMM yyyy HH:mm"
                         selected={toDate ? new Date(toDate) : null}
                         showTimeSelect
@@ -403,15 +413,15 @@ const AddJobs: React.FC<{}> = observer(() => {
                     name={`items[${index}].exdate`}
                     rules={{ required: 'Department cannot be null.' }}
                     ref={register({ required: true })}
-                    aria-invalid={errors.items?.filter((e) => e.exdate) ? 'true' : 'false'}
+                    aria-invalid={errors.items && errors.items[index]?.exdate ? 'true' : 'false'}
                     defaultValue={toDate}
                     onChange={([selected]: any) => {
                       return { value: selected };
                     }}
                   />
                 </Box>
-                {errors.items?.filter((e) => e.exdate) && (
-                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+                {errors.items && errors.items[index]?.exdate && (
+                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
                     This field is required
                   </span>
                 )}
@@ -426,14 +436,14 @@ const AddJobs: React.FC<{}> = observer(() => {
                   type="text"
                   name={`items[${index}].name`}
                   style={{
-                    borderColor: errors.items?.filter((e) => e.name) ? '#ff3d71' : '',
+                    borderColor: errors.items && errors.items[index]?.name ? '#ff3d71' : '',
                   }}
                   ref={register({ required: true })}
-                  aria-invalid={errors.items?.filter((e) => e.name) ? 'true' : 'false'}
+                  aria-invalid={errors.items && errors.items[index]?.name ? 'true' : 'false'}
                   defaultValue={name}
                 />
-                {errors.items?.filter((e) => e.name) && (
-                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+                {errors.items && errors.items[index]?.name && (
+                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
                     This field is required
                   </span>
                 )}
@@ -446,14 +456,14 @@ const AddJobs: React.FC<{}> = observer(() => {
                   name={`items[${index}].contactMobileNo`}
                   maxLength={10}
                   style={{
-                    borderColor: errors.items?.filter((e) => e.contactMobileNo) ? '#ff3d71' : '',
+                    borderColor: errors.items && errors.items[index]?.contactMobileNo ? '#ff3d71' : '',
                   }}
                   defaultValue={contactMobileNo}
                   ref={register({ required: true })}
-                  aria-invalid={errors.items?.filter((e) => e.contactMobileNo) ? 'true' : 'false'}
+                  aria-invalid={errors.items && errors.items[index]?.contactMobileNo ? 'true' : 'false'}
                 />
-                {errors.items?.filter((e) => e.contactMobileNo) && (
-                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }} role="alert">
+                {errors.items && errors.items[index]?.contactMobileNo && (
+                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
                     This field is required
                   </span>
                 )}
