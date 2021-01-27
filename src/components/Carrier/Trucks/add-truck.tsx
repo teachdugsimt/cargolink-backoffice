@@ -242,15 +242,21 @@ const AddTruck: React.FC<Props> = observer((props) => {
             โซนที่วิ่งงาน <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <Controller
-            as={
-              <Select
-                status={errors.region ? 'Danger' : 'Basic'}
-                options={filterRegion}
-                placeholder="ภูมิภาค"
-                fullWidth
-              />
-            }
-            onChange={(event: any) => onChangeRegion(event)}
+            as={({ onChange, value }) => {
+              return (
+                <Select
+                  status={errors.region ? 'Danger' : 'Basic'}
+                  options={filterRegion}
+                  placeholder="ภูมิภาค"
+                  fullWidth
+                  value={value}
+                  onChange={(event: any) => {
+                    onChangeRegion(event);
+                    onChange(event);
+                  }}
+                />
+              );
+            }}
             control={control}
             valueName="selected"
             rules={{ required: 'Department cannot be null.' }}
@@ -266,15 +272,21 @@ const AddTruck: React.FC<Props> = observer((props) => {
           )}
           <br />
           <Controller
-            as={
-              <Select
-                status={errors.province ? 'Danger' : 'Basic'}
-                options={filterProvince}
-                placeholder="จังหวัด"
-                fullWidth
-                onChange={(event: any) => onChangeProvince(event)}
-              />
-            }
+            as={({ onChange, value }) => {
+              return (
+                <Select
+                  status={errors.province ? 'Danger' : 'Basic'}
+                  options={filterProvince}
+                  placeholder="จังหวัด"
+                  fullWidth
+                  value={value}
+                  onChange={(event: any) => {
+                    onChange(event);
+                    onChangeProvince(event);
+                  }}
+                />
+              );
+            }}
             control={control}
             valueName="selected"
             rules={{ required: 'Department cannot be null.' }}
