@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { useMst } from '../../../stores/root-store';
 import { navigate } from 'gatsby';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 // import DatePicker from 'react-datepicker';
 import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -18,6 +19,7 @@ import th from 'date-fns/locale/th';
 registerLocale('th', th);
 
 const AddJobs: React.FC<{}> = observer(() => {
+  const { t } = useTranslation();
   const { shipperStore, carrierStore, loginStore } = useMst();
 
   const { register, control, handleSubmit, watch, errors } = useForm({
@@ -135,19 +137,19 @@ const AddJobs: React.FC<{}> = observer(() => {
     <Card>
       <Alert setting={alertSetting} />
       <CardHeader>
-        <span>เพิ่มข้อมูลรถ</span>
+        <span>{t('addDataCar')}</span>
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)} className="form-add-data">
           <p>
-            ประเภทของรถที่คุณต้องการ <span style={{ color: '#ff3d71' }}>*</span>
+            {t('typeCar')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <Controller
             as={
               <Select
                 options={truckTypeOptions}
                 status={errors.truckType ? 'Danger' : 'Basic'}
-                placeholder="Please select"
+                placeholder={t('pleaseselect')}
                 fullWidth
               />
             }
@@ -160,11 +162,11 @@ const AddJobs: React.FC<{}> = observer(() => {
           />
           {errors.truckType && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldTruckType')}
             </span>
           )}
           <p>
-            จำนวนคันรถที่ต้องการ <span style={{ color: '#ff3d71' }}>*</span>
+            {t('truckAmount')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <input
             className="new-input-component"
@@ -179,19 +181,19 @@ const AddJobs: React.FC<{}> = observer(() => {
           />
           {errors.truckAmount && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldTruckAmount')}
             </span>
           )}
           <hr style={{ margin: '1.125rem 0' }} />
           <p>
-            ข้อมูลสินค้าที่ต้องการส่ง <span style={{ color: '#ff3d71' }}>*</span>
+            {t('productType')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <Controller
             as={
               <Select
                 options={productTypeIdOptions}
                 status={errors.productTypeId ? 'Danger' : 'Basic'}
-                placeholder="Please select"
+                placeholder={t('pleaseselect')}
                 fullWidth
               />
             }
@@ -204,11 +206,11 @@ const AddJobs: React.FC<{}> = observer(() => {
           />
           {errors.productTypeId && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldproductType')}
             </span>
           )}
           <p>
-            ระบุชื่อสินค้าของคุณ <span style={{ color: '#ff3d71' }}>*</span>
+            {t('productName')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <input
             className="new-input-component"
@@ -223,11 +225,11 @@ const AddJobs: React.FC<{}> = observer(() => {
           />
           {errors.productName && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldproductName')}
             </span>
           )}
           <p>
-            ระบุจำนวนน้ำหนัก (ตัน) <span style={{ color: '#ff3d71' }}>*</span>
+            {t('amountWeight')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <input
             className="new-input-component"
@@ -242,18 +244,20 @@ const AddJobs: React.FC<{}> = observer(() => {
           />
           {errors.weight && errors.weight.type === 'required' && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldWeight')}
             </span>
           )}
           {errors.weight && errors.weight.type === 'min' && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              ต้องมีค่ามากกว่าหรือเท่ากับ 0
+              {t('minWeight')}
             </span>
           )}
           <hr style={{ margin: '1.125rem 0 0' }} />
-          <p style={{ fontWeight: 'bold', backgroundColor: '#253858', padding: 10, color: 'white' }}>จุดส่งสินค้า</p>
+          <p style={{ fontWeight: 'bold', backgroundColor: '#253858', padding: 10, color: 'white' }}>
+            {t('deliveryPoint')}
+          </p>
           <p>
-            ระบุสถานที่ที่ส่งสินค้า <span style={{ color: '#ff3d71' }}>*</span>
+            {t('deliveryLocation')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <input
             className="new-input-component"
@@ -268,11 +272,11 @@ const AddJobs: React.FC<{}> = observer(() => {
           />
           {errors.contactName && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldDeliveryLocation')}
             </span>
           )}
           <p>
-            วัน-เวลา ส่งที่ต้องการ <span style={{ color: '#ff3d71' }}>*</span>
+            {t('dateStart')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <Box sx={{ maxWidth: '400px' }} as="form" onSubmit={handleSubmit((data) => console.log(data))}>
             <Controller
@@ -304,13 +308,13 @@ const AddJobs: React.FC<{}> = observer(() => {
           </Box>
           {errors.start && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldDateStart')}
             </span>
           )}
           <div style={{ display: 'flex' }}>
-            <p style={{ fontWeight: 'bold', marginRight: 5 }}>ข้อมูลติดต่อจุดส่งสินค้า: </p>
+            <p style={{ fontWeight: 'bold', marginRight: 5 }}>{t('deliveryPointInformation')}: </p>
             <p>
-              ชื่อผู้ส่งสินค้า <span style={{ color: '#ff3d71' }}>*</span>
+              {t('shipperName')} <span style={{ color: '#ff3d71' }}>*</span>
             </p>
           </div>
           <input
@@ -326,11 +330,11 @@ const AddJobs: React.FC<{}> = observer(() => {
           />
           {errors.name && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldShipperName')}
             </span>
           )}
           <p>
-            เบอร์ติดต่อ <span style={{ color: '#ff3d71' }}>*</span>
+            {t('contactNumber')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <input
             className="new-input-component"
@@ -345,7 +349,7 @@ const AddJobs: React.FC<{}> = observer(() => {
           />
           {errors.contactMobileNo && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldContactNumber')}
             </span>
           )}
           <hr style={{ margin: '1.125rem 0 0' }} />
@@ -358,16 +362,18 @@ const AddJobs: React.FC<{}> = observer(() => {
               marginBottom: 0,
             }}
           >
-            จุดรับสินค้า
+            {t('pickUp')}
           </p>
           {fields.map(({ id, contactName, name, contactMobileNo, exdate }, index) => {
             const toDate = watch(`items[${index}].exdate`);
             return (
               <div key={id}>
                 <div style={{ display: 'flex' }}>
-                  <p style={{ fontWeight: 'bold', marginRight: 5 }}>จุดรับสินค้าที่ {index == 0 ? 1 : index + 1}: </p>
+                  <p style={{ fontWeight: 'bold', marginRight: 5 }}>
+                    {t('pickUpAt')} {index == 0 ? 1 : index + 1}:{' '}
+                  </p>
                   <p>
-                    ระบุสถานที่ที่เข้ารับสินค้า <span style={{ color: '#ff3d71' }}>*</span>
+                    {t('pickupLocation')} <span style={{ color: '#ff3d71' }}>*</span>
                   </p>
                 </div>
                 <input
@@ -383,11 +389,11 @@ const AddJobs: React.FC<{}> = observer(() => {
                 />
                 {errors.items && errors.items[index]?.contactName && (
                   <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-                    This field is required
+                    {t('fieldPickupLocation')}
                   </span>
                 )}
                 <p>
-                  วัน-เวลา รับสินค้าที่ต้องการ <span style={{ color: '#ff3d71' }}>*</span>
+                  {t('endDate')} <span style={{ color: '#ff3d71' }}>*</span>
                 </p>
                 <Box sx={{ maxWidth: '400px' }} as="form" onSubmit={handleSubmit((data) => console.log(data))}>
                   <Controller
@@ -422,13 +428,13 @@ const AddJobs: React.FC<{}> = observer(() => {
                 </Box>
                 {errors.items && errors.items[index]?.exdate && (
                   <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-                    This field is required
+                    {t('fieldDateStart')}
                   </span>
                 )}
                 <div style={{ display: 'flex' }}>
-                  <p style={{ fontWeight: 'bold', marginRight: 5 }}>ข้อมูลติดต่อจุดรับสินค้า: </p>
+                  <p style={{ fontWeight: 'bold', marginRight: 5 }}>{t('pickUpPointInformation')}: </p>
                   <p>
-                    ชื่อผู้รับสินค้า <span style={{ color: '#ff3d71' }}>*</span>
+                    {t('consigneeName')} <span style={{ color: '#ff3d71' }}>*</span>
                   </p>
                 </div>
                 <input
@@ -444,11 +450,11 @@ const AddJobs: React.FC<{}> = observer(() => {
                 />
                 {errors.items && errors.items[index]?.name && (
                   <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-                    This field is required
+                    {t('fieldConsigneeName')}
                   </span>
                 )}
                 <p>
-                  เบอร์ติดต่อ <span style={{ color: '#ff3d71' }}>*</span>
+                  {t('contactNumber')} <span style={{ color: '#ff3d71' }}>*</span>
                 </p>
                 <input
                   className="new-input-component"
@@ -464,7 +470,7 @@ const AddJobs: React.FC<{}> = observer(() => {
                 />
                 {errors.items && errors.items[index]?.contactMobileNo && (
                   <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-                    This field is required
+                    {t('fieldContactNumber')}
                   </span>
                 )}
                 {index == 0 ? (
