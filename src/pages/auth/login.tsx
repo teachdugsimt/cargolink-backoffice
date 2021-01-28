@@ -12,10 +12,11 @@ import Spinner from '@paljs/ui/Spinner';
 import Alert from '../../components/alert';
 import { useMst } from '../../stores/root-store';
 import { defaultAlertSetting } from '../../components/simple-data';
+import { useTranslation } from 'react-i18next';
 
 const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageContext }) => {
   const { loginStore } = useMst();
-
+  const { t } = useTranslation();
   const [checkbox, setCheckbox] = useState({ 1: false });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -72,7 +73,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
   };
 
   return (
-    <Auth title="" subTitle="Login with your phone number">
+    <Auth title="" subTitle={t('loginSubtitle')}>
       <Alert setting={alertSetting} />
       <SEO title="Login" />
       <form>
@@ -86,15 +87,13 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
         >
           <input
             type="text"
-            placeholder="Phone Number"
+            placeholder={t('phoneNumber')}
             value={email}
             onChange={(event) => onChangeEmail(event.target.value)}
           />
         </InputGroup>
         {toggle && !email ? (
-          <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>
-            * Please input a valid phone number
-          </span>
+          <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>* {t('loginError1')}</span>
         ) : null}
         <InputGroup
           status={toggle && !password ? 'Danger' : 'Basic'}
@@ -103,20 +102,20 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
         >
           <input
             type="password"
-            placeholder="Password"
+            placeholder={t('password')}
             value={password}
             onChange={(event) => onChangePassword(event.target.value)}
           />
         </InputGroup>
         {toggle && !password ? (
-          <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>* Please input a valid password</span>
+          <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>* {t('loginError2')}</span>
         ) : null}
         <Group>
           <Checkbox checked={checkbox[1]} onChange={(value) => onChangeCheckbox(value, 1)}>
-            Remember me
+            {t('rememberMe')}
           </Checkbox>
           <Link to="/auth/request-password" style={{ textDecoration: 'none' }}>
-            Forgot Password?
+            {t('forgotPassword')}
           </Link>
         </Group>
         <Button
@@ -134,19 +133,19 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           {loginStore.fetching_login ? (
             <div>
               <Spinner status="Basic">
-                <span style={{ color: 'white' }}>Loading...</span>
+                <span style={{ color: 'white' }}>{t('loding')}</span>
               </Spinner>
               .
             </div>
           ) : (
-            'Login'
+            `${t('login')}`
           )}
         </Button>
       </form>
       <p>
-        Don&apos;t have account?{' '}
+        {t('loginDescription')}{' '}
         <Link to="/auth/register" style={{ textDecoration: 'none' }}>
-          Register
+          {t('register')}
         </Link>
       </p>
     </Auth>
