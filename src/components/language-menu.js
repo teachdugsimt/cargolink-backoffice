@@ -41,7 +41,14 @@ const LanguageMenu = (props) => {
 
   return (
     <Select
-      style={{ background: '#fff', borderRadius: 5, width: 80, textAlign: 'center', textAlignLast: 'center' }}
+      style={{
+        background: '#fff',
+        borderRadius: 5,
+        width: 80,
+        textAlign: 'center',
+        textAlignLast: 'center',
+        display: 'flex',
+      }}
       value={values.language}
       onChange={(e) => handleChange(e)}
       disableUnderline
@@ -53,15 +60,15 @@ const LanguageMenu = (props) => {
       }}
     >
       <MenuItem value={'th'}>
-        <div style={{ display: 'flex' }}>
-          <img src={thailand} style={{ width: 20, height: 20, margin: '0px 5px', alignItems: 'center' }} />
-          <span>TH</span>
+        <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+          <img src={thailand} style={{ width: 22, height: 22, margin: '0px 5px' }} />
+          <span style={{ marginTop: 2 }}>TH</span>
         </div>
       </MenuItem>
       <MenuItem value={'en'}>
-        <div style={{ display: 'flex' }}>
-          <img src={united_kingdom} style={{ width: 20, height: 20, margin: '0px 5px', alignItems: 'center' }} />
-          <span>EN</span>
+        <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+          <img src={united_kingdom} style={{ width: 22, height: 22, margin: '0px 5px' }} />
+          <span style={{ marginTop: 2 }}>EN</span>
         </div>
       </MenuItem>
     </Select>
