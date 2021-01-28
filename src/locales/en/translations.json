@@ -46,5 +46,6 @@
     "endDate":"Receiving Date-time",
     "pickUpPointInformation":"Pick up point contact information",
     "consigneeName":"Consignee name",
-    "fieldConsigneeName":"This field consignee name is required"
+    "fieldConsigneeName":"This field consignee name is required",
+    "tipper":"Does the car have a tipper?"
   }

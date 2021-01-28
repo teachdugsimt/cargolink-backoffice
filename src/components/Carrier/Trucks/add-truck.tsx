@@ -13,6 +13,7 @@ import { regionOptions, stallHeightOption, provinceOptions } from './dynamic-tab
 import { navigate } from 'gatsby';
 import '../../../Layouts/css/style.css';
 import { UploadFileStore } from '../../../stores/upload-file-store';
+import { useTranslation } from 'react-i18next';
 
 const provinces = provinceOptions.sort((a, b) => {
   if (a.label < b.label) return -1;
@@ -23,6 +24,7 @@ const provinces = provinceOptions.sort((a, b) => {
 interface Props {}
 
 const AddTruck: React.FC<Props> = observer((props) => {
+  const { t } = useTranslation();
   const { carrierStore } = useMst();
   const truckPhotos = JSON.parse(JSON.stringify(UploadFileStore.truckPhotos));
   const { register, handleSubmit, errors, control } = useForm({
@@ -118,12 +120,12 @@ const AddTruck: React.FC<Props> = observer((props) => {
     <Card>
       <Alert setting={alertSetting} />
       <CardHeader>
-        <span>เพิ่มข้อมูลรถ</span>
+        <span>{t('addDataCar')}</span>
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)} className="form-add-data">
           <p>
-            เลือกประเภทของรถของคุณ <span style={{ color: '#ff3d71' }}>*</span>
+            {t('typeCar')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <Controller
             as={
@@ -143,11 +145,11 @@ const AddTruck: React.FC<Props> = observer((props) => {
           />
           {errors.truckType && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldTruckType')}
             </span>
           )}
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <p>รถมีที่ดั้มหรือไม่</p>
+            <p>{t('tipper')}</p>
             <Switch
               checked={checkbox}
               onChange={() => setCheckbox(!checkbox)}
