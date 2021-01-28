@@ -11,7 +11,6 @@ const MainLayout: React.FC<{ children: any }> = observer(({ children }) => {
 
   useEffect(() => {
     i18n.changeLanguage(loginStore.language);
-    console.log('language:>>', loginStore.language);
   }, []);
 
   return <LayoutColumn className="main-content">{children}</LayoutColumn>;

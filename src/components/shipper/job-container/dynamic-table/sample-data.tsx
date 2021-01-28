@@ -2,11 +2,7 @@ import React from 'react';
 import { Icon } from 'react-icons-kit';
 import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
 import images from '../../../Themes/images';
-import moment from 'moment';
-import 'moment/locale/th';
-moment.locale('th');
-
-const nf = new Intl.NumberFormat();
+import { momentFormatDateTime } from '../../../simple-data';
 
 export const createHead = (withWidth: boolean) => {
   return {
@@ -54,7 +50,7 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const createRow = (jobs: any, products: any) => {
+export const createRow = (jobs: any, products: any, language: string) => {
   return jobs.map((jobpost: any, index: number) => {
     const productType = products?.length && products.find((prod: any) => prod.id === jobpost.productTypeId);
     const typeName = productType ? productType.name : '';
@@ -90,7 +86,7 @@ export const createRow = (jobs: any, products: any) => {
                 <span style={{ padding: '2px 0', display: 'flex' }}>
                   <div style={{ border: '1px dashed black', margin: '0 13px 0 10px' }} />
                   <Icon style={{ color: '#FBBC12', marginRight: 5 }} icon={ic_access_time} />
-                  {` ${moment(jobpost.from?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
+                  {` ${momentFormatDateTime(jobpost.from?.dateTime, language)}`}
                 </span>
               </div>
               <div style={{ marginBottom: 5 }}>
@@ -104,7 +100,7 @@ export const createRow = (jobs: any, products: any) => {
                       </span>
                       <span style={{ padding: 2, marginLeft: 23 }}>
                         <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />
-                        {` ${moment(e?.dateTime, 'DD-MM-YYYY HH:mm').add(543, 'year').format('LLL')}`}
+                        {` ${momentFormatDateTime(e?.dateTime, language)}`}
                       </span>
                     </div>
                   );

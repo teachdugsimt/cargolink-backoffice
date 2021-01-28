@@ -2,25 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useMst } from '../../../stores/root-store';
 import TruckForm from './truck-form';
-import moment from 'moment';
 import images from '../../Themes/images';
-import { defaultAlertSetting } from '../../simple-data';
-
-import 'moment/locale/th';
-moment.locale('th');
-
-function sortByDate(input: string) {
-  return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
-}
+import { defaultAlertSetting, momentFormat } from '../../simple-data';
 
 const TruckForApproval: React.FC<{}> = observer(({}) => {
-  const { carrierStore } = useMst();
+  const { carrierStore, loginStore } = useMst();
   const [rowData, setRowData] = useState([]);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
   useEffect(() => {
     carrierStore.getAllTrucksByCarrier();
   }, []);
+
+  useEffect(() => {
+    carrierStore.getAllTrucksByCarrier();
+  }, [loginStore.language]);
 
   useEffect(() => {
     const { loading } = carrierStore;
@@ -165,13 +161,13 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
             content: truck.approveStatus,
           },
           {
-            key: sortByDate(truck.createdAt),
-            content: moment(truck.createdAt, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
+            key: momentFormat(truck.createdAt, loginStore.language),
+            content: momentFormat(truck.createdAt, loginStore.language),
           },
         ],
       }));
     setRowData(rows);
-  }, [carrierStore.trucks_carrier?.length]);
+  }, [carrierStore.trucks_carrier?.length, loginStore.language]);
 
   return <TruckForm rows={rowData} alertSetting={alertSetting} />;
 });

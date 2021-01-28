@@ -23,7 +23,7 @@ const Input = styled(InputGroup)`
 `;
 
 const DriverForApproval: React.FC<{}> = observer(({}) => {
-  const { carrierStore } = useMst();
+  const { carrierStore, loginStore } = useMst();
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   const [rowData, setRowData] = useState(rows);
@@ -33,9 +33,12 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
 
   useEffect(() => {
     carrierStore.getAllDriversByCarrier();
-    // carrierStore.trucks_carrier;
-    // console.log('data :>>', JSON.parse(JSON.stringify(carrierStore.trucks_carrier)));
   }, []);
+
+  useEffect(() => {
+    carrierStore.getAllDriversByCarrier();
+  }, [loginStore.language]);
+
   const onClickSearch = () => {
     const lowercasedValue = searchValue.toLowerCase().trim();
     if (lowercasedValue === '') setRowData(rows);

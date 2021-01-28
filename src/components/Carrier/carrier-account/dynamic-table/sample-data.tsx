@@ -1,8 +1,6 @@
 import React from 'react';
-import { Button, ButtonLink } from '@paljs/ui/Button';
-
+import { Button } from '@paljs/ui/Button';
 import { carriers } from './carriers';
-
 import { Icon } from 'react-icons-kit';
 import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
@@ -21,10 +19,6 @@ interface Carrier {
 
 function sortByDate(input: string) {
   return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
-}
-
-function createKey(input: string) {
-  return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
 }
 
 export const caption = `Results found: ${carriers.length}`;
@@ -104,7 +98,7 @@ export const rows = carriers.map((carrier: Carrier, index: number) => ({
     },
     {
       key: sortByDate(carrier.register_date),
-      content: moment(carrier.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
+      content: sortByDate(carrier.register_date),
     },
     {
       key: carrier.date_approve,

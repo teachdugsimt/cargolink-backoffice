@@ -27,7 +27,7 @@ const Wrapper = styled.div`
 interface Props {}
 const JobContainer: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
-  const { shipperStore } = useMst();
+  const { shipperStore, loginStore } = useMst();
   const [rows, setRows] = useState([]);
   const [rowData, setRowData] = useState([]);
   const [productTypes, setProductTypes] = useState([]);
@@ -43,6 +43,15 @@ const JobContainer: React.FC<Props> = observer(() => {
       page: 0,
     });
   }, []);
+
+  useEffect(() => {
+    shipperStore.getProductTypes();
+    shipperStore.clearShipperStore();
+    shipperStore.getAllJobsByShipper({
+      descending: true,
+      page: 0,
+    });
+  }, [loginStore.language]);
 
   useEffect(() => {
     const { loading } = shipperStore;
@@ -71,11 +80,11 @@ const JobContainer: React.FC<Props> = observer(() => {
   useEffect(() => {
     const jobs_shipper = JSON.parse(JSON.stringify(shipperStore.jobs_shipper));
     if (jobs_shipper?.length) {
-      const rows = createRow(jobs_shipper, productTypes);
+      const rows = createRow(jobs_shipper, productTypes, loginStore.language);
       setRows(rows);
       setRowData(rows);
     }
-  }, [shipperStore.jobs_shipper?.length, productTypes]);
+  }, [shipperStore.jobs_shipper?.length, productTypes, loginStore.language]);
 
   useEffect(() => {
     const product_types = JSON.parse(JSON.stringify(shipperStore.product_types));
