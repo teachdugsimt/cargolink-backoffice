@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { Card, CardBody } from '@paljs/ui/Card';
 import { breakpointDown } from '@paljs/ui/breakpoints';
 import React from 'react';
-import { withTrans } from '../../i18n/withTrans'
-
+import { withTrans } from '../../i18n/withTrans';
+import images from '../Themes/images';
 
 const AuthStyle = styled.div<{ subTitle?: string }>`
   margin: auto;
@@ -55,6 +55,11 @@ const Auth: React.FC<AuthProps> = ({ subTitle, title, children }) => {
     <CardAuth>
       <CardBody>
         <AuthStyle subTitle={subTitle}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: 200 }}>
+              <img src={images.logo} style={{ maxWidth: '100%', height: 'auto' }} />
+            </div>
+          </div>
           <h1>{title}</h1>
           {subTitle && <p>{subTitle}</p>}
           {children}

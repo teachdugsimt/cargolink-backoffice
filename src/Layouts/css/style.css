@@ -137,6 +137,9 @@ input[type='file'] {
 .react-datepicker__triangle {
   left: 50px !important;
 }
+.brsVJf {
+  position: inherit !important;
+}
 
 @media screen and (min-width: 399.8px) {
   .header-logo {
@@ -159,20 +162,8 @@ input[type='file'] {
   }
 }
 
-@media screen and (min-width: 576px) {
-  .CMplq {
-    margin-left: 56px;
-  }
-}
-
 @media screen and (min-width: 991.8px) {
   .form-add-data {
     padding: 10px 5rem;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  .CMplq {
-    margin-left: 0px;
   }
 }

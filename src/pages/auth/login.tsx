@@ -7,7 +7,6 @@ import { Link } from 'gatsby';
 import { navigate } from 'gatsby';
 
 import Auth, { Group } from '../../components/Auth';
-import Socials from '../../components/Auth/Socials';
 import SEO from '../../components/SEO';
 import Spinner from '@paljs/ui/Spinner';
 import Alert from '../../components/alert';
@@ -73,7 +72,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
   };
 
   return (
-    <Auth title="Login" subTitle="Hello! Login with your phone number">
+    <Auth title="" subTitle="Login with your phone number">
       <Alert setting={alertSetting} />
       <SEO title="Login" />
       <form>
@@ -113,10 +112,16 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           <Checkbox checked={checkbox[1]} onChange={(value) => onChangeCheckbox(value, 1)}>
             Remember me
           </Checkbox>
-          <Link to="/auth/request-password">Forgot Password?</Link>
+          <Link to="/auth/request-password" style={{ textDecoration: 'none' }}>
+            Forgot Password?
+          </Link>
         </Group>
         <Button
-          style={{ position: loginStore.fetching_login ? 'relative' : 'initial' }}
+          style={{
+            position: loginStore.fetching_login ? 'relative' : 'initial',
+            backgroundColor: '#00b132',
+            borderColor: '#00b132',
+          }}
           status="Success"
           type="button"
           shape="SemiRound"
@@ -135,9 +140,11 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           )}
         </Button>
       </form>
-      {/* <Socials /> */}
       <p>
-        Don&apos;t have account? <Link to="/auth/register">Register</Link>
+        Don&apos;t have account?{' '}
+        <Link to="/auth/register" style={{ textDecoration: 'none' }}>
+          Register
+        </Link>
       </p>
     </Auth>
   );

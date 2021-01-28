@@ -182,6 +182,7 @@ const SidebarStyle = styled.aside<SidebarStyleProps>`
       display: flex;
       flex-direction: column;
       transition: width 0.3s cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+      background-color: white;
       ${state === 'hidden'
         ? 'width: 0;padding: 0;'
         : state === 'compacted'
