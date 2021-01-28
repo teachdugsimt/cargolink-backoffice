@@ -58,5 +58,16 @@
   "pickUpPointInformation":"ข้อมูลติดต่อจุดรับสินค้า",
   "consigneeName":"ชื่อผู้รับสินค้า",
   "fieldConsigneeName":"ต้องระบุชื่อผู้รับสินค้าในฟิลด์นี้",
-  "tipper":"รถมีที่ดั้มหรือไม่?"
+  "tipper":"รถมีที่ดั้มหรือไม่?",
+  "stallHeight":"ความสูงของคอกรถ (หน่วยเป็นเมตร)",
+  "fieldStallHeight":"ต้องระบุความสูงในฟิลด์นี้",
+  "registrationNumber":"เลขทะเบียนรถ",
+  "fieldRegistrationNumber":"ต้องระบุเลขทะเบียนรถในฟิลด์นี้",
+  "uploadCar":"อัพโหลดรูปภาพรถ",
+  "fieldUploadCar":"ต้องอัพโหลดรูปภาพรถในฟิลด์นี้",
+  "zoneWork":"โซนที่วิ่งงาน",
+  "fieldRegion":"ต้องระบุภูมิภาคในฟิลด์นี้",
+  "fieldProvince":"ต้องระบุจังหวัดในฟิลด์นี้",
+  "region":"ภูมิภาค",
+  "province":"จังหวัด"
 }

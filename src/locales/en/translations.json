@@ -58,5 +58,16 @@
   "pickUpPointInformation":"Pick up point contact information",
   "consigneeName":"Consignee name",
   "fieldConsigneeName":"This field consignee name is required",
-  "tipper":"Does the car have a tipper?"
+  "tipper":"Does the car have a tipper?",
+  "stallHeight":"Height of the car stall (In meters)",
+  "fieldStallHeight":"This field Height is required",
+  "registrationNumber":"Vehicle registration number",
+  "fieldRegistrationNumber":"This field registration number is required",
+  "uploadCar":"Upload car pictures",
+  "fieldUploadCar":"This field upload car pictures is required",
+  "zoneWork":"Zone working",
+  "fieldRegion":"This field region is required",
+  "fieldProvince":"This field province is required",
+  "region":"region",
+  "province":"province"
 }

@@ -132,7 +132,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
               <Select
                 options={truckTypeOptions}
                 status={errors.truckType ? 'Danger' : 'Basic'}
-                placeholder="Select multiple"
+                placeholder={t('pleaseselect')}
                 fullWidth
               />
             }
@@ -158,14 +158,14 @@ const AddTruck: React.FC<Props> = observer((props) => {
             />
           </div>
           <p>
-            ความสูงของคอกรถ (หน่วยเป็นเมตร) <span style={{ color: '#ff3d71' }}>*</span>
+            {t('stallHeight')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <Controller
             as={
               <Select
                 options={stallHeightOption}
                 status={errors.stallHeight ? 'Danger' : 'Basic'}
-                placeholder="Select multiple"
+                placeholder={t('pleaseselect')}
                 fullWidth
               />
             }
@@ -178,11 +178,11 @@ const AddTruck: React.FC<Props> = observer((props) => {
           />
           {errors.stallHeight && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldStallHeight')}
             </span>
           )}
           <p>
-            ระบุจำนวนน้ำหนัก (ตัน) <span style={{ color: '#ff3d71' }}>*</span>
+            {t('amountWeight')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <input
             className="new-input-component"
@@ -196,19 +196,19 @@ const AddTruck: React.FC<Props> = observer((props) => {
           />
           {errors.loadingWeight && errors.loadingWeight.type === 'required' && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldWeight')}
             </span>
           )}
           {errors.loadingWeight && errors.loadingWeight.type === 'min' && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              ต้องมีค่ามากกว่าหรือเท่ากับ 0
+              {t('minWeight')}
             </span>
           )}
           <hr style={{ margin: '1.125rem 0 0' }} />
           <div style={{ display: 'flex' }}>
             <p style={{ fontWeight: 'bold', marginRight: 5 }}>ข้อมูลรถของคุณ: </p>
             <p>
-              เลขทะเบียนรถ <span style={{ color: '#ff3d71' }}>*</span>
+              {t('registrationNumber')} <span style={{ color: '#ff3d71' }}>*</span>
             </p>
           </div>
           <input
@@ -223,23 +223,23 @@ const AddTruck: React.FC<Props> = observer((props) => {
           />
           {errors.registrationNumber && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldRegistrationNumber')}
             </span>
           )}
           <hr style={{ margin: '1.125rem 0' }} />
           <p>
-            อัพโหลดรูปภาพรถ <span style={{ color: '#ff3d71' }}>*</span>
+            {t('uploadCar')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <br />
           <ImageUpload submitted={toggle} />
           {toggle && (!truckPhotos.front || !truckPhotos.back || !truckPhotos.left || !truckPhotos.left) && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldUploadCar')}
             </span>
           )}
           <hr style={{ margin: '1.125rem 0' }} />
           <p>
-            โซนที่วิ่งงาน <span style={{ color: '#ff3d71' }}>*</span>
+            {t('zoneWork')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <Controller
             as={({ onChange, value }) => {
@@ -247,7 +247,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
                 <Select
                   status={errors.region ? 'Danger' : 'Basic'}
                   options={filterRegion}
-                  placeholder="ภูมิภาค"
+                  placeholder={t('region')}
                   fullWidth
                   value={value}
                   onChange={(event: any) => {
@@ -266,7 +266,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
           />
           {errors.region && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldRegion')}
               <br />
             </span>
           )}
@@ -277,7 +277,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
                 <Select
                   status={errors.province ? 'Danger' : 'Basic'}
                   options={filterProvince}
-                  placeholder="จังหวัด"
+                  placeholder={t('province')}
                   fullWidth
                   value={value}
                   onChange={(event: any) => {
@@ -297,7 +297,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
 
           {errors.province && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              This field is required
+              {t('fieldProvince')}
             </span>
           )}
           <br />
