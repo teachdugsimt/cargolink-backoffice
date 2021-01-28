@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'gatsby';
 import { navigate } from 'gatsby';
-
+import LanguageMenu from '../../components/language-menu';
 import Auth, { Group } from '../../components/Auth';
 import SEO from '../../components/SEO';
 import Spinner from '@paljs/ui/Spinner';
@@ -76,6 +76,9 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
       <Alert setting={alertSetting} />
       <SEO title="Login" />
       <form>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 5 }}>
+          <LanguageMenu />
+        </div>
         <InputGroup
           status={toggle && !email ? 'Danger' : 'Basic'}
           style={{ marginBottom: toggle && !email ? 0 : '2rem' }}
