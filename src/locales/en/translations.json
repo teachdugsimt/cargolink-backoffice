@@ -69,5 +69,6 @@
   "fieldRegion":"This field region is required",
   "fieldProvince":"This field province is required",
   "region":"region",
-  "province":"province"
+  "province":"province",
+  "clickTime":"Click to select time"
 }

@@ -290,7 +290,7 @@ const AddJobs: React.FC<{}> = observer(() => {
                   // todayButton="Today"
                   dropdownMode="select"
                   isClearable
-                  placeholderText="Click to select time"
+                  placeholderText={t('clickTime')}
                   timeFormat="HH:mm"
                   timeIntervals={1}
                   shouldCloseOnSelect
@@ -409,7 +409,7 @@ const AddJobs: React.FC<{}> = observer(() => {
                         // todayButton="Today"
                         dropdownMode="select"
                         isClearable
-                        placeholderText="Click to select time"
+                        placeholderText={t('clickTime')}
                         timeFormat="HH:mm"
                         timeIntervals={1}
                         shouldCloseOnSelect
