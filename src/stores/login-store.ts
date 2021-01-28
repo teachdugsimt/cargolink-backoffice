@@ -16,6 +16,7 @@ export const LoginStore = types
     return {
       setLanguage: flow(function* setLanguage(param) {
         self.language = param;
+        localStorage.setItem('profileLanguage', param);
       }),
 
       requestLogin: flow(function* requestLogin(params) {

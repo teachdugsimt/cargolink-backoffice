@@ -7,8 +7,7 @@ const ExcuteApi = async (url, params, method, timeout = 20000) => {
   try {
     const api = create(
       await Header(
-        null,
-        url.includes('signin') ? true : null,
+        url.includes('login') ? true : null,
         url.includes('upload') && method == 'post' ? 'upload' : null,
         timeout,
       ),
