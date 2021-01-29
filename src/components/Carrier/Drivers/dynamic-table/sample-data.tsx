@@ -1,19 +1,5 @@
 import React from 'react';
-import moment from 'moment';
-
-import { drivers } from './drivers';
-import 'moment/locale/th';
 import { momentFormat } from '../../../simple-data';
-moment.locale('th');
-interface Driver {
-  id: number;
-  mobile_number: string;
-  name: string;
-  otp: number;
-  carrier_name: string;
-  status: string;
-  register_date: string;
-}
 
 export const createHead = (withWidth: boolean) => {
   return {
