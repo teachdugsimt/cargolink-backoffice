@@ -74,5 +74,8 @@
   "inputSearch":"Enter your search here",
   "resultsFound":"Results found",
   "back":"Back",
-  "confirm":"Confirm"
+  "confirm":"Confirm",
+  "LOW": "Low",
+  "MEDIUM": "Medium",
+  "HIGH": "High"
 }

@@ -73,12 +73,6 @@ export const regionOptions: { value: any; label: string }[] = [
   { value: 6, label: 'ภาคใต้' },
 ];
 
-export const stallHeightOption: { value: string; label: string }[] = [
-  { value: 'LOW', label: 'LOW' },
-  { value: 'MEDIUM', label: 'MEDIUM' },
-  { value: 'HIGH', label: 'HIGH' },
-];
-
 export const provinceOptions: { value: any; label: string; area: number }[] = [
   { value: 1, label: 'กรุงเทพมหานคร', area: 2 },
   { value: 2, label: 'สมุทรปราการ', area: 2 },

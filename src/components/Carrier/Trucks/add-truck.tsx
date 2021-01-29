@@ -9,7 +9,7 @@ import ImageUpload from './image-upload';
 import { useMst } from '../../../stores/root-store';
 import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
-import { regionOptions, stallHeightOption, provinceOptions } from './dynamic-table/sample-data';
+import { regionOptions, provinceOptions } from './dynamic-table/sample-data';
 import { navigate } from 'gatsby';
 import '../../../Layouts/css/style.css';
 import { UploadFileStore } from '../../../stores/upload-file-store';
@@ -25,13 +25,14 @@ interface Props {}
 
 const AddTruck: React.FC<Props> = observer((props) => {
   const { t } = useTranslation();
-  const { carrierStore } = useMst();
+  const { carrierStore, loginStore } = useMst();
   const truckPhotos = JSON.parse(JSON.stringify(UploadFileStore.truckPhotos));
   const { register, handleSubmit, errors, control } = useForm({
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
   const [checkbox, setCheckbox] = useState(false);
+  const [stallHeights, setStallHeights] = useState([]);
   const [filterProvince, setFilterProvince] = useState(provinces);
   const [filterRegion, setFilterRegion] = useState(regionOptions);
   const [truckTypeOptions, setTruckTypeOptions] = useState();
@@ -40,7 +41,22 @@ const AddTruck: React.FC<Props> = observer((props) => {
 
   useEffect(() => {
     carrierStore.getAllTruckTypes();
+    const stalls: any = [
+      { value: 'LOW', label: t('LOW') },
+      { value: 'MEDIUM', label: t('MEDIUM') },
+      { value: 'HIGH', label: t('HIGH') },
+    ];
+    setStallHeights(stalls);
   }, []);
+
+  useEffect(() => {
+    const stalls: any = [
+      { value: 'LOW', label: t('LOW') },
+      { value: 'MEDIUM', label: t('MEDIUM') },
+      { value: 'HIGH', label: t('HIGH') },
+    ];
+    setStallHeights(stalls);
+  }, [loginStore.language]);
 
   useEffect(() => {
     const { loading } = carrierStore;
@@ -168,7 +184,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
           <Controller
             as={
               <Select
-                options={stallHeightOption}
+                options={stallHeights}
                 status={errors.stallHeight ? 'Danger' : 'Basic'}
                 placeholder={t('pleaseselect')}
                 fullWidth
