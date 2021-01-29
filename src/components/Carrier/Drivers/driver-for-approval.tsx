@@ -1,32 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { InputGroup } from '@paljs/ui/Input';
 import DynamicTable from '@atlaskit/dynamic-table';
-import { head, rows } from './dynamic-table/sample-data';
-import { Icon } from 'react-icons-kit';
-import { search } from 'react-icons-kit/icomoon/search';
+import { head, createRow } from './dynamic-table/sample-data';
 import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
 import { useMst } from '../../../stores/root-store';
 import { observer } from 'mobx-react-lite';
+import SearchForm from '../../search-form';
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
   margin-top: 10px;
   min-width: 600px;
 `;
 
-import styled from 'styled-components';
-
-const Input = styled(InputGroup)`
-  margin-bottom: 0px;
-`;
-
 const DriverForApproval: React.FC<{}> = observer(({}) => {
   const { carrierStore, loginStore } = useMst();
   const { t } = useTranslation();
-  const [searchValue, setSearchValue] = useState('');
-  const [rowData, setRowData] = useState(rows);
+  const [rows, setRows] = useState([]);
+  const [rowData, setRowData] = useState([]);
   const [panding, setPanding] = useState(false);
   const [approved, setApproved] = useState(false);
   const [all, setAll] = useState(false);
@@ -36,28 +29,21 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
   }, []);
 
   useEffect(() => {
-    carrierStore.getAllDriversByCarrier();
-  }, [loginStore.language]);
-
-  const onClickSearch = () => {
-    const lowercasedValue = searchValue.toLowerCase().trim();
-    if (lowercasedValue === '') setRowData(rows);
-    else {
-      const filteredData = rows.filter((item) => {
-        const data = item.cells.filter((key) => key.key.toString().toLowerCase().includes(lowercasedValue));
-        return data && data.length ? true : false;
-      });
-      setRowData(filteredData);
+    const drivers_carrier = JSON.parse(JSON.stringify(carrierStore.drivers_carrier));
+    if (drivers_carrier?.length) {
+      const rows = createRow(drivers_carrier, loginStore.language);
+      setRows(rows);
+      setRowData(rows);
     }
-  };
+  }, [carrierStore.drivers_carrier, carrierStore.drivers_carrier?.length]);
 
   const onClickPending = () => {
     setPanding(true);
     setApproved(false);
     setAll(false);
-    const filteredData = rows.filter((item) => {
-      const data = item.cells.filter((key) => key.key == 'Pending');
-      return data && data.length ? true : false;
+    const filteredData = rows.filter((item: any) => {
+      const data = item.cells[5].key.toString().toUpperCase() === t('pending');
+      return data ? true : false;
     });
     setRowData(filteredData);
   };
@@ -66,9 +52,9 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
     setApproved(true);
     setPanding(false);
     setAll(false);
-    const filteredData = rows.filter((item) => {
-      const data = item.cells.filter((key) => key.key == 'Approved');
-      return data && data.length ? true : false;
+    const filteredData = rows.filter((item: any) => {
+      const data = item.cells[5].key.toString().toUpperCase() === t('approved');
+      return data ? true : false;
     });
     setRowData(filteredData);
   };
@@ -82,30 +68,18 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
 
   return (
     <Card>
-      <CardHeader
-        style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-      >
-        <span style={{ display: 'flex', flexDirection: 'column', fontSize: 20 }}>{t('drivers')}</span>
-        <div style={{ display: 'flex' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Input>
-              <input
-                type="text"
-                placeholder="Enter your search here"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-            </Input>
-            <Button appearance="filled" status="Basic" onClick={() => onClickSearch()}>
-              <Icon size={18} icon={search} />
-            </Button>
+      <CardHeader>
+        <div className="block-data-header">
+          <span className="font-data-header">{t('drivers')}</span>
+          <div style={{ display: 'flex' }}>
+            <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
           </div>
         </div>
       </CardHeader>
       <CardBody>
         <Row style={{ padding: 5, marginBottom: 10 }}>
           <Button
-            appearance={all == true ? 'filled' : 'outline'}
+            appearance={all ? 'filled' : 'outline'}
             status="Success"
             size="Small"
             onClick={() => onClickAll()}
@@ -119,7 +93,7 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
             {t('all')}
           </Button>
           <Button
-            appearance={panding == true ? 'filled' : 'outline'}
+            appearance={panding ? 'filled' : 'outline'}
             status="Warning"
             size="Small"
             style={{
@@ -133,7 +107,7 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
             {t('pending')}
           </Button>
           <Button
-            appearance={approved == true ? 'filled' : 'outline'}
+            appearance={approved ? 'filled' : 'outline'}
             status="Warning"
             size="Small"
             style={{

@@ -45,15 +45,6 @@ const JobContainer: React.FC<Props> = observer(() => {
   }, []);
 
   useEffect(() => {
-    shipperStore.getProductTypes();
-    shipperStore.clearShipperStore();
-    shipperStore.getAllJobsByShipper({
-      descending: true,
-      page: 0,
-    });
-  }, [loginStore.language]);
-
-  useEffect(() => {
     const { loading } = shipperStore;
     setAlertSetting({
       icon: '',
@@ -78,18 +69,18 @@ const JobContainer: React.FC<Props> = observer(() => {
   }, [shipperStore.error_response]);
 
   useEffect(() => {
+    const product_types = JSON.parse(JSON.stringify(shipperStore.product_types));
+    if (product_types?.length) setProductTypes(product_types);
+  }, [shipperStore.product_types, shipperStore.product_types?.length]);
+
+  useEffect(() => {
     const jobs_shipper = JSON.parse(JSON.stringify(shipperStore.jobs_shipper));
     if (jobs_shipper?.length) {
       const rows = createRow(jobs_shipper, productTypes, loginStore.language);
       setRows(rows);
       setRowData(rows);
     }
-  }, [shipperStore.jobs_shipper?.length, productTypes, loginStore.language]);
-
-  useEffect(() => {
-    const product_types = JSON.parse(JSON.stringify(shipperStore.product_types));
-    if (product_types?.length) setProductTypes(product_types);
-  }, [shipperStore.product_types]);
+  }, [shipperStore.jobs_shipper, shipperStore.jobs_shipper?.length, productTypes]);
 
   return (
     <Card>

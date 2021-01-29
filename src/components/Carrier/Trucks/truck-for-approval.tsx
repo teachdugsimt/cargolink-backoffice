@@ -15,10 +15,6 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
   }, []);
 
   useEffect(() => {
-    carrierStore.getAllTrucksByCarrier();
-  }, [loginStore.language]);
-
-  useEffect(() => {
     const { loading } = carrierStore;
     setAlertSetting({
       icon: '',
@@ -167,7 +163,7 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
         ],
       }));
     setRowData(rows);
-  }, [carrierStore.trucks_carrier?.length, loginStore.language]);
+  }, [carrierStore.trucks_carrier, carrierStore.trucks_carrier?.length]);
 
   return <TruckForm rows={rowData} alertSetting={alertSetting} />;
 });

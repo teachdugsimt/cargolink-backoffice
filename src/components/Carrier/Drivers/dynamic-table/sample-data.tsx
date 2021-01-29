@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import { drivers } from './drivers';
 import 'moment/locale/th';
+import { momentFormat } from '../../../simple-data';
 moment.locale('th');
 interface Driver {
   id: number;
@@ -13,18 +14,13 @@ interface Driver {
   status: string;
   register_date: string;
 }
-function sortByDate(input: string) {
-  return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
-}
-
-export const caption = `Results found: ${drivers.length}`;
 
 export const createHead = (withWidth: boolean) => {
   return {
     cells: [
       {
         key: 'id',
-        content: 'Id',
+        content: 'ID',
         isSortable: true,
         // width: withWidth ? 5 : undefined,
       },
@@ -43,20 +39,14 @@ export const createHead = (withWidth: boolean) => {
         // width: withWidth ? 10 : undefined,
       },
       {
-        key: 'otp',
-        content: 'OTP',
-        shouldTruncate: true,
-        isSortable: true,
-      },
-      {
-        key: 'carrier_name',
-        content: "Carrier's name",
+        key: 'driver_licens_number',
+        content: "Driver's license number",
         shouldTruncate: true,
         isSortable: true,
       },
       {
         key: 'status',
-        content: 'Carrier status',
+        content: 'Status',
         shouldTruncate: true,
         isSortable: true,
       },
@@ -72,36 +62,43 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const rows = drivers.map((driver: Driver, index: number) => ({
-  key: `row-${index}-${driver.id}`,
-  cells: [
-    {
-      key: driver.id,
-      content: driver.id,
-    },
-    {
-      key: driver.mobile_number,
-      content: driver.mobile_number,
-    },
-    {
-      key: driver.name,
-      content: driver.name,
-    },
-    {
-      key: driver.otp,
-      content: driver.otp,
-    },
-    {
-      key: driver.carrier_name,
-      content: driver.carrier_name,
-    },
-    {
-      key: driver.status,
-      content: driver.status,
-    },
-    {
-      key: sortByDate(driver.register_date),
-      content: moment(driver.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
-    },
-  ],
-}));
+export const createRow = (drivers: any, language: string) => {
+  return drivers.map((driver: any, index: number) => {
+    let status = 'Pending';
+    if (driver.approveStatus === 1) {
+      if (language === 'en') status = 'Approved';
+      else status = 'อนุมัติแล้ว';
+    } else {
+      if (language === 'th') status = 'อยู่ระหว่างการดำเนินการ';
+    }
+    return {
+      key: `row-${index}-${driver.id}`,
+      cells: [
+        {
+          key: driver.id,
+          content: <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{driver.id}</span>,
+        },
+        {
+          key: driver.phoneNumber,
+          content: driver.phoneNumber,
+        },
+        {
+          key: driver.fullname,
+          content: driver.fullname,
+        },
+        {
+          key: driver.driverLicenseNumber,
+          content: driver.driverLicenseNumber,
+        },
+        {
+          key: status,
+          content: status,
+        },
+        {
+          key: momentFormat(driver.createdAt, language),
+          content: momentFormat(driver.createdAt, language),
+        },
+      ],
+    };
+  });
+};

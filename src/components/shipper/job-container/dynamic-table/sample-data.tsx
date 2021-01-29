@@ -111,7 +111,7 @@ export const createRow = (jobs: any, products: any, language: string) => {
         },
         {
           key: jobpost.weight,
-          content: <span>{jobpost.weight}</span>,
+          content: jobpost.weight,
         },
       ],
     };
