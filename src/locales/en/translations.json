@@ -70,5 +70,7 @@
   "fieldProvince":"This field province is required",
   "region":"region",
   "province":"province",
-  "clickTime":"Click to select time"
+  "clickTime":"Click to select time",
+  "inputSearch":"Enter your search here",
+  "resultsFound":"Results found"
 }

@@ -111,10 +111,10 @@ const JobContainer: React.FC<Props> = observer(() => {
               navigate('/add-job');
             }}
           >
-            <Icon icon={ic_add} /> {t('AddNewJob')}
+            <Icon icon={ic_add} /> {t('addNewJob')}
           </Button>
         </Row>
-        <span>{`Results found: ${rowData.length}`}</span>
+        <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
         <Wrapper>
           <DynamicTable
             //   caption={caption}

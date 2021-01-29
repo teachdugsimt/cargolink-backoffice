@@ -100,7 +100,7 @@ const MultipleRole = () => {
               color: submit ? 'white' : '#00B132',
             }}
           >
-            <Icon icon={ic_add} /> {t('AddNewAccount')}
+            <Icon icon={ic_add} /> {t('addNewAccount')}
           </Button>
         </Row>
         <Wrapper>

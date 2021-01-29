@@ -31,7 +31,7 @@ const SearchForm: React.FC<SearchProps> = observer((props) => {
       <input
         className="new-input-component"
         type="text"
-        placeholder="Enter your search here"
+        placeholder={t('inputSearch')}
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
       />

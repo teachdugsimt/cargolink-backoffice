@@ -111,7 +111,7 @@ const JobContainer = (props: any) => {
                 setSubmit(true);
               }}
             >
-              <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> {t('AddNewAccount')}
+              <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> {t('addNewAccount')}
             </Button>
           </div>
         </Row>

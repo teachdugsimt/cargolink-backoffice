@@ -127,7 +127,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
               navigate('/add-truck');
             }}
           >
-            <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> {t('AddNewTruck')}
+            <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> {t('addNewTruck')}
           </Button>
         </Row>
         <span>{`Results found: ${rowData ? rowData.length : 0}`}</span>
