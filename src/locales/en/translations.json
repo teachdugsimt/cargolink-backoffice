@@ -72,5 +72,7 @@
   "province":"province",
   "clickTime":"Click to select time",
   "inputSearch":"Enter your search here",
-  "resultsFound":"Results found"
+  "resultsFound":"Results found",
+  "back":"Back",
+  "confirm":"Confirm"
 }

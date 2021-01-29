@@ -518,7 +518,7 @@ const AddJobs: React.FC<{}> = observer(() => {
               onClick={() => navigate('/jobs')}
               style={{ marginRight: 10, backgroundColor: '#FBBC12', borderColor: '#FBBC12' }}
             >
-              กลับ
+              {t('back')}
             </Button>
             <Button
               status="Success"
@@ -527,7 +527,7 @@ const AddJobs: React.FC<{}> = observer(() => {
               fullWidth
               style={{ backgroundColor: '#00B132', borderColor: '#00B132' }}
             >
-              ยืนยัน
+              {t('confirm')}
             </Button>
           </div>
         </form>
