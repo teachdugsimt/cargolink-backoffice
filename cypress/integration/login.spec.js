@@ -30,7 +30,7 @@ context('Window', () => {
 
   it('ทดสอบการไม่กรอก เบอร์โทร และ รหัสผ่าน', () => {
     cy.wait(1000);
-    cy.get('.sc-bkbjAj').click().click();
+    cy.get('.sc-bkbjAj').click();
     cy.get('[style="color: rgb(255, 61, 113); margin-left: 10px; font-size: small;"]').should(
       'contain',
       '* กรุณาใส่หมายเลขโทรศัพท์ที่ถูกต้อง',
@@ -49,7 +49,7 @@ context('Window', () => {
     cy.get('.sc-bkbjAj').click();
     cy.get('#swal2-content').should('contain', 'Phone Number or Password is invalid');
     cy.wait(2000);
-    cy.get('.swal2-confirm').click();
+    cy.get('.swal2-confirm').should('be.visible').click();
     cy.wait(1000);
   });
 
@@ -60,7 +60,7 @@ context('Window', () => {
     cy.get('.sc-bkbjAj').click();
     cy.get('#swal2-content').should('contain', 'Invalid entry for phone number');
     cy.wait(2000);
-    cy.get('.swal2-confirm').click();
+    cy.get('.swal2-confirm').should('be.visible').click();
     cy.wait(1000);
   });
 
