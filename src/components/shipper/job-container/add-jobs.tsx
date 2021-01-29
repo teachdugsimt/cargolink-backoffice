@@ -66,6 +66,11 @@ const AddJobs: React.FC<{}> = observer(() => {
   }, [shipperStore.loading]);
 
   useEffect(() => {
+    const { success_response } = shipperStore;
+    if (success_response) navigate('/jobs');
+  }, [shipperStore.success_response]);
+
+  useEffect(() => {
     const { error_response } = shipperStore;
     if (error_response) {
       setAlertSetting({
@@ -79,15 +84,15 @@ const AddJobs: React.FC<{}> = observer(() => {
   }, [shipperStore.error_response]);
 
   useEffect(() => {
-    const allTrucksTypes = JSON.parse(JSON.stringify(carrierStore.trucks_types));
-    const array =
-      allTrucksTypes &&
-      allTrucksTypes.map((truck: any) => ({
+    const trucks_types = JSON.parse(JSON.stringify(carrierStore.trucks_types));
+    if (trucks_types?.length) {
+      const array = trucks_types.map((truck: any) => ({
         value: truck.id,
         label: truck.name,
       }));
-    setTruckTypeOptions(array);
-  }, [carrierStore.trucks_types]);
+      setTruckTypeOptions(array);
+    }
+  }, [carrierStore.trucks_types, carrierStore.trucks_types?.length]);
 
   useEffect(() => {
     const allProductTypeId = JSON.parse(JSON.stringify(shipperStore.product_types));
@@ -98,7 +103,7 @@ const AddJobs: React.FC<{}> = observer(() => {
         label: product.name,
       }));
     setProductTypeIdOptions(array);
-  }, [shipperStore.product_types]);
+  }, [shipperStore.product_types, shipperStore.product_types?.length]);
 
   const onSubmit = (data: any) => {
     if (data && data.truckType.value && data.productTypeId.value) {
@@ -234,6 +239,7 @@ const AddJobs: React.FC<{}> = observer(() => {
           <input
             className="new-input-component"
             type="number"
+            step="0.01"
             name="weight"
             id="weight"
             style={{
