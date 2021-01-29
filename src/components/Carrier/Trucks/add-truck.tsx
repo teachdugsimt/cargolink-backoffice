@@ -311,7 +311,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
               onClick={() => navigate('/trucks')}
               style={{ marginRight: 10, backgroundColor: '#FBBC12', borderColor: '#FBBC12' }}
             >
-              กลับ
+              {t('back')}
             </Button>
             <Button
               status="Success"
@@ -321,7 +321,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
               style={{ backgroundColor: '#00B132', borderColor: '#00B132' }}
               onClick={() => setToggle(true)}
             >
-              ยืนยัน
+              {t('confirm')}
             </Button>
           </div>
         </form>
