@@ -126,7 +126,7 @@ const JobContainer = (props: any) => {
             loadingSpinnerSize="large"
             isLoading={false}
             // isFixedSize
-            defaultSortKey="term"
+            // defaultSortKey="term"
             defaultSortOrder="ASC"
             onSort={() => console.log('onSort')}
             onSetPage={() => console.log('onSetPage')}

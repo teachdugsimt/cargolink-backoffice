@@ -125,7 +125,7 @@ const JobContainer: React.FC<Props> = observer(() => {
             loadingSpinnerSize="large"
             isLoading={false}
             // isFixedSize
-            defaultSortKey="term"
+            // defaultSortKey="term"
             defaultSortOrder="ASC"
             onSort={() => console.log('onSort')}
             page={page}
