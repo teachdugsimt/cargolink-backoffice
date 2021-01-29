@@ -42,8 +42,8 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
     const trucks = JSON.parse(JSON.stringify(carrierStore.trucks_carrier));
     const rows =
       trucks &&
-      trucks.map((truck: any) => ({
-        key: `row-${truck.id}`,
+      trucks.map((truck: any, index: number) => ({
+        key: `row-${index}-${truck.id}`,
         cells: [
           {
             key: truck.id,
@@ -63,8 +63,8 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
             ),
           },
           {
-            key: truck.registrationNumber.map((e: any) => e),
-            content: truck.registrationNumber.map((e: any) => e),
+            key: truck.registrationNumber.join(''),
+            content: truck.registrationNumber.join(', '),
           },
           {
             key: truck.truckType,

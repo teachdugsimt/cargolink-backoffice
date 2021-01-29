@@ -48,9 +48,11 @@ const Alert = (props) => {
       <SweetAlert
         custom
         show={show}
+        title=""
         style={{ width: 150, height: 150 }}
         showConfirm={false}
         customIcon={images.loading}
+        onConfirm={() => {}}
       >
         {content}
       </SweetAlert>
