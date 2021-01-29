@@ -52,6 +52,7 @@ export const CarrierStore = types
     trucks_carrier: types.maybeNull(types.array(trucks)),
     trucks_types: types.maybeNull(types.array(trucksTypes)),
     drivers_carrier: types.maybeNull(types.array(drivers)),
+    success_response: false,
     error_response: types.maybeNull(
       types.model({
         title: types.maybeNull(types.string),
@@ -71,7 +72,6 @@ export const CarrierStore = types
           if (response && response.ok) {
             self.loading = false;
             self.trucks_carrier = response.data;
-            self.error_response = null;
           } else {
             self.loading = false;
             self.error_response = {
@@ -99,7 +99,6 @@ export const CarrierStore = types
           if (response && response.ok) {
             self.loading = false;
             self.drivers_carrier = response.data;
-            self.error_response = null;
           } else {
             self.loading = false;
             self.error_response = {
@@ -120,6 +119,7 @@ export const CarrierStore = types
       getAllTruckTypes: flow(function* getAllTruckTypes() {
         self.loading = true;
         self.trucks_types = null;
+        self.success_response = false;
         self.error_response = null;
         try {
           const response = yield CarrierApi.listTruckTypes();
@@ -127,7 +127,6 @@ export const CarrierStore = types
           if (response && response.ok) {
             self.loading = false;
             self.trucks_types = response.data;
-            self.error_response = null;
           } else {
             self.loading = false;
             self.error_response = {
@@ -147,13 +146,14 @@ export const CarrierStore = types
 
       postTruck: flow(function* postTruck(params) {
         self.loading = true;
+        self.success_response = false;
         self.error_response = null;
         try {
           const response = yield CarrierApi.addTruck(params);
           console.log('postTruck response :> ', response);
           if (response && response.ok) {
             self.loading = false;
-            self.error_response = null;
+            self.success_response = true;
           } else {
             self.loading = false;
             self.error_response = {

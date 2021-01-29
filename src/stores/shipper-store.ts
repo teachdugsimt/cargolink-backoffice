@@ -71,7 +71,6 @@ export const ShipperStore = types
           if (response && response.ok) {
             const { data } = response;
             self.loading = false;
-            self.error_response = null;
             //? in th first time, we get jobs
             let jobs = JSON.parse(JSON.stringify(self.jobs_shipper));
             if (self.jobs_shipper?.length) jobs.push(...data);
@@ -124,7 +123,6 @@ export const ShipperStore = types
           if (response && response.ok) {
             self.loading = false;
             self.success_response = true;
-            self.error_response = null;
           } else {
             self.loading = false;
             self.error_response = {
@@ -152,7 +150,6 @@ export const ShipperStore = types
           if (response && response.ok) {
             self.loading = false;
             self.product_types = response.data;
-            self.error_response = null;
           } else {
             self.loading = false;
             self.error_response = {

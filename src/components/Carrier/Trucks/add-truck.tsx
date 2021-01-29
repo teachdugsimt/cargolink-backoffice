@@ -54,6 +54,11 @@ const AddTruck: React.FC<Props> = observer((props) => {
   }, [carrierStore.loading]);
 
   useEffect(() => {
+    const { success_response } = carrierStore;
+    if (success_response) navigate('/trucks');
+  }, [carrierStore.success_response]);
+
+  useEffect(() => {
     const { error_response } = carrierStore;
     if (error_response) {
       setAlertSetting({
@@ -67,15 +72,15 @@ const AddTruck: React.FC<Props> = observer((props) => {
   }, [carrierStore.error_response]);
 
   useEffect(() => {
-    const allTrucksTypes = JSON.parse(JSON.stringify(carrierStore.trucks_types));
-    const array =
-      allTrucksTypes &&
-      allTrucksTypes.map((truck: any) => ({
+    const trucks_types = JSON.parse(JSON.stringify(carrierStore.trucks_types));
+    if (trucks_types?.length) {
+      const array = trucks_types.map((truck: any) => ({
         value: truck.id,
         label: truck.name,
       }));
-    setTruckTypeOptions(array);
-  }, [carrierStore.trucks_types]);
+      setTruckTypeOptions(array);
+    }
+  }, [carrierStore.trucks_types, carrierStore.trucks_types?.length]);
 
   const onSubmit = (data: any) => {
     const { region, truckType, province } = data;
@@ -188,6 +193,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
             className="new-input-component"
             name="loadingWeight"
             type="number"
+            step="0.01"
             style={{
               borderColor: errors.loadingWeight ? '#ff3d71' : '',
             }}
