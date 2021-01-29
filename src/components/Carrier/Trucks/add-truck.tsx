@@ -190,6 +190,7 @@ const AddTruck: React.FC<Props> = observer((props) => {
                 fullWidth
               />
             }
+            id="stallHeight"
             control={control}
             valueName="selected"
             rules={{ required: 'Stall height cannot be null.' }}

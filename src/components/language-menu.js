@@ -41,6 +41,7 @@ const LanguageMenu = (props) => {
 
   return (
     <Select
+      id="language"
       style={{
         background: '#fff',
         borderRadius: 5,
@@ -59,13 +60,13 @@ const LanguageMenu = (props) => {
         select: classes.selectFocus,
       }}
     >
-      <MenuItem value={'th'}>
+      <MenuItem id="th" value={'th'}>
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <img src={thailand} style={{ width: 22, height: 22, margin: '0px 5px' }} />
           <span style={{ marginTop: 2 }}>TH</span>
         </div>
       </MenuItem>
-      <MenuItem value={'en'}>
+      <MenuItem id="th" value={'en'}>
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <img src={united_kingdom} style={{ width: 22, height: 22, margin: '0px 5px' }} />
           <span style={{ marginTop: 2 }}>EN</span>

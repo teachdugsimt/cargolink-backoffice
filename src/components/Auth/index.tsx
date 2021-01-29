@@ -60,8 +60,8 @@ const Auth: React.FC<AuthProps> = ({ subTitle, title, children }) => {
               <img src={images.logo} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
           </div>
-          <h1>{title}</h1>
-          {subTitle && <p>{subTitle}</p>}
+          <h1 id="title">{title}</h1>
+          {subTitle && <p id="subTitle">{subTitle}</p>}
           {children}
         </AuthStyle>
       </CardBody>

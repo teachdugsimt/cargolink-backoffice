@@ -86,6 +86,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           fullWidth
         >
           <input
+            id="phoneNumber"
             type="text"
             placeholder={t('phoneNumber')}
             value={email}
@@ -93,7 +94,9 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           />
         </InputGroup>
         {toggle && !email ? (
-          <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>* {t('loginError1')}</span>
+          <span id="loginError1" style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>
+            * {t('loginError1')}
+          </span>
         ) : null}
         <InputGroup
           status={toggle && !password ? 'Danger' : 'Basic'}
@@ -101,6 +104,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           fullWidth
         >
           <input
+            id="password"
             type="password"
             placeholder={t('password')}
             value={password}
@@ -108,13 +112,15 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           />
         </InputGroup>
         {toggle && !password ? (
-          <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>* {t('loginError2')}</span>
+          <span id="loginError2" style={{ color: '#ff3d71', marginLeft: 10, fontSize: 'small' }}>
+            * {t('loginError2')}
+          </span>
         ) : null}
         <Group>
           <Checkbox checked={checkbox[1]} onChange={(value) => onChangeCheckbox(value, 1)}>
             {t('rememberMe')}
           </Checkbox>
-          <Link to="/auth/request-password" style={{ textDecoration: 'none' }}>
+          <Link id="forgotPassword" to="/auth/request-password" style={{ textDecoration: 'none' }}>
             {t('forgotPassword')}
           </Link>
         </Group>
@@ -124,6 +130,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
             backgroundColor: '#00b132',
             borderColor: '#00b132',
           }}
+          id="login"
           status="Success"
           type="button"
           shape="SemiRound"
@@ -142,7 +149,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           )}
         </Button>
       </form>
-      <p>
+      <p id="loginDescription">
         {t('loginDescription')}{' '}
         <Link to="/auth/register" style={{ textDecoration: 'none' }}>
           {t('register')}
