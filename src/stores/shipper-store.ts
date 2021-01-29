@@ -51,6 +51,7 @@ export const ShipperStore = types
     loading: false,
     jobs_shipper: types.maybeNull(types.array(Jobs)),
     product_types: types.maybeNull(types.array(Products)),
+    success_response: false,
     error_response: types.maybeNull(
       types.model({
         title: types.maybeNull(types.string),
@@ -115,12 +116,14 @@ export const ShipperStore = types
 
       postJobs: flow(function* postJobs(params) {
         self.loading = true;
+        self.success_response = false;
         self.error_response = null;
         try {
           const response = yield ShipperApi.addJobs(params);
           console.log('postJobs response :> ', response);
           if (response && response.ok) {
             self.loading = false;
+            self.success_response = true;
             self.error_response = null;
           } else {
             self.loading = false;
@@ -141,6 +144,7 @@ export const ShipperStore = types
 
       getProductTypes: flow(function* getProductTypes() {
         self.loading = true;
+        self.product_types = null;
         self.error_response = null;
         try {
           const response = yield ShipperApi.getAllProductType();
@@ -151,7 +155,6 @@ export const ShipperStore = types
             self.error_response = null;
           } else {
             self.loading = false;
-            self.product_types = null;
             self.error_response = {
               title: response.problem,
               content: response.originalError.message,
@@ -160,7 +163,6 @@ export const ShipperStore = types
         } catch (error) {
           console.error('Failed to get product types :> ', error);
           self.loading = false;
-          self.product_types = null;
           self.error_response = {
             title: '',
             content: 'Failed to get product types ',
@@ -170,6 +172,7 @@ export const ShipperStore = types
 
       clearShipperStore: flow(function* clearShipperStore() {
         self.jobs_shipper = null;
+        self.success_response = false;
         self.error_response = null;
       }),
     };

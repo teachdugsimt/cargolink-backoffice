@@ -63,6 +63,7 @@ export const CarrierStore = types
     return {
       getAllTrucksByCarrier: flow(function* getAllTrucksByCarrier() {
         self.loading = true;
+        self.trucks_carrier = null;
         self.error_response = null;
         try {
           const response = yield CarrierApi.getAllTrucks();
@@ -73,7 +74,6 @@ export const CarrierStore = types
             self.error_response = null;
           } else {
             self.loading = false;
-            self.trucks_carrier = null;
             self.error_response = {
               title: response.problem,
               content: response.originalError.message,
@@ -82,7 +82,6 @@ export const CarrierStore = types
         } catch (error) {
           console.error('Failed to getAllTrucksByCarrier :> ', error);
           self.loading = false;
-          self.trucks_carrier = null;
           self.error_response = {
             title: '',
             content: 'Failed to get all trucks by carrier',
@@ -92,6 +91,7 @@ export const CarrierStore = types
 
       getAllDriversByCarrier: flow(function* getAllDriversByCarrier() {
         self.loading = true;
+        self.drivers_carrier = null;
         self.error_response = null;
         try {
           const response = yield CarrierApi.getAllDrivers();
@@ -101,7 +101,6 @@ export const CarrierStore = types
             self.drivers_carrier = response.data;
             self.error_response = null;
           } else {
-            self.drivers_carrier = null;
             self.loading = false;
             self.error_response = {
               title: response.problem,
@@ -111,7 +110,6 @@ export const CarrierStore = types
         } catch (error) {
           console.error('Failed to getAllDriversByCarrier :> ', error);
           self.loading = false;
-          self.drivers_carrier = null;
           self.error_response = {
             title: '',
             content: 'Failed to get all drivers by carrier',
@@ -121,6 +119,7 @@ export const CarrierStore = types
 
       getAllTruckTypes: flow(function* getAllTruckTypes() {
         self.loading = true;
+        self.trucks_types = null;
         self.error_response = null;
         try {
           const response = yield CarrierApi.listTruckTypes();
@@ -131,7 +130,6 @@ export const CarrierStore = types
             self.error_response = null;
           } else {
             self.loading = false;
-            self.trucks_types = null;
             self.error_response = {
               title: response.problem,
               content: response.originalError.message,
@@ -140,7 +138,6 @@ export const CarrierStore = types
         } catch (error) {
           console.error('Failed to getAllTruckTypes :> ', error);
           self.loading = false;
-          self.trucks_types = null;
           self.error_response = {
             title: '',
             content: 'Failed to get all truck types',
