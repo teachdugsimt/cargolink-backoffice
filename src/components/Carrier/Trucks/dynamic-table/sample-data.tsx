@@ -13,13 +13,6 @@ export const createHead = (withWidth: boolean) => {
         // width: withWidth ? 5 : undefined,
       },
       {
-        key: 'truck_brand_name',
-        content: 'Truck brand name',
-        shouldTruncate: true,
-        isSortable: true,
-        // width: withWidth ? 5 : undefined,
-      },
-      {
         key: 'working_zones',
         content: 'Working Zones',
         shouldTruncate: true,
@@ -43,6 +36,12 @@ export const createHead = (withWidth: boolean) => {
       {
         key: 'weigth_capacity',
         content: 'Weigth capacity',
+        shouldTruncate: true,
+        isSortable: true,
+      },
+      {
+        key: 'stall_height',
+        content: 'Stall height',
         shouldTruncate: true,
         isSortable: true,
       },

@@ -8,22 +8,16 @@ const objectWorking = types.model({
 });
 
 const trucks = types.model({
-  stallHeight: types.maybeNull(types.string),
-  tipper: types.maybeNull(types.boolean),
   id: types.maybeNull(types.string),
-  name: types.maybeNull(types.string),
-  registrationNumber: types.maybeNull(types.array(types.maybeNull(types.string))),
-  workingZones: types.maybeNull(types.array(objectWorking)),
-  vehicleRegistrationYear: types.maybeNull(types.string),
-  createdAt: types.maybeNull(types.string),
-  updatedAt: types.maybeNull(types.string),
   truckType: types.maybeNull(types.number),
   loadingWeight: types.maybeNull(types.number),
+  stallHeight: types.maybeNull(types.string),
+  createdAt: types.maybeNull(types.string),
+  updatedAt: types.maybeNull(types.string),
   approveStatus: types.maybeNull(types.string),
-  vehiculeRegCertExpDate: types.maybeNull(types.string),
-  logBookExpDate: types.maybeNull(types.string),
-  insurancePolicyExpDate: types.maybeNull(types.string),
-  dltStickerExpiredDate: types.maybeNull(types.string),
+  registrationNumber: types.maybeNull(types.array(types.maybeNull(types.string))),
+  workingZones: types.maybeNull(types.array(objectWorking)),
+  tipper: types.maybeNull(types.boolean),
 });
 
 const trucksTypes = types.model({
@@ -62,18 +56,46 @@ export const CarrierStore = types
   })
   .actions((self) => {
     return {
-      getAllTrucksByCarrier: flow(function* getAllTrucksByCarrier() {
+      getAllTrucksByCarrier: flow(function* getAllTrucksByCarrier(params) {
         self.loading = true;
-        self.trucks_carrier = null;
         self.error_response = null;
         try {
-          const response = yield CarrierApi.getAllTrucks();
+          const response = yield CarrierApi.getAllTrucks(params);
           console.log('getAllTrucksByCarrier response :> ', response);
+
           if (response && response.ok) {
+            const { data } = response;
             self.loading = false;
-            self.trucks_carrier = response.data;
+            //? in th first time, we get trucks
+            let trucks = JSON.parse(JSON.stringify(self.trucks_carrier));
+            if (self.trucks_carrier?.length) trucks.push(...data);
+            else trucks = data;
+
+            self.trucks_carrier = trucks;
+
+            //? in th second time, we get trucks
+            if (data?.length && data?.length % 10 === 0) {
+              self.loading = true;
+              //? change page parameter
+              let newParams = JSON.parse(JSON.stringify(params));
+              newParams.page = trucks?.length;
+
+              const newResponse = yield CarrierApi.getAllTrucks(newParams);
+              console.log('getAllTrucksByCarrier newResponse :> ', newResponse);
+
+              if (newResponse && newResponse.ok) {
+                self.loading = false;
+                const newData = newResponse.data;
+                let newTrucks = JSON.parse(JSON.stringify(self.trucks_carrier));
+                newTrucks.push(...newData);
+                self.trucks_carrier = newTrucks;
+              } else {
+                self.loading = false;
+              }
+            }
           } else {
             self.loading = false;
+            self.trucks_carrier = null;
             self.error_response = {
               title: response.problem,
               content: response.originalError.message,
@@ -82,6 +104,7 @@ export const CarrierStore = types
         } catch (error) {
           console.error('Failed to getAllTrucksByCarrier :> ', error);
           self.loading = false;
+          self.trucks_carrier = null;
           self.error_response = {
             title: '',
             content: 'Failed to get all trucks by carrier',

@@ -1,4 +1,4 @@
-const Header = async (is_login = null, is_upload = null, timeout = 20000) => {
+const Header = async (is_login = null, is_upload = null, timeout = 20000, requiredToken = true) => {
   let baseURL = process.env.API_ENDPOINT;
   let header = {};
   let token = await JSON.parse(localStorage.getItem('profileLocal'));
@@ -41,13 +41,23 @@ const Header = async (is_login = null, is_upload = null, timeout = 20000) => {
       },
       timeout: timeout,
     };
-  } else {
+  } else if (requiredToken) {
     header = {
       baseURL,
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
         Authorization: 'Bearer ' + token.idToken,
+        'Accept-Language': language,
+      },
+      timeout: timeout,
+    };
+  } else {
+    header = {
+      baseURL,
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: '*/*',
         'Accept-Language': language,
       },
       timeout: timeout,

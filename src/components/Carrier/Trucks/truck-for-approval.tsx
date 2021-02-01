@@ -11,7 +11,10 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
   useEffect(() => {
-    carrierStore.getAllTrucksByCarrier();
+    carrierStore.getAllTrucksByCarrier({
+      descending: true,
+      page: 0,
+    });
   }, []);
 
   useEffect(() => {
@@ -40,9 +43,8 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
 
   useEffect(() => {
     const trucks = JSON.parse(JSON.stringify(carrierStore.trucks_carrier));
-    const rows =
-      trucks &&
-      trucks.map((truck: any, index: number) => ({
+    if (trucks?.length) {
+      const rows = trucks.map((truck: any, index: number) => ({
         key: `row-${index}-${truck.id}`,
         cells: [
           {
@@ -50,16 +52,21 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
             content: <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{truck.id}</span>,
           },
           {
-            key: truck.name,
-            content: truck.name,
-          },
-          {
             key: truck.workingZones,
             content: (
-              <div>
-                <span>{truck.workingZones && truck.workingZones.region ? truck.workingZones.region : ''}</span>
-                <span>{truck.workingZones && truck.workingZones.province ? truck.workingZones.province : ''}</span>
-              </div>
+              <ul>
+                {truck.workingZones &&
+                  truck.workingZones.map((zone: any, index: number) => {
+                    return (
+                      <li key={index}>
+                        <span style={{ fontWeight: 'bold', marginRight: 5 }}>ภูมิภาค: </span>
+                        <span>{zone.region}</span>
+                        <span style={{ fontWeight: 'bold', margin: '0 5' }}>จังหวัด: </span>
+                        <span>{zone.province}</span>
+                      </li>
+                    );
+                  })}
+              </ul>
             ),
           },
           {
@@ -153,6 +160,10 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
             content: truck.loadingWeight,
           },
           {
+            key: truck.stallHeight,
+            content: truck.stallHeight,
+          },
+          {
             key: truck.approveStatus,
             content: truck.approveStatus,
           },
@@ -162,7 +173,8 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
           },
         ],
       }));
-    setRowData(rows);
+      setRowData(rows);
+    }
   }, [carrierStore.trucks_carrier, carrierStore.trucks_carrier?.length]);
 
   return <TruckForm rows={rowData} alertSetting={alertSetting} />;

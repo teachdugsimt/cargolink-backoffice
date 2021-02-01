@@ -1,7 +1,7 @@
 import { create } from 'apisauce';
 import Header from './header';
 
-const ExcuteApi = async (url, params, method, timeout = 20000) => {
+const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = true) => {
   console.time('ExcuteApi');
   console.log('Params Excute header : ', params);
   try {
@@ -10,6 +10,7 @@ const ExcuteApi = async (url, params, method, timeout = 20000) => {
         url.includes('login') ? true : null,
         url.includes('upload') && method == 'post' ? 'upload' : null,
         timeout,
+        requiredToken,
       ),
     );
 

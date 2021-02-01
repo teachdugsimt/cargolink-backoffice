@@ -8,6 +8,7 @@ import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
 import { observer } from 'mobx-react-lite';
+import { useMst } from '../../../stores/root-store';
 import SearchForm from '../../search-form';
 import styled from 'styled-components';
 import Alert from '../../alert';
@@ -19,16 +20,18 @@ const Wrapper = styled.div`
 `;
 
 const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, alertSetting }) => {
+  const { carrierStore } = useMst();
   const { t } = useTranslation();
   const [rowData, setRowData] = useState([]);
   const [panding, setPanding] = useState(false);
   const [approved, setApproved] = useState(false);
   const [all, setAll] = useState(false);
   const [submit, setSubmit] = useState(false);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     setRowData(rows);
-  }, [rows]);
+  }, [rows, rows?.length]);
 
   const onClickPending = () => {
     setPanding(true);
@@ -144,7 +147,16 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
             // defaultSortKey="term"
             defaultSortOrder="ASC"
             onSort={() => console.log('onSort')}
-            onSetPage={() => console.log('onSetPage')}
+            page={page}
+            onSetPage={(pagination) => {
+              setPage(pagination);
+              if (rowData.length % 10 === 0 && pagination % 2 === 0 && rowData.length === rows.length) {
+                carrierStore.getAllTrucksByCarrier({
+                  descending: true,
+                  page: rowData.length,
+                });
+              }
+            }}
           />
         </Wrapper>
       </CardBody>

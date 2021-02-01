@@ -1,7 +1,7 @@
 import { types, flow } from 'mobx-state-tree';
 import { ShipperApi } from '../services';
 
-const ArrayFrom = types.model({
+const ObjectFrom = types.model({
   name: types.maybeNull(types.string),
   dateTime: types.maybeNull(types.string),
   contactName: types.maybeNull(types.string),
@@ -34,9 +34,10 @@ const Jobs = types.model({
   truckType: types.maybeNull(types.string),
   weight: types.maybeNull(types.number),
   requiredTruckAmount: types.maybeNull(types.number),
-  from: types.maybeNull(ArrayFrom),
+  from: types.maybeNull(ObjectFrom),
   to: types.maybeNull(types.array(ArrayTo)),
   owner: types.maybeNull(OwnerObject),
+  status: types.maybeNull(types.number),
 });
 
 const Products = types.model({
@@ -80,6 +81,7 @@ export const ShipperStore = types
 
             //? in th second time, we get jobs
             if (data?.length && data?.length % 10 === 0) {
+              self.loading = true;
               //? change page parameter
               let newParams = JSON.parse(JSON.stringify(params));
               newParams.page = jobs?.length;
@@ -88,10 +90,13 @@ export const ShipperStore = types
               console.log('getAllJobsByShipper newResponse :> ', newResponse);
 
               if (newResponse && newResponse.ok) {
+                self.loading = false;
                 const newData = newResponse.data;
                 let newJobs = JSON.parse(JSON.stringify(self.jobs_shipper));
                 newJobs.push(...newData);
                 self.jobs_shipper = newJobs;
+              } else {
+                self.loading = false;
               }
             }
           } else {

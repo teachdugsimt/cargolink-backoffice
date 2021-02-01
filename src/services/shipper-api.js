@@ -1,7 +1,7 @@
 import ExcuteApi from './api-integrations/excute-api';
 class ShipperApi {
   getAllJobs = async (params) => {
-    const response = await ExcuteApi('/api/v1/mobile/carriers/job', params, 'post', 600000);
+    const response = await ExcuteApi('/api/v1/mobile/job/list', params, 'post', 600000, false);
     return response;
   };
   addJobs = async (params) => {
@@ -9,7 +9,7 @@ class ShipperApi {
     return response;
   };
   getAllProductType = async () => {
-    const response = await ExcuteApi('/api/v1/mobile/shippers/product-type', {}, 'get', 600000);
+    const response = await ExcuteApi('/api/v1/mobile/mst/product-type', {}, 'get', 600000);
     return response;
   };
 }
