@@ -4,17 +4,15 @@ import styled, { DefaultTheme } from 'styled-components';
 import Select from '@paljs/ui/Select';
 import { LayoutHeader } from '@paljs/ui/Layout';
 // import { EvaIcon } from '@paljs/ui/Icon';
-// import { Button } from '@paljs/ui/Button';
 import { Actions } from '@paljs/ui/Actions';
 import ContextMenu from '@paljs/ui/ContextMenu';
-import User from '@paljs/ui/User';
+import Button from '@material-ui/core/Button';
 import { getPathReady } from './Sidebar';
 import { Location } from '@reach/router';
 import { breakpointDown } from '@paljs/ui/breakpoints';
 import { useTranslation } from 'react-i18next';
 import LanguageMenu from '../components/language-menu';
 import images from '../components/Themes/images';
-import { Button } from '@paljs/ui/Button';
 import { ic_menu } from 'react-icons-kit/md/ic_menu';
 import { Icon } from 'react-icons-kit';
 
@@ -92,9 +90,9 @@ const Header: React.FC<HeaderProps> = (props) => {
             actions={[
               {
                 content: (
-                  <a id="actions-menu" onClick={props.toggleSidebar} style={{ color: 'white' }}>
+                  <Button id="actions-menu" onClick={props.toggleSidebar} style={{ padding: 0, color: 'white' }}>
                     <Icon size={40} icon={ic_menu} />
-                  </a>
+                  </Button>
                 ),
               },
               {
