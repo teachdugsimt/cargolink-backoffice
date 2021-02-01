@@ -34,12 +34,12 @@ const items: MenuItemType[] = [
     icon: 'user',
     link: { to: '/user-management' },
   },
-  {
-    title_th: 'สถานะงาน',
-    title_en: 'Job Status',
-    icon: 'briefcase',
-    link: { to: '/user-management' },
-  },
+  // {
+  //   title_th: 'สถานะงาน',
+  //   title_en: 'Job Status',
+  //   icon: 'briefcase',
+  //   link: { to: '/user-management' },
+  // },
 ];
 
 export default items;
