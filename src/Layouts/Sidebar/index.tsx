@@ -1,10 +1,6 @@
 import React, { useRef, useState, forwardRef, useImperativeHandle } from 'react';
-// import { SidebarBody, SidebarRefObject, SidebarProps, Sidebar } from '@paljs/ui/Sidebar';
-// import { Menu, MenuRefObject } from '@paljs/ui/Menu';
 import { Menu, MenuRefObject } from './Menu';
 import { SidebarBody, SidebarRefObject, SidebarProps, Sidebar } from './Sidebar';
-import { Button } from '@paljs/ui/Button';
-import { EvaIcon } from '@paljs/ui/Icon';
 import menuItems from '../menu-item';
 import { Link } from 'gatsby';
 import { Location } from '@reach/router';
