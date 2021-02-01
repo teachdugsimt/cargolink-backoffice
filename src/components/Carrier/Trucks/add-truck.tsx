@@ -10,13 +10,13 @@ import { useMst } from '../../../stores/root-store';
 import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
 import { navigate } from 'gatsby';
-import '../../../Layouts/css/style.css';
 import { UploadFileStore } from '../../../stores/upload-file-store';
 import { useTranslation } from 'react-i18next';
+import '../../../Layouts/css/style.css';
 
 interface Props {}
 
-const AddTruck: React.FC<Props> = observer((props) => {
+const AddTruck: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
   const { carrierStore, loginStore, masterTypeStore } = useMst();
   const truckPhotos = JSON.parse(JSON.stringify(UploadFileStore.truckPhotos));

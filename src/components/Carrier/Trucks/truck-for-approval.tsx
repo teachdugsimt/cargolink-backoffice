@@ -4,9 +4,11 @@ import { useMst } from '../../../stores/root-store';
 import TruckForm from './truck-form';
 import images from '../../Themes/images';
 import { defaultAlertSetting, momentFormat } from '../../simple-data';
+import { useTranslation } from 'react-i18next';
 
 const TruckForApproval: React.FC<{}> = observer(({}) => {
   const { carrierStore, loginStore, masterTypeStore } = useMst();
+  const { t } = useTranslation();
   const [rowData, setRowData] = useState([]);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
@@ -156,7 +158,7 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
             },
             {
               key: truck.stallHeight,
-              content: truck.stallHeight,
+              content: <span>{t(`${truck.stallHeight}`)}</span>,
             },
             {
               key: truck.approveStatus,
