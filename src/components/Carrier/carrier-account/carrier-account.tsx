@@ -106,7 +106,7 @@ const CarrierAccount = (props: any) => {
             {t('approved')}
           </Button>
         </Row>
-        <span>{`Results found: ${rowData.length}`}</span>
+        <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
         <Wrapper>
           <DynamicTable
             // caption={caption}

@@ -28,8 +28,6 @@ function sortByDate(input: string) {
   return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
 
-export const caption = `Results found: ${shippers.length}`;
-
 export const createHead = (withWidth: boolean) => {
   return {
     cells: [

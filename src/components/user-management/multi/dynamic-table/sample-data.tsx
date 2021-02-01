@@ -16,16 +16,9 @@ interface User {
   register_date: string;
   date_approve: string;
 }
-
-function createKey(input: string) {
-  return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
-}
-
 function sortByDate(input: string) {
   return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
-
-export const caption = `Results found: ${users.length}`;
 
 export const createHead = (withWidth: boolean) => {
   return {

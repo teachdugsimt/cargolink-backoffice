@@ -82,7 +82,7 @@ const JobContainer = (props: any) => {
             <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> {t('addNewAccount')}
           </Button>
         </Row>
-        <span>{`Results found: ${rowData.length}`}</span>
+        <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
         <Wrapper>
           <DynamicTable
             //   caption={caption}

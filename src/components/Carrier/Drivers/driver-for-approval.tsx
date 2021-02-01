@@ -120,7 +120,7 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
             {t('approved')}
           </Button>
         </Row>
-        <span>{`Results found: ${rowData.length}`}</span>
+        <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
         <Wrapper>
           <DynamicTable
             // caption={caption}

@@ -72,7 +72,7 @@ const MultipleRole = () => {
             <Icon icon={ic_add} /> {t('addNewAccount')}
           </Button>
         </Row>
-        <span style={{ display: 'flex', alignItems: 'center' }}>{`Results found: ${rowData.length}`}</span>
+        <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
         <Wrapper>
           <DynamicTable
             head={head}
