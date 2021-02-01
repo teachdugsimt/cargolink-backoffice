@@ -18,7 +18,6 @@ const Wrapper = styled.div`
 
 const MultipleRole = () => {
   const { t } = useTranslation();
-  const [searchValue, setSearchValue] = useState('');
   const [rowData, setRowData] = useState(rows);
   // const [panding, setPanding] = useState(false)
   // const [approved, setApproved] = useState(false)
