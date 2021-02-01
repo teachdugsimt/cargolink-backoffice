@@ -5,11 +5,6 @@ context('Window', () => {
     cy.visit('http://localhost:8000/add-truck');
   });
 
-  // it('', () => {
-  //   cy.get('#stallHeight').click().contains('สูง').click();
-  //   cy.wait(2000);
-  // });
-
   it('ทดสอบไม่กรอกข้อมูล', () => {
     cy.wait(2000);
     cy.get('#confirm').click();
@@ -19,7 +14,11 @@ context('Window', () => {
     cy.get('#fieldRegistrationNumber').should('contain', 'ต้องระบุเลขทะเบียนรถในฟิลด์นี้');
     cy.get('#fieldUploadCar').should('contain', 'ต้องอัพโหลดรูปภาพรถในฟิลด์นี้');
     cy.get('#fieldRegion').should('contain', 'ต้องระบุภูมิภาคในฟิลด์นี');
-    cy.get('#fieldProvince').should('contain', 'ต้องระบุจังหวัดในฟิลด์นี้');
     cy.wait(2000);
   });
+
+  // it('', () => {
+  //   cy.get('#stallHeight').click().contains('สูง').click();
+  //   cy.wait(2000);
+  // });
 });
