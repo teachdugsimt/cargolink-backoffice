@@ -7,40 +7,36 @@ context('Window', () => {
 
   it('ทดสอบหน้า เมนู Carrier account', () => {
     cy.wait(1000);
-    cy.get('.Header__HeaderStyle-hhdliK > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();
+    cy.get('#actions-menu').click();
     cy.wait(1000);
-    // cy.get(':nth-child(3) > [href="#"]').click();
-    // cy.wait(2000);
-    cy.get(':nth-child(3) > .menu-items > :nth-child(1) > a > .menu-title').click();
+    cy.get('li').eq(5).click();
     cy.url().should('include', 'http://localhost:8000/carrier-account');
     cy.wait(2000);
-    cy.get('.Header__HeaderStyle-hhdliK > :nth-child(1) > .sc-kEqYlL > :nth-child(1)')
-      .should('exist')
-      .click({ multiple: true });
+    cy.get('#actions-menu').should('exist').click({ multiple: true });
     cy.wait(2000);
-    cy.get('.sc-efHXLn > :nth-child(2)').click();
+    cy.get('#pending').click();
     cy.wait(2000);
-    cy.get('.sc-efHXLn > :nth-child(3)').click();
+    cy.get('#approved').click();
     cy.wait(2000);
-    cy.get('.Lnyfd').click();
+    cy.get('#all').click();
     cy.wait(2000);
-    cy.get('.sc-dIvqjp > input').type('777', { delay: 300 });
-    cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
+    cy.get('#inputSearch').type('777', { delay: 300 });
+    cy.get('#search').click();
     cy.wait(2000);
-    cy.get('.sc-dIvqjp > input').clear('777');
-    cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
+    cy.get('#inputSearch').clear('777');
+    cy.get('#search').click();
     cy.wait(2000);
-    cy.get('.sc-dIvqjp > input').type('Individual', { delay: 300 });
-    cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
+    cy.get('#inputSearch').type('Individual', { delay: 300 });
+    cy.get('#search').click();
     cy.wait(2000);
-    cy.get('.sc-dIvqjp > input').clear('Individual');
-    cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
+    cy.get('#inputSearch').clear('Individual');
+    cy.get('#search').click();
     cy.wait(2000);
-    cy.get('.sc-dIvqjp > input').type('Company', { delay: 300 });
-    cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
+    cy.get('#inputSearch').type('Company', { delay: 300 });
+    cy.get('#search').click();
     cy.wait(2000);
-    cy.get('.sc-dIvqjp > input').clear('Company');
-    cy.get('[style="display: flex; align-items: center;"] > .sc-bkbjAj').click();
+    cy.get('#inputSearch').clear('Company');
+    cy.get('#search').click();
     cy.wait(2000);
     cy.get('[page="1"]').click();
     cy.wait(2000);
