@@ -10,13 +10,10 @@ import styled from 'styled-components';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
 import { useMst } from '../../../stores/root-store';
-import moment from 'moment';
-import 'moment/locale/th';
 import { navigate } from 'gatsby';
 import SearchForm from '../../search-form';
 import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
-moment.locale('th');
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -34,6 +31,10 @@ const JobContainer: React.FC<Props> = observer(() => {
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
   const [submit, setSubmit] = useState(false);
   const [page, setPage] = useState(1);
+  const [open, setOpen] = useState(false);
+  const [inProgress, setInProgress] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [all, setAll] = useState(false);
 
   useEffect(() => {
     shipperStore.getProductTypes();
@@ -76,11 +77,55 @@ const JobContainer: React.FC<Props> = observer(() => {
   useEffect(() => {
     const jobs_shipper = JSON.parse(JSON.stringify(shipperStore.jobs_shipper));
     if (jobs_shipper?.length) {
-      const rows = createRow(jobs_shipper, productTypes, loginStore.language);
+      const rows = createRow(jobs_shipper, productTypes, loginStore.language, t);
       setRows(rows);
       setRowData(rows);
     }
   }, [shipperStore.jobs_shipper, shipperStore.jobs_shipper?.length, productTypes]);
+
+  const onClickOpen = () => {
+    setOpen(true);
+    setInProgress(false);
+    setCompleted(false);
+    setAll(false);
+    const filteredData = rows.filter((item: any) => {
+      const data = item.cells[6].key.toString() === t('OPEN');
+      return data ? true : false;
+    });
+    setRowData(filteredData);
+  };
+
+  const onClickInProgress = () => {
+    setOpen(false);
+    setInProgress(true);
+    setCompleted(false);
+    setAll(false);
+    const filteredData = rows.filter((item: any) => {
+      const data = item.cells[6].key.toString() === t('IN-PROGRESS');
+      return data ? true : false;
+    });
+    setRowData(filteredData);
+  };
+
+  const onClickCompleted = () => {
+    setOpen(false);
+    setInProgress(false);
+    setCompleted(true);
+    setAll(false);
+    const filteredData = rows.filter((item: any) => {
+      const data = item.cells[6].key.toString() === t('COMPLETED');
+      return data ? true : false;
+    });
+    setRowData(filteredData);
+  };
+
+  const onClickAll = () => {
+    setAll(true);
+    setOpen(false);
+    setInProgress(false);
+    setCompleted(false);
+    setRowData(rows);
+  };
 
   return (
     <Card>
@@ -94,7 +139,59 @@ const JobContainer: React.FC<Props> = observer(() => {
         </div>
       </CardHeader>
       <CardBody>
-        <Row style={{ padding: 10, marginBottom: 10, display: 'flex', justifyContent: 'flex-end', minWidth: 600 }}>
+        <Row style={{ padding: 10, marginBottom: 10, display: 'flex', justifyContent: 'space-between', minWidth: 600 }}>
+          <div>
+            <Button
+              size="Small"
+              onClick={() => onClickAll()}
+              style={{
+                marginRight: 10,
+                borderColor: '#FBBC12',
+                backgroundColor: all ? '#FBBC12' : 'white',
+                color: all ? 'white' : 'black',
+              }}
+            >
+              {t('all')}
+            </Button>
+            <Button
+              status="Warning"
+              size="Small"
+              style={{
+                marginRight: 10,
+                borderColor: '#FBBC12',
+                backgroundColor: open ? '#FBBC12' : 'white',
+                color: open ? 'white' : 'black',
+              }}
+              onClick={() => onClickOpen()}
+            >
+              {t('OPEN')}
+            </Button>
+            <Button
+              status="Warning"
+              size="Small"
+              onClick={() => onClickInProgress()}
+              style={{
+                marginRight: 10,
+                borderColor: '#FBBC12',
+                backgroundColor: inProgress ? '#FBBC12' : 'white',
+                color: inProgress ? 'white' : 'black',
+              }}
+            >
+              {t('IN-PROGRESS')}
+            </Button>
+            <Button
+              status="Warning"
+              size="Small"
+              onClick={() => onClickCompleted()}
+              style={{
+                borderColor: '#FBBC12',
+                backgroundColor: completed ? '#FBBC12' : 'white',
+                color: completed ? 'white' : 'black',
+              }}
+            >
+              {t('COMPLETED')}
+            </Button>
+          </div>
           <Button
             appearance="outline"
             status="Success"

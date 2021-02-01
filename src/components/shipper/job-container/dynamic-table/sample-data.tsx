@@ -68,7 +68,7 @@ const jobStatus = {
   jobStatus23: 'IN-PROGRESS',
 };
 
-export const createRow = (jobs: any, products: any, language: string) => {
+export const createRow = (jobs: any, products: any, language: string, t: any) => {
   return jobs.map((job: any, index: number) => {
     const productType = products?.length && products.find((prod: any) => prod.id === job.productTypeId);
     const typeName = productType ? productType.name : '';
@@ -134,8 +134,8 @@ export const createRow = (jobs: any, products: any, language: string) => {
           content: job.weight,
         },
         {
-          key: status,
-          content: status,
+          key: t(status),
+          content: <span>{t(status)}</span>,
         },
       ],
     };

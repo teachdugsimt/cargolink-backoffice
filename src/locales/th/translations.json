@@ -77,5 +77,8 @@
   "confirm":"ยืนยัน",
   "LOW": "ต่ำ",
   "MEDIUM": "กลาง",
-  "HIGH": "สูง"
+  "HIGH": "สูง",
+  "OPEN": "OPEN",
+  "IN-PROGRESS": "IN-PROGRESS",
+  "COMPLETED": "COMPLETED"
 }
