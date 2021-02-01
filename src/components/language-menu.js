@@ -18,15 +18,13 @@ const useStyles = makeStyles({
 const LanguageMenu = (props) => {
   const { t, i18n } = useTranslation();
   const { loginStore } = useMst();
-  console.log('i18n :>', i18n);
   const classes = useStyles();
-
-  const [values, setValues] = useState({
-    language: 'th',
-  });
+  const [values, setValues] = useState({ language: 'th' });
 
   useEffect(() => {
-    setValues({ language: loginStore.language });
+    const { language } = loginStore;
+    if (language) setValues({ language: loginStore.language });
+    else loginStore.setLanguage('th');
   }, []);
 
   function handleChange(event) {

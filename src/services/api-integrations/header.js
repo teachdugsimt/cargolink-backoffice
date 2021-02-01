@@ -26,7 +26,7 @@ const Header = async (is_login = null, is_upload = null, timeout = 20000, requir
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        'Accept-Language': language,
+        'Accept-Language': language ? language : 'th',
       },
       timeout: 20000,
     };
@@ -37,7 +37,7 @@ const Header = async (is_login = null, is_upload = null, timeout = 20000, requir
         'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>',
         Accept: '*/*',
         Authorization: 'Bearer ' + token.idToken,
-        'Accept-Language': language,
+        'Accept-Language': language ? language : 'th',
       },
       timeout: timeout,
     };
@@ -48,7 +48,7 @@ const Header = async (is_login = null, is_upload = null, timeout = 20000, requir
         'Content-Type': 'application/json',
         Accept: 'application/json',
         Authorization: 'Bearer ' + token.idToken,
-        'Accept-Language': language,
+        'Accept-Language': language ? language : 'th',
       },
       timeout: timeout,
     };
@@ -58,7 +58,7 @@ const Header = async (is_login = null, is_upload = null, timeout = 20000, requir
       headers: {
         'Content-Type': 'application/json',
         Accept: '*/*',
-        'Accept-Language': language,
+        'Accept-Language': language ? language : 'th',
       },
       timeout: timeout,
     };
