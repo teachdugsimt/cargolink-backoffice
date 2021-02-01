@@ -83,6 +83,19 @@ const AddTruck: React.FC<Props> = observer(() => {
   }, [carrierStore.error_response]);
 
   useEffect(() => {
+    const { error_response } = masterTypeStore;
+    if (error_response) {
+      setAlertSetting({
+        icon: 'error',
+        show: true,
+        type: 'general',
+        title: error_response.title || '',
+        content: error_response.content || '',
+      });
+    }
+  }, [masterTypeStore.error_response]);
+
+  useEffect(() => {
     const trucks_types = JSON.parse(JSON.stringify(carrierStore.trucks_types));
     if (trucks_types?.length) {
       const array = trucks_types.map((truck: any) => ({

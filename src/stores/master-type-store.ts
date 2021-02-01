@@ -43,7 +43,7 @@ export const MasterTypeStore = types
             self.loading = false;
             self.error_response = {
               title: response.problem,
-              content: response.originalError.message,
+              content: 'GET regions : ' + response.originalError.message,
             };
           }
         } catch (error) {
@@ -71,7 +71,7 @@ export const MasterTypeStore = types
             self.loading = false;
             self.error_response = {
               title: response.problem,
-              content: response.originalError.message,
+              content: 'GET provinces : ' + response.originalError.message,
             };
           }
         } catch (error) {

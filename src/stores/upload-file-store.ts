@@ -40,7 +40,7 @@ export const UploadFileStore = types
             self.loading = false;
             self.error_response = {
               title: response.problem,
-              content: response.originalError.message,
+              content: 'POST image : ' + response.originalError.message,
             };
           }
         } catch (error) {

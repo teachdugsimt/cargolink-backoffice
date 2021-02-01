@@ -104,7 +104,7 @@ export const ShipperStore = types
             self.jobs_shipper = null;
             self.error_response = {
               title: response.problem,
-              content: response.originalError.message,
+              content: 'GET jobs : ' + response.originalError.message,
             };
           }
         } catch (error) {
@@ -132,7 +132,7 @@ export const ShipperStore = types
             self.loading = false;
             self.error_response = {
               title: response.problem,
-              content: response.originalError.message,
+              content: 'POST job : ' + response.originalError.message,
             };
           }
         } catch (error) {
@@ -159,7 +159,7 @@ export const ShipperStore = types
             self.loading = false;
             self.error_response = {
               title: response.problem,
-              content: response.originalError.message,
+              content: 'GET product-types : ' + response.originalError.message,
             };
           }
         } catch (error) {
