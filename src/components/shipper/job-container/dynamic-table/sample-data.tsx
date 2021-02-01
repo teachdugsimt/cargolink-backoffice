@@ -57,32 +57,22 @@ export const createHead = (withWidth: boolean) => {
 export const head = createHead(true);
 
 const jobStatus = {
-  jobStatus1TH: 'Submitted',
-  jobStatus3TH: 'Negotiation',
-  jobStatus4TH: 'Accepted',
-  jobStatus7TH: 'Completed',
-  jobStatus9TH: 'In progress',
-  jobStatus17TH: 'Waiting payment',
-  jobStatus20TH: 'Waiting confirmation',
-  jobStatus21TH: 'Complained',
-  jobStatus23TH: 'Waiting payment confirmation',
-
-  jobStatus1EN: 'Submitted',
-  jobStatus3EN: 'Negotiation',
-  jobStatus4EN: 'Accepted',
-  jobStatus7EN: 'Completed',
-  jobStatus9EN: 'In progress',
-  jobStatus17EN: 'Waiting payment',
-  jobStatus20EN: 'Waiting confirmation',
-  jobStatus21EN: 'Complained',
-  jobStatus23EN: 'Waiting payment confirmation',
+  jobStatus1: 'OPEN',
+  jobStatus3: 'IN-PROGRESS',
+  jobStatus4: 'IN-PROGRESS',
+  jobStatus7: 'COMPLETED',
+  jobStatus9: 'IN-PROGRESS',
+  jobStatus17: 'IN-PROGRESS',
+  jobStatus20: 'IN-PROGRESS',
+  jobStatus21: 'IN-PROGRESS',
+  jobStatus23: 'IN-PROGRESS',
 };
 
 export const createRow = (jobs: any, products: any, language: string) => {
   return jobs.map((job: any, index: number) => {
     const productType = products?.length && products.find((prod: any) => prod.id === job.productTypeId);
     const typeName = productType ? productType.name : '';
-    let status = jobStatus[`jobStatus${job.status}${language.toUpperCase()}`];
+    let status = jobStatus[`jobStatus${job.status}`];
     if (!status) status = job.status;
     return {
       key: `row-${index}-${job.id}`,
