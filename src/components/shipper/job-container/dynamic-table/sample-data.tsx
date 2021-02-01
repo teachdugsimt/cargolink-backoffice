@@ -44,53 +44,83 @@ export const createHead = (withWidth: boolean) => {
         shouldTruncate: true,
         isSortable: true,
       },
+      {
+        key: 'status',
+        content: 'Status',
+        shouldTruncate: true,
+        isSortable: true,
+      },
     ],
   };
 };
 
 export const head = createHead(true);
 
+const jobStatus = {
+  jobStatus1TH: 'Submitted',
+  jobStatus3TH: 'Negotiation',
+  jobStatus4TH: 'Accepted',
+  jobStatus7TH: 'Completed',
+  jobStatus9TH: 'In progress',
+  jobStatus17TH: 'Waiting payment',
+  jobStatus20TH: 'Waiting confirmation',
+  jobStatus21TH: 'Complained',
+  jobStatus23TH: 'Waiting payment confirmation',
+
+  jobStatus1EN: 'Submitted',
+  jobStatus3EN: 'Negotiation',
+  jobStatus4EN: 'Accepted',
+  jobStatus7EN: 'Completed',
+  jobStatus9EN: 'In progress',
+  jobStatus17EN: 'Waiting payment',
+  jobStatus20EN: 'Waiting confirmation',
+  jobStatus21EN: 'Complained',
+  jobStatus23EN: 'Waiting payment confirmation',
+};
+
 export const createRow = (jobs: any, products: any, language: string) => {
-  return jobs.map((jobpost: any, index: number) => {
-    const productType = products?.length && products.find((prod: any) => prod.id === jobpost.productTypeId);
+  return jobs.map((job: any, index: number) => {
+    const productType = products?.length && products.find((prod: any) => prod.id === job.productTypeId);
     const typeName = productType ? productType.name : '';
+    let status = jobStatus[`jobStatus${job.status}${language.toUpperCase()}`];
+    if (!status) status = job.status;
     return {
-      key: `row-${index}-${jobpost.id}`,
+      key: `row-${index}-${job.id}`,
       cells: [
         {
-          key: jobpost.id,
-          content: <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{jobpost.id}</span>,
+          key: job.id,
+          content: <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{job.id}</span>,
         },
         {
-          key: jobpost.productName,
-          content: jobpost.productName,
+          key: job.productName,
+          content: job.productName,
         },
         {
-          key: jobpost.owner?.companyName,
-          content: jobpost.owner?.companyName,
+          key: job.owner?.companyName,
+          content: job.owner?.companyName,
         },
         {
           key: typeName,
           content: typeName,
         },
         {
-          key: jobpost.from?.name,
+          key: job.from?.name,
           content: (
             <div style={{ borderBottom: '2px solid #253858' }}>
               <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
                 <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
                   <img src={images.pinDrop2} style={{ width: 18 }} />
                   <span style={{ fontWeight: 'bold', margin: '0 5px' }}>From:</span>
-                  {`${jobpost.from?.name}`}
+                  {`${job.from?.name}`}
                 </span>
                 <span style={{ padding: '2px 0', display: 'flex' }}>
                   <div style={{ border: '1px dashed black', margin: '0 13px 0 10px' }} />
                   <Icon style={{ color: '#FBBC12', marginRight: 5 }} icon={ic_access_time} />
-                  {` ${momentFormatDateTime(jobpost.from?.dateTime, language)}`}
+                  {` ${momentFormatDateTime(job.from?.dateTime, language)}`}
                 </span>
               </div>
               <div style={{ marginBottom: 5 }}>
-                {jobpost.to.map((e: any, i: number) => {
+                {job.to.map((e: any, i: number) => {
                   return (
                     <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 5 }} key={i}>
                       <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
@@ -110,8 +140,12 @@ export const createRow = (jobs: any, products: any, language: string) => {
           ),
         },
         {
-          key: jobpost.weight,
-          content: jobpost.weight,
+          key: job.weight,
+          content: job.weight,
+        },
+        {
+          key: status,
+          content: status,
         },
       ],
     };
