@@ -24,12 +24,6 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
   useEffect(() => {
-    if (pageContext.layout === 'auth') {
-      loginStore.requestLogout();
-    }
-  }, [pageContext]);
-
-  useEffect(() => {
     if (loginStore.error_login && !loginStore.data_signin.idToken) {
       setAlertSetting({
         icon: 'error',

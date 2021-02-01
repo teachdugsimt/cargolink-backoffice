@@ -65,7 +65,14 @@ const Item: React.FC<ItemProps> = observer(
               </a>
             </Link>
           ) : (
-            <Link {...item.link} className={item.selected ? 'active' : ''} onClick={onClickHandler}>
+            <Link
+              {...item.link}
+              className={item.selected ? 'active' : ''}
+              onClick={() => {
+                onClickHandler();
+                if (item.link?.to === '/auth/login') loginStore.requestLogout();
+              }}
+            >
               <LinkContent item={item} />
             </Link>
           )

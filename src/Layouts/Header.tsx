@@ -1,11 +1,9 @@
 import React from 'react';
 import { Link } from 'gatsby';
 import styled, { DefaultTheme } from 'styled-components';
-import Select from '@paljs/ui/Select';
 import { LayoutHeader } from '@paljs/ui/Layout';
-// import { EvaIcon } from '@paljs/ui/Icon';
 import { Actions } from '@paljs/ui/Actions';
-import ContextMenu from '@paljs/ui/ContextMenu';
+import ContextMenu from '../Layouts/Sidebar/ContextMenu';
 import Button from '@material-ui/core/Button';
 import { getPathReady } from './Sidebar';
 import { Location } from '@reach/router';
@@ -58,16 +56,6 @@ const StyleHeader = styled(LayoutHeader)`
     }
   }
 `;
-
-const Label = styled.span`
-  display: flex;
-  align-items: center;
-`;
-
-const SelectStyled = styled(Select)`
-  min-width: 150px;
-`;
-
 interface HeaderProps {
   toggleSidebar: () => void;
   theme: {
@@ -120,8 +108,18 @@ const Header: React.FC<HeaderProps> = (props) => {
                       placement="bottom"
                       currentPath={getPathReady(location.pathname)}
                       items={[
-                        { title: 'Profile', link: { to: '/profile' } },
-                        { title: 'Log out', link: { to: '/auth/login' } },
+                        {
+                          title_th: 'ข้อมูลผู้ใช้งาน',
+                          title_en: 'Profile',
+                          link: { to: '/profile' },
+                          icon: 'user',
+                        },
+                        {
+                          title_th: 'ออกจากระบบ',
+                          title_en: 'Log out',
+                          link: { to: '/auth/login' },
+                          icon: 'signOut',
+                        },
                       ]}
                       Link={Link}
                     >
