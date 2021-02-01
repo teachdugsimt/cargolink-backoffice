@@ -77,6 +77,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
         <Row style={{ padding: 10, marginBottom: 10, display: 'flex', justifyContent: 'space-between', minWidth: 600 }}>
           <div>
             <Button
+              id="all"
               size="Small"
               onClick={() => onClickAll()}
               style={{
@@ -89,6 +90,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
               {t('all')}
             </Button>
             <Button
+              id="pending"
               status="Warning"
               size="Small"
               style={{
@@ -102,6 +104,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
               {t('pending')}
             </Button>
             <Button
+              id="approved"
               status="Warning"
               size="Small"
               onClick={() => onClickApproved()}
@@ -115,6 +118,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
             </Button>
           </div>
           <Button
+            id="addNewTruck"
             appearance="outline"
             status="Success"
             size="Small"
