@@ -135,7 +135,7 @@ export const createRow = (jobs: any, products: any, language: string, t: any) =>
         },
         {
           key: t(status),
-          content: <span>{t(status)}</span>,
+          content: t(status),
         },
       ],
     };
