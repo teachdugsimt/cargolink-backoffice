@@ -62,6 +62,7 @@ const CarrierAccount = (props: any) => {
       <CardBody>
         <Row style={{ padding: 5, marginBottom: 10, minWidth: 600 }}>
           <Button
+            id="all"
             appearance={all == true ? 'filled' : 'outline'}
             status="Success"
             size="Small"
@@ -76,6 +77,7 @@ const CarrierAccount = (props: any) => {
             {t('all')}
           </Button>
           <Button
+            id="pending"
             appearance={panding == true ? 'filled' : 'outline'}
             status="Warning"
             size="Small"
@@ -90,6 +92,7 @@ const CarrierAccount = (props: any) => {
             {t('pending')}
           </Button>
           <Button
+            id="approved"
             appearance={approved == true ? 'filled' : 'outline'}
             status="Warning"
             size="Small"

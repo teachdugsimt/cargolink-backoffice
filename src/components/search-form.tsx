@@ -29,6 +29,7 @@ const SearchForm: React.FC<SearchProps> = observer((props) => {
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <input
+        id="inputSearch"
         className="new-input-component"
         type="text"
         placeholder={t('inputSearch')}
@@ -36,6 +37,7 @@ const SearchForm: React.FC<SearchProps> = observer((props) => {
         onChange={(e) => setSearchValue(e.target.value)}
       />
       <Button
+        id="search"
         appearance="filled"
         status="Basic"
         style={{ padding: '0.5875rem 0.8125rem' }}
