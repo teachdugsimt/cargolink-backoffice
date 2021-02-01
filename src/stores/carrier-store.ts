@@ -142,7 +142,6 @@ export const CarrierStore = types
       getAllTruckTypes: flow(function* getAllTruckTypes() {
         self.loading = true;
         self.trucks_types = null;
-        self.success_response = false;
         self.error_response = null;
         try {
           const response = yield CarrierApi.listTruckTypes();
@@ -169,7 +168,6 @@ export const CarrierStore = types
 
       postTruck: flow(function* postTruck(params) {
         self.loading = true;
-        self.success_response = false;
         self.error_response = null;
         try {
           const response = yield CarrierApi.addTruck(params);
@@ -192,6 +190,12 @@ export const CarrierStore = types
             content: 'Failed to post truck',
           };
         }
+      }),
+
+      clearCarrierStore: flow(function* clearCarrierStore() {
+        self.trucks_carrier = null;
+        self.success_response = false;
+        self.error_response = null;
       }),
     };
   });

@@ -9,23 +9,16 @@ import ImageUpload from './image-upload';
 import { useMst } from '../../../stores/root-store';
 import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
-import { regionOptions, provinceOptions } from './dynamic-table/sample-data';
 import { navigate } from 'gatsby';
 import '../../../Layouts/css/style.css';
 import { UploadFileStore } from '../../../stores/upload-file-store';
 import { useTranslation } from 'react-i18next';
 
-const provinces = provinceOptions.sort((a, b) => {
-  if (a.label < b.label) return -1;
-  if (a.label > b.label) return 1;
-  return 0;
-});
-
 interface Props {}
 
 const AddTruck: React.FC<Props> = observer((props) => {
   const { t } = useTranslation();
-  const { carrierStore, loginStore } = useMst();
+  const { carrierStore, loginStore, masterTypeStore } = useMst();
   const truckPhotos = JSON.parse(JSON.stringify(UploadFileStore.truckPhotos));
   const { register, handleSubmit, errors, control } = useForm({
     mode: 'onChange',
@@ -33,14 +26,16 @@ const AddTruck: React.FC<Props> = observer((props) => {
   });
   const [checkbox, setCheckbox] = useState(false);
   const [stallHeights, setStallHeights] = useState([]);
-  const [filterProvince, setFilterProvince] = useState(provinces);
-  const [filterRegion, setFilterRegion] = useState(regionOptions);
+  const [filterProvince, setFilterProvince] = useState([]);
+  const [filterRegion, setFilterRegion] = useState([]);
   const [truckTypeOptions, setTruckTypeOptions] = useState();
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
   const [toggle, setToggle] = useState(false);
+  const [isSelectRegion, setIsSelectRegion] = useState(false);
 
   useEffect(() => {
     carrierStore.getAllTruckTypes();
+    masterTypeStore.getAllRegion();
     const stalls: any = [
       { value: 'LOW', label: t('LOW') },
       { value: 'MEDIUM', label: t('MEDIUM') },
@@ -98,6 +93,33 @@ const AddTruck: React.FC<Props> = observer((props) => {
     }
   }, [carrierStore.trucks_types, carrierStore.trucks_types?.length]);
 
+  useEffect(() => {
+    const regions = JSON.parse(JSON.stringify(masterTypeStore.regions));
+    if (regions?.length) {
+      const regionOptions = regions.map((region: any) => {
+        return { value: region.id, label: region.name };
+      });
+      setFilterRegion(regionOptions);
+    }
+  }, [masterTypeStore.regions]);
+
+  useEffect(() => {
+    const provinces = JSON.parse(JSON.stringify(masterTypeStore.provinces));
+    if (provinces?.length) {
+      const provinceOptions = provinces.map((region: any) => {
+        return { value: region.id, label: region.name };
+      });
+      setFilterProvince(provinceOptions);
+    }
+  }, [masterTypeStore.provinces, masterTypeStore.provinces?.length]);
+
+  const onChangeRegion = (event: { value: number; label: string }) => {
+    setIsSelectRegion(true);
+    masterTypeStore.getAllProvince({
+      regionId: event.value,
+    });
+  };
+
   const onSubmit = (data: any) => {
     const { region, truckType, province } = data;
     if (
@@ -125,16 +147,6 @@ const AddTruck: React.FC<Props> = observer((props) => {
         ],
       });
     }
-  };
-
-  const onChangeRegion = (event: { value: number; label: string }) => {
-    const provincesFillterByRegion = provinces.filter((e) => e.area === event.value);
-    setFilterProvince(provincesFillterByRegion);
-  };
-
-  const onChangeProvince = (event: { value: number; label: string; area: number }) => {
-    const regionsFillterByProvince = regionOptions.filter((e) => e.value === event.area);
-    setFilterRegion(regionsFillterByProvince);
   };
 
   return (
@@ -305,8 +317,8 @@ const AddTruck: React.FC<Props> = observer((props) => {
                   value={value}
                   onChange={(event: any) => {
                     onChange(event);
-                    onChangeProvince(event);
                   }}
+                  isDisabled={!isSelectRegion}
                 />
               );
             }}

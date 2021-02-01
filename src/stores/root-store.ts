@@ -4,11 +4,13 @@ import { types, Instance, onSnapshot } from 'mobx-state-tree';
 import { LoginStore } from './login-store';
 import { CarrierStore } from './carrier-store';
 import { ShipperStore } from './shipper-store';
+import { MasterTypeStore } from './master-type-store';
 
 const RootModel = types.model({
   loginStore: LoginStore,
   carrierStore: CarrierStore,
   shipperStore: ShipperStore,
+  masterTypeStore: MasterTypeStore,
 });
 
 let initialState = RootModel.create({
@@ -25,6 +27,10 @@ let initialState = RootModel.create({
   shipperStore: {
     jobs_shipper: [],
     product_types: [],
+  },
+  masterTypeStore: {
+    regions: [],
+    provinces: [],
   },
 });
 
