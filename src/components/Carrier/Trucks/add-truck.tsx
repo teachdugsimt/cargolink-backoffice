@@ -167,6 +167,7 @@ const AddTruck: React.FC<Props> = observer(() => {
                 fullWidth
               />
             }
+            id="truckType"
             control={control}
             valueName="selected"
             rules={{ required: 'Truck type cannot be null.' }}
@@ -175,13 +176,14 @@ const AddTruck: React.FC<Props> = observer(() => {
             aria-invalid={errors.truckType ? 'true' : 'false'}
           />
           {errors.truckType && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+            <span id="fieldTruckType" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               {t('fieldTruckType')}
             </span>
           )}
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <p>{t('tipper')}</p>
             <Switch
+              id="tipper"
               checked={checkbox}
               onChange={() => setCheckbox(!checkbox)}
               color="primary"
@@ -209,7 +211,11 @@ const AddTruck: React.FC<Props> = observer(() => {
             aria-invalid={errors.stallHeight ? 'true' : 'false'}
           />
           {errors.stallHeight && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+            <span
+              id="fieldStallHeight"
+              style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }}
+              role="alert"
+            >
               {t('fieldStallHeight')}
             </span>
           )}
@@ -217,6 +223,7 @@ const AddTruck: React.FC<Props> = observer(() => {
             {t('amountWeight')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <input
+            id="loadingWeight"
             className="new-input-component"
             name="loadingWeight"
             type="number"
@@ -228,12 +235,12 @@ const AddTruck: React.FC<Props> = observer(() => {
             aria-invalid={errors.loadingWeight ? 'true' : 'false'}
           />
           {errors.loadingWeight && errors.loadingWeight.type === 'required' && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+            <span id="fieldWeight" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               {t('fieldWeight')}
             </span>
           )}
           {errors.loadingWeight && errors.loadingWeight.type === 'min' && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+            <span id="minWeight" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               {t('minWeight')}
             </span>
           )}
@@ -245,6 +252,7 @@ const AddTruck: React.FC<Props> = observer(() => {
             </p>
           </div>
           <input
+            id="registrationNumber"
             className="new-input-component"
             name="registrationNumber"
             type="text"
@@ -255,7 +263,11 @@ const AddTruck: React.FC<Props> = observer(() => {
             aria-invalid={errors.registrationNumber ? 'true' : 'false'}
           />
           {errors.registrationNumber && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+            <span
+              id="fieldRegistrationNumber"
+              style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }}
+              role="alert"
+            >
               {t('fieldRegistrationNumber')}
             </span>
           )}
@@ -266,7 +278,7 @@ const AddTruck: React.FC<Props> = observer(() => {
           <br />
           <ImageUpload submitted={toggle} />
           {toggle && (!truckPhotos.front || !truckPhotos.back || !truckPhotos.left || !truckPhotos.left) && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+            <span id="fieldUploadCar" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               {t('fieldUploadCar')}
             </span>
           )}
@@ -290,6 +302,7 @@ const AddTruck: React.FC<Props> = observer(() => {
                 />
               );
             }}
+            id="region"
             control={control}
             valueName="selected"
             rules={{ required: 'Region cannot be null.' }}
@@ -298,7 +311,7 @@ const AddTruck: React.FC<Props> = observer(() => {
             aria-invalid={errors.region ? 'true' : 'false'}
           />
           {errors.region && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+            <span id="fieldRegion" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               {t('fieldRegion')}
               <br />
             </span>
@@ -320,6 +333,7 @@ const AddTruck: React.FC<Props> = observer(() => {
                 />
               );
             }}
+            id="province"
             control={control}
             valueName="selected"
             // rules={{ required: 'Province cannot be null.' }}
@@ -327,9 +341,8 @@ const AddTruck: React.FC<Props> = observer(() => {
             // ref={register({ required: true })}
             // aria-invalid={errors.province ? 'true' : 'false'}
           />
-
           {/* {errors.province && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+            <span id="fieldProvince" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               {t('fieldProvince')}
             </span>
           )} */}
@@ -337,6 +350,7 @@ const AddTruck: React.FC<Props> = observer(() => {
           <br />
           <div style={{ display: 'flex' }}>
             <Button
+              id="back"
               type="button"
               status="Warning"
               shape="Rectangle"
@@ -347,6 +361,7 @@ const AddTruck: React.FC<Props> = observer(() => {
               {t('back')}
             </Button>
             <Button
+              id="confirm"
               status="Success"
               type="submit"
               shape="Rectangle"
