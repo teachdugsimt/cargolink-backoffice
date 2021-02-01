@@ -121,28 +121,26 @@ const AddTruck: React.FC<Props> = observer(() => {
   };
 
   const onSubmit = (data: any) => {
-    const { region, truckType, province } = data;
+    const { region, truckType, province, stallHeight, registrationNumber, loadingWeight } = data;
     if (
-      data &&
       region.value &&
       truckType.value &&
-      province.value &&
       truckPhotos.front &&
       truckPhotos.back &&
       truckPhotos.left &&
       truckPhotos.left
     ) {
       carrierStore.postTruck({
-        loadingWeight: data.loadingWeight,
-        registrationNumber: [data.registrationNumber],
-        stallHeight: data.stallHeight.value,
+        loadingWeight: loadingWeight,
+        registrationNumber: [registrationNumber],
+        stallHeight: stallHeight.value,
         tipper: checkbox,
         truckPhotos: UploadFileStore.truckPhotos,
-        truckType: data.truckType.value,
+        truckType: truckType.value,
         workingZones: [
           {
-            province: data.province.value,
-            region: data.region.value,
+            province: province?.value,
+            region: region.value,
           },
         ],
       });
@@ -324,17 +322,17 @@ const AddTruck: React.FC<Props> = observer(() => {
             }}
             control={control}
             valueName="selected"
-            rules={{ required: 'Province cannot be null.' }}
+            // rules={{ required: 'Province cannot be null.' }}
             name="province"
-            ref={register({ required: true })}
-            aria-invalid={errors.province ? 'true' : 'false'}
+            // ref={register({ required: true })}
+            // aria-invalid={errors.province ? 'true' : 'false'}
           />
 
-          {errors.province && (
+          {/* {errors.province && (
             <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               {t('fieldProvince')}
             </span>
-          )}
+          )} */}
           <br />
           <br />
           <div style={{ display: 'flex' }}>
