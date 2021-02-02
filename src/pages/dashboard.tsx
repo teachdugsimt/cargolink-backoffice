@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SEO from '../components/SEO';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import ChartCar from '../components/dashboard/chart-car/chart-car';
@@ -8,6 +8,11 @@ import { useTranslation } from 'react-i18next';
 
 const Home = () => {
   const { t } = useTranslation();
+
+  // useEffect(() => {
+  //   const data = localStorage.getItem('rootState');
+  //   console.log('data : >>', data);
+  // }, [])
   return (
     <div>
       <Card size="Large">
