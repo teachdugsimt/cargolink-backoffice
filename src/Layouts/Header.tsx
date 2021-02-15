@@ -71,7 +71,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = observer((props) => {
   const { t, i18n } = useTranslation();
   const { loginStore } = useMst();
-  const [profile, setProfile] = useState({null});
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const data_profile = JSON.parse(JSON.stringify(loginStore.data_profile));
@@ -136,7 +136,7 @@ const Header: React.FC<HeaderProps> = observer((props) => {
                       Link={Link}
                     >
                       {/* <User color="#fff" name="Wirachai Khueankaew" title="Manger" size="Medium"/> */}
-                      {profile && profile.fullName ?profile.fullName:'No data'}
+                      {profile && profile.fullName ? profile.fullName : 'No data'}
                     </ContextMenu>
                   )}
                 </Location>
