@@ -18,12 +18,12 @@ const items: MenuItemType[] = [
     ],
   },
   {
-    title_th: 'ผู้ให้บริการ',
+    title_th: 'ผู้ให้บริการขนส่ง',
     title_en: 'Carrier',
     icon: 'truck',
     expanded: true,
     children: [
-      { title_th: 'บัญชีผู้ให้บริการ', title_en: 'Carrier account', link: { to: '/carrier-account' } },
+      { title_th: 'บัญชีผู้ให้บริการขนส่ง', title_en: 'Carrier account', link: { to: '/carrier-account' } },
       { title_th: 'รถบรรทุก', title_en: 'Trucks', link: { to: '/trucks' } },
       { title_th: 'คนขับรถ', title_en: 'Drivers', link: { to: '/drivers' } },
     ],

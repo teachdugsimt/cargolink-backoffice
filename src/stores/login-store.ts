@@ -5,12 +5,27 @@ const token = types.model({
   idToken: types.string,
 });
 
+const profile = types.model({
+  id: types.maybeNull(types.number),
+  avatar: types.maybeNull(types.string),
+  commissionFee: types.maybeNull(types.number),
+  fullName: types.maybeNull(types.string),
+  loginId: types.maybeNull(types.string),
+  multipleAccount: types.maybeNull(types.boolean),
+  phoneNumber: types.maybeNull(types.string),
+  ratingPoint: types.maybeNull(types.number),
+  role: types.maybeNull(types.string),
+  status: types.maybeNull(types.boolean),
+  title: types.maybeNull(types.string),
+});
+
 export const LoginStore = types
   .model('LoginStore', {
     language: types.string,
     fetching_login: false,
     data_signin: token,
     error_login: types.string,
+    data_profile: types.maybeNull(profile),
   })
   .actions((self) => {
     return {
@@ -25,6 +40,7 @@ export const LoginStore = types
           idToken: '',
         };
         self.error_login = '';
+        self.data_profile = null;
 
         try {
           // ... yield can be used in async/await style
@@ -32,12 +48,26 @@ export const LoginStore = types
           console.log('requestLogin response :> ', response);
           if (response && response.ok) {
             const responseHeader = response.headers.authorization;
+            const { data } = response;
             self.fetching_login = false;
             const data_signin = {
               idToken: responseHeader,
             };
             self.data_signin = data_signin;
             self.error_login = '';
+            self.data_profile = {
+              id: data.id,
+              avatar: data.avatar,
+              commissionFee: data.commissionFee,
+              fullName: data.fullName,
+              loginId: data.loginId,
+              multipleAccount: data.multipleAccount,
+              phoneNumber: data.phoneNumber,
+              ratingPoint: data.ratingPoint,
+              role: data.role,
+              status: data.status,
+              title: data.title,
+            };
             localStorage.setItem('profileLocal', JSON.stringify(data_signin));
           } else {
             self.fetching_login = false;

@@ -22,6 +22,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
   const [password, setPassword] = useState('');
   const [toggle, setToggle] = useState(false);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
+  const [keyboard, setkeyboard] = useState('');
 
   useEffect(() => {
     if (loginStore.error_login && !loginStore.data_signin.idToken) {
@@ -65,6 +66,24 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
     }
     setAlertSetting(defaultAlertSetting);
   };
+
+  const _handleKeyPress = (event: any) => {
+    console.log('Event :: ', event);
+    setkeyboard(event.key);
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', _handleKeyPress, false);
+    return () => {
+      document.removeEventListener('keydown', _handleKeyPress, false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (keyboard === 'Enter') {
+      submit();
+    }
+  }, [keyboard]);
 
   return (
     <Auth title="" subTitle={t('loginSubtitle')}>

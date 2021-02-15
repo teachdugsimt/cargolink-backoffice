@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@paljs/ui/Button';
@@ -12,6 +12,7 @@ interface SearchProps {
 const SearchForm: React.FC<SearchProps> = observer((props) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
+  const [keyboard, setkeyboard] = useState('');
 
   const onClickSearch = () => {
     const rows = props.data;
@@ -25,6 +26,24 @@ const SearchForm: React.FC<SearchProps> = observer((props) => {
       props.onSearch(filteredData);
     }
   };
+
+  const _handleKeyPress = (event: any) => {
+    console.log('Event :: ', event);
+    setkeyboard(event.key);
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', _handleKeyPress, false);
+    return () => {
+      document.removeEventListener('keydown', _handleKeyPress, false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (keyboard === 'Enter') {
+      onClickSearch();
+    }
+  }, [keyboard]);
 
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>

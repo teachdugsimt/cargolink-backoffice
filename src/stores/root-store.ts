@@ -20,6 +20,7 @@ let initialState = RootModel.create({
       idToken: '',
     },
     error_login: '',
+    data_profile: null,
   },
   carrierStore: {
     trucks_carrier: [],

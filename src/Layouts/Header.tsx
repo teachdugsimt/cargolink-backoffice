@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'gatsby';
 import styled, { DefaultTheme } from 'styled-components';
 import { LayoutHeader } from '@paljs/ui/Layout';
@@ -13,6 +13,8 @@ import LanguageMenu from '../components/language-menu';
 import images from '../components/Themes/images';
 import { ic_menu } from 'react-icons-kit/md/ic_menu';
 import { Icon } from 'react-icons-kit';
+import { observer } from 'mobx-react-lite';
+import { useMst } from '../stores/root-store';
 
 const HeaderStyle = styled.div`
   display: flex;
@@ -66,8 +68,18 @@ interface HeaderProps {
   dir: 'rtl' | 'ltr';
 }
 
-const Header: React.FC<HeaderProps> = (props) => {
+const Header: React.FC<HeaderProps> = observer((props) => {
   const { t, i18n } = useTranslation();
+  const { loginStore } = useMst();
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    const data_profile = JSON.parse(JSON.stringify(loginStore.data_profile));
+    console.log('profile:>>', data_profile);
+    if (data_profile) {
+      setProfile(data_profile);
+    }
+  }, [loginStore.data_profile]);
 
   return (
     <StyleHeader fixed>
@@ -124,7 +136,7 @@ const Header: React.FC<HeaderProps> = (props) => {
                       Link={Link}
                     >
                       {/* <User color="#fff" name="Wirachai Khueankaew" title="Manger" size="Medium"/> */}
-                      Wirachai Khueankaew
+                      {profile && profile.fullName}
                     </ContextMenu>
                   )}
                 </Location>
@@ -135,5 +147,5 @@ const Header: React.FC<HeaderProps> = (props) => {
       </HeaderStyle>
     </StyleHeader>
   );
-};
+});
 export default Header;
