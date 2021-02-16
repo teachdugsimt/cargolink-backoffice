@@ -146,17 +146,17 @@ export const ShipperStore = types
       }),
 
       getProductTypes: flow(function* getProductTypes() {
-        self.loading = true;
+        // self.loading = true;
         self.product_types = null;
         self.error_response = null;
         try {
           const response = yield ShipperApi.getAllProductType();
           console.log('getProductTypes response :> ', response);
           if (response && response.ok) {
-            self.loading = false;
+            // self.loading = false;
             self.product_types = response.data;
           } else {
-            self.loading = false;
+            // self.loading = false;
             self.error_response = {
               title: response.problem,
               content: 'GET product-types : ' + response.originalError.message,
@@ -164,7 +164,7 @@ export const ShipperStore = types
           }
         } catch (error) {
           console.error('Failed to get product types :> ', error);
-          self.loading = false;
+          // self.loading = false;
           self.error_response = {
             title: '',
             content: 'Failed to get product types ',

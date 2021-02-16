@@ -112,7 +112,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
             style={{ borderColor: submitted && !imageUpload.front ? '#ff3d71' : ' #d8d8d8' }}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-              <label for="file-upload-front" className="custom-file-upload-photo">
+              <label htmlFor="file-upload-front" className="custom-file-upload-photo">
                 <Icon icon={camera} style={{ marginRight: 5 }} />
               </label>
               <input
@@ -150,7 +150,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
             style={{ borderColor: submitted && !imageUpload.back ? '#ff3d71' : ' #d8d8d8' }}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-              <label for="file-upload-back" className="custom-file-upload-photo">
+              <label htmlFor="file-upload-back" className="custom-file-upload-photo">
                 <Icon icon={camera} style={{ marginRight: 5 }} />
               </label>
               <input
@@ -189,7 +189,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
             style={{ borderColor: submitted && !imageUpload.left ? '#ff3d71' : ' #d8d8d8' }}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-              <label for="file-upload-left" className="custom-file-upload-photo">
+              <label htmlFor="file-upload-left" className="custom-file-upload-photo">
                 <Icon icon={camera} style={{ marginRight: 5 }} />
               </label>
               <input
@@ -227,7 +227,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
             style={{ borderColor: submitted && !imageUpload.right ? '#ff3d71' : ' #d8d8d8' }}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-              <label for="file-upload-right" className="custom-file-upload-photo">
+              <label htmlFor="file-upload-right" className="custom-file-upload-photo">
                 <Icon icon={camera} style={{ marginRight: 5 }} />
               </label>
               <input
