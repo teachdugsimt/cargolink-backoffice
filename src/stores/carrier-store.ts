@@ -7,10 +7,41 @@ const objectWorking = types.model({
   truckId: types.maybeNull(types.number),
 });
 
-const trucks = types.model({
+const AvatarObject = types.model({
+  object: types.maybeNull(types.string),
+  token: types.maybeNull(types.string),
+});
+
+const objectOwner = types.model({
+  avatar: types.maybeNull(AvatarObject),
+  companyName: types.maybeNull(types.string),
+  email: types.maybeNull(types.string),
+  fullName: types.maybeNull(types.string),
+  id: types.maybeNull(types.number),
+  mobileNo: types.maybeNull(types.string),
+  userId: types.maybeNull(types.string),
+});
+
+const objectSort = types.model({
+  empty: types.maybeNull(types.boolean),
+  sorted: types.maybeNull(types.boolean),
+  unsorted: types.maybeNull(types.boolean),
+});
+
+const objectPageable = types.model({
+  offset: types.maybeNull(types.number),
+  pageNumber: types.maybeNull(types.number),
+  pageSize: types.maybeNull(types.number),
+  paged: types.maybeNull(types.boolean),
+  sort: types.maybeNull(objectSort),
+  unpaged: types.maybeNull(types.boolean),
+});
+
+const contentArray = types.model({
   id: types.maybeNull(types.string),
   truckType: types.maybeNull(types.number),
   loadingWeight: types.maybeNull(types.number),
+  owner: types.maybeNull(types.array(objectOwner)),
   stallHeight: types.maybeNull(types.string),
   createdAt: types.maybeNull(types.string),
   updatedAt: types.maybeNull(types.string),
@@ -18,6 +49,20 @@ const trucks = types.model({
   registrationNumber: types.maybeNull(types.array(types.maybeNull(types.string))),
   workingZones: types.maybeNull(types.array(objectWorking)),
   tipper: types.maybeNull(types.boolean),
+});
+
+const trucks = types.model({
+  content: types.maybeNull(types.array(contentArray)),
+  empty: types.maybeNull(types.boolean),
+  first: types.maybeNull(types.boolean),
+  last: types.maybeNull(types.boolean),
+  number: types.maybeNull(types.number),
+  numberOfElements: types.maybeNull(types.number),
+  pageable: types.maybeNull(objectPageable),
+  size: types.maybeNull(types.number),
+  sort: types.maybeNull(objectSort),
+  totalElements: types.maybeNull(types.number),
+  totalPages: types.maybeNull(types.number),
 });
 
 const trucksTypes = types.model({
@@ -43,7 +88,7 @@ const drivers = types.model({
 export const CarrierStore = types
   .model('CarrierStore', {
     loading: false,
-    trucks_carrier: types.maybeNull(types.array(trucks)),
+    trucks_carrier: types.maybeNull(trucks),
     trucks_types: types.maybeNull(types.array(trucksTypes)),
     drivers_carrier: types.maybeNull(types.array(drivers)),
     success_response: false,
@@ -68,7 +113,7 @@ export const CarrierStore = types
             self.loading = false;
             //? in th first time, we get trucks
             let trucks = JSON.parse(JSON.stringify(self.trucks_carrier));
-            if (self.trucks_carrier?.length) trucks.push(...data);
+            if (self.trucks_carrier?.content?.length) trucks.push(...data);
             else trucks = data;
 
             self.trucks_carrier = trucks;

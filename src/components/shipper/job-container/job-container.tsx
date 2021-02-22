@@ -76,7 +76,7 @@ const JobContainer: React.FC<Props> = observer(() => {
 
   useEffect(() => {
     const jobs_shipper = JSON.parse(JSON.stringify(shipperStore.jobs_shipper));
-    console.log('jobs_shipper:>>', JSON.parse(JSON.stringify(shipperStore.jobs_shipper?.content)));
+    console.log('jobs_shipper:>>', JSON.parse(JSON.stringify(shipperStore.jobs_shipper)));
     if (jobs_shipper?.length) {
       const rows = createRow(jobs_shipper, productTypes, loginStore.language, t);
       setRows(rows);

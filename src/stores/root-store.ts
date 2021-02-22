@@ -23,7 +23,7 @@ let initialState = RootModel.create({
     data_profile: null,
   },
   carrierStore: {
-    trucks_carrier: [],
+    trucks_carrier: null,
   },
   shipperStore: {
     jobs_shipper: null,
