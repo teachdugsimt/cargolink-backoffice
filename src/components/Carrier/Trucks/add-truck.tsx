@@ -38,7 +38,10 @@ const AddTruck: React.FC<Props> = observer(() => {
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
   const [toggle, setToggle] = useState(false);
   const [isSelectRegion, setIsSelectRegion] = useState(false);
-
+  console.log('register:>>', register);
+  console.log('truckTypeOptions:>>', truckTypeOptions);
+  let formValue = control.getValues();
+  console.log('control:>>', formValue['truckType']);
   useEffect(() => {
     carrierStore.getAllTruckTypes();
     masterTypeStore.getAllRegion();
@@ -244,6 +247,7 @@ const AddTruck: React.FC<Props> = observer(() => {
                 status={errors.stallHeight ? 'Danger' : 'Basic'}
                 placeholder={t('pleaseselect')}
                 fullWidth
+                isDisabled={formValue['truckType'] ? true : false}
               />
             }
             id="stallHeight"
