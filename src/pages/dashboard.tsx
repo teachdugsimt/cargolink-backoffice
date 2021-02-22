@@ -19,16 +19,14 @@ const Home = () => {
         <CardHeader>
           <span style={{ fontSize: 20 }}>{t('dashboard')}</span>
         </CardHeader>
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
-          <CardBody>
+        <CardBody>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <span style={{ fontSize: 20, marginBottom: 20 }}>{t('truckstype')}</span>
             <ChartArea />
-          </CardBody>
-          <CardBody>
             <span style={{ fontSize: 20, marginBottom: 20 }}>{t('JobsRegion')}</span>
             <ChartRegion />
-          </CardBody>
-        </div>
+          </div>
+        </CardBody>
       </Card>
     </div>
   );

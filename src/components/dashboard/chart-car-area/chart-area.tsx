@@ -20,7 +20,12 @@ const customizeTooltip = (arg) => {
 };
 const ChartArea = () => {
   return (
-    <Chart id="chart" title="" dataSource={dataSource} size={{ width: 550, height: 480 }}>
+    <Chart
+      id="chart"
+      title=""
+      dataSource={dataSource}
+      // size={{ width: 550, height: 480 }}
+    >
       <CommonSeriesSettings argumentField="state" type="stackedBar" />
       <Series valueField="Western" name="Western" />
       <Series valueField="Central" name="Central" />

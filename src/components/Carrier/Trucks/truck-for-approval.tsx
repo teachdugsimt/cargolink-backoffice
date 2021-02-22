@@ -6,7 +6,7 @@ import images from '../../Themes/images';
 import { defaultAlertSetting, momentFormat } from '../../simple-data';
 import { useTranslation } from 'react-i18next';
 
-const TruckForApproval: React.FC<{}> = observer(({ }) => {
+const TruckForApproval: React.FC<{}> = observer(({}) => {
   const { carrierStore, loginStore, masterTypeStore } = useMst();
   const { t } = useTranslation();
   const [rowData, setRowData] = useState([]);
@@ -147,8 +147,8 @@ const TruckForApproval: React.FC<{}> = observer(({ }) => {
                   ) : truck.truckType == 36 ? (
                     <img style={{ height: 30 }} src={images.Truck36} />
                   ) : (
-                                                                                            <></>
-                                                                                          )}
+                    <></>
+                  )}
                 </div>
               ),
             },
