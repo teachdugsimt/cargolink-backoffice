@@ -69,6 +69,7 @@ const jobStatus = {
 };
 
 export const createRow = (jobs: any, products: any, language: string, t: any) => {
+  console.log('jobs:>>', jobs);
   return jobs.map((job: any, index: number) => {
     const productType = products?.length && products.find((prod: any) => prod.id === job.productTypeId);
     const typeName = productType ? productType.name : '';

@@ -26,7 +26,7 @@ let initialState = RootModel.create({
     trucks_carrier: [],
   },
   shipperStore: {
-    jobs_shipper: [],
+    jobs_shipper: null,
     product_types: [],
   },
   masterTypeStore: {

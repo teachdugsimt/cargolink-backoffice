@@ -19,15 +19,22 @@ const ArrayTo = types.model({
   lng: types.maybeNull(types.string),
 });
 
+const AvatarObject = types.model({
+  object: types.maybeNull(types.string),
+  token: types.maybeNull(types.string),
+});
+
 const OwnerObject = types.model({
   id: types.maybeNull(types.number),
   companyName: types.maybeNull(types.string),
   fullName: types.maybeNull(types.string),
   mobileNo: types.maybeNull(types.string),
   email: types.maybeNull(types.string),
+  avatar: types.maybeNull(AvatarObject),
+  userId: types.maybeNull(types.string),
 });
 
-const Jobs = types.model({
+const contentData = types.model({
   id: types.maybeNull(types.string),
   productTypeId: types.maybeNull(types.number),
   productName: types.maybeNull(types.string),
@@ -40,6 +47,35 @@ const Jobs = types.model({
   status: types.maybeNull(types.number),
 });
 
+const sortData = types.model({
+  empty: types.maybeNull(types.boolean),
+  sorted: types.maybeNull(types.boolean),
+  unsorted: types.maybeNull(types.boolean),
+});
+
+const pageableData = types.model({
+  offset: types.maybeNull(types.number),
+  pageNumber: types.maybeNull(types.number),
+  pageSize: types.maybeNull(types.number),
+  sort: types.maybeNull(sortData),
+  paged: types.maybeNull(types.boolean),
+  unpaged: types.maybeNull(types.boolean),
+});
+
+const Jobs = types.model({
+  content: types.maybeNull(types.array(contentData)),
+  empty: types.maybeNull(types.boolean),
+  first: types.maybeNull(types.boolean),
+  last: types.maybeNull(types.boolean),
+  number: types.maybeNull(types.number),
+  numberOfElements: types.maybeNull(types.number),
+  pageable: types.maybeNull(pageableData),
+  size: types.maybeNull(types.number),
+  sort: types.maybeNull(sortData),
+  totalElements: types.maybeNull(types.number),
+  totalPages: types.maybeNull(types.number),
+});
+
 const Products = types.model({
   id: types.maybeNull(types.number),
   name: types.maybeNull(types.string),
@@ -50,7 +86,7 @@ const Products = types.model({
 export const ShipperStore = types
   .model('ShipperStore', {
     loading: false,
-    jobs_shipper: types.maybeNull(types.array(Jobs)),
+    jobs_shipper: types.maybeNull(Jobs),
     product_types: types.maybeNull(types.array(Products)),
     success_response: false,
     error_response: types.maybeNull(
@@ -74,17 +110,17 @@ export const ShipperStore = types
             self.loading = false;
             //? in th first time, we get jobs
             let jobs = JSON.parse(JSON.stringify(self.jobs_shipper));
-            if (self.jobs_shipper?.length) jobs.push(...data);
+            if (self.jobs_shipper?.content?.length) jobs.push(...data);
             else jobs = data;
 
             self.jobs_shipper = jobs;
 
             //? in th second time, we get jobs
-            if (data?.length && data?.length % 10 === 0) {
+            if (data.content?.length && data.content?.length % 10 === 0) {
               self.loading = true;
               //? change page parameter
               let newParams = JSON.parse(JSON.stringify(params));
-              newParams.page = jobs?.length;
+              newParams.page = jobs?.content.length;
 
               const newResponse = yield ShipperApi.getAllJobs(newParams);
               console.log('getAllJobsByShipper newResponse :> ', newResponse);
