@@ -41,7 +41,7 @@ const contentArray = types.model({
   id: types.maybeNull(types.string),
   truckType: types.maybeNull(types.number),
   loadingWeight: types.maybeNull(types.number),
-  owner: types.maybeNull(types.array(objectOwner)),
+  owner: types.maybeNull(objectOwner),
   stallHeight: types.maybeNull(types.string),
   createdAt: types.maybeNull(types.string),
   updatedAt: types.maybeNull(types.string),
