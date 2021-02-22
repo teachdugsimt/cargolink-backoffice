@@ -16,6 +16,12 @@ import '../../../Layouts/css/style.css';
 
 interface Props {}
 
+const userOptions: any = [
+  { value: 'LOW', label: 'dsdsa' },
+  { value: 'MEDIUM', label: 'dsad' },
+  { value: 'HIGH', label: 'dsad' },
+];
+
 const AddTruck: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
   const { carrierStore, loginStore, masterTypeStore } = useMst();
@@ -146,7 +152,7 @@ const AddTruck: React.FC<Props> = observer(() => {
       carrierStore.postTruck({
         loadingWeight: loadingWeight,
         registrationNumber: [registrationNumber],
-        stallHeight: stallHeight.value,
+        stallHeight: stallHeight && stallHeight.value ? stallHeight.value : '',
         tipper: checkbox,
         truckPhotos: UploadFileStore.truckPhotos,
         truckType: truckType.value,
@@ -168,6 +174,31 @@ const AddTruck: React.FC<Props> = observer(() => {
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)} className="form-add-data">
+          <p>
+            {t('user')} <span style={{ color: '#ff3d71' }}>*</span>
+          </p>
+          <Controller
+            as={
+              <Select
+                options={userOptions}
+                status={errors.user ? 'Danger' : 'Basic'}
+                placeholder={t('pleaseselect')}
+                fullWidth
+              />
+            }
+            id="user"
+            control={control}
+            valueName="selected"
+            rules={{ required: 'Truck type cannot be null.' }}
+            name="user"
+            ref={register({ required: true })}
+            aria-invalid={errors.user ? 'true' : 'false'}
+          />
+          {errors.user && (
+            <span id="user" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+              {t('user')}
+            </span>
+          )}
           <p>
             {t('typeCar')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
