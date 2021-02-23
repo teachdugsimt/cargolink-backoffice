@@ -40,6 +40,7 @@ const JobContainer: React.FC<Props> = observer(() => {
   useEffect(() => {
     shipperStore.getProductTypes();
     shipperStore.clearShipperStore();
+    setSearchValue({ page: 0 });
     shipperStore.getAllJobsByShipper({ page: 0 });
   }, []);
 
@@ -80,7 +81,7 @@ const JobContainer: React.FC<Props> = observer(() => {
     }
   }, [
     shipperStore.jobs_shipper,
-    shipperStore.jobs_shipper?.number,
+    shipperStore.jobs_shipper?.reRender,
     shipperStore.jobs_shipper?.content?.length,
     productTypes,
   ]);
@@ -90,11 +91,8 @@ const JobContainer: React.FC<Props> = observer(() => {
     setInProgress(false);
     setCompleted(false);
     setAll(false);
-    setSearchValue({ status: 1 });
-    shipperStore.getAllJobsByShipper({
-      page: 0,
-      status: 1,
-    });
+    setSearchValue({ page: 0, status: 1 });
+    shipperStore.getAllJobsByShipper({ page: 0, status: 1 });
   };
 
   const onClickInProgress = () => {
@@ -102,11 +100,8 @@ const JobContainer: React.FC<Props> = observer(() => {
     setInProgress(true);
     setCompleted(false);
     setAll(false);
-    setSearchValue({ status: 3 });
-    shipperStore.getAllJobsByShipper({
-      page: 0,
-      status: 3,
-    });
+    setSearchValue({ page: 0, status: 3 });
+    shipperStore.getAllJobsByShipper({ page: 0, status: 3 });
   };
 
   const onClickCompleted = () => {
@@ -114,11 +109,8 @@ const JobContainer: React.FC<Props> = observer(() => {
     setInProgress(false);
     setCompleted(true);
     setAll(false);
-    setSearchValue({ status: 7 });
-    shipperStore.getAllJobsByShipper({
-      page: 0,
-      status: 7,
-    });
+    setSearchValue({ page: 0, status: 7 });
+    shipperStore.getAllJobsByShipper({ page: 0, status: 7 });
   };
 
   const onClickAll = () => {
@@ -126,7 +118,7 @@ const JobContainer: React.FC<Props> = observer(() => {
     setOpen(false);
     setInProgress(false);
     setCompleted(false);
-    setSearchValue({});
+    setSearchValue({ page: 0 });
     shipperStore.getAllJobsByShipper({ page: 0 });
   };
 
@@ -138,6 +130,7 @@ const JobContainer: React.FC<Props> = observer(() => {
         if (thereIs) productIds.push(e.id);
       });
     const search = {
+      page: 0,
       productName: value,
       owner: value,
       productType: productIds,
@@ -146,10 +139,7 @@ const JobContainer: React.FC<Props> = observer(() => {
       weight: parseInt(value, 10),
     };
     setSearchValue(search);
-    shipperStore.getAllJobsByShipper({
-      page: 0,
-      ...search,
-    });
+    shipperStore.getAllJobsByShipper(search);
   };
 
   return (
@@ -242,8 +232,9 @@ const JobContainer: React.FC<Props> = observer(() => {
             //   caption={caption}
             head={head}
             rows={rows}
-            sortKey={sortable.sortKey}
-            sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
+            page={page}
+            // sortKey={sortable.sortKey}
+            // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
@@ -256,18 +247,14 @@ const JobContainer: React.FC<Props> = observer(() => {
               const search = { ...searchValue, descending, sortBy: sort.key };
               setSortable({ sortKey: sort.key, sortOrder: sort.sortOrder });
               setSearchValue(search);
-              shipperStore.getAllJobsByShipper({
-                page: 0,
-                ...search,
-              });
+              shipperStore.getAllJobsByShipper(search);
             }}
-            page={page}
             onSetPage={(pagination) => {
               setPage(pagination);
-              shipperStore.getAllJobsByShipper({
-                page: pagination - 1,
-                ...searchValue,
-              });
+              let search = JSON.parse(JSON.stringify(searchValue));
+              search['page'] = pagination - 1;
+              setSearchValue(search);
+              shipperStore.getAllJobsByShipper(search);
             }}
           />
         </Wrapper>

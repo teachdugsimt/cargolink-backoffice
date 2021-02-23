@@ -22,7 +22,6 @@ const Wrapper = styled.div`
 const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, alertSetting }) => {
   const { carrierStore, masterTypeStore } = useMst();
   const { t } = useTranslation();
-  const [rowData, setRowData] = useState([]);
   const [panding, setPanding] = useState(false);
   const [approved, setApproved] = useState(false);
   const [all, setAll] = useState(false);
@@ -32,36 +31,30 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
   const [sortable, setSortable] = useState({ sortKey: '', sortOrder: 'DESC' });
 
   useEffect(() => {
-    setRowData(rows);
-  }, [rows, rows?.length]);
+    setSearchValue({ page: 0 });
+  }, []);
 
   const onClickPending = () => {
     setPanding(true);
     setApproved(false);
     setAll(false);
-    setSearchValue({ approveStatus: 0 });
-    carrierStore.getAllTrucksByCarrier({
-      page: 0,
-      approveStatus: 0,
-    });
+    setSearchValue({ page: 0, approveStatus: 0 });
+    carrierStore.getAllTrucksByCarrier({ page: 0, approveStatus: 0 });
   };
 
   const onClickApproved = () => {
     setApproved(true);
     setPanding(false);
     setAll(false);
-    setSearchValue({ approveStatus: 1 });
-    carrierStore.getAllTrucksByCarrier({
-      page: 0,
-      approveStatus: 1,
-    });
+    setSearchValue({ page: 0, approveStatus: 1 });
+    carrierStore.getAllTrucksByCarrier({ page: 0, approveStatus: 1 });
   };
 
   const onClickAll = () => {
     setAll(true);
     setPanding(false);
     setApproved(false);
-    setSearchValue({});
+    setSearchValue({ page: 0 });
     carrierStore.getAllTrucksByCarrier({ page: 0 });
   };
 
@@ -74,16 +67,14 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
         if (thereIs) zoneIds.push(z.id);
       });
     const search = {
+      page: 0,
       workingZones: zoneIds,
       registrationNumber: value,
       loadingWeight: parseInt(value, 10),
       stallHeight: value,
     };
     setSearchValue(search);
-    carrierStore.getAllTrucksByCarrier({
-      page: 0,
-      ...search,
-    });
+    carrierStore.getAllTrucksByCarrier(search);
   };
 
   return (
@@ -161,14 +152,15 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
             <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> {t('addNewTruck')}
           </Button>
         </Row>
-        <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
+        <span>{`${t('resultsFound')}: ${rows.length}`}</span>
         <Wrapper>
           <DynamicTable
             // caption={caption}
             head={head}
-            rows={rowData}
-            sortKey={sortable.sortKey}
-            sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
+            rows={rows}
+            page={page}
+            // sortKey={sortable.sortKey}
+            // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
@@ -181,18 +173,14 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
               const search = { ...searchValue, descending, sortBy: sort.key };
               setSortable({ sortKey: sort.key, sortOrder: sort.sortOrder });
               setSearchValue(search);
-              carrierStore.getAllTrucksByCarrier({
-                page: 0,
-                ...search,
-              });
+              carrierStore.getAllTrucksByCarrier(search);
             }}
-            page={page}
             onSetPage={(pagination) => {
               setPage(pagination);
-              carrierStore.getAllTrucksByCarrier({
-                page: pagination - 1,
-                ...searchValue,
-              });
+              let search = JSON.parse(JSON.stringify(searchValue));
+              search['page'] = pagination - 1;
+              setSearchValue(search);
+              carrierStore.getAllTrucksByCarrier(search);
             }}
           />
         </Wrapper>

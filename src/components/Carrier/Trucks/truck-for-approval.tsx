@@ -45,7 +45,7 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
   useEffect(() => {
     const trucks = JSON.parse(JSON.stringify(carrierStore.trucks_carrier));
     const regions = JSON.parse(JSON.stringify(masterTypeStore.regions));
-    if (trucks?.content?.length && regions?.length) {
+    if (trucks?.content && regions?.length) {
       const rows = trucks.content.map((truck: any, index: number) => {
         const zones =
           truck.workingZones &&
@@ -174,7 +174,7 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
     }
   }, [
     carrierStore.trucks_carrier,
-    carrierStore.trucks_carrier?.number,
+    carrierStore.trucks_carrier?.reRender,
     carrierStore.trucks_carrier?.content?.length,
     masterTypeStore.regions,
   ]);

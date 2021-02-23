@@ -78,7 +78,7 @@ const contentData = types.model({
 
 const Jobs = types.model({
   content: types.maybeNull(types.array(contentData)),
-  number: types.maybeNull(types.number),
+  reRender: types.boolean,
 });
 
 const Products = types.model({
@@ -115,7 +115,7 @@ export const ShipperStore = types
             self.loading = false;
             const pageNumber = data.pageable.pageNumber * 10;
             const content = data.content;
-            let jobs: { content: any; number: any } = { content: [], number: 0 };
+            let jobs: { content: any; reRender: boolean } = { content: [], reRender: true };
             const ct = {
               id: null,
               productTypeId: null,
@@ -137,8 +137,8 @@ export const ShipperStore = types
               for (let i = pageNumber, j = 0; i < pageNumber + pageSize; i++, j++) {
                 jobs.content[i] = content[j];
               }
+              jobs.reRender = !!!self.jobs_shipper?.reRender;
             }
-            jobs.number = data.number;
             self.jobs_shipper = jobs;
           } else {
             self.loading = false;

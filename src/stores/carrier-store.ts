@@ -67,7 +67,7 @@ const contentArray = types.model({
 
 const Trucks = types.model({
   content: types.maybeNull(types.array(contentArray)),
-  number: types.maybeNull(types.number),
+  reRender: types.boolean,
 });
 
 const trucksTypes = types.model({
@@ -118,7 +118,7 @@ export const CarrierStore = types
             self.loading = false;
             const pageNumber = data.pageable.pageNumber * 10;
             const content = data.content;
-            let trucks: { content: any; number: any } = { content: [], number: 0 };
+            let trucks: { content: any; reRender: boolean } = { content: [], reRender: true };
             const ct = {
               id: null,
               truckType: null,
@@ -141,8 +141,8 @@ export const CarrierStore = types
               for (let i = pageNumber, j = 0; i < pageNumber + pageSize; i++, j++) {
                 trucks.content[i] = content[j];
               }
+              trucks.reRender = !!!self.trucks_carrier?.reRender;
             }
-            trucks.number = data.number;
             self.trucks_carrier = trucks;
           } else {
             self.loading = false;
