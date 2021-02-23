@@ -330,15 +330,6 @@ const AddTruck: React.FC<Props> = observer(() => {
             // ref={register({ required: false })}
             aria-invalid={errors.stallHeight ? 'true' : 'false'}
           />
-          {/* {errors.stallHeight && (
-            <span
-              id="fieldStallHeight"
-              style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }}
-              role="alert"
-            >
-              {t('fieldStallHeight')}
-            </span>
-          )} */}
           <p>
             {t('amountWeight')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
@@ -552,7 +543,6 @@ const AddTruck: React.FC<Props> = observer(() => {
           {fieldZone.length >= 2 ? (
             <></>
           ) : (
-            // <Col offset={{ xs: 11 }} breakPoint={{ xs: 1 }}>
             <Button
               type="button"
               size="Small"
@@ -562,13 +552,7 @@ const AddTruck: React.FC<Props> = observer(() => {
             >
               <EvaIcon name="plus-outline" />
             </Button>
-            // </Col>
           )}
-          {/* {errors.province && (
-            <span id="fieldProvince" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldProvince')}
-            </span>
-          )} */}
           <br />
           <br />
           <div style={{ display: 'flex' }}>
