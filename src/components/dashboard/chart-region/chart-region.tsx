@@ -15,7 +15,7 @@ import populationData from './data.tsx';
 const dataSource = populationData.getMaleAgeData();
 const customizeTooltip = (arg: any) => {
   return {
-    text: `${arg.seriesName} years: ${arg.valueText}`,
+    text: `${arg.seriesName} : ${arg.valueText}`,
   };
 };
 const ChartCar = () => {

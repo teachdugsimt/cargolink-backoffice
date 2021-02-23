@@ -50,10 +50,6 @@ const AddTruck: React.FC<Props> = observer(() => {
   const [toggle, setToggle] = useState(false);
   const [isSelectRegion, setIsSelectRegion] = useState(false);
   const [valueTruck, setValueTruck] = useState(0);
-  // console.log('register:>>', register);
-  // console.log('truckTypeOptions:>>', truckTypeOptions);
-  // let formValue = control.getValues();
-  // console.log('control:>>', formValue?.truckType?.value);
 
   useEffect(() => {
     carrierStore.getAllTruckTypes();
@@ -436,61 +432,91 @@ const AddTruck: React.FC<Props> = observer(() => {
           <p>
             {t('zoneWork')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
-          <Controller
-            as={({ onChange, value }) => {
-              return (
-                <Select
-                  status={errors.region ? 'Danger' : 'Basic'}
-                  options={filterRegion}
-                  placeholder={t('region')}
-                  fullWidth
-                  value={value}
-                  onChange={(event: any) => {
-                    onChangeRegion(event);
-                    onChange(event);
-                  }}
-                />
-              );
-            }}
-            id="region"
-            control={control}
-            valueName="selected"
-            rules={{ required: 'Region cannot be null.' }}
-            name="region"
-            ref={register({ required: true })}
-            aria-invalid={errors.region ? 'true' : 'false'}
-          />
-          {errors.region && (
-            <span id="fieldRegion" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldRegion')}
+          {fields.map(({ id }, index) => {
+            <div key={id}>
+              <Controller
+                as={({ onChange, value }) => {
+                  return (
+                    <Select
+                      status={errors.region ? 'Danger' : 'Basic'}
+                      options={filterRegion}
+                      placeholder={t('region')}
+                      fullWidth
+                      value={value}
+                      onChange={(event: any) => {
+                        onChangeRegion(event);
+                        onChange(event);
+                      }}
+                    />
+                  );
+                }}
+                id="region"
+                control={control}
+                valueName="selected"
+                rules={{ required: 'Region cannot be null.' }}
+                name="region"
+                ref={register({ required: true })}
+                aria-invalid={errors.region ? 'true' : 'false'}
+              />
+              {errors.region && (
+                <span id="fieldRegion" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('fieldRegion')}
+                  <br />
+                </span>
+              )}
               <br />
-            </span>
-          )}
-          <br />
-          <Controller
-            as={({ onChange, value }) => {
-              return (
-                <Select
-                  status={errors.province ? 'Danger' : 'Basic'}
-                  options={filterProvince}
-                  placeholder={t('province')}
-                  fullWidth
-                  value={value}
-                  onChange={(event: any) => {
-                    onChange(event);
-                  }}
-                  isDisabled={!isSelectRegion}
-                />
+              <Controller
+                as={({ onChange, value }) => {
+                  return (
+                    <Select
+                      status={errors.province ? 'Danger' : 'Basic'}
+                      options={filterProvince}
+                      placeholder={t('province')}
+                      fullWidth
+                      value={value}
+                      onChange={(event: any) => {
+                        onChange(event);
+                      }}
+                      isDisabled={!isSelectRegion}
+                    />
+                  );
+                }}
+                id="province"
+                control={control}
+                valueName="selected"
+                // rules={{ required: 'Province cannot be null.' }}
+                name="province"
+                // ref={register({ required: true })}
+                // aria-invalid={errors.province ? 'true' : 'false'}
+              />
+            </div>;
+            {
+              index == 0 ? (
+                <></>
+              ) : (
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.125rem' }}>
+                  <Button
+                    type="button"
+                    size="Small"
+                    shape="SemiRound"
+                    style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
+                    onClick={() => remove(index)}
+                  >
+                    <EvaIcon name="minus-outline" />
+                  </Button>
+                </div>
               );
-            }}
-            id="province"
-            control={control}
-            valueName="selected"
-            // rules={{ required: 'Province cannot be null.' }}
-            name="province"
-            // ref={register({ required: true })}
-            // aria-invalid={errors.province ? 'true' : 'false'}
-          />
+            }
+          })}
+          <Button
+            type="button"
+            size="Small"
+            shape="SemiRound"
+            style={{ backgroundColor: '#253858', borderColor: '#253858', marginTop: '1.125rem' }}
+            onClick={() => append({})}
+          >
+            <EvaIcon name="plus-outline" />
+          </Button>
           {/* {errors.province && (
             <span id="fieldProvince" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               {t('fieldProvince')}
