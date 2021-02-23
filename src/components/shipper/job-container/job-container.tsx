@@ -35,6 +35,7 @@ const JobContainer: React.FC<Props> = observer(() => {
   const [inProgress, setInProgress] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [all, setAll] = useState(false);
+  const [searchValue, setSearchValue] = useState({});
 
   useEffect(() => {
     shipperStore.getProductTypes();
@@ -76,23 +77,29 @@ const JobContainer: React.FC<Props> = observer(() => {
 
   useEffect(() => {
     const jobs_shipper = JSON.parse(JSON.stringify(shipperStore.jobs_shipper));
-    if (jobs_shipper?.content?.length) {
+    if (jobs_shipper?.content) {
       const rows = createRow(jobs_shipper.content, productTypes, loginStore.language, t);
       setRows(rows);
       setRowData(rows);
     }
-  }, [shipperStore.jobs_shipper, shipperStore.jobs_shipper?.number, productTypes]);
+  }, [
+    shipperStore.jobs_shipper,
+    shipperStore.jobs_shipper?.number,
+    shipperStore.jobs_shipper?.content?.length,
+    productTypes,
+  ]);
 
   const onClickOpen = () => {
     setOpen(true);
     setInProgress(false);
     setCompleted(false);
     setAll(false);
-    const filteredData = rows.filter((item: any) => {
-      const data = item.cells[6].key.toString() === t('OPEN');
-      return data ? true : false;
+    setSearchValue({ status: 1 });
+    shipperStore.getAllJobsByShipper({
+      descending: true,
+      page: 0,
+      status: 1,
     });
-    setRowData(filteredData);
   };
 
   const onClickInProgress = () => {
@@ -100,11 +107,12 @@ const JobContainer: React.FC<Props> = observer(() => {
     setInProgress(true);
     setCompleted(false);
     setAll(false);
-    const filteredData = rows.filter((item: any) => {
-      const data = item.cells[6].key.toString() === t('IN-PROGRESS');
-      return data ? true : false;
+    setSearchValue({ status: 3 });
+    shipperStore.getAllJobsByShipper({
+      descending: true,
+      page: 0,
+      status: 3,
     });
-    setRowData(filteredData);
   };
 
   const onClickCompleted = () => {
@@ -112,11 +120,12 @@ const JobContainer: React.FC<Props> = observer(() => {
     setInProgress(false);
     setCompleted(true);
     setAll(false);
-    const filteredData = rows.filter((item: any) => {
-      const data = item.cells[6].key.toString() === t('COMPLETED');
-      return data ? true : false;
+    setSearchValue({ status: 7 });
+    shipperStore.getAllJobsByShipper({
+      descending: true,
+      page: 0,
+      status: 7,
     });
-    setRowData(filteredData);
   };
 
   const onClickAll = () => {
@@ -124,7 +133,34 @@ const JobContainer: React.FC<Props> = observer(() => {
     setOpen(false);
     setInProgress(false);
     setCompleted(false);
-    setRowData(rows);
+    setSearchValue({});
+    shipperStore.getAllJobsByShipper({
+      descending: true,
+      page: 0,
+    });
+  };
+
+  const onSearch = (value: string) => {
+    let productIds: number[] = [];
+    productTypes &&
+      productTypes.forEach((e: any) => {
+        const thereIs = e.name.includes(value.trim());
+        if (thereIs) productIds.push(e.id);
+      });
+    const search = {
+      productName: value,
+      owner: value,
+      productType: productIds,
+      from: value,
+      to: value,
+      weight: parseInt(value, 10),
+    };
+    setSearchValue(search);
+    shipperStore.getAllJobsByShipper({
+      descending: true,
+      page: 0,
+      ...search,
+    });
   };
 
   return (
@@ -134,7 +170,7 @@ const JobContainer: React.FC<Props> = observer(() => {
         <div className="block-data-header">
           <span className="font-data-header">{t('jobs')}</span>
           <div style={{ display: 'flex' }}>
-            <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
+            <SearchForm onSearch={(value: string) => onSearch(value)} />
           </div>
         </div>
       </CardHeader>
@@ -228,12 +264,11 @@ const JobContainer: React.FC<Props> = observer(() => {
             page={page}
             onSetPage={(pagination) => {
               setPage(pagination);
-              if (rowData.length === rows.length) {
-                shipperStore.getAllJobsByShipper({
-                  descending: true,
-                  page: pagination - 1,
-                });
-              }
+              shipperStore.getAllJobsByShipper({
+                descending: true,
+                page: pagination - 1,
+                ...searchValue,
+              });
             }}
           />
         </Wrapper>
