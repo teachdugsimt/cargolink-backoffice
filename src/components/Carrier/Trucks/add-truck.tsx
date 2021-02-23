@@ -367,6 +367,7 @@ const AddTruck: React.FC<Props> = observer(() => {
             {fields.map(({ id }, index) => {
               return (
                 <div key={id}>
+                  {index >= 1 ? <br /> : <></>}
                   <input
                     id="registrationNumber"
                     className="new-input-component"
@@ -374,7 +375,6 @@ const AddTruck: React.FC<Props> = observer(() => {
                     type="text"
                     style={{
                       borderColor: errors.registrationNumber ? '#ff3d71' : '',
-                      marginTop: index >= 1 ? 20 : 0,
                     }}
                     ref={register({ required: true })}
                     aria-invalid={errors.registrationNumber ? 'true' : 'false'}
@@ -386,6 +386,7 @@ const AddTruck: React.FC<Props> = observer(() => {
                       role="alert"
                     >
                       {t('fieldRegistrationNumber')}
+                      <br />
                     </span>
                   )}
                   {index == 0 ? (
