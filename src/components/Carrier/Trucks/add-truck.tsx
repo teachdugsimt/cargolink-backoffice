@@ -289,13 +289,12 @@ const AddTruck: React.FC<Props> = observer(() => {
               id="tipper"
               checked={checkbox}
               onChange={() => setCheckbox(!checkbox)}
+              disabled={valueTruck == 26 || valueTruck == 42 || valueTruck == 36 ? false : true}
               color="primary"
               style={{ color: checkbox ? '#00B132' : '' }}
             />
           </div>
-          <p>
-            {t('stallHeight')} <span style={{ color: '#ff3d71' }}>*</span>
-          </p>
+          <p>{t('stallHeight')}</p>
           <Controller
             as={
               <Select
@@ -315,10 +314,10 @@ const AddTruck: React.FC<Props> = observer(() => {
             valueName="selected"
             rules={{ required: 'Stall height cannot be null.' }}
             name="stallHeight"
-            ref={register({ required: true })}
+            ref={register({ required: false })}
             aria-invalid={errors.stallHeight ? 'true' : 'false'}
           />
-          {errors.stallHeight && (
+          {/* {errors.stallHeight && (
             <span
               id="fieldStallHeight"
               style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }}
@@ -326,7 +325,7 @@ const AddTruck: React.FC<Props> = observer(() => {
             >
               {t('fieldStallHeight')}
             </span>
-          )}
+          )} */}
           <p>
             {t('amountWeight')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
