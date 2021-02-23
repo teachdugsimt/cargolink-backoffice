@@ -520,10 +520,10 @@ const AddTruck: React.FC<Props> = observer(() => {
                       type="button"
                       size="Small"
                       shape="SemiRound"
-                      style={{ backgroundColor: '#253858', borderColor: '#253858' }}
-                      onClick={() => appendZone({})}
+                      style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
+                      onClick={() => removeZone(index)}
                     >
-                      <EvaIcon name="plus-outline" />
+                      <EvaIcon name="minus-outline" />
                     </Button>
                   )}
                 </Row>
@@ -537,10 +537,10 @@ const AddTruck: React.FC<Props> = observer(() => {
                       type="button"
                       size="Small"
                       shape="SemiRound"
-                      style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
-                      onClick={() => removeZone(index)}
+                      style={{ backgroundColor: '#253858', borderColor: '#253858' }}
+                      onClick={() => appendZone({})}
                     >
-                      <EvaIcon name="minus-outline" />
+                      <EvaIcon name="plus-outline" />
                     </Button>
                     {/*    </Col>
                      </Row> */}
