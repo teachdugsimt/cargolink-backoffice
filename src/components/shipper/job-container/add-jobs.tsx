@@ -49,6 +49,8 @@ const AddJobs: React.FC<{}> = observer(() => {
 
   const startDate = watch('start');
 
+  console.log('jobType:>>', productTypeIdOptions);
+
   useEffect(() => {
     carrierStore.getAllTruckTypes();
     shipperStore.getProductTypes();
