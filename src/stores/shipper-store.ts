@@ -47,34 +47,34 @@ const contentData = types.model({
   status: types.maybeNull(types.number),
 });
 
-const sortData = types.model({
-  empty: types.maybeNull(types.boolean),
-  sorted: types.maybeNull(types.boolean),
-  unsorted: types.maybeNull(types.boolean),
-});
+// const sortData = types.model({
+//   empty: types.maybeNull(types.boolean),
+//   sorted: types.maybeNull(types.boolean),
+//   unsorted: types.maybeNull(types.boolean),
+// });
 
-const pageableData = types.model({
-  offset: types.maybeNull(types.number),
-  pageNumber: types.maybeNull(types.number),
-  pageSize: types.maybeNull(types.number),
-  sort: types.maybeNull(sortData),
-  paged: types.maybeNull(types.boolean),
-  unpaged: types.maybeNull(types.boolean),
-});
+// const pageableData = types.model({
+//   offset: types.maybeNull(types.number),
+//   pageNumber: types.maybeNull(types.number),
+//   pageSize: types.maybeNull(types.number),
+//   sort: types.maybeNull(sortData),
+//   paged: types.maybeNull(types.boolean),
+//   unpaged: types.maybeNull(types.boolean),
+// });
 
-const Jobs = types.model({
-  content: types.maybeNull(types.array(contentData)),
-  empty: types.maybeNull(types.boolean),
-  first: types.maybeNull(types.boolean),
-  last: types.maybeNull(types.boolean),
-  number: types.maybeNull(types.number),
-  numberOfElements: types.maybeNull(types.number),
-  pageable: types.maybeNull(pageableData),
-  size: types.maybeNull(types.number),
-  sort: types.maybeNull(sortData),
-  totalElements: types.maybeNull(types.number),
-  totalPages: types.maybeNull(types.number),
-});
+// const Jobs = types.model({
+//   content: types.maybeNull(types.array(contentData)),
+//   empty: types.maybeNull(types.boolean),
+//   first: types.maybeNull(types.boolean),
+//   last: types.maybeNull(types.boolean),
+//   number: types.maybeNull(types.number),
+//   numberOfElements: types.maybeNull(types.number),
+//   pageable: types.maybeNull(pageableData),
+//   size: types.maybeNull(types.number),
+//   sort: types.maybeNull(sortData),
+//   totalElements: types.maybeNull(types.number),
+//   totalPages: types.maybeNull(types.number),
+// });
 
 const Products = types.model({
   id: types.maybeNull(types.number),
@@ -86,7 +86,7 @@ const Products = types.model({
 export const ShipperStore = types
   .model('ShipperStore', {
     loading: false,
-    jobs_shipper: types.maybeNull(Jobs),
+    jobs_shipper: types.maybeNull(types.array(contentData)),
     product_types: types.maybeNull(types.array(Products)),
     success_response: false,
     error_response: types.maybeNull(
@@ -108,33 +108,34 @@ export const ShipperStore = types
           if (response && response.ok) {
             const { data } = response;
             self.loading = false;
-            //? in th first time, we get jobs
-            let jobs = JSON.parse(JSON.stringify(self.jobs_shipper));
-            if (self.jobs_shipper?.content?.length) jobs.push(...data);
-            else jobs = data;
-
-            self.jobs_shipper = jobs;
-
-            //? in th second time, we get jobs
-            if (data.content?.length && data.content?.length % 10 === 0) {
-              self.loading = true;
-              //? change page parameter
-              let newParams = JSON.parse(JSON.stringify(params));
-              newParams.page = jobs?.content.length;
-
-              const newResponse = yield ShipperApi.getAllJobs(newParams);
-              console.log('getAllJobsByShipper newResponse :> ', newResponse);
-
-              if (newResponse && newResponse.ok) {
-                self.loading = false;
-                const newData = newResponse.data;
-                let newJobs = JSON.parse(JSON.stringify(self.jobs_shipper));
-                newJobs.push(...newData);
-                self.jobs_shipper = newJobs;
-              } else {
-                self.loading = false;
+            const pageNumber = data.pageable.pageNumber * 10;
+            const content = data.content;
+            let jobs = [];
+            const ct = {
+              id: null,
+              productTypeId: null,
+              productName: null,
+              truckType: null,
+              weight: null,
+              requiredTruckAmount: null,
+              from: null,
+              to: null,
+              owner: null,
+              status: null,
+            };
+            if (pageNumber == 0) {
+              //? in th first time, we get jobs
+              jobs = [...content, ...Array(data.totalElements - content.length).fill(ct)];
+            } else {
+              jobs = Array(data.totalElements).fill(ct);
+              const pageSize = data.pageable.pageSize;
+              let amount = 0;
+              for (let i = pageNumber; i < pageNumber + pageSize; i++) {
+                jobs[i] = content[amount];
+                amount++;
               }
             }
+            self.jobs_shipper = jobs;
           } else {
             self.loading = false;
             self.jobs_shipper = null;
