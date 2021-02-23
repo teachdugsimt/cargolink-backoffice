@@ -56,7 +56,7 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-const jobStatus = {
+const jobStatus: any = {
   jobStatus1: 'OPEN',
   jobStatus3: 'IN-PROGRESS',
   jobStatus4: 'IN-PROGRESS',
@@ -69,7 +69,6 @@ const jobStatus = {
 };
 
 export const createRow = (jobs: any, products: any, language: string, t: any) => {
-  console.log('jobs:>>', jobs);
   return jobs.map((job: any, index: number) => {
     const productType = products?.length && products.find((prod: any) => prod.id === job.productTypeId);
     const typeName = productType ? productType.name : '';

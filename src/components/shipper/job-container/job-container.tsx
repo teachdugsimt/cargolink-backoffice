@@ -76,13 +76,13 @@ const JobContainer: React.FC<Props> = observer(() => {
 
   useEffect(() => {
     const jobs_shipper = JSON.parse(JSON.stringify(shipperStore.jobs_shipper));
-    console.log('jobs_shipper:>>', JSON.parse(JSON.stringify(shipperStore.jobs_shipper)));
+    // console.log('jobs_shipper:>>', JSON.parse(JSON.stringify(shipperStore.jobs_shipper)));
     if (jobs_shipper?.length) {
       const rows = createRow(jobs_shipper, productTypes, loginStore.language, t);
       setRows(rows);
       setRowData(rows);
     }
-  }, [shipperStore.jobs_shipper?.content, shipperStore.jobs_shipper?.content?.length, productTypes]);
+  }, [shipperStore.jobs_shipper, shipperStore.jobs_shipper?.length, productTypes]);
 
   const onClickOpen = () => {
     setOpen(true);
@@ -229,10 +229,10 @@ const JobContainer: React.FC<Props> = observer(() => {
             page={page}
             onSetPage={(pagination) => {
               setPage(pagination);
-              if (rowData.length % 10 === 0 && pagination % 2 === 0 && rowData.length === rows.length) {
+              if (rowData.length === rows.length) {
                 shipperStore.getAllJobsByShipper({
                   descending: true,
-                  page: rowData.length,
+                  page: pagination - 1,
                 });
               }
             }}

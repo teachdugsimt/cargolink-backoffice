@@ -28,7 +28,6 @@ const SearchForm: React.FC<SearchProps> = observer((props) => {
   };
 
   const _handleKeyPress = (event: any) => {
-    console.log('Event :: ', event);
     setkeyboard(event.key);
   };
 
