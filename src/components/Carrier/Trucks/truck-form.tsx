@@ -20,7 +20,7 @@ const Wrapper = styled.div`
 `;
 
 const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, alertSetting }) => {
-  const { carrierStore } = useMst();
+  const { carrierStore, masterTypeStore } = useMst();
   const { t } = useTranslation();
   const [rowData, setRowData] = useState([]);
   const [panding, setPanding] = useState(false);
@@ -28,6 +28,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
   const [all, setAll] = useState(false);
   const [submit, setSubmit] = useState(false);
   const [page, setPage] = useState(1);
+  const [searchValue, setSearchValue] = useState({});
 
   useEffect(() => {
     setRowData(rows);
@@ -37,29 +38,57 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
     setPanding(true);
     setApproved(false);
     setAll(false);
-    const filteredData = rows.filter((item: any) => {
-      const data = item.cells[6].key.toString().toUpperCase() === t('pending');
-      return data ? true : false;
+    setSearchValue({ approveStatus: 0 });
+    carrierStore.getAllTrucksByCarrier({
+      descending: true,
+      page: 0,
+      approveStatus: 0,
     });
-    setRowData(filteredData);
   };
 
   const onClickApproved = () => {
     setApproved(true);
     setPanding(false);
     setAll(false);
-    const filteredData = rows.filter((item: any) => {
-      const data = item.cells[6].key.toString().toUpperCase() === t('approved');
-      return data ? true : false;
+    setSearchValue({ approveStatus: 1 });
+    carrierStore.getAllTrucksByCarrier({
+      descending: true,
+      page: 0,
+      approveStatus: 1,
     });
-    setRowData(filteredData);
   };
 
   const onClickAll = () => {
     setAll(true);
     setPanding(false);
     setApproved(false);
-    setRowData(rows);
+    setSearchValue({});
+    carrierStore.getAllTrucksByCarrier({
+      descending: true,
+      page: 0,
+    });
+  };
+
+  const onSearch = (value: string) => {
+    let zoneIds: number[] = [];
+    const regions = JSON.parse(JSON.stringify(masterTypeStore.regions));
+    regions &&
+      regions.forEach((z: any) => {
+        const thereIs = z.name.includes(value.trim());
+        if (thereIs) zoneIds.push(z.id);
+      });
+    const search = {
+      workingZones: zoneIds,
+      registrationNumber: value,
+      loadingWeight: parseInt(value, 10),
+      stallHeight: value,
+    };
+    setSearchValue(search);
+    carrierStore.getAllTrucksByCarrier({
+      descending: true,
+      page: 0,
+      ...search,
+    });
   };
 
   return (
@@ -69,7 +98,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
         <div className="block-data-header">
           <span className="font-data-header">{t('trucks')}</span>
           <div style={{ display: 'flex' }}>
-            <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
+            <SearchForm onSearch={(value: string) => onSearch(value)} />
           </div>
         </div>
       </CardHeader>
@@ -154,12 +183,11 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
             page={page}
             onSetPage={(pagination) => {
               setPage(pagination);
-              if (rowData.length === rows.length) {
-                carrierStore.getAllTrucksByCarrier({
-                  descending: true,
-                  page: pagination - 1,
-                });
-              }
+              carrierStore.getAllTrucksByCarrier({
+                descending: true,
+                page: pagination - 1,
+                ...searchValue,
+              });
             }}
           />
         </Wrapper>

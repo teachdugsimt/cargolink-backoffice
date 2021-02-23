@@ -30,7 +30,7 @@ export const createHead = (withWidth: boolean) => {
         key: 'truck_type',
         content: 'Truck type',
         shouldTruncate: true,
-        isSortable: true,
+        isSortable: false,
         width: withWidth ? 15 : undefined,
       },
       {

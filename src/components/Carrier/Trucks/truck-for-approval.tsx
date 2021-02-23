@@ -175,7 +175,12 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
       });
       setRowData(rows);
     }
-  }, [carrierStore.trucks_carrier, carrierStore.trucks_carrier?.number, masterTypeStore.regions]);
+  }, [
+    carrierStore.trucks_carrier,
+    carrierStore.trucks_carrier?.number,
+    carrierStore.trucks_carrier?.content?.length,
+    masterTypeStore.regions,
+  ]);
 
   return <TruckForm rows={rowData} alertSetting={alertSetting} />;
 });
