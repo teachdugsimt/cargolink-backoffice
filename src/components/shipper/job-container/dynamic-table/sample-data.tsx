@@ -8,25 +8,25 @@ export const createHead = (withWidth: boolean) => {
   return {
     cells: [
       {
-        key: 'job_no',
+        key: 'id',
         content: 'Job No.',
         isSortable: true,
         // width: withWidth ? 10 : undefined,
       },
       {
-        key: 'product_name',
+        key: 'productName',
         content: 'Product Name',
         shouldTruncate: true,
         isSortable: true,
       },
       {
-        key: 'name_shipper',
+        key: 'companyName',
         content: 'Name of  shipper',
         shouldTruncate: true,
         isSortable: true,
       },
       {
-        key: 'type',
+        key: 'productTypeId',
         content: 'Type of goods',
         shouldTruncate: true,
         isSortable: true,

@@ -35,14 +35,12 @@ const JobContainer: React.FC<Props> = observer(() => {
   const [completed, setCompleted] = useState(false);
   const [all, setAll] = useState(false);
   const [searchValue, setSearchValue] = useState({});
+  const [sortable, setSortable] = useState({ sortKey: '', sortOrder: 'DESC' });
 
   useEffect(() => {
     shipperStore.getProductTypes();
     shipperStore.clearShipperStore();
-    shipperStore.getAllJobsByShipper({
-      descending: true,
-      page: 0,
-    });
+    shipperStore.getAllJobsByShipper({ page: 0 });
   }, []);
 
   useEffect(() => {
@@ -94,7 +92,6 @@ const JobContainer: React.FC<Props> = observer(() => {
     setAll(false);
     setSearchValue({ status: 1 });
     shipperStore.getAllJobsByShipper({
-      descending: true,
       page: 0,
       status: 1,
     });
@@ -107,7 +104,6 @@ const JobContainer: React.FC<Props> = observer(() => {
     setAll(false);
     setSearchValue({ status: 3 });
     shipperStore.getAllJobsByShipper({
-      descending: true,
       page: 0,
       status: 3,
     });
@@ -120,7 +116,6 @@ const JobContainer: React.FC<Props> = observer(() => {
     setAll(false);
     setSearchValue({ status: 7 });
     shipperStore.getAllJobsByShipper({
-      descending: true,
       page: 0,
       status: 7,
     });
@@ -132,10 +127,7 @@ const JobContainer: React.FC<Props> = observer(() => {
     setInProgress(false);
     setCompleted(false);
     setSearchValue({});
-    shipperStore.getAllJobsByShipper({
-      descending: true,
-      page: 0,
-    });
+    shipperStore.getAllJobsByShipper({ page: 0 });
   };
 
   const onSearch = (value: string) => {
@@ -155,7 +147,6 @@ const JobContainer: React.FC<Props> = observer(() => {
     };
     setSearchValue(search);
     shipperStore.getAllJobsByShipper({
-      descending: true,
       page: 0,
       ...search,
     });
@@ -251,19 +242,29 @@ const JobContainer: React.FC<Props> = observer(() => {
             //   caption={caption}
             head={head}
             rows={rows}
+            sortKey={sortable.sortKey}
+            sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
             isLoading={false}
             // isFixedSize
-            // defaultSortKey="term"
-            defaultSortOrder="ASC"
-            onSort={() => console.log('onSort')}
+            // defaultSortKey="id"
+            defaultSortOrder="DESC"
+            onSort={(sort) => {
+              const descending = sort.sortOrder === 'DESC' ? true : false;
+              const search = { ...searchValue, descending, sortBy: sort.key };
+              setSortable({ sortKey: sort.key, sortOrder: sort.sortOrder });
+              setSearchValue(search);
+              shipperStore.getAllJobsByShipper({
+                page: 0,
+                ...search,
+              });
+            }}
             page={page}
             onSetPage={(pagination) => {
               setPage(pagination);
               shipperStore.getAllJobsByShipper({
-                descending: true,
                 page: pagination - 1,
                 ...searchValue,
               });

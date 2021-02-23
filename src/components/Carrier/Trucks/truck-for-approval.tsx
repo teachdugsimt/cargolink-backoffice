@@ -14,10 +14,7 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
 
   useEffect(() => {
     carrierStore.clearCarrierStore();
-    carrierStore.getAllTrucksByCarrier({
-      descending: true,
-      page: 0,
-    });
+    carrierStore.getAllTrucksByCarrier({ page: 0 });
     masterTypeStore.getAllRegion();
   }, []);
 

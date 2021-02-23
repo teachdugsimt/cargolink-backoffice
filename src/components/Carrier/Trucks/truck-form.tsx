@@ -41,7 +41,6 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
     setAll(false);
     setSearchValue({ approveStatus: 0 });
     carrierStore.getAllTrucksByCarrier({
-      descending: true,
       page: 0,
       approveStatus: 0,
     });
@@ -53,7 +52,6 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
     setAll(false);
     setSearchValue({ approveStatus: 1 });
     carrierStore.getAllTrucksByCarrier({
-      descending: true,
       page: 0,
       approveStatus: 1,
     });
@@ -64,10 +62,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
     setPanding(false);
     setApproved(false);
     setSearchValue({});
-    carrierStore.getAllTrucksByCarrier({
-      descending: true,
-      page: 0,
-    });
+    carrierStore.getAllTrucksByCarrier({ page: 0 });
   };
 
   const onSearch = (value: string) => {
@@ -86,7 +81,6 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
     };
     setSearchValue(search);
     carrierStore.getAllTrucksByCarrier({
-      descending: true,
       page: 0,
       ...search,
     });
@@ -181,7 +175,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
             isLoading={false}
             // isFixedSize
             // defaultSortKey="id"
-            defaultSortOrder="ASC"
+            defaultSortOrder="DESC"
             onSort={(sort) => {
               const descending = sort.sortOrder === 'DESC' ? true : false;
               const search = { ...searchValue, descending, sortBy: sort.key };
@@ -196,7 +190,6 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
             onSetPage={(pagination) => {
               setPage(pagination);
               carrierStore.getAllTrucksByCarrier({
-                descending: true,
                 page: pagination - 1,
                 ...searchValue,
               });
