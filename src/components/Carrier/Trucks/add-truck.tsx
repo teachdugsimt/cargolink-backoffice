@@ -38,29 +38,53 @@ const AddTruck: React.FC<Props> = observer(() => {
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
   const [toggle, setToggle] = useState(false);
   const [isSelectRegion, setIsSelectRegion] = useState(false);
-  console.log('register:>>', register);
-  console.log('truckTypeOptions:>>', truckTypeOptions);
-  let formValue = control.getValues();
-  console.log('control:>>', formValue['truckType']);
+  const [valueTruck, setValueTruck] = useState(0);
+  // console.log('register:>>', register);
+  // console.log('truckTypeOptions:>>', truckTypeOptions);
+  // let formValue = control.getValues();
+  // console.log('control:>>', formValue?.truckType?.value);
+
   useEffect(() => {
     carrierStore.getAllTruckTypes();
     masterTypeStore.getAllRegion();
-    const stalls: any = [
-      { value: 'LOW', label: t('LOW') },
-      { value: 'MEDIUM', label: t('MEDIUM') },
-      { value: 'HIGH', label: t('HIGH') },
-    ];
-    setStallHeights(stalls);
+    if (valueTruck == 49 || valueTruck == 3) {
+      const stalls: any = [
+        { value: 'LOW', label: t('LOW') },
+        { value: 'HIGH', label: t('HIGH') },
+      ];
+      setStallHeights(stalls);
+    } else if (valueTruck == 26 || valueTruck == 42) {
+      const stalls: any = [{ value: 'MEDIUM', label: t('MEDIUM') }];
+      setStallHeights(stalls);
+    } else {
+      const stalls: any = [
+        { value: 'LOW', label: t('LOW') },
+        { value: 'MEDIUM', label: t('MEDIUM') },
+        { value: 'HIGH', label: t('HIGH') },
+      ];
+      setStallHeights(stalls);
+    }
   }, []);
 
   useEffect(() => {
-    const stalls: any = [
-      { value: 'LOW', label: t('LOW') },
-      { value: 'MEDIUM', label: t('MEDIUM') },
-      { value: 'HIGH', label: t('HIGH') },
-    ];
-    setStallHeights(stalls);
-  }, [loginStore.language]);
+    if (valueTruck == 49 || valueTruck == 3) {
+      const stalls: any = [
+        { value: 'LOW', label: t('LOW') },
+        { value: 'HIGH', label: t('HIGH') },
+      ];
+      setStallHeights(stalls);
+    } else if (valueTruck == 26 || valueTruck == 42) {
+      const stalls: any = [{ value: 'MEDIUM', label: t('MEDIUM') }];
+      setStallHeights(stalls);
+    } else {
+      const stalls: any = [
+        { value: 'LOW', label: t('LOW') },
+        { value: 'MEDIUM', label: t('MEDIUM') },
+        { value: 'HIGH', label: t('HIGH') },
+      ];
+      setStallHeights(stalls);
+    }
+  }, [loginStore.language, valueTruck]);
 
   useEffect(() => {
     const { loading } = carrierStore;
@@ -142,6 +166,10 @@ const AddTruck: React.FC<Props> = observer(() => {
     });
   };
 
+  const onChangeTruckType = (event: { value: number; label: string }) => {
+    setValueTruck(event.value);
+  };
+
   const onSubmit = (data: any) => {
     const { region, truckType, province, stallHeight, registrationNumber, loadingWeight } = data;
     if (
@@ -206,14 +234,21 @@ const AddTruck: React.FC<Props> = observer(() => {
             {t('typeCar')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
           <Controller
-            as={
-              <Select
-                options={truckTypeOptions}
-                status={errors.truckType ? 'Danger' : 'Basic'}
-                placeholder={t('pleaseselect')}
-                fullWidth
-              />
-            }
+            as={({ onChange, value }) => {
+              return (
+                <Select
+                  options={truckTypeOptions}
+                  status={errors.truckType ? 'Danger' : 'Basic'}
+                  placeholder={t('pleaseselect')}
+                  fullWidth
+                  value={value}
+                  onChange={(event: any) => {
+                    onChange(event);
+                    onChangeTruckType(event);
+                  }}
+                />
+              );
+            }}
             id="truckType"
             control={control}
             valueName="selected"
@@ -247,7 +282,11 @@ const AddTruck: React.FC<Props> = observer(() => {
                 status={errors.stallHeight ? 'Danger' : 'Basic'}
                 placeholder={t('pleaseselect')}
                 fullWidth
-                isDisabled={formValue['truckType'] ? true : false}
+                isDisabled={
+                  valueTruck == 49 || valueTruck == 3 || valueTruck == 26 || valueTruck == 42 || valueTruck == 36
+                    ? false
+                    : true
+                }
               />
             }
             id="stallHeight"
