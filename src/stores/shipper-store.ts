@@ -76,6 +76,11 @@ const contentData = types.model({
 //   totalPages: types.maybeNull(types.number),
 // });
 
+const Jobs = types.model({
+  content: types.maybeNull(types.array(contentData)),
+  number: types.maybeNull(types.number),
+});
+
 const Products = types.model({
   id: types.maybeNull(types.number),
   name: types.maybeNull(types.string),
@@ -86,7 +91,7 @@ const Products = types.model({
 export const ShipperStore = types
   .model('ShipperStore', {
     loading: false,
-    jobs_shipper: types.maybeNull(types.array(contentData)),
+    jobs_shipper: types.maybeNull(Jobs),
     product_types: types.maybeNull(types.array(Products)),
     success_response: false,
     error_response: types.maybeNull(
@@ -110,7 +115,7 @@ export const ShipperStore = types
             self.loading = false;
             const pageNumber = data.pageable.pageNumber * 10;
             const content = data.content;
-            let jobs = [];
+            let jobs: { content: any; number: any } = { content: [], number: 0 };
             const ct = {
               id: null,
               productTypeId: null,
@@ -125,16 +130,15 @@ export const ShipperStore = types
             };
             if (pageNumber == 0) {
               //? in th first time, we get jobs
-              jobs = [...content, ...Array(data.totalElements - content.length).fill(ct)];
+              jobs.content = [...content, ...Array(data.totalElements - content.length).fill(ct)];
             } else {
-              jobs = Array(data.totalElements).fill(ct);
-              const pageSize = data.pageable.pageSize;
-              let amount = 0;
-              for (let i = pageNumber; i < pageNumber + pageSize; i++) {
-                jobs[i] = content[amount];
-                amount++;
+              jobs.content = Array(data.totalElements).fill(ct);
+              const pageSize = data.numberOfElements;
+              for (let i = pageNumber, j = 0; i < pageNumber + pageSize; i++, j++) {
+                jobs.content[i] = content[j];
               }
             }
+            jobs.number = data.number;
             self.jobs_shipper = jobs;
           } else {
             self.loading = false;

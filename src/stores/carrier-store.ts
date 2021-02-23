@@ -138,10 +138,8 @@ export const CarrierStore = types
             } else {
               trucks.content = Array(data.totalElements).fill(ct);
               const pageSize = data.numberOfElements;
-              let amount = 0;
-              for (let i = pageNumber; i < pageNumber + pageSize; i++) {
-                trucks.content[i] = content[amount];
-                amount++;
+              for (let i = pageNumber, j = 0; i < pageNumber + pageSize; i++, j++) {
+                trucks.content[i] = content[j];
               }
             }
             trucks.number = data.number;

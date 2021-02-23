@@ -76,13 +76,12 @@ const JobContainer: React.FC<Props> = observer(() => {
 
   useEffect(() => {
     const jobs_shipper = JSON.parse(JSON.stringify(shipperStore.jobs_shipper));
-    // console.log('jobs_shipper:>>', JSON.parse(JSON.stringify(shipperStore.jobs_shipper)));
-    if (jobs_shipper?.length) {
-      const rows = createRow(jobs_shipper, productTypes, loginStore.language, t);
+    if (jobs_shipper?.content?.length) {
+      const rows = createRow(jobs_shipper.content, productTypes, loginStore.language, t);
       setRows(rows);
       setRowData(rows);
     }
-  }, [shipperStore.jobs_shipper, shipperStore.jobs_shipper?.length, productTypes]);
+  }, [shipperStore.jobs_shipper, shipperStore.jobs_shipper?.number, productTypes]);
 
   const onClickOpen = () => {
     setOpen(true);
