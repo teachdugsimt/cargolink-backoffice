@@ -123,23 +123,30 @@ const JobContainer: React.FC<Props> = observer(() => {
   };
 
   const onSearch = (value: string) => {
-    let productIds: number[] = [];
-    productTypes &&
-      productTypes.forEach((e: any) => {
-        const thereIs = e.name.includes(value.trim());
-        if (thereIs) productIds.push(e.id);
-      });
-    const search = {
-      page: 0,
-      productName: value,
-      owner: value,
-      productType: productIds,
-      from: value,
-      to: value,
-      weight: parseInt(value, 10),
-    };
-    setSearchValue(search);
-    shipperStore.getAllJobsByShipper(search);
+    if (value) {
+      let productIds: number[] = [];
+      productTypes &&
+        productTypes.forEach((e: any) => {
+          const thereIs = e.name.includes(value.trim());
+          if (thereIs) productIds.push(e.id);
+        });
+      const search = {
+        page: 0,
+        productName: value,
+        owner: value,
+        productType: productIds,
+        from: value,
+        to: value,
+        weight: parseInt(value, 10),
+      };
+      setPage(1);
+      setSearchValue(search);
+      shipperStore.getAllJobsByShipper(search);
+    } else {
+      setPage(1);
+      setSearchValue({ page: 0 });
+      shipperStore.getAllJobsByShipper({ page: 0 });
+    }
   };
 
   return (

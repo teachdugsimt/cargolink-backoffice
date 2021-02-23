@@ -59,22 +59,37 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
   };
 
   const onSearch = (value: string) => {
-    let zoneIds: number[] = [];
-    const regions = JSON.parse(JSON.stringify(masterTypeStore.regions));
-    regions &&
-      regions.forEach((z: any) => {
-        const thereIs = z.name.includes(value.trim());
-        if (thereIs) zoneIds.push(z.id);
-      });
-    const search = {
-      page: 0,
-      workingZones: zoneIds,
-      registrationNumber: value,
-      loadingWeight: parseInt(value, 10),
-      stallHeight: value,
-    };
-    setSearchValue(search);
-    carrierStore.getAllTrucksByCarrier(search);
+    if (value) {
+      // find region zone id
+      let zoneIds: number[] = [];
+      const regions = JSON.parse(JSON.stringify(masterTypeStore.regions));
+      regions &&
+        regions.forEach((z: any) => {
+          const thereIs = z.name.includes(value.trim());
+          if (thereIs) zoneIds.push(z.id);
+        });
+
+      // find stalls value
+      let stalls = value;
+      if (value.includes('ต่ำ')) stalls = 'LOW';
+      else if (value.includes('กลาง')) stalls = 'MEDIUM';
+      else if (value.includes('สูง')) stalls = 'HIGH';
+
+      const search = {
+        page: 0,
+        workingZones: zoneIds,
+        registrationNumber: value,
+        loadingWeight: parseInt(value, 10),
+        stallHeight: stalls,
+      };
+      setPage(1);
+      setSearchValue(search);
+      carrierStore.getAllTrucksByCarrier(search);
+    } else {
+      setPage(1);
+      setSearchValue({ page: 0 });
+      carrierStore.getAllTrucksByCarrier({ page: 0 });
+    }
   };
 
   return (
