@@ -41,6 +41,7 @@ const AddTruck: React.FC<Props> = observer(() => {
       province: null,
       truckType: null,
       items: [{ registrationNumber: null }],
+      zones: [{ region: null, province: null }],
     },
   });
   const [checkbox, setCheckbox] = useState(false);
@@ -179,15 +180,27 @@ const AddTruck: React.FC<Props> = observer(() => {
     setValueTruck(event.value);
   };
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields: fieldsRegis, append: appendRegis, remove: removeRegis } = useFieldArray({
     control,
     name: 'items',
   });
 
+  const { fields: fieldZone, append: appendZone, remove: removeZone } = useFieldArray({
+    control,
+    name: 'zones',
+  });
+
   const onSubmit = (data: any) => {
-    const { region, truckType, province, stallHeight, items, loadingWeight } = data;
-    // console.log("data", [data.items.map((e: any, i: any) => {
-    //   return  e.registrationNumber
+    const { region, truckType, stallHeight, loadingWeight } = data;
+    // console.log("data:>>", data.zones.map((e: any, i: any) => {
+    //   return {
+    //     province: e.province?.value,
+    //     region: e.region.value,
+
+    //   };
+    // }))
+    // console.log("registrationNumber:>>", [data.items.map((e: any, i: any) => {
+    //   return e.registrationNumber
     // })])
     if (
       region.value &&
@@ -208,17 +221,15 @@ const AddTruck: React.FC<Props> = observer(() => {
         tipper: checkbox,
         truckPhotos: UploadFileStore.truckPhotos,
         truckType: truckType.value,
-        workingZones: [
-          {
-            province: province?.value,
-            region: region.value,
-          },
-        ],
+        workingZones: data.zones.map((e: any, i: any) => {
+          return {
+            province: e.province?.value,
+            region: e.region.value,
+          };
+        }),
       });
     }
   };
-
-  console.log('fields:>>', fields);
 
   return (
     <Card>
@@ -314,9 +325,9 @@ const AddTruck: React.FC<Props> = observer(() => {
             id="stallHeight"
             control={control}
             valueName="selected"
-            rules={{ required: 'Stall height cannot be null.' }}
+            // rules={{ required: 'Stall height cannot be null.' }}
             name="stallHeight"
-            ref={register({ required: false })}
+            // ref={register({ required: false })}
             aria-invalid={errors.stallHeight ? 'true' : 'false'}
           />
           {/* {errors.stallHeight && (
@@ -361,7 +372,7 @@ const AddTruck: React.FC<Props> = observer(() => {
             </p>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {fields.map(({ id }, index) => {
+            {fieldsRegis.map(({ id }, index) => {
               return (
                 <div key={id}>
                   {index >= 1 ? <br /> : <></>}
@@ -395,7 +406,7 @@ const AddTruck: React.FC<Props> = observer(() => {
                         size="Small"
                         shape="SemiRound"
                         style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
-                        onClick={() => remove(index)}
+                        onClick={() => removeRegis(index)}
                       >
                         <EvaIcon name="minus-outline" />
                       </Button>
@@ -405,7 +416,7 @@ const AddTruck: React.FC<Props> = observer(() => {
               );
             })}
           </div>
-          {fields.length >= 2 ? (
+          {fieldsRegis.length >= 2 ? (
             <></>
           ) : (
             // <Col offset={{ xs: 11 }} breakPoint={{ xs: 1 }}>
@@ -414,7 +425,7 @@ const AddTruck: React.FC<Props> = observer(() => {
               size="Small"
               shape="SemiRound"
               style={{ backgroundColor: '#253858', borderColor: '#253858', marginTop: '1.125rem' }}
-              onClick={() => append({})}
+              onClick={() => appendRegis({})}
             >
               <EvaIcon name="plus-outline" />
             </Button>
@@ -435,97 +446,124 @@ const AddTruck: React.FC<Props> = observer(() => {
           <p>
             {t('zoneWork')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
-          {/* {fields.map(({ id }, index) => {
-            <div key={id}> */}
-          <Row>
-            <Col breakPoint={{ xs: true }}>
-              <Controller
-                as={({ onChange, value }) => {
-                  return (
-                    <Select
-                      status={errors.region ? 'Danger' : 'Basic'}
-                      options={filterRegion}
-                      placeholder={t('region')}
-                      fullWidth
-                      value={value}
-                      onChange={(event: any) => {
-                        onChangeRegion(event);
-                        onChange(event);
+          {fieldZone.map(({ id }, index) => {
+            return (
+              <div key={id}>
+                {index >= 1 ? <br /> : <></>}
+                <Row>
+                  <Col breakPoint={{ xs: true }}>
+                    <Controller
+                      as={({ onChange, value }) => {
+                        return (
+                          <Select
+                            status={errors.region ? 'Danger' : 'Basic'}
+                            options={filterRegion}
+                            placeholder={t('region')}
+                            fullWidth
+                            value={value}
+                            onChange={(event: any) => {
+                              onChangeRegion(event);
+                              onChange(event);
+                            }}
+                          />
+                        );
                       }}
+                      id="region"
+                      control={control}
+                      valueName="selected"
+                      rules={{ required: 'Region cannot be null.' }}
+                      name={`zones[${index}].region`}
+                      ref={register({ required: true })}
+                      aria-invalid={errors.region ? 'true' : 'false'}
                     />
-                  );
-                }}
-                id="region"
-                control={control}
-                valueName="selected"
-                rules={{ required: 'Region cannot be null.' }}
-                name="region"
-                ref={register({ required: true })}
-                aria-invalid={errors.region ? 'true' : 'false'}
-              />
-              {errors.region && (
-                <span id="fieldRegion" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-                  {t('fieldRegion')}
-                  <br />
-                </span>
-              )}
-            </Col>
-            <Col breakPoint={{ xs: true }}>
-              <Controller
-                as={({ onChange, value }) => {
-                  return (
-                    <Select
-                      status={errors.province ? 'Danger' : 'Basic'}
-                      options={filterProvince}
-                      placeholder={t('province')}
-                      fullWidth
-                      value={value}
-                      onChange={(event: any) => {
-                        onChange(event);
+                    {errors.region && (
+                      <span
+                        id="fieldRegion"
+                        style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }}
+                        role="alert"
+                      >
+                        {t('fieldRegion')}
+                        <br />
+                      </span>
+                    )}
+                  </Col>
+                  <Col breakPoint={{ xs: true }}>
+                    <Controller
+                      as={({ onChange, value }) => {
+                        return (
+                          <Select
+                            status={errors.province ? 'Danger' : 'Basic'}
+                            options={filterProvince}
+                            placeholder={t('province')}
+                            fullWidth
+                            value={value}
+                            onChange={(event: any) => {
+                              onChange(event);
+                            }}
+                            isDisabled={!isSelectRegion}
+                          />
+                        );
                       }}
-                      isDisabled={!isSelectRegion}
+                      id="province"
+                      control={control}
+                      valueName="selected"
+                      // rules={{ required: 'Province cannot be null.' }}
+                      name={`zones[${index}].province`}
+                      // ref={register({ required: true })}
+                      // aria-invalid={errors.province ? 'true' : 'false'}
                     />
-                  );
-                }}
-                id="province"
-                control={control}
-                valueName="selected"
-                // rules={{ required: 'Province cannot be null.' }}
-                name="province"
-                // ref={register({ required: true })}
-                // aria-invalid={errors.province ? 'true' : 'false'}
-              />
-            </Col>
-          </Row>
-          <br />
-          {/* </div>;
-            {
-              index == 0 ? (
-                <></>
-              ) : (
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.125rem' }}>
-                  <Button
-                    type="button"
-                    size="Small"
-                    shape="SemiRound"
-                    style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
-                    onClick={() => remove(index)}
-                  >
-                    <EvaIcon name="minus-outline" />
-                  </Button>
-                </div>
-              );
-            }
-          })} */}
-          {/* <Button
-            type="button"
-            size="Small"
-            shape="SemiRound"
-            style={{ backgroundColor: '#253858', borderColor: '#253858', marginTop: '1.125rem' }}
-            onClick={() => append({})}
-          >
-            <EvaIcon name="plus-outline" />
-          </Button> */}
+                  </Col>
+                  {index == 0 ? (
+                    <></>
+                  ) : (
+                    <Button
+                      type="button"
+                      size="Small"
+                      shape="SemiRound"
+                      style={{ backgroundColor: '#253858', borderColor: '#253858' }}
+                      onClick={() => appendZone({})}
+                    >
+                      <EvaIcon name="plus-outline" />
+                    </Button>
+                  )}
+                </Row>
+                {index == 0 ? (
+                  <></>
+                ) : (
+                  <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '1.125rem' }}>
+                    {/*  <Row>
+                           <Col offset={{ xs: 11.25 }} style={{ marginTop: '1.125rem' }}> */}
+                    <Button
+                      type="button"
+                      size="Small"
+                      shape="SemiRound"
+                      style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
+                      onClick={() => removeZone(index)}
+                    >
+                      <EvaIcon name="minus-outline" />
+                    </Button>
+                    {/*    </Col>
+                     </Row> */}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+          {fieldZone.length >= 2 ? (
+            <></>
+          ) : (
+            // <Col offset={{ xs: 11 }} breakPoint={{ xs: 1 }}>
+            <Button
+              type="button"
+              size="Small"
+              shape="SemiRound"
+              style={{ backgroundColor: '#253858', borderColor: '#253858', marginTop: '1.125rem' }}
+              onClick={() => appendZone({})}
+            >
+              <EvaIcon name="plus-outline" />
+            </Button>
+            // </Col>
+          )}
           {/* {errors.province && (
             <span id="fieldProvince" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               {t('fieldProvince')}
