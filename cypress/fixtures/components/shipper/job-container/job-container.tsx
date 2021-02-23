@@ -52,7 +52,7 @@ const JobContainer: React.FC<Props> = observer(() => {
       show: loading,
       type: 'loading',
       title: '',
-      content: 'Loading',
+      content: t('LOADING'),
     });
   }, [shipperStore.loading]);
 

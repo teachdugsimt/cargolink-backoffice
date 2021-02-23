@@ -1,6 +1,7 @@
 import IconButton from '@material-ui/core/IconButton';
 import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useTranslation } from 'react-i18next';
 import Icon from 'react-icons-kit';
 import { camera } from 'react-icons-kit/fa/camera';
 import { timesCircleO } from 'react-icons-kit/fa/timesCircleO';
@@ -15,6 +16,7 @@ interface ImageProps {
 }
 
 const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
+  const { t } = useTranslation();
   const [render, setRender] = useState(false);
   const [imageUpload, setImageUpload] = useState({ front: '', back: '', left: '', right: '' });
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
@@ -31,7 +33,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
       show: loading,
       type: 'loading',
       title: '',
-      content: 'Loading',
+      content: t('LOADING'),
     });
   }, [UploadFileStore.loading]);
 
@@ -112,7 +114,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
             style={{ borderColor: submitted && !imageUpload.front ? '#ff3d71' : ' #d8d8d8' }}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-              <label for="file-upload-front" className="custom-file-upload-photo">
+              <label htmlFor="file-upload-front" className="custom-file-upload-photo">
                 <Icon icon={camera} style={{ marginRight: 5 }} />
               </label>
               <input
@@ -150,7 +152,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
             style={{ borderColor: submitted && !imageUpload.back ? '#ff3d71' : ' #d8d8d8' }}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-              <label for="file-upload-back" className="custom-file-upload-photo">
+              <label htmlFor="file-upload-back" className="custom-file-upload-photo">
                 <Icon icon={camera} style={{ marginRight: 5 }} />
               </label>
               <input
@@ -189,7 +191,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
             style={{ borderColor: submitted && !imageUpload.left ? '#ff3d71' : ' #d8d8d8' }}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-              <label for="file-upload-left" className="custom-file-upload-photo">
+              <label htmlFor="file-upload-left" className="custom-file-upload-photo">
                 <Icon icon={camera} style={{ marginRight: 5 }} />
               </label>
               <input
@@ -227,7 +229,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
             style={{ borderColor: submitted && !imageUpload.right ? '#ff3d71' : ' #d8d8d8' }}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 5 }}>
-              <label for="file-upload-right" className="custom-file-upload-photo">
+              <label htmlFor="file-upload-right" className="custom-file-upload-photo">
                 <Icon icon={camera} style={{ marginRight: 5 }} />
               </label>
               <input

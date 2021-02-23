@@ -28,7 +28,7 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
       show: loading,
       type: 'loading',
       title: '',
-      content: 'Loading',
+      content: t('LOADING'),
     });
   }, [carrierStore.loading]);
 

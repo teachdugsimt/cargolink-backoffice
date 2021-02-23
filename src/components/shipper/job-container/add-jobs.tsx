@@ -61,7 +61,7 @@ const AddJobs: React.FC<{}> = observer(() => {
       show: loading,
       type: 'loading',
       title: '',
-      content: 'Loading',
+      content: t('LOADING'),
     });
   }, [shipperStore.loading]);
 

@@ -60,7 +60,7 @@ const AddTruck: React.FC<Props> = observer(() => {
       show: loading,
       type: 'loading',
       title: '',
-      content: 'Loading',
+      content: t('LOADING'),
     });
   }, [carrierStore.loading]);
 

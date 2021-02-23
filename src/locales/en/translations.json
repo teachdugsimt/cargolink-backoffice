@@ -80,5 +80,6 @@
   "HIGH": "High",
   "OPEN": "OPEN",
   "IN-PROGRESS": "IN-PROGRESS",
-  "COMPLETED": "COMPLETED"
+  "COMPLETED": "COMPLETED",
+  "LOADING": "Loading"
 }

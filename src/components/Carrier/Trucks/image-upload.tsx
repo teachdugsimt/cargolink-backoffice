@@ -1,6 +1,7 @@
 import IconButton from '@material-ui/core/IconButton';
 import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useTranslation } from 'react-i18next';
 import Icon from 'react-icons-kit';
 import { camera } from 'react-icons-kit/fa/camera';
 import { timesCircleO } from 'react-icons-kit/fa/timesCircleO';
@@ -15,6 +16,7 @@ interface ImageProps {
 }
 
 const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
+  const { t } = useTranslation();
   const [render, setRender] = useState(false);
   const [imageUpload, setImageUpload] = useState({ front: '', back: '', left: '', right: '' });
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
@@ -31,7 +33,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
       show: loading,
       type: 'loading',
       title: '',
-      content: 'Loading',
+      content: t('LOADING'),
     });
   }, [UploadFileStore.loading]);
 
