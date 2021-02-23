@@ -28,7 +28,7 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
       show: loading,
       type: 'loading',
       title: '',
-      content: 'Loading',
+      content: t('LOADING'),
     });
   }, [carrierStore.loading]);
 
@@ -48,13 +48,15 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
   useEffect(() => {
     const trucks = JSON.parse(JSON.stringify(carrierStore.trucks_carrier));
     const regions = JSON.parse(JSON.stringify(masterTypeStore.regions));
-    if (trucks?.length) {
-      const rows = trucks.map((truck: any, index: number) => {
-        const zones = truck.workingZones.map((z: any) => {
-          const zone = regions && regions.find((r: any) => r.id === z.region);
-          if (zone) return zone.name;
-          return '';
-        });
+    if (trucks?.content?.length && regions?.length) {
+      const rows = trucks.content.map((truck: any, index: number) => {
+        const zones =
+          truck.workingZones &&
+          truck.workingZones.map((z: any) => {
+            const zone = regions && regions.find((r: any) => r.id === z.region);
+            if (zone) return zone.name;
+            return '';
+          });
         return {
           key: `row-${index}-${truck.id}`,
           cells: [
@@ -63,12 +65,12 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
               content: <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{truck.id}</span>,
             },
             {
-              key: zones.join(''),
-              content: zones.join(', '),
+              key: zones ? zones.join('') : '',
+              content: zones ? zones.join(', ') : '',
             },
             {
-              key: truck.registrationNumber.join(''),
-              content: truck.registrationNumber.join(', '),
+              key: truck.registrationNumber ? truck.registrationNumber.join('') : '',
+              content: truck.registrationNumber ? truck.registrationNumber.join(', ') : '',
             },
             {
               key: truck.truckType,
@@ -157,23 +159,23 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
               content: truck.loadingWeight,
             },
             {
-              key: truck.stallHeight,
-              content: <span>{t(`${truck.stallHeight}`)}</span>,
+              key: truck.stallHeight ? truck.stallHeight : '',
+              content: truck.stallHeight ? <span>{t(`${truck.stallHeight}`)}</span> : '',
             },
             {
               key: truck.approveStatus,
               content: truck.approveStatus,
             },
             {
-              key: momentFormat(truck.createdAt, loginStore.language),
-              content: momentFormat(truck.createdAt, loginStore.language),
+              key: truck.createdAt ? momentFormat(truck.createdAt, loginStore.language) : '',
+              content: truck.createdAt ? momentFormat(truck.createdAt, loginStore.language) : '',
             },
           ],
         };
       });
       setRowData(rows);
     }
-  }, [carrierStore.trucks_carrier, carrierStore.trucks_carrier?.content?.length, masterTypeStore.regions]);
+  }, [carrierStore.trucks_carrier, carrierStore.trucks_carrier?.number, masterTypeStore.regions]);
 
   return <TruckForm rows={rowData} alertSetting={alertSetting} />;
 });

@@ -22,21 +22,6 @@ const objectOwner = types.model({
   userId: types.maybeNull(types.string),
 });
 
-const objectSort = types.model({
-  empty: types.maybeNull(types.boolean),
-  sorted: types.maybeNull(types.boolean),
-  unsorted: types.maybeNull(types.boolean),
-});
-
-const objectPageable = types.model({
-  offset: types.maybeNull(types.number),
-  pageNumber: types.maybeNull(types.number),
-  pageSize: types.maybeNull(types.number),
-  paged: types.maybeNull(types.boolean),
-  sort: types.maybeNull(objectSort),
-  unpaged: types.maybeNull(types.boolean),
-});
-
 const contentArray = types.model({
   id: types.maybeNull(types.string),
   truckType: types.maybeNull(types.number),
@@ -51,18 +36,38 @@ const contentArray = types.model({
   tipper: types.maybeNull(types.boolean),
 });
 
-const trucks = types.model({
+// const objectSort = types.model({
+//   empty: types.maybeNull(types.boolean),
+//   sorted: types.maybeNull(types.boolean),
+//   unsorted: types.maybeNull(types.boolean),
+// });
+
+// const objectPageable = types.model({
+//   offset: types.maybeNull(types.number),
+//   pageNumber: types.maybeNull(types.number),
+//   pageSize: types.maybeNull(types.number),
+//   paged: types.maybeNull(types.boolean),
+//   sort: types.maybeNull(objectSort),
+//   unpaged: types.maybeNull(types.boolean),
+// });
+
+// const trucks = types.model({
+//   content: types.maybeNull(types.array(contentArray)),
+//   empty: types.maybeNull(types.boolean),
+//   first: types.maybeNull(types.boolean),
+//   last: types.maybeNull(types.boolean),
+//   number: types.maybeNull(types.number),
+//   numberOfElements: types.maybeNull(types.number),
+//   pageable: types.maybeNull(objectPageable),
+//   size: types.maybeNull(types.number),
+//   sort: types.maybeNull(objectSort),
+//   totalElements: types.maybeNull(types.number),
+//   totalPages: types.maybeNull(types.number),
+// });
+
+const Trucks = types.model({
   content: types.maybeNull(types.array(contentArray)),
-  empty: types.maybeNull(types.boolean),
-  first: types.maybeNull(types.boolean),
-  last: types.maybeNull(types.boolean),
   number: types.maybeNull(types.number),
-  numberOfElements: types.maybeNull(types.number),
-  pageable: types.maybeNull(objectPageable),
-  size: types.maybeNull(types.number),
-  sort: types.maybeNull(objectSort),
-  totalElements: types.maybeNull(types.number),
-  totalPages: types.maybeNull(types.number),
 });
 
 const trucksTypes = types.model({
@@ -88,7 +93,7 @@ const drivers = types.model({
 export const CarrierStore = types
   .model('CarrierStore', {
     loading: false,
-    trucks_carrier: types.maybeNull(trucks),
+    trucks_carrier: types.maybeNull(Trucks),
     trucks_types: types.maybeNull(types.array(trucksTypes)),
     drivers_carrier: types.maybeNull(types.array(drivers)),
     success_response: false,
@@ -111,33 +116,36 @@ export const CarrierStore = types
           if (response && response.ok) {
             const { data } = response;
             self.loading = false;
-            //? in th first time, we get trucks
-            let trucks = JSON.parse(JSON.stringify(self.trucks_carrier));
-            if (self.trucks_carrier?.content?.length) trucks.push(...data);
-            else trucks = data;
-
-            self.trucks_carrier = trucks;
-
-            //? in th second time, we get trucks
-            if (data?.length && data?.length % 10 === 0) {
-              self.loading = true;
-              //? change page parameter
-              let newParams = JSON.parse(JSON.stringify(params));
-              newParams.page = trucks?.length;
-
-              const newResponse = yield CarrierApi.getAllTrucks(newParams);
-              console.log('getAllTrucksByCarrier newResponse :> ', newResponse);
-
-              if (newResponse && newResponse.ok) {
-                self.loading = false;
-                const newData = newResponse.data;
-                let newTrucks = JSON.parse(JSON.stringify(self.trucks_carrier));
-                newTrucks.push(...newData);
-                self.trucks_carrier = newTrucks;
-              } else {
-                self.loading = false;
+            const pageNumber = data.pageable.pageNumber * 10;
+            const content = data.content;
+            let trucks: { content: any; number: any } = { content: [], number: 0 };
+            const ct = {
+              id: null,
+              truckType: null,
+              loadingWeight: null,
+              owner: null,
+              stallHeight: null,
+              createdAt: null,
+              updatedAt: null,
+              approveStatus: null,
+              registrationNumber: null,
+              workingZones: null,
+              tipper: null,
+            };
+            if (pageNumber == 0) {
+              //? in th first time, we get trucks
+              trucks.content = [...content, ...Array(data.totalElements - content.length).fill(ct)];
+            } else {
+              trucks.content = Array(data.totalElements).fill(ct);
+              const pageSize = data.numberOfElements;
+              let amount = 0;
+              for (let i = pageNumber; i < pageNumber + pageSize; i++) {
+                trucks.content[i] = content[amount];
+                amount++;
               }
             }
+            trucks.number = data.number;
+            self.trucks_carrier = trucks;
           } else {
             self.loading = false;
             self.trucks_carrier = null;

@@ -154,10 +154,10 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
             page={page}
             onSetPage={(pagination) => {
               setPage(pagination);
-              if (rowData.length % 10 === 0 && pagination % 2 === 0 && rowData.length === rows.length) {
+              if (rowData.length === rows.length) {
                 carrierStore.getAllTrucksByCarrier({
                   descending: true,
-                  page: rowData.length,
+                  page: pagination - 1,
                 });
               }
             }}
