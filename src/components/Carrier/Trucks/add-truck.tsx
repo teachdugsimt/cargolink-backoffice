@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Card, CardHeader, CardBody } from '@paljs/ui/Card';
 import Select from '@paljs/ui/Select';
 import Switch from '@material-ui/core/Switch';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import ImageUpload from './image-upload';
 import { useMst } from '../../../stores/root-store';
 import Alert from '../../alert';
@@ -12,6 +12,7 @@ import { defaultAlertSetting } from '../../simple-data';
 import { navigate } from 'gatsby';
 import { UploadFileStore } from '../../../stores/upload-file-store';
 import { useTranslation } from 'react-i18next';
+import { EvaIcon } from '@paljs/ui/Icon';
 import '../../../Layouts/css/style.css';
 
 interface Props {}
@@ -29,6 +30,16 @@ const AddTruck: React.FC<Props> = observer(() => {
   const { register, handleSubmit, errors, control } = useForm({
     mode: 'onChange',
     reValidateMode: 'onChange',
+    defaultValues: {
+      user: null,
+      stallHeight: null,
+      loadingWeight: null,
+      registrationNumber: null,
+      region: null,
+      province: null,
+      truckType: null,
+      items: [{ registrationNumber: null }],
+    },
   });
   const [checkbox, setCheckbox] = useState(false);
   const [stallHeights, setStallHeights] = useState([]);
@@ -170,8 +181,16 @@ const AddTruck: React.FC<Props> = observer(() => {
     setValueTruck(event.value);
   };
 
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'items',
+  });
+
   const onSubmit = (data: any) => {
-    const { region, truckType, province, stallHeight, registrationNumber, loadingWeight } = data;
+    const { region, truckType, province, stallHeight, items, loadingWeight } = data;
+    // console.log("data", [data.items.map((e: any, i: any) => {
+    //   return  e.registrationNumber
+    // })])
     if (
       region.value &&
       truckType.value &&
@@ -182,7 +201,11 @@ const AddTruck: React.FC<Props> = observer(() => {
     ) {
       carrierStore.postTruck({
         loadingWeight: loadingWeight,
-        registrationNumber: [registrationNumber],
+        registrationNumber: [
+          data.items.map((e: any, i: any) => {
+            return e.registrationNumber;
+          }),
+        ],
         stallHeight: stallHeight && stallHeight.value ? stallHeight.value : '',
         tipper: checkbox,
         truckPhotos: UploadFileStore.truckPhotos,
@@ -338,26 +361,61 @@ const AddTruck: React.FC<Props> = observer(() => {
               {t('registrationNumber')} <span style={{ color: '#ff3d71' }}>*</span>
             </p>
           </div>
-          <input
-            id="registrationNumber"
-            className="new-input-component"
-            name="registrationNumber"
-            type="text"
-            style={{
-              borderColor: errors.registrationNumber ? '#ff3d71' : '',
-            }}
-            ref={register({ required: true })}
-            aria-invalid={errors.registrationNumber ? 'true' : 'false'}
-          />
-          {errors.registrationNumber && (
-            <span
-              id="fieldRegistrationNumber"
-              style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }}
-              role="alert"
+          {fields.map(({ id }, index) => {
+            return (
+              <div key={id} style={{ marginBottom: 6 }}>
+                <input
+                  id="registrationNumber"
+                  className="new-input-component"
+                  name={`items[${index}].registrationNumber`}
+                  type="text"
+                  style={{
+                    borderColor: errors.registrationNumber ? '#ff3d71' : '',
+                  }}
+                  ref={register({ required: true })}
+                  aria-invalid={errors.registrationNumber ? 'true' : 'false'}
+                />
+                {errors.items && errors.items[index]?.registrationNumber && (
+                  <span
+                    id="fieldRegistrationNumber"
+                    style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }}
+                    role="alert"
+                  >
+                    {t('fieldRegistrationNumber')}
+                  </span>
+                )}
+                {index == 0 ? (
+                  <></>
+                ) : (
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.125rem' }}>
+                    <Button
+                      type="button"
+                      size="Small"
+                      shape="SemiRound"
+                      style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
+                      onClick={() => remove(index)}
+                    >
+                      <EvaIcon name="minus-outline" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+          {fields.length >= 2 ? (
+            <></>
+          ) : (
+            <Button
+              type="button"
+              size="Small"
+              shape="SemiRound"
+              style={{ backgroundColor: '#253858', borderColor: '#253858', marginTop: '1.125rem' }}
+              onClick={() => append({})}
             >
-              {t('fieldRegistrationNumber')}
-            </span>
+              <EvaIcon name="plus-outline" />
+            </Button>
           )}
+
           <hr style={{ margin: '1.125rem 0' }} />
           <p>
             {t('uploadCar')} <span style={{ color: '#ff3d71' }}>*</span>
