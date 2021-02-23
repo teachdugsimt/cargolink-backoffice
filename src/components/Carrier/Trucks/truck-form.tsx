@@ -29,6 +29,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
   const [submit, setSubmit] = useState(false);
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState({});
+  const [sortable, setSortable] = useState({ sortKey: '', sortOrder: 'DESC' });
 
   useEffect(() => {
     setRowData(rows);
@@ -172,14 +173,25 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
             // caption={caption}
             head={head}
             rows={rowData}
+            sortKey={sortable.sortKey}
+            sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
             isLoading={false}
             // isFixedSize
-            // defaultSortKey="term"
+            // defaultSortKey="id"
             defaultSortOrder="ASC"
-            onSort={() => console.log('onSort')}
+            onSort={(sort) => {
+              const descending = sort.sortOrder === 'DESC' ? true : false;
+              const search = { ...searchValue, descending, sortBy: sort.key };
+              setSortable({ sortKey: sort.key, sortOrder: sort.sortOrder });
+              setSearchValue(search);
+              carrierStore.getAllTrucksByCarrier({
+                page: 0,
+                ...search,
+              });
+            }}
             page={page}
             onSetPage={(pagination) => {
               setPage(pagination);
