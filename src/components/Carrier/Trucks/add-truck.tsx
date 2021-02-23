@@ -220,6 +220,8 @@ const AddTruck: React.FC<Props> = observer(() => {
     }
   };
 
+  console.log('fields:>>', fields);
+
   return (
     <Card>
       <Alert setting={alertSetting} />
@@ -361,47 +363,50 @@ const AddTruck: React.FC<Props> = observer(() => {
               {t('registrationNumber')} <span style={{ color: '#ff3d71' }}>*</span>
             </p>
           </div>
-          {fields.map(({ id }, index) => {
-            return (
-              <div key={id} style={{ marginBottom: 6 }}>
-                <input
-                  id="registrationNumber"
-                  className="new-input-component"
-                  name={`items[${index}].registrationNumber`}
-                  type="text"
-                  style={{
-                    borderColor: errors.registrationNumber ? '#ff3d71' : '',
-                  }}
-                  ref={register({ required: true })}
-                  aria-invalid={errors.registrationNumber ? 'true' : 'false'}
-                />
-                {errors.items && errors.items[index]?.registrationNumber && (
-                  <span
-                    id="fieldRegistrationNumber"
-                    style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }}
-                    role="alert"
-                  >
-                    {t('fieldRegistrationNumber')}
-                  </span>
-                )}
-                {index == 0 ? (
-                  <></>
-                ) : (
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.125rem' }}>
-                    <Button
-                      type="button"
-                      size="Small"
-                      shape="SemiRound"
-                      style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
-                      onClick={() => remove(index)}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {fields.map(({ id }, index) => {
+              return (
+                <div key={id}>
+                  <input
+                    id="registrationNumber"
+                    className="new-input-component"
+                    name={`items[${index}].registrationNumber`}
+                    type="text"
+                    style={{
+                      borderColor: errors.registrationNumber ? '#ff3d71' : '',
+                      marginTop: index >= 1 ? 20 : 0,
+                    }}
+                    ref={register({ required: true })}
+                    aria-invalid={errors.registrationNumber ? 'true' : 'false'}
+                  />
+                  {errors.items && errors.items[index]?.registrationNumber && (
+                    <span
+                      id="fieldRegistrationNumber"
+                      style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }}
+                      role="alert"
                     >
-                      <EvaIcon name="minus-outline" />
-                    </Button>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                      {t('fieldRegistrationNumber')}
+                    </span>
+                  )}
+                  {index == 0 ? (
+                    <></>
+                  ) : (
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.125rem' }}>
+                      <Button
+                        type="button"
+                        size="Small"
+                        shape="SemiRound"
+                        style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
+                        onClick={() => remove(index)}
+                      >
+                        <EvaIcon name="minus-outline" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
           {fields.length >= 2 ? (
             <></>
           ) : (
@@ -415,7 +420,6 @@ const AddTruck: React.FC<Props> = observer(() => {
               <EvaIcon name="plus-outline" />
             </Button>
           )}
-
           <hr style={{ margin: '1.125rem 0' }} />
           <p>
             {t('uploadCar')} <span style={{ color: '#ff3d71' }}>*</span>
