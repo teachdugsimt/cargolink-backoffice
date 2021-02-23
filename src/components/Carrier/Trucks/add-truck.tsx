@@ -14,6 +14,8 @@ import { UploadFileStore } from '../../../stores/upload-file-store';
 import { useTranslation } from 'react-i18next';
 import { EvaIcon } from '@paljs/ui/Icon';
 import '../../../Layouts/css/style.css';
+import Row from '@paljs/ui/Row';
+import Col from '@paljs/ui/Col';
 
 interface Props {}
 
@@ -406,6 +408,7 @@ const AddTruck: React.FC<Props> = observer(() => {
           {fields.length >= 2 ? (
             <></>
           ) : (
+            // <Col offset={{ xs: 11 }} breakPoint={{ xs: 1 }}>
             <Button
               type="button"
               size="Small"
@@ -415,6 +418,7 @@ const AddTruck: React.FC<Props> = observer(() => {
             >
               <EvaIcon name="plus-outline" />
             </Button>
+            // </Col>
           )}
           <hr style={{ margin: '1.125rem 0' }} />
           <p>
@@ -431,8 +435,10 @@ const AddTruck: React.FC<Props> = observer(() => {
           <p>
             {t('zoneWork')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
-          {fields.map(({ id }, index) => {
-            <div key={id}>
+          {/* {fields.map(({ id }, index) => {
+            <div key={id}> */}
+          <Row>
+            <Col breakPoint={{ xs: true }}>
               <Controller
                 as={({ onChange, value }) => {
                   return (
@@ -463,7 +469,8 @@ const AddTruck: React.FC<Props> = observer(() => {
                   <br />
                 </span>
               )}
-              <br />
+            </Col>
+            <Col breakPoint={{ xs: true }}>
               <Controller
                 as={({ onChange, value }) => {
                   return (
@@ -488,7 +495,10 @@ const AddTruck: React.FC<Props> = observer(() => {
                 // ref={register({ required: true })}
                 // aria-invalid={errors.province ? 'true' : 'false'}
               />
-            </div>;
+            </Col>
+          </Row>
+          <br />
+          {/* </div>;
             {
               index == 0 ? (
                 <></>
@@ -506,8 +516,8 @@ const AddTruck: React.FC<Props> = observer(() => {
                 </div>
               );
             }
-          })}
-          <Button
+          })} */}
+          {/* <Button
             type="button"
             size="Small"
             shape="SemiRound"
@@ -515,7 +525,7 @@ const AddTruck: React.FC<Props> = observer(() => {
             onClick={() => append({})}
           >
             <EvaIcon name="plus-outline" />
-          </Button>
+          </Button> */}
           {/* {errors.province && (
             <span id="fieldProvince" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
               {t('fieldProvince')}
