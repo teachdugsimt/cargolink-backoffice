@@ -26,7 +26,6 @@ const JobContainer: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
   const { shipperStore, loginStore } = useMst();
   const [rows, setRows] = useState([]);
-  const [rowData, setRowData] = useState([]);
   const [productTypes, setProductTypes] = useState([]);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
   const [submit, setSubmit] = useState(false);
@@ -80,7 +79,6 @@ const JobContainer: React.FC<Props> = observer(() => {
     if (jobs_shipper?.content) {
       const rows = createRow(jobs_shipper.content, productTypes, loginStore.language, t);
       setRows(rows);
-      setRowData(rows);
     }
   }, [
     shipperStore.jobs_shipper,
@@ -247,12 +245,12 @@ const JobContainer: React.FC<Props> = observer(() => {
             <Icon icon={ic_add} /> {t('addNewJob')}
           </Button>
         </Row>
-        <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
+        <span>{`${t('resultsFound')}: ${rows.length}`}</span>
         <Wrapper>
           <DynamicTable
             //   caption={caption}
             head={head}
-            rows={rowData}
+            rows={rows}
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
