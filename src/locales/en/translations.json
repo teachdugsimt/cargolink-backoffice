@@ -81,5 +81,6 @@
   "OPEN": "OPEN",
   "IN-PROGRESS": "IN-PROGRESS",
   "COMPLETED": "COMPLETED",
-  "LOADING": "Loading"
+  "LOADING": "Loading",
+  "user":"User"
 }

@@ -81,5 +81,6 @@
   "OPEN": "OPEN",
   "IN-PROGRESS": "IN-PROGRESS",
   "COMPLETED": "COMPLETED",
-  "LOADING": "กำลังโหลด"
+  "LOADING": "กำลังโหลด",
+  "user":"ผู้ใช้งาน"
 }

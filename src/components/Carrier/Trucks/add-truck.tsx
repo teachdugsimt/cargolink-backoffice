@@ -20,9 +20,9 @@ import Col from '@paljs/ui/Col';
 interface Props {}
 
 const userOptions: any = [
-  { value: 'LOW', label: 'dsdsa' },
-  { value: 'MEDIUM', label: 'dsad' },
-  { value: 'HIGH', label: 'dsad' },
+  { value: 'virachai', label: 'virachai' },
+  { value: 'miww', label: 'Miww' },
+  { value: 'cargolink', label: 'cargolink' },
 ];
 
 const AddTruck: React.FC<Props> = observer(() => {
