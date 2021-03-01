@@ -3,6 +3,7 @@ import { Icon } from 'react-icons-kit';
 import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
 import images from '../../../Themes/images';
 import { momentFormatDateTime } from '../../../simple-data';
+import Link from '@material-ui/core/Link';
 
 export const createHead = (withWidth: boolean) => {
   return {
@@ -79,7 +80,11 @@ export const createRow = (jobs: any, products: any, language: string, t: any) =>
       cells: [
         {
           key: job.id,
-          content: <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{job.id}</span>,
+          content: (
+            <Link href="/job-detail">
+              <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{job.id}</span>
+            </Link>
+          ),
         },
         {
           key: job.productName,
