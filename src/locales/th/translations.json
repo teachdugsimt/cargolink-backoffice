@@ -82,5 +82,7 @@
   "IN-PROGRESS": "IN-PROGRESS",
   "COMPLETED": "COMPLETED",
   "LOADING": "กำลังโหลด",
-  "user":"ผู้ใช้งาน"
+  "user":"ผู้ใช้งาน",
+  "to":"ถึง",
+  "from":"จาก"
 }

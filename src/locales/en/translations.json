@@ -82,5 +82,7 @@
   "IN-PROGRESS": "IN-PROGRESS",
   "COMPLETED": "COMPLETED",
   "LOADING": "Loading",
-  "user":"User"
+  "user":"User",
+  "to":"To",
+  "from":"From"
 }
