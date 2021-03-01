@@ -40,12 +40,12 @@ const ChartArea: React.FC<Props> = observer(() => {
       // size={{ width: 550, height: 480 }}
     >
       <CommonSeriesSettings argumentField="state" type="stackedBar" />
-      <Series valueField="Western" name="Western" />
-      <Series valueField="Central" name="Central" />
-      <Series valueField="Eastern" name="Eastern" />
-      <Series valueField="North" name="North" />
-      <Series valueField="South" name="South" />
-      <Series valueField="Northeast" name="Northeast" />
+      <Series color="red" valueField="Western" name="Western" />
+      <Series color="blue" valueField="Central" name="Central" />
+      <Series color="yellow" valueField="Eastern" name="Eastern" />
+      <Series color="orange" valueField="North" name="North" />
+      <Series color="green" valueField="South" name="South" />
+      <Series color="purple" valueField="Northeast" name="Northeast" />
       <ArgumentAxis>
         <Label />
       </ArgumentAxis>

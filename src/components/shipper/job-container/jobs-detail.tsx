@@ -28,12 +28,12 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                 <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
                   <img src={images.pinDrop2} style={{ width: 18 }} />
                   <span style={{ fontWeight: 'bold', margin: '0 5px' }}>{t('from')}:</span>
-                  กรุงเทพมหานคร
+                  972 เพชรเกษม 19 ตำบล บางแขม อำเภอเมืองนครปฐม นครปฐม 73000 ประเทศไทย
                 </span>
                 <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
                   <img src={images.pinDrop} style={{ width: 18 }} />
                   <span style={{ fontWeight: 'bold', margin: '0 5px' }}>{t('to')}:</span>
-                  นครราชศรีธรรมราช
+                  3086 ตำบล ลาดหญ้า อำเภอเมืองกาญจนบุรี กาญจนบุรี 71190 ประเทศไทย
                 </span>
               </Col>
             </div>
