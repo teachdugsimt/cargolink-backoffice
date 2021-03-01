@@ -46,6 +46,10 @@ const images = {
   rightTruck: require('../../images/S2Truck.png'),
   pinDrop: require('../../images/pin-drop.png'),
   pinDrop2: require('../../images/pin-drop2.png'),
+  // simpleCar1: require('../../images/pin-drop2.png'),
+  // simpleCar2: require('../../images/pin-drop2.png'),
+  // simpleCar3: require('../../images/pin-drop2.png'),
+  // simpleCar4: require('../../images/pin-drop2.png'),
 };
 
 export default images;

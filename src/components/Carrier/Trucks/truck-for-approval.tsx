@@ -5,6 +5,7 @@ import TruckForm from './truck-form';
 import images from '../../Themes/images';
 import { defaultAlertSetting, momentFormat } from '../../simple-data';
 import { useTranslation } from 'react-i18next';
+import Link from '@material-ui/core/Link';
 
 const TruckForApproval: React.FC<{}> = observer(({}) => {
   const { carrierStore, loginStore, masterTypeStore } = useMst();
@@ -59,7 +60,11 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
           cells: [
             {
               key: truck.id,
-              content: <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{truck.id}</span>,
+              content: (
+                <Link href="/truck-detail">
+                  <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{truck.id}</span>
+                </Link>
+              ),
             },
             {
               key: zones ? zones.join('') : '',
