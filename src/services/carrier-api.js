@@ -19,5 +19,10 @@ class CarrierApi {
     const response = await ExcuteApi('/api/v1/mobile/carriers/truck', params, 'post', 600000);
     return response;
   };
+
+  truckSummary = async (params) => {
+    const response = await ExcuteApi('/api/v1/mobile/multi-roles/truck/summary', params, 'get', 600000);
+    return response;
+  };
 }
 export default new CarrierApi();

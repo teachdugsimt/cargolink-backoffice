@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Chart,
   Series,
@@ -11,14 +11,27 @@ import {
   Label,
 } from 'devextreme-react/chart';
 import service from './data.tsx';
+import { observer } from 'mobx-react-lite';
+import { useTranslation } from 'react-i18next';
+import { useMst } from '../../../stores/root-store';
 
 const dataSource = service.getMaleAgeData();
-const customizeTooltip = (arg) => {
+const customizeTooltip = (arg: any) => {
   return {
     text: `${arg.seriesName} years: ${arg.valueText}`,
   };
 };
-const ChartArea = () => {
+
+interface Props {}
+
+const ChartArea: React.FC<Props> = observer(() => {
+  const { t } = useTranslation();
+  const { carrierStore } = useMst();
+
+  useEffect(() => {
+    carrierStore.getTruckSummary();
+  }, []);
+  useEffect(() => {}, [carrierStore.trucks_summary]);
   return (
     <Chart
       id="chart"
@@ -41,5 +54,5 @@ const ChartArea = () => {
       <Tooltip enabled={true} location="edge" customizeTooltip={customizeTooltip} />
     </Chart>
   );
-};
+});
 export default ChartArea;

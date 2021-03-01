@@ -518,41 +518,18 @@ const AddTruck: React.FC<Props> = observer(() => {
                     </Button>
                   )}
                 </Row>
-                {index == 0 ? (
-                  <></>
-                ) : (
-                  <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '1.125rem' }}>
-                    {/*  <Row>
-                           <Col offset={{ xs: 11.25 }} style={{ marginTop: '1.125rem' }}> */}
-                    <Button
-                      type="button"
-                      size="Small"
-                      shape="SemiRound"
-                      style={{ backgroundColor: '#253858', borderColor: '#253858' }}
-                      onClick={() => appendZone({})}
-                    >
-                      <EvaIcon name="plus-outline" />
-                    </Button>
-                    {/*    </Col>
-                     </Row> */}
-                  </div>
-                )}
               </div>
             );
           })}
-          {fieldZone.length >= 2 ? (
-            <></>
-          ) : (
-            <Button
-              type="button"
-              size="Small"
-              shape="SemiRound"
-              style={{ backgroundColor: '#253858', borderColor: '#253858', marginTop: '1.125rem' }}
-              onClick={() => appendZone({})}
-            >
-              <EvaIcon name="plus-outline" />
-            </Button>
-          )}
+          <Button
+            type="button"
+            size="Small"
+            shape="SemiRound"
+            style={{ backgroundColor: '#253858', borderColor: '#253858', marginTop: '1.125rem' }}
+            onClick={() => appendZone({})}
+          >
+            <EvaIcon name="plus-outline" />
+          </Button>
           <br />
           <br />
           <div style={{ display: 'flex' }}>

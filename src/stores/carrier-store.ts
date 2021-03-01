@@ -90,9 +90,21 @@ const drivers = types.model({
   driverLicenseExpDate: types.maybeNull(types.string),
 });
 
+const TruckSummary = types.model({
+  truckType: types.maybeNull(types.string),
+  central: types.maybeNull(types.number),
+  north: types.maybeNull(types.number),
+  south: types.maybeNull(types.number),
+  east: types.maybeNull(types.number),
+  west: types.maybeNull(types.number),
+  northEast: types.maybeNull(types.number),
+  nationalWide: types.maybeNull(types.number),
+});
+
 export const CarrierStore = types
   .model('CarrierStore', {
     loading: false,
+    trucks_summary: types.maybeNull(types.array(TruckSummary)),
     trucks_carrier: types.maybeNull(Trucks),
     trucks_types: types.maybeNull(types.array(trucksTypes)),
     drivers_carrier: types.maybeNull(types.array(drivers)),
@@ -239,6 +251,33 @@ export const CarrierStore = types
           self.error_response = {
             title: '',
             content: 'Failed to post truck',
+          };
+        }
+      }),
+
+      getTruckSummary: flow(function* getTruckSummary() {
+        self.loading = true;
+        self.trucks_summary = null;
+        self.error_response = null;
+        try {
+          const response = yield CarrierApi.truckSummary();
+          console.log('getTruckSummary response :> ', response);
+          if (response && response.ok) {
+            self.loading = false;
+            self.trucks_summary = response.data;
+          } else {
+            self.loading = false;
+            self.error_response = {
+              title: response.problem,
+              content: 'GET truck : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to getTruckSummary :> ', error);
+          self.loading = false;
+          self.error_response = {
+            title: '',
+            content: 'Failed to get all drivers by carrier',
           };
         }
       }),
