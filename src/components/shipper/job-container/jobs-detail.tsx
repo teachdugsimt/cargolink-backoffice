@@ -51,7 +51,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
       </Card>
       <Card>
         <CardBody>
-          <p style={{ color: '#FBBC12' }}>รายละเอียดรถ</p>
+          <p style={{ color: '#FBBC12' }}>รายละเอียดงาน</p>
           <Row style={{ justifyContent: 'center' }}>
             <div style={{ justifyContent: 'left', marginLeft: 50 }}>
               <Col>
