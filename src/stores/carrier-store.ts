@@ -36,6 +36,29 @@ const contentArray = types.model({
   tipper: types.maybeNull(types.boolean),
 });
 
+const photos = types.model({
+  back: types.maybeNull(AvatarObject),
+  front: types.maybeNull(AvatarObject),
+  left: types.maybeNull(AvatarObject),
+  right: types.maybeNull(AvatarObject),
+});
+
+const TruckDetail = types.model({
+  id: types.maybeNull(types.string),
+  truckType: types.maybeNull(types.number),
+  loadingWeight: types.maybeNull(types.number),
+  owner: types.maybeNull(objectOwner),
+  stallHeight: types.maybeNull(types.string),
+  createdAt: types.maybeNull(types.string),
+  updatedAt: types.maybeNull(types.string),
+  approveStatus: types.maybeNull(types.string),
+  phoneNumber: types.maybeNull(types.string),
+  truckPhotos: types.maybeNull(photos),
+  registrationNumber: types.maybeNull(types.array(types.maybeNull(types.string))),
+  workingZones: types.maybeNull(types.array(objectWorking)),
+  tipper: types.maybeNull(types.boolean),
+});
+
 // const objectSort = types.model({
 //   empty: types.maybeNull(types.boolean),
 //   sorted: types.maybeNull(types.boolean),
@@ -106,6 +129,7 @@ export const CarrierStore = types
     loading: false,
     trucks_summary: types.maybeNull(types.array(TruckSummary)),
     trucks_carrier: types.maybeNull(Trucks),
+    trucks_detail: types.maybeNull(TruckDetail),
     trucks_types: types.maybeNull(types.array(trucksTypes)),
     drivers_carrier: types.maybeNull(types.array(drivers)),
     success_response: false,
@@ -274,6 +298,33 @@ export const CarrierStore = types
           }
         } catch (error) {
           console.error('Failed to getTruckSummary :> ', error);
+          self.loading = false;
+          self.error_response = {
+            title: '',
+            content: 'Failed to get all drivers by carrier',
+          };
+        }
+      }),
+
+      getTruckDeyailById: flow(function* getTruckDeyailById(id: string) {
+        self.loading = true;
+        self.trucks_detail = null;
+        self.error_response = null;
+        try {
+          const response = yield CarrierApi.truckDetail(id);
+          console.log('truckDetail response :> ', response);
+          if (response && response.ok) {
+            self.loading = false;
+            self.trucks_detail = response.data;
+          } else {
+            self.loading = false;
+            self.error_response = {
+              title: response.problem,
+              content: 'GET truck : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to truckDetail :> ', error);
           self.loading = false;
           self.error_response = {
             title: '',

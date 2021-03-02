@@ -115,21 +115,23 @@ export const createRow = (jobs: any, products: any, language: string, t: any) =>
                 </span>
               </div>
               <div style={{ marginBottom: 5 }}>
-                {job.to.map((e: any, i: number) => {
-                  return (
-                    <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 5 }} key={i}>
-                      <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
-                        {i === 0 ? <img src={images.pinDrop} style={{ width: 18 }} /> : <div style={{ width: 18 }} />}
-                        <span style={{ fontWeight: 'bold', margin: '0 5px' }}>To:</span>
-                        {`${e?.name}`}
-                      </span>
-                      <span style={{ padding: 2, marginLeft: 23 }}>
-                        <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />
-                        {` ${momentFormatDateTime(e?.dateTime, language)}`}
-                      </span>
-                    </div>
-                  );
-                })}
+                {job &&
+                  job.to &&
+                  job.to.map((e: any, i: number) => {
+                    return (
+                      <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 5 }} key={i}>
+                        <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
+                          {i === 0 ? <img src={images.pinDrop} style={{ width: 18 }} /> : <div style={{ width: 18 }} />}
+                          <span style={{ fontWeight: 'bold', margin: '0 5px' }}>To:</span>
+                          {`${e?.name}`}
+                        </span>
+                        <span style={{ padding: 2, marginLeft: 23 }}>
+                          <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />
+                          {` ${momentFormatDateTime(e?.dateTime, language)}`}
+                        </span>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           ),

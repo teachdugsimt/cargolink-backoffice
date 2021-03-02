@@ -6,6 +6,8 @@ import images from '../../Themes/images';
 import { defaultAlertSetting, momentFormat } from '../../simple-data';
 import { useTranslation } from 'react-i18next';
 import Link from '@material-ui/core/Link';
+import { Button } from '@paljs/ui/Button';
+import { navigate } from 'gatsby';
 
 const TruckForApproval: React.FC<{}> = observer(({}) => {
   const { carrierStore, loginStore, masterTypeStore } = useMst();
@@ -43,6 +45,11 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
     }
   }, [carrierStore.error_response]);
 
+  const onDetail = (id: string) => {
+    carrierStore.getTruckDeyailById(id);
+    navigate('/truck-detail');
+  };
+
   useEffect(() => {
     const trucks = JSON.parse(JSON.stringify(carrierStore.trucks_carrier));
     const regions = JSON.parse(JSON.stringify(masterTypeStore.regions));
@@ -61,9 +68,9 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
             {
               key: truck.id,
               content: (
-                <Link href="/truck-detail">
+                <Button status="Control" onClick={() => onDetail(truck.id)}>
                   <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{truck.id}</span>
-                </Link>
+                </Button>
               ),
             },
             {
