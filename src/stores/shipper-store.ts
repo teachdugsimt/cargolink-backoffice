@@ -88,10 +88,31 @@ const Products = types.model({
   groupId: types.maybeNull(types.number),
 });
 
+const Quotations = types.model({
+  id: types.maybeNull(types.string),
+  fullName: types.maybeNull(types.string),
+  bookingDatetime: types.maybeNull(types.string),
+  avatar: types.maybeNull(types.string),
+});
+
+const jobDetail = types.model({
+  id: types.maybeNull(types.string),
+  productTypeId: types.maybeNull(types.number),
+  productName: types.maybeNull(types.string),
+  truckType: types.maybeNull(types.string),
+  weight: types.maybeNull(types.number),
+  requiredTruckAmount: types.maybeNull(types.number),
+  from: types.maybeNull(ObjectFrom),
+  to: types.maybeNull(types.array(ArrayTo)),
+  owner: types.maybeNull(OwnerObject),
+  quotations: types.maybeNull(types.array(Quotations)),
+});
+
 export const ShipperStore = types
   .model('ShipperStore', {
     loading: false,
     jobs_shipper: types.maybeNull(Jobs),
+    job_detail: types.maybeNull(jobDetail),
     product_types: types.maybeNull(types.array(Products)),
     success_response: false,
     error_response: types.maybeNull(
@@ -209,6 +230,33 @@ export const ShipperStore = types
           self.error_response = {
             title: '',
             content: 'Failed to get product types ',
+          };
+        }
+      }),
+
+      getJobDetailById: flow(function* getJobDetailById(id: string) {
+        self.loading = true;
+        self.job_detail = null;
+        self.error_response = null;
+        try {
+          const response = yield ShipperApi.jobDetail(id);
+          console.log('jobDetail response :> ', response);
+          if (response && response.ok) {
+            self.loading = false;
+            self.job_detail = response.data;
+          } else {
+            self.loading = false;
+            self.error_response = {
+              title: response.problem,
+              content: 'GET truck : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to jobDetail :> ', error);
+          self.loading = false;
+          self.error_response = {
+            title: '',
+            content: 'Failed to get all drivers by carrier',
           };
         }
       }),

@@ -13,12 +13,41 @@ import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
 
 const TrucksDetail: React.FC<{}> = observer(({}) => {
   const { t } = useTranslation();
+  const { shipperStore, carrierStore } = useMst();
+  const [truckTypeOptions, setTruckTypeOptions] = useState({ groupId: null, id: null, image: null, name: null });
+  const [job, setJob] = useState({});
+  const [productTypes, setProductTypes] = useState([]);
 
+  useEffect(() => {
+    const job = JSON.parse(JSON.stringify(shipperStore.job_detail));
+    const trucks_types = JSON.parse(JSON.stringify(carrierStore.trucks_types));
+    const product_types = JSON.parse(JSON.stringify(shipperStore.product_types));
+    if (product_types?.length) {
+      const productType = product_types?.length && product_types.find((prod: any) => prod.id === job.productTypeId);
+      const typeName = productType ? productType.name : '';
+      setProductTypes(typeName);
+    }
+    if (trucks_types?.length) {
+      const array = trucks_types && trucks_types.find((truck: any) => truck.id == JSON.parse(job?.truckType));
+      setTruckTypeOptions(array);
+    }
+    setJob(job);
+  }, [
+    shipperStore.job_detail,
+    carrierStore.trucks_types,
+    carrierStore.trucks_types?.length,
+    shipperStore.product_types,
+    shipperStore.product_types?.length,
+  ]);
+
+  console.log('jobDetail:>>', job);
+  console.log('truckTypeOptions:>>', truckTypeOptions);
+  console.log('productTypes:>>', productTypes);
   return (
     <div>
       <Card>
         <CardHeader>
-          <span>รายละเอียดรถ</span>
+          <span>รายละเอียดงาน</span>
         </CardHeader>
         <CardBody>
           <p>จุดรับส่งสินค้า</p>
@@ -28,13 +57,21 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                 <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
                   <img src={images.pinDrop2} style={{ width: 18 }} />
                   <span style={{ fontWeight: 'bold', margin: '0 5px' }}>{t('from')}:</span>
-                  972 เพชรเกษม 19 ตำบล บางแขม อำเภอเมืองนครปฐม นครปฐม 73000 ประเทศไทย
+                  {`${job && job.from && job.from.name ? job.from.name : ''}`}
                 </span>
-                <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
-                  <img src={images.pinDrop} style={{ width: 18 }} />
-                  <span style={{ fontWeight: 'bold', margin: '0 5px' }}>{t('to')}:</span>
-                  3086 ตำบล ลาดหญ้า อำเภอเมืองกาญจนบุรี กาญจนบุรี 71190 ประเทศไทย
-                </span>
+                {job &&
+                  job.to &&
+                  job.to.map((e: any, i: number) => {
+                    return (
+                      <div key={i}>
+                        <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
+                          {i === 0 ? <img src={images.pinDrop} style={{ width: 18 }} /> : <div style={{ width: 18 }} />}
+                          <span style={{ fontWeight: 'bold', margin: '0 5px' }}>To:</span>
+                          {`${e?.name}`}
+                        </span>
+                      </div>
+                    );
+                  })}
               </Col>
             </div>
             <div style={{ justifyContent: 'left', marginLeft: 50, borderLeft: '2px solid black' }}>
@@ -47,11 +84,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
               </Col>
             </div>
           </Row>
-        </CardBody>
-      </Card>
-      <Card>
-        <CardBody>
-          <p style={{ color: '#FBBC12' }}>รายละเอียดงาน</p>
+          <p>รายละเอียดงาน</p>
           <Row style={{ justifyContent: 'center' }}>
             <div style={{ justifyContent: 'left', marginLeft: 50 }}>
               <Col>
@@ -62,14 +95,11 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                       fill="#FBBC12"
                     />
                   </svg>{' '}
-                  ประเภทรถ : รถ 6 ล้อตู้คอก
+                  ประเภทรถ : {truckTypeOptions && truckTypeOptions.name ? truckTypeOptions.name : ''}
                 </span>
               </Col>
-              <Col style={{ marginLeft: 25 }}>
-                <span>จำนวน: 2 คัน</span>
-              </Col>
             </div>
-            <div style={{ justifyContent: 'left', marginLeft: 50, borderLeft: '2px solid black' }}>
+            <div style={{ justifyContent: 'left', marginLeft: 50 }}>
               <Col>
                 <span>
                   <svg width="20" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -78,24 +108,29 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                       fill="#FBBC12"
                     />
                   </svg>{' '}
-                  ประเภทสินค้า : สินค้าเกษตร
+                  ประเภทสินค้า : {productTypes ? productTypes : ''}
                 </span>
               </Col>
               <Col style={{ marginLeft: 25 }}>
-                <span>ชื่อสินค้า : ข้าวโพด</span>
+                <span>ชื่อสินค้า : {`${job && job.productName ? job.productName : ''}`}</span>
               </Col>
               <Col style={{ marginLeft: 25 }}>
-                <span>น้ำหนัก : 20 ตัน</span>
+                <span>น้ำหนัก : {`${job && job.weight ? job.weight : 0}`} ตัน</span>
               </Col>
             </div>
           </Row>
         </CardBody>
       </Card>
+      {/* <Card>
+        <CardBody>
+         
+        </CardBody>
+      </Card> */}
       <Card>
         <CardBody>
           <Row style={{ justifyContent: 'space-between' }}>
             <div>
-              <p>ทะเบียนรถ</p>
+              <p>ชื่อบริษัท : {`${job && job.owner && job.owner.companyName ? job.owner.companyName : ''}`}</p>
             </div>
             <Row style={{ marginRight: 5 }}>
               <span style={{ fontWeight: 5, padding: 15 }}>Cargolink</span>

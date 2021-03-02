@@ -3,7 +3,7 @@ import { Icon } from 'react-icons-kit';
 import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
 import images from '../../../Themes/images';
 import { momentFormatDateTime } from '../../../simple-data';
-import Link from '@material-ui/core/Link';
+import { Button } from '@paljs/ui/Button';
 
 export const createHead = (withWidth: boolean) => {
   return {
@@ -69,7 +69,7 @@ const jobStatus: any = {
   jobStatus23: 'IN-PROGRESS',
 };
 
-export const createRow = (jobs: any, products: any, language: string, t: any) => {
+export const createRow = (jobs: any, products: any, language: string, t: any, onDetail: any) => {
   return jobs.map((job: any, index: number) => {
     const productType = products?.length && products.find((prod: any) => prod.id === job.productTypeId);
     const typeName = productType ? productType.name : '';
@@ -81,9 +81,9 @@ export const createRow = (jobs: any, products: any, language: string, t: any) =>
         {
           key: job.id,
           content: (
-            <Link href="/job-detail">
+            <Button status="Control" onClick={() => onDetail(job.id)}>
               <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{job.id}</span>
-            </Link>
+            </Button>
           ),
         },
         {

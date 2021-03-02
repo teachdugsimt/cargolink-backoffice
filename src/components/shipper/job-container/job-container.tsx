@@ -76,7 +76,7 @@ const JobContainer: React.FC<Props> = observer(() => {
   useEffect(() => {
     const jobs_shipper = JSON.parse(JSON.stringify(shipperStore.jobs_shipper));
     if (jobs_shipper?.content) {
-      const rows = createRow(jobs_shipper.content, productTypes, loginStore.language, t);
+      const rows = createRow(jobs_shipper.content, productTypes, loginStore.language, t, onDetail);
       setRows(rows);
     }
   }, [
@@ -85,6 +85,11 @@ const JobContainer: React.FC<Props> = observer(() => {
     shipperStore.jobs_shipper?.content?.length,
     productTypes,
   ]);
+
+  const onDetail = (id: string) => {
+    shipperStore.getJobDetailById(id);
+    navigate('/job-detail');
+  };
 
   const onClickOpen = () => {
     setOpen(true);
