@@ -1,14 +1,4 @@
-const maleAgeData: [
-  {
-    state: string;
-    Western: number;
-    Central: number;
-    Eastern: number;
-    North: number;
-    South: number;
-    Northeast: number;
-  },
-] = [
+const maleAgeData = [
   {
     state: '4 Wheels',
     Western: 6.7,
