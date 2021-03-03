@@ -84,5 +84,9 @@
   "LOADING": "Loading",
   "user":"User",
   "to":"To",
-  "from":"From"
+  "from":"From",
+  "HH": "Hr",
+  "mm": "min",
+  "ss": "sec",
+  "ms": "millsec"
 }

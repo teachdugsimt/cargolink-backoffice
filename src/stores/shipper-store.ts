@@ -88,12 +88,12 @@ const Products = types.model({
   groupId: types.maybeNull(types.number),
 });
 
-const Quotations = types.model({
-  id: types.maybeNull(types.string),
-  fullName: types.maybeNull(types.string),
-  bookingDatetime: types.maybeNull(types.string),
-  avatar: types.maybeNull(types.string),
-});
+// const Quotations = types.model({
+//   id: types.maybeNull(types.string),
+//   fullName: types.maybeNull(types.string),
+//   bookingDatetime: types.maybeNull(types.string),
+//   avatar: types.maybeNull(types.string),
+// });
 
 const jobDetail = types.model({
   id: types.maybeNull(types.string),
@@ -105,7 +105,7 @@ const jobDetail = types.model({
   from: types.maybeNull(ObjectFrom),
   to: types.maybeNull(types.array(ArrayTo)),
   owner: types.maybeNull(OwnerObject),
-  quotations: types.maybeNull(types.array(Quotations)),
+  // quotations: types.maybeNull(types.array(Quotations)),
 });
 
 export const ShipperStore = types
