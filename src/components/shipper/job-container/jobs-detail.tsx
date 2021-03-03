@@ -129,7 +129,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
 
   // console.log('distance:>>', distance);
   // console.log('duration:>>', duration);
-  console.log('jobDetail:>>', jobDetail);
+  // console.log('jobDetail:>>', jobDetail);
 
   return (
     <div>
