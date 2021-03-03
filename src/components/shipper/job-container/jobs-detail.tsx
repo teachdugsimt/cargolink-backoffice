@@ -171,7 +171,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
           </Row>
           <Row style={{ marginTop: 24 }}>
             <Col breakPoint={{ xs: 12 }} style={{ margin: '6px 0' }}>
-              <strong>รายละเอียดงาน</strong>
+              <strong>{t('jobDetail')}</strong>
             </Col>
             <Col breakPoint={{ xs: 12 }}>
               <Row>
@@ -185,12 +185,15 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                       />
                     </Col>
                     <Col breakPoint={{ xs: 10, lg: 9.5 }} style={{ margin: '6px 0px' }}>
-                      <span>ประเภทรถ: {truckTypeOptions && truckTypeOptions.name ? truckTypeOptions.name : ''}</span>
+                      <span>
+                        {t('truckType')}: {truckTypeOptions && truckTypeOptions.name ? truckTypeOptions.name : ''}
+                      </span>
                     </Col>
                     <Col breakPoint={{ xs: 2, lg: 2.5 }} />
                     <Col breakPoint={{ xs: 10, lg: 9.5 }} style={{ margin: '6px 0px' }}>
                       <span>
-                        จำนวนรถ: {`${jobDetail && jobDetail.requiredTruckAmount ? jobDetail.requiredTruckAmount : ''}`}
+                        {t('truckAmount_1')}:{' '}
+                        {`${jobDetail && jobDetail.requiredTruckAmount ? jobDetail.requiredTruckAmount : ''}`}
                       </span>
                     </Col>
                   </Row>
@@ -204,15 +207,21 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                       />
                     </Col>
                     <Col breakPoint={{ xs: 10, lg: 11 }} style={{ margin: '6px 0px' }}>
-                      <span>ประเภทสินค้า : {productTypes ? productTypes : ''}</span>
+                      <span>
+                        {t('productType_1')}: {productTypes ? productTypes : ''}
+                      </span>
                     </Col>
                     <Col breakPoint={{ xs: 2, lg: 1 }} />
                     <Col breakPoint={{ xs: 10, lg: 11 }} style={{ margin: '6px 0px' }}>
-                      <span>ชื่อสินค้า : {`${jobDetail && jobDetail.productName ? jobDetail.productName : ''}`}</span>
+                      <span>
+                        {t('productName_1')}: {`${jobDetail && jobDetail.productName ? jobDetail.productName : ''}`}
+                      </span>
                     </Col>
                     <Col breakPoint={{ xs: 2, lg: 1 }} />
                     <Col breakPoint={{ xs: 10, lg: 11 }} style={{ margin: '6px 0px' }}>
-                      <span>น้ำหนัก : {`${jobDetail && jobDetail.weight ? jobDetail.weight : 0}`} ตัน</span>
+                      <span>
+                        {t('weight')}: {`${jobDetail && jobDetail.weight ? jobDetail.weight : 0}`} ตัน
+                      </span>
                     </Col>
                   </Row>
                 </Col>

@@ -95,6 +95,7 @@
   "jobDetail":"รายละเอียดงาน",
   "pickUpPoint":"จุดรับส่งสินค้า",
   "km":"กม.",
+  "truckType": "ประเภทรถ",
   "truckAmount_1":"จำนวนรถ",
   "productType_1":"ประเภทสินค้า",
   "companyName":"ชื่อบริษัท"

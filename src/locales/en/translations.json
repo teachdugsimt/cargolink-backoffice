@@ -95,6 +95,7 @@
   "jobDetail":"Job Detail",
   "pickUpPoint":"Pick up point",
   "km":"KM",
+  "truckType": "Truck Type",
   "truckAmount_1":"Truck Amount",
   "productType_1":"Product Type",
   "companyName":"Company Name"
