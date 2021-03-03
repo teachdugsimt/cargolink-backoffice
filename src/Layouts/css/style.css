@@ -137,7 +137,8 @@ input[type='file'] {
 .react-datepicker__triangle {
   left: 50px !important;
 }
-.brsVJf {
+.brsVJf,
+.menu-sidebar {
   position: inherit !important;
 }
 .MuiSelect-select.MuiSelect-select {
