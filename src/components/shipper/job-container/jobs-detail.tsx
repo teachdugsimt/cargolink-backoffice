@@ -4,45 +4,125 @@ import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
 import Col from '@paljs/ui/Col';
 import images from '../../Themes/images';
-import { EvaIcon } from '@paljs/ui/Icon';
 import { observer } from 'mobx-react-lite';
 import { useMst } from '../../../stores/root-store';
 import { ic_check_circle } from 'react-icons-kit/md/ic_check_circle';
 import Icon from 'react-icons-kit';
-import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
 
 const TrucksDetail: React.FC<{}> = observer(({}) => {
   const { t } = useTranslation();
   const { shipperStore, carrierStore } = useMst();
   const [truckTypeOptions, setTruckTypeOptions] = useState({ groupId: null, id: null, image: null, name: null });
-  const [job, setJob] = useState({});
+  const [jobDetail, setJobDetail] = useState({});
   const [productTypes, setProductTypes] = useState([]);
+  const [distance, setDistance] = useState('');
+  const [duration, setDuration] = useState('');
+
+  useEffect(() => {
+    shipperStore.getProductTypes();
+    const job = JSON.parse(JSON.stringify(shipperStore.job_detail));
+    if (job?.to && job?.from) {
+      const data = [job?.from, ...job.to];
+      getGoogleApi(data);
+    }
+  }, [shipperStore.job_detail]);
+
+  useEffect(() => {
+    const job = JSON.parse(JSON.stringify(shipperStore.job_detail));
+    setJobDetail(job);
+  }, [shipperStore.job_detail]);
+
+  useEffect(() => {
+    const job = JSON.parse(JSON.stringify(shipperStore.job_detail));
+    const product_types = JSON.parse(JSON.stringify(shipperStore.product_types));
+    if (product_types?.length && job?.productTypeId) {
+      const productType = product_types.find((e: any) => e.id === job.productTypeId);
+      const typeName = productType ? productType.name : '';
+      setProductTypes(typeName);
+    }
+  }, [shipperStore.job_detail, shipperStore.product_types, shipperStore.product_types?.length]);
 
   useEffect(() => {
     const job = JSON.parse(JSON.stringify(shipperStore.job_detail));
     const trucks_types = JSON.parse(JSON.stringify(carrierStore.trucks_types));
-    const product_types = JSON.parse(JSON.stringify(shipperStore.product_types));
-    if (product_types?.length) {
-      const productType = product_types?.length && product_types.find((prod: any) => prod.id === job.productTypeId);
-      const typeName = productType ? productType.name : '';
-      setProductTypes(typeName);
-    }
-    if (trucks_types?.length) {
-      const array = trucks_types && trucks_types.find((truck: any) => truck.id == JSON.parse(job?.truckType));
+    if (trucks_types?.length && job?.truckType) {
+      const array = trucks_types.find((truck: any) => truck.id === parseInt(job.truckType, 10));
       setTruckTypeOptions(array);
     }
-    setJob(job);
-  }, [
-    shipperStore.job_detail,
-    carrierStore.trucks_types,
-    carrierStore.trucks_types?.length,
-    shipperStore.product_types,
-    shipperStore.product_types?.length,
-  ]);
+  }, [shipperStore.job_detail, carrierStore.trucks_types, carrierStore.trucks_types?.length]);
 
-  console.log('jobDetail:>>', job);
-  console.log('truckTypeOptions:>>', truckTypeOptions);
-  console.log('productTypes:>>', productTypes);
+  const getGoogleApi = async (coordinates: any) => {
+    // console.log("coordinates:>>", coordinates)
+    let arrDistances = [];
+    let summaryDistance = 0;
+    let summaryDuration = 0;
+    let province = {};
+    for (let index = 0; index < coordinates.length; index++) {
+      if (index + 1 < coordinates.length) {
+        const startLoc = `${coordinates[index].lat},${coordinates[index].lng}`;
+        const destinationLoc = `${coordinates[index + 1].lat},${coordinates[index + 1].lng}`;
+        const response = await fetch(
+          `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&result_type=country&key=AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw`,
+          {
+            method: 'GET',
+          },
+        );
+        const responseJson = await response.json();
+        console.log('response :> ', responseJson);
+        if (responseJson.status === 'OK') {
+          const mapData = responseJson.routes[0];
+          const distanceValue = mapData?.legs[0]?.distance?.value || 0;
+          const durationValue = mapData?.legs[0]?.duration?.value || 0;
+
+          summaryDistance += distanceValue;
+          summaryDuration += durationValue;
+
+          province = {
+            ...province,
+            [startLoc]: mapData?.legs[0]?.start_address || '',
+            [destinationLoc]: mapData?.legs[0]?.end_address || '',
+          };
+
+          arrDistances.push({
+            from: startLoc,
+            to: destinationLoc,
+            distance: distanceValue,
+            duration: durationValue,
+          });
+        }
+      }
+    }
+
+    const time_convert = (
+      duration: number,
+      format: 'HHmmssms' | 'HHmmss' | 'HHmm' | 'HH' | 'mmssms' | 'mmss' | 'mm' | 'ssms' | 'ss' | 'ms',
+    ) => {
+      const time = {
+        ms: (duration % 1000) / 100,
+        ss: Math.floor((duration / 1000) % 60),
+        mm: Math.floor((duration / (1000 * 60)) % 60),
+        HH: Math.floor((duration / (1000 * 60 * 60)) % 24),
+      };
+
+      let timeStr = '';
+      const arrFormat = format.match(/.{1,2}/g);
+
+      arrFormat.forEach((f) => {
+        timeStr += `${time[f]} ${t(`${f}`)} `;
+      });
+
+      return timeStr.trim();
+    };
+    // console.log('arrDistances :> ', arrDistances);
+    setDistance((summaryDistance / 1000).toFixed(2));
+    setDuration(time_convert(summaryDuration * 1000, 'HHmm'));
+    // console.log('summaryDistance :> ', summaryDistance / 1000);
+    // console.log('summaryDuration :> ', time_convert(summaryDuration * 1000, 'HHmm'));
+  };
+
+  console.log('distance:>>', distance);
+  console.log('duration:>>', duration);
+
   return (
     <div>
       <Card>
@@ -57,11 +137,11 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                 <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
                   <img src={images.pinDrop2} style={{ width: 18 }} />
                   <span style={{ fontWeight: 'bold', margin: '0 5px' }}>{t('from')}:</span>
-                  {`${job && job.from && job.from.name ? job.from.name : ''}`}
+                  {`${jobDetail && jobDetail.from && jobDetail.from.name ? jobDetail.from.name : ''}`}
                 </span>
-                {job &&
-                  job.to &&
-                  job.to.map((e: any, i: number) => {
+                {jobDetail &&
+                  jobDetail.to &&
+                  jobDetail.to.map((e: any, i: number) => {
                     return (
                       <div key={i}>
                         <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
@@ -77,10 +157,10 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
             <div style={{ justifyContent: 'left', marginLeft: 50, borderLeft: '2px solid black' }}>
               <Col>
                 <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
-                  <span style={{ fontWeight: 'bold', margin: '0 5px' }}>435.45</span>
+                  <span style={{ fontWeight: 'bold', margin: '0 5px' }}>{distance}</span>
                   KM
                 </span>
-                <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>3 ชั่วโมง 45 นาที</span>
+                <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>{duration}</span>
               </Col>
             </div>
           </Row>
@@ -112,10 +192,10 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                 </span>
               </Col>
               <Col style={{ marginLeft: 25 }}>
-                <span>ชื่อสินค้า : {`${job && job.productName ? job.productName : ''}`}</span>
+                <span>ชื่อสินค้า : {`${jobDetail && jobDetail.productName ? jobDetail.productName : ''}`}</span>
               </Col>
               <Col style={{ marginLeft: 25 }}>
-                <span>น้ำหนัก : {`${job && job.weight ? job.weight : 0}`} ตัน</span>
+                <span>น้ำหนัก : {`${jobDetail && jobDetail.weight ? jobDetail.weight : 0}`} ตัน</span>
               </Col>
             </div>
           </Row>
@@ -130,7 +210,10 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
         <CardBody>
           <Row style={{ justifyContent: 'space-between' }}>
             <div>
-              <p>ชื่อบริษัท : {`${job && job.owner && job.owner.companyName ? job.owner.companyName : ''}`}</p>
+              <p>
+                ชื่อบริษัท :{' '}
+                {`${jobDetail && jobDetail.owner && jobDetail.owner.companyName ? jobDetail.owner.companyName : ''}`}
+              </p>
             </div>
             <Row style={{ marginRight: 5 }}>
               <span style={{ fontWeight: 5, padding: 15 }}>Cargolink</span>
