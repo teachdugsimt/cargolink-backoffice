@@ -166,7 +166,7 @@ const JobContainer: React.FC<Props> = observer(() => {
         </div>
       </CardHeader>
       <CardBody>
-        <Row style={{ padding: 10, marginBottom: 10, display: 'flex', justifyContent: 'space-between', minWidth: 600 }}>
+        <Row style={{ padding: 10, marginBottom: 10, display: 'flex', justifyContent: 'space-between', minWidth: 719 }}>
           <div>
             <Button
               size="Small"
