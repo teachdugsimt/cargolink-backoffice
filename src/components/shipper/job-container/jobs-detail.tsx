@@ -126,7 +126,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
     <div>
       <Card>
         <CardHeader>
-          <span>รายละเอียดงาน</span>
+          <span>{t('jobDetail')}</span>
         </CardHeader>
         <CardBody>
           <Row>
@@ -226,7 +226,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
           <Row>
             <Col breakPoint={{ xs: 12, sm: 6 }} style={{ margin: '6px 0px', display: 'flex', alignItems: 'center' }}>
               <p>
-                ชื่อบริษัท :{' '}
+                {t('companyName')} :{' '}
                 {`${jobDetail && jobDetail.owner && jobDetail.owner.companyName ? jobDetail.owner.companyName : ''}`}
               </p>
             </Col>
