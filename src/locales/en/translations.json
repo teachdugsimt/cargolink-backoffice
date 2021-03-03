@@ -88,5 +88,6 @@
   "HH": "Hr",
   "mm": "min",
   "ss": "sec",
-  "ms": "millsec"
+  "ms": "millsec",
+  "KM": "KM"
 }

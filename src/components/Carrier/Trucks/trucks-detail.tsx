@@ -185,7 +185,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                   />
                 </Col>
                 <Col breakPoint={{ xs: 10, sm: 11 }} style={{ margin: '6px 0px' }}>
-                  โซนวิ่งงาน: {filterRegion && filterRegion.join(', ')}
+                  <span>โซนวิ่งงาน: {filterRegion && filterRegion.join(', ')}</span>
                 </Col>
                 <Col breakPoint={{ xs: 2, sm: 1 }} />
                 <Col breakPoint={{ xs: 10, sm: 11 }} style={{ margin: '6px 0px' }}>
@@ -207,7 +207,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
       <Card>
         <CardBody>
           <Row>
-            <Col breakPoint={{ xs: 12, sm: 6 }} style={{ margin: '6px 0px' }}>
+            <Col breakPoint={{ xs: 12, sm: 6 }} style={{ margin: '6px 0px', display: 'flex', alignItems: 'center' }}>
               <p>ทะเบียนรถ : {trucks && trucks.registrationNumber && trucks.registrationNumber.join(' ')}</p>
             </Col>
             <Col breakPoint={{ xs: 12, sm: 6 }} style={{ margin: '6px 0px' }}>
