@@ -13,7 +13,14 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
   const { t } = useTranslation();
   const { shipperStore, carrierStore } = useMst();
   const [truckTypeOptions, setTruckTypeOptions] = useState({ groupId: null, id: null, image: null, name: null });
-  const [jobDetail, setJobDetail] = useState({});
+  const [jobDetail, setJobDetail] = useState({
+    productName: '',
+    weight: 0,
+    owner: { companyName: ' ' },
+    requiredTruckAmount: 0,
+    to: [],
+    from: { name: '' },
+  });
   const [productTypes, setProductTypes] = useState([]);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
@@ -68,7 +75,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
           },
         );
         const responseJson = await response.json();
-        console.log('response :> ', responseJson);
+        // console.log('response :> ', responseJson);
         if (responseJson.status === 'OK') {
           const mapData = responseJson.routes[0];
           const distanceValue = mapData?.legs[0]?.distance?.value || 0;
@@ -107,7 +114,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
       let timeStr = '';
       const arrFormat = format.match(/.{1,2}/g);
 
-      arrFormat.forEach((f) => {
+      arrFormat?.forEach((f) => {
         timeStr += `${time[f]} ${t(`${f}`)} `;
       });
 
@@ -120,8 +127,9 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
     // console.log('summaryDuration :> ', time_convert(summaryDuration * 1000, 'HHmm'));
   };
 
-  console.log('distance:>>', distance);
-  console.log('duration:>>', duration);
+  // console.log('distance:>>', distance);
+  // console.log('duration:>>', duration);
+  console.log('jobDetail:>>', jobDetail);
 
   return (
     <div>
@@ -176,6 +184,11 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                     />
                   </svg>{' '}
                   ประเภทรถ : {truckTypeOptions && truckTypeOptions.name ? truckTypeOptions.name : ''}
+                </span>
+              </Col>
+              <Col style={{ marginLeft: 25 }}>
+                <span>
+                  จำนวนรถ : {`${jobDetail && jobDetail.requiredTruckAmount ? jobDetail.requiredTruckAmount : ''}`}
                 </span>
               </Col>
             </div>
