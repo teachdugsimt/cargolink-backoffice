@@ -120,9 +120,9 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
 
       return timeStr.trim();
     };
-    // console.log('arrDistances :> ', arrDistances);
     setDistance((summaryDistance / 1000).toFixed(2));
     setDuration(time_convert(summaryDuration * 1000, 'HHmm'));
+    // console.log('arrDistances :> ', arrDistances);
     // console.log('summaryDistance :> ', summaryDistance / 1000);
     // console.log('summaryDuration :> ', time_convert(summaryDuration * 1000, 'HHmm'));
   };
@@ -135,10 +135,10 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
     <div>
       <Card>
         <CardHeader>
-          <span>รายละเอียดงาน</span>
+          <span>{t('jobDetail')}</span>
         </CardHeader>
         <CardBody>
-          <p>จุดรับส่งสินค้า</p>
+          <p>{t('pickUpPoint')}</p>
           <Row style={{ justifyContent: 'center' }}>
             <div style={{ justifyContent: 'left' }}>
               <Col>
@@ -166,13 +166,13 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
               <Col>
                 <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
                   <span style={{ fontWeight: 'bold', margin: '0 5px' }}>{distance}</span>
-                  KM
+                  {t('km')}
                 </span>
                 <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>{duration}</span>
               </Col>
             </div>
           </Row>
-          <p>รายละเอียดงาน</p>
+          <p>{t('jobDetail')}</p>
           <Row style={{ justifyContent: 'center' }}>
             <div style={{ justifyContent: 'left', marginLeft: 50 }}>
               <Col>
@@ -183,12 +183,13 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                       fill="#FBBC12"
                     />
                   </svg>{' '}
-                  ประเภทรถ : {truckTypeOptions && truckTypeOptions.name ? truckTypeOptions.name : ''}
+                  {t('truckstype')} : {truckTypeOptions && truckTypeOptions.name ? truckTypeOptions.name : ''}
                 </span>
               </Col>
               <Col style={{ marginLeft: 25 }}>
                 <span>
-                  จำนวนรถ : {`${jobDetail && jobDetail.requiredTruckAmount ? jobDetail.requiredTruckAmount : ''}`}
+                  {t('truckAmount_1')} :{' '}
+                  {`${jobDetail && jobDetail.requiredTruckAmount ? jobDetail.requiredTruckAmount : ''}`}
                 </span>
               </Col>
             </div>
@@ -201,14 +202,18 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                       fill="#FBBC12"
                     />
                   </svg>{' '}
-                  ประเภทสินค้า : {productTypes ? productTypes : ''}
+                  {t('productType_1')} : {productTypes ? productTypes : ''}
                 </span>
               </Col>
               <Col style={{ marginLeft: 25 }}>
-                <span>ชื่อสินค้า : {`${jobDetail && jobDetail.productName ? jobDetail.productName : ''}`}</span>
+                <span>
+                  {t('productName_1')} : {`${jobDetail && jobDetail.productName ? jobDetail.productName : ''}`}
+                </span>
               </Col>
               <Col style={{ marginLeft: 25 }}>
-                <span>น้ำหนัก : {`${jobDetail && jobDetail.weight ? jobDetail.weight : 0}`} ตัน</span>
+                <span>
+                  {t('weight')} : {`${jobDetail && jobDetail.weight ? jobDetail.weight : 0}`} ตัน
+                </span>
               </Col>
             </div>
           </Row>
@@ -224,7 +229,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
           <Row style={{ justifyContent: 'space-between' }}>
             <div>
               <p>
-                ชื่อบริษัท :{' '}
+                {t('companyName')} :{' '}
                 {`${jobDetail && jobDetail.owner && jobDetail.owner.companyName ? jobDetail.owner.companyName : ''}`}
               </p>
             </div>

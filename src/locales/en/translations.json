@@ -36,8 +36,10 @@
   "productType":"Product information to be sent",
   "fieldProductType":"This field product type is required",
   "productName":"Name your product",
+  "productName_1":"Product Name",
   "fieldProductName":"This field product name is required",
   "amountWeight":"Amount of weight (ton)",
+  "weight":"Weight",
   "fieldWeight":"This field amount weight is required",
   "minWeight":"Must be greater than or equal to 0",
   "deliveryPoint":"Delivery point",
@@ -88,5 +90,11 @@
   "HH": "Hr",
   "mm": "min",
   "ss": "sec",
-  "ms": "millsec"
+  "ms": "millsec",
+  "jobDetail":"Job Detail",
+  "pickUpPoint":"Pick up point",
+  "km":"KM",
+  "truckAmount_1":"Truck Amount",
+  "productType_1":"Product Type",
+  "companyName":"Company Name"
 }
