@@ -1,5 +1,5 @@
-const Header = async (is_login = null, is_upload = null, timeout = 20000, requiredToken = true) => {
-  let baseURL = process.env.API_ENDPOINT;
+const Header = async (admin_api = false, is_login = null, is_upload = null, timeout = 20000, requiredToken = true) => {
+  const baseURL = admin_api ? process.env.API_ENDPOINT_ADMIN : process.env.API_ENDPOINT;
   let header = {};
   let token = await JSON.parse(localStorage.getItem('profileLocal'));
   let language = await localStorage.getItem('profileLanguage');

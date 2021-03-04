@@ -1,12 +1,13 @@
 import { create } from 'apisauce';
 import Header from './header';
 
-const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = true) => {
+const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = true, admin_api = false) => {
   console.time('ExcuteApi');
   console.log('Params Excute header : ', params);
   try {
     const api = create(
       await Header(
+        admin_api,
         url.includes('login') ? true : null,
         url.includes('upload') && method == 'post' ? 'upload' : null,
         timeout,
