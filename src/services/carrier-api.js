@@ -21,7 +21,7 @@ class CarrierApi {
   };
 
   truckSummary = async (params) => {
-    const response = await ExcuteApi('/api/v1/mobile/multi-roles/truck/summary', params, 'get', 600000);
+    const response = await ExcuteApi('/api/admin/mobile/v1/truck/summary', null, 'get', 600000, false);
     return response;
   };
 

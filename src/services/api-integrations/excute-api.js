@@ -16,7 +16,7 @@ const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = t
 
     let response;
     if (method == 'get' || method == 'GET') {
-      response = await api.get(url, params || { filter: {} });
+      response = await api.get(url, params || {});
     } else if (method == 'post' || method == 'POST') {
       response = await api.post(url, params);
     } else if (method == 'put' || method == 'PUT') {
