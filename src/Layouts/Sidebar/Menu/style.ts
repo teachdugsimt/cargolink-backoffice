@@ -37,7 +37,7 @@ const MenuStyle = styled.div`
           background-color: ${theme.menuItemActiveBackgroundColor};
           color: #253858;
           .menu-icon {
-            color: #253858;
+            color: #fbbc2f;
           }
         }
         a:hover {
@@ -45,7 +45,7 @@ const MenuStyle = styled.div`
           color: #253858;
           cursor: ${theme.menuItemHoverCursor};
           .menu-icon {
-            color: #253858;
+            color: #fbbc2f;
           }
         }
         .menu-icon {
@@ -90,7 +90,7 @@ const MenuStyle = styled.div`
           border-color: ${theme.menuSubmenuItemActiveBorderColor};
           color: #253858;
           .menu-icon {
-            color: #253858;
+            color: #fbbc2f;
           }
         }
         a:hover {
@@ -98,7 +98,7 @@ const MenuStyle = styled.div`
           border-color: ${theme.menuSubmenuItemHoverBorderColor};
           color: #253858;
           .menu-icon {
-            color: #253858;
+            color: #fbbc2f;
           }
         }
         a.active:hover {
@@ -106,7 +106,7 @@ const MenuStyle = styled.div`
           border-color: ${theme.menuSubmenuItemActiveHoverBorderColor};
           color: #253858;
           .menu-icon {
-            color: #253858;
+            color: #fbbc2f;
           }
         }
       }
