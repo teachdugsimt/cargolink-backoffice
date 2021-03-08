@@ -108,10 +108,22 @@ const jobDetail = types.model({
   // quotations: types.maybeNull(types.array(Quotations)),
 });
 
+const JobsSummary = types.model({
+  productType: types.maybeNull(types.string),
+  central: types.maybeNull(types.number),
+  north: types.maybeNull(types.number),
+  south: types.maybeNull(types.number),
+  east: types.maybeNull(types.number),
+  west: types.maybeNull(types.number),
+  northEast: types.maybeNull(types.number),
+  nationalWide: types.maybeNull(types.number),
+});
+
 export const ShipperStore = types
   .model('ShipperStore', {
     loading: false,
     jobs_shipper: types.maybeNull(Jobs),
+    jobs_summary: types.maybeNull(types.array(JobsSummary)),
     job_detail: types.maybeNull(jobDetail),
     product_types: types.maybeNull(types.array(Products)),
     success_response: false,
@@ -253,6 +265,33 @@ export const ShipperStore = types
           }
         } catch (error) {
           console.error('Failed to jobDetail :> ', error);
+          self.loading = false;
+          self.error_response = {
+            title: '',
+            content: 'Failed to get all drivers by carrier',
+          };
+        }
+      }),
+
+      getJobSummary: flow(function* getJobSummary() {
+        self.loading = true;
+        self.jobs_summary = null;
+        self.error_response = null;
+        try {
+          const response = yield ShipperApi.jobsSummary();
+          console.log('getJobSummary response :> ', response);
+          if (response && response.ok) {
+            self.loading = false;
+            self.jobs_summary = response.data;
+          } else {
+            self.loading = false;
+            self.error_response = {
+              title: response.problem,
+              content: 'GET truck : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to getJobSummary :> ', error);
           self.loading = false;
           self.error_response = {
             title: '',

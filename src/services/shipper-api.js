@@ -17,5 +17,10 @@ class ShipperApi {
     const response = await ExcuteApi(`/api/v1/mobile/job/${params}`, params, 'get', 600000);
     return response;
   };
+
+  jobsSummary = async () => {
+    const response = await ExcuteApi('/api/admin/mobile/v1/job/summary', null, 'get', 600000, false, true);
+    return response;
+  };
 }
 export default new ShipperApi();

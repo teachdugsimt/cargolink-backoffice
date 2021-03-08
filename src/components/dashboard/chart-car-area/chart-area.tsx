@@ -35,7 +35,7 @@ const ChartArea: React.FC<Props> = observer(() => {
     const trucks_summary = JSON.parse(JSON.stringify(carrierStore.trucks_summary));
     // console.log("trucks_summary:>>", trucks_summary)
     setTrucksSummary(trucks_summary);
-  }, [carrierStore.trucks_summary]);
+  }, [carrierStore.trucks_summary, carrierStore.trucks_summary?.length]);
 
   //  getMaleAgeData = () => {
   //   return trucksSummary
