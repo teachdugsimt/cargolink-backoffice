@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import DynamicTable from '@atlaskit/dynamic-table';
-import { head, rows } from './dynamic-table/sample-data';
+import { head, createRow } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
 import { ic_add } from 'react-icons-kit/md/ic_add';
 import SearchForm from '../../search-form';
@@ -9,6 +9,10 @@ import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
 import styled from 'styled-components';
+import { useMst } from '../../../stores/root-store';
+import { observer } from 'mobx-react-lite';
+import { defaultAlertSetting } from '../../simple-data';
+import Alert from '../../alert';
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -16,41 +20,59 @@ const Wrapper = styled.div`
   background-color: '#5E6C84';
 `;
 
-const MultipleRole = () => {
+interface Props {}
+
+const MultipleRole: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
-  const [rowData, setRowData] = useState(rows);
-  // const [panding, setPanding] = useState(false)
-  // const [approved, setApproved] = useState(false)
+  const { userStore } = useMst();
+  const [rowData, setRowData] = useState([]);
   const [submit, setSubmit] = useState(false);
+  const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
-  // const onClickPending = () => {
-  //   setPanding(true)
-  //   setApproved(false)
-  //   const filteredData = rows.filter((item) => {
-  //     const data = item.cells.filter((key) => key.key == 'Pending');
-  //     return data && data.length ? true : false;
-  //   });
-  //   setRowData(filteredData);
-  // };
+  useEffect(() => {
+    userStore.getUser({ type: 0 });
+  }, []);
 
-  // const onClickApproved = () => {
-  //   setApproved(true)
-  //   setPanding(false)
+  useEffect(() => {
+    const { loading } = userStore;
+    setAlertSetting({
+      icon: '',
+      show: loading,
+      type: 'loading',
+      title: '',
+      content: t('LOADING'),
+    });
+  }, [userStore.loading]);
 
-  //   const filteredData = rows.filter((item) => {
-  //     const data = item.cells.filter((key) => key.key == 'Approved');
-  //     return data && data.length ? true : false;
-  //   });
-  //   setRowData(filteredData);
-  // };
+  useEffect(() => {
+    const { error_response } = userStore;
+    if (error_response) {
+      setAlertSetting({
+        icon: 'error',
+        show: true,
+        type: 'general',
+        title: error_response.title || '',
+        content: error_response.content || '',
+      });
+    }
+  }, [userStore.error_response]);
+
+  useEffect(() => {
+    const data_user = JSON.parse(JSON.stringify(userStore.data_user));
+    if (data_user) {
+      const rows = createRow(data_user, t);
+      setRowData(rows);
+    }
+  }, [userStore.data_user, userStore.data_user?.length]);
 
   return (
     <Card>
       <CardHeader>
+        <Alert setting={alertSetting} />
         <div className="block-data-header">
           <span className="font-data-header">{t('userManagement')}</span>
           <div style={{ display: 'flex' }}>
-            <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
+            <SearchForm onSearch={(value: any) => setRowData(value)} />
           </div>
         </div>
       </CardHeader>
@@ -91,5 +113,5 @@ const MultipleRole = () => {
       </CardBody>
     </Card>
   );
-};
+});
 export default MultipleRole;

@@ -23,41 +23,41 @@ function sortByDate(input: string) {
 export const createHead = (withWidth: boolean) => {
   return {
     cells: [
+      // {
+      //   key: 'id',
+      //   content: 'Id',
+      //   isSortable: true,
+      //   width: withWidth ? 5 : undefined,
+      // },
       {
-        key: 'id',
-        content: 'Id',
-        isSortable: true,
-        width: withWidth ? 5 : undefined,
-      },
-      {
-        key: 'phone',
+        key: 'phoneNumber',
         content: 'Phone number',
         shouldTruncate: true,
         isSortable: true,
         // width: withWidth ? 15 : undefined,
       },
       {
-        key: 'full_name',
+        key: 'fullName',
         content: 'Full name',
         shouldTruncate: true,
         isSortable: true,
         // width: withWidth ? 10 : undefined,
       },
       {
-        key: 'register_date',
+        key: 'registerDate',
         content: 'Register Date',
         shouldTruncate: true,
         isSortable: true,
       },
       {
-        key: 'status',
-        content: 'Status',
+        key: 'jobCount',
+        content: 'job count',
         shouldTruncate: true,
         isSortable: true,
       },
       {
-        key: 'date_approve',
-        content: 'Date of approval',
+        key: 'truckCount',
+        content: 'truck count',
         shouldTruncate: true,
         isSortable: true,
       },
@@ -72,40 +72,44 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const rows = users.map((user: User, index: number) => ({
-  key: `row-${index}-${user.id}`,
-  cells: [
-    {
-      key: user.id,
-      content: user.id,
-    },
-    {
-      key: user.phone,
-      content: user.phone,
-    },
-    {
-      key: user.full_name,
-      content: user.full_name,
-    },
-    {
-      key: sortByDate(user.register_date),
-      content: moment(user.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
-    },
-    {
-      key: user.status,
-      content: user.status,
-    },
-    {
-      key: sortByDate(user.date_approve),
-      content: moment(user.date_approve, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
-    },
-    {
-      key: user.id,
-      content: (
-        <Button appearance="ghost" status="Basic" size="Small">
-          <Icon icon={ic_delete} />
-        </Button>
-      ),
-    },
-  ],
-}));
+export const createRow = (user: any, t: any) => {
+  return user.map((user: any, index: number) => {
+    return {
+      key: `row-${index}-${user.id}`,
+      cells: [
+        // {
+        //   key: user.id,
+        //   content: user.id,
+        // },
+        {
+          key: user.phoneNumber,
+          content: user.phoneNumber,
+        },
+        {
+          key: user.fullName,
+          content: user.fullName,
+        },
+        {
+          key: sortByDate(user.registerDate),
+          content: moment(user.registerDate, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
+        },
+        {
+          key: user.jobCount,
+          content: user.jobCount,
+        },
+        {
+          key: user.truckCount,
+          content: user.truckCount,
+        },
+        {
+          key: user.id,
+          content: (
+            <Button appearance="ghost" status="Basic" size="Small">
+              <Icon icon={ic_delete} />
+            </Button>
+          ),
+        },
+      ],
+    };
+  });
+};

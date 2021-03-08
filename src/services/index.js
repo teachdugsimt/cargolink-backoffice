@@ -3,5 +3,6 @@ import CarrierApi from './carrier-api';
 import ShipperApi from './shipper-api';
 import UploadFileApi from './upload-file-api';
 import MasterTypeApi from './master-type-api';
+import UserApi from './user-api';
 
-export { LoginApi, CarrierApi, ShipperApi, UploadFileApi, MasterTypeApi };
+export { LoginApi, CarrierApi, ShipperApi, UploadFileApi, MasterTypeApi, UserApi };

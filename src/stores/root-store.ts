@@ -5,12 +5,14 @@ import { LoginStore } from './login-store';
 import { CarrierStore } from './carrier-store';
 import { ShipperStore } from './shipper-store';
 import { MasterTypeStore } from './master-type-store';
+import { UserStore } from './user-store';
 
 const RootModel = types.model({
   loginStore: LoginStore,
   carrierStore: CarrierStore,
   shipperStore: ShipperStore,
   masterTypeStore: MasterTypeStore,
+  userStore: UserStore,
 });
 
 let initialState = RootModel.create({
@@ -32,6 +34,9 @@ let initialState = RootModel.create({
   masterTypeStore: {
     regions: [],
     provinces: [],
+  },
+  userStore: {
+    data_user: null,
   },
 });
 
