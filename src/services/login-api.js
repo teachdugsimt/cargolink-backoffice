@@ -1,7 +1,7 @@
 import ExcuteApi from './api-integrations/excute-api';
 class LoginApi {
   LoginApi = async (params) => {
-    const response = await ExcuteApi('/api/mobile/v1/auth/login', params, 'post');
+    const response = await ExcuteApi('/api/login', params, 'post', 300000, false, true);
     return response;
   };
 }

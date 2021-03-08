@@ -59,9 +59,9 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
     setToggle(true);
     if (email && password) {
       loginStore.requestLogin({
-        loginId: email && email.includes('+66') ? email : '+66' + email,
+        loginId: email,
         password: password,
-        userType: 0,
+        // userType: 0,
       });
     }
     setAlertSetting(defaultAlertSetting);
