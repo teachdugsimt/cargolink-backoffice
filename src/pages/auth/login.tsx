@@ -101,7 +101,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           <input
             id="phoneNumber"
             type="text"
-            placeholder={t('phoneNumber')}
+            placeholder={t('email')}
             value={email}
             onChange={(event) => onChangeEmail(event.target.value)}
           />

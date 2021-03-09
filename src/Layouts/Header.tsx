@@ -136,7 +136,9 @@ const Header: React.FC<HeaderProps> = observer((props) => {
                       Link={Link}
                     >
                       {/* <User color="#fff" name="Wirachai Khueankaew" title="Manger" size="Medium"/> */}
-                      {profile && profile.fullName ? profile.fullName : 'No data'}
+                      {profile && profile.lastName && profile.firstName
+                        ? profile.firstName + ' ' + profile.lastName
+                        : 'No data'}
                     </ContextMenu>
                   )}
                 </Location>

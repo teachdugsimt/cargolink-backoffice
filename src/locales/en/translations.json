@@ -1,6 +1,7 @@
 {
   "loginSubtitle": "Login with your phone number",
   "phoneNumber": "Phone Number",
+  "email":"Email",
   "password": "Password",
   "loginError1": "Please input a valid phone number",
   "loginError2": "Please input a valid password",

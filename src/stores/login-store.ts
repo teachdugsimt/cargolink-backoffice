@@ -7,16 +7,11 @@ const token = types.model({
 
 const profile = types.model({
   id: types.maybeNull(types.number),
-  avatar: types.maybeNull(types.string),
-  commissionFee: types.maybeNull(types.number),
-  fullName: types.maybeNull(types.string),
   loginId: types.maybeNull(types.string),
-  multipleAccount: types.maybeNull(types.boolean),
-  phoneNumber: types.maybeNull(types.string),
-  ratingPoint: types.maybeNull(types.number),
+  firstName: types.maybeNull(types.string),
+  lastName: types.maybeNull(types.string),
   role: types.maybeNull(types.string),
-  status: types.maybeNull(types.boolean),
-  title: types.maybeNull(types.string),
+  roles: types.maybeNull(types.array(types.string)),
 });
 
 export const LoginStore = types
@@ -57,16 +52,11 @@ export const LoginStore = types
             self.error_login = '';
             self.data_profile = {
               id: data.id,
-              avatar: data.avatar,
-              commissionFee: data.commissionFee,
-              fullName: data.fullName,
               loginId: data.loginId,
-              multipleAccount: data.multipleAccount,
-              phoneNumber: data.phoneNumber,
-              ratingPoint: data.ratingPoint,
+              firstName: data.firstName,
+              lastName: data.lastName,
               role: data.role,
-              status: data.status,
-              title: data.title,
+              roles: data.roles,
             };
             localStorage.setItem('profileLocal', JSON.stringify(data_signin));
           } else {
