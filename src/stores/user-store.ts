@@ -10,6 +10,11 @@ const user = types.model({
   truckCount: types.maybeNull(types.number),
 });
 
+const userManagement = types.model({
+  content: types.maybeNull(types.array(user)),
+  reRender: types.boolean,
+});
+
 export const UserStore = types
   .model('UserStore', {
     loading: false,
@@ -20,7 +25,7 @@ export const UserStore = types
         content: types.maybeNull(types.string),
       }),
     ),
-    data_user: types.maybeNull(types.array(user)),
+    data_user: types.maybeNull(userManagement),
   })
   .actions((self) => {
     return {
@@ -32,10 +37,39 @@ export const UserStore = types
           const response = yield userApi.User(params);
           console.log('getUser response :> ', response);
           if (response && response.ok) {
+            const { data } = response;
             self.loading = false;
-            self.data_user = response.data;
+            const pageNumber = data.pageable.pageNumber * 10;
+            const content = data.content;
+            let user: { content: any; reRender: boolean } = { content: [], reRender: true };
+            const ct = {
+              id: null,
+              truckType: null,
+              loadingWeight: null,
+              owner: null,
+              stallHeight: null,
+              createdAt: null,
+              updatedAt: null,
+              approveStatus: null,
+              registrationNumber: null,
+              workingZones: null,
+              tipper: null,
+            };
+            if (pageNumber == 0) {
+              //? in th first time, we get user
+              user.content = [...content, ...Array(data.totalElements - content.length).fill(ct)];
+            } else {
+              user.content = Array(data.totalElements).fill(ct);
+              const pageSize = data.numberOfElements;
+              for (let i = pageNumber, j = 0; i < pageNumber + pageSize; i++, j++) {
+                user.content[i] = content[j];
+              }
+              user.reRender = !!!self.data_user?.reRender;
+            }
+            self.data_user = user;
           } else {
             self.loading = false;
+            self.data_user = null;
             self.error_response = {
               title: response.problem,
               content: 'GET user : ' + response.originalError.message,
@@ -44,6 +78,7 @@ export const UserStore = types
         } catch (error) {
           console.error('Failed to getUser :> ', error);
           self.loading = false;
+          self.data_user = null;
           self.error_response = {
             title: '',
             content: 'Failed to get all drivers by carrier',

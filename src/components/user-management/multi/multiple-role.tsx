@@ -28,9 +28,13 @@ const MultipleRole: React.FC<Props> = observer(() => {
   const [rowData, setRowData] = useState([]);
   const [submit, setSubmit] = useState(false);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
+  const [page, setPage] = useState(1);
+  const [searchValue, setSearchValue] = useState({});
+  const [sortable, setSortable] = useState({ sortKey: '', sortOrder: 'DESC' });
 
   useEffect(() => {
-    userStore.getUser({ type: 0 });
+    setSearchValue({ page: 0 });
+    userStore.getUser({ page: 0 });
   }, []);
 
   useEffect(() => {
@@ -60,10 +64,37 @@ const MultipleRole: React.FC<Props> = observer(() => {
   useEffect(() => {
     const data_user = JSON.parse(JSON.stringify(userStore.data_user));
     if (data_user) {
-      const rows = createRow(data_user, t);
+      const rows = createRow(data_user.content, t);
       setRowData(rows);
     }
-  }, [userStore.data_user, userStore.data_user?.length]);
+  }, [userStore.data_user, userStore.data_user?.content?.length]);
+
+  const onSearch = (value: string) => {
+    if (value) {
+      let productIds: number[] = [];
+      rowData &&
+        rowData.forEach((e: any) => {
+          const thereIs = e.name.includes(value.trim());
+          if (thereIs) productIds.push(e.id);
+        });
+      const search = {
+        page: 0,
+        productName: value,
+        owner: value,
+        productType: productIds,
+        from: value,
+        to: value,
+        weight: parseInt(value, 10),
+      };
+      setPage(1);
+      setSearchValue(search);
+      userStore.getUser(search);
+    } else {
+      setPage(1);
+      setSearchValue({ page: 0 });
+      userStore.getUser({ page: 0 });
+    }
+  };
 
   return (
     <Card>
@@ -97,17 +128,33 @@ const MultipleRole: React.FC<Props> = observer(() => {
         <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
         <Wrapper>
           <DynamicTable
+            //   caption={caption}
             head={head}
             rows={rowData}
+            page={page}
+            // sortKey={sortable.sortKey}
+            // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
             isLoading={false}
             // isFixedSize
-            // defaultSortKey="term"
-            defaultSortOrder="ASC"
-            onSort={() => console.log('onSort')}
-            onSetPage={() => console.log('onSetPage')}
+            // defaultSortKey="id"
+            defaultSortOrder="DESC"
+            onSort={(sort) => {
+              const descending = sort.sortOrder === 'DESC' ? true : false;
+              const search = { ...searchValue, descending, sortBy: sort.key };
+              setSortable({ sortKey: sort.key, sortOrder: sort.sortOrder });
+              setSearchValue(search);
+              userStore.getUser(search);
+            }}
+            onSetPage={(pagination) => {
+              setPage(pagination);
+              let search = JSON.parse(JSON.stringify(searchValue));
+              search['page'] = pagination - 1;
+              setSearchValue(search);
+              userStore.getUser(search);
+            }}
           />
         </Wrapper>
       </CardBody>
