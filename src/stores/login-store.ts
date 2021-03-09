@@ -38,7 +38,6 @@ export const LoginStore = types
         self.data_profile = null;
 
         try {
-          // ... yield can be used in async/await style
           const response = yield LoginApi.LoginApi(params);
           console.log('requestLogin response :> ', response);
           if (response && response.ok) {
@@ -64,12 +63,11 @@ export const LoginStore = types
             self.data_signin = {
               idToken: '',
             };
-            self.error_login = response.data.validMsgList['']
-              ? response.data.validMsgList[''][0]
-              : 'Phone Number or Password is invalid';
+            const { validMsgList } = response.data;
+            if (validMsgList && validMsgList['']) self.error_login = validMsgList[''][0];
+            else self.error_login = response.originalError.message;
           }
         } catch (error) {
-          // ... including try/catch error handling
           console.error('Failed to request login store :> ', error);
           self.fetching_login = false;
           self.data_signin = {

@@ -25,21 +25,30 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
   const [keyboard, setkeyboard] = useState('');
 
   useEffect(() => {
-    if (loginStore.error_login && !loginStore.data_signin.idToken) {
-      setAlertSetting({
-        icon: 'error',
-        show: true,
-        type: 'general',
-        title: '',
-        content: loginStore.error_login,
-      });
-    } else if (loginStore.data_signin.idToken && !loginStore.error_login) {
-      navigate('/dashboard');
+    document.addEventListener('keydown', _handleKeyPress, false);
+    // return () => {
+    document.removeEventListener('keydown', _handleKeyPress, false);
+    // };
+  }, []);
+
+  useEffect(() => {
+    const { fetching_login, error_login, data_signin } = loginStore;
+    if (toggle && !fetching_login) {
+      if (error_login && !data_signin.idToken) {
+        setAlertSetting({
+          icon: 'error',
+          show: true,
+          type: 'general',
+          title: '',
+          content: error_login,
+        });
+      } else if (loginStore.data_signin.idToken && !loginStore.error_login) {
+        navigate('/dashboard');
+      }
     }
-  }, [loginStore.data_signin.idToken, loginStore.error_login]);
+  }, [loginStore.data_signin.idToken, loginStore.error_login, loginStore.fetching_login, toggle]);
 
   const onChangeCheckbox = (value: boolean, name: number) => {
-    // v will be true or false
     setCheckbox({ ...checkbox, [name]: value });
   };
 
@@ -68,16 +77,8 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
   };
 
   const _handleKeyPress = (event: any) => {
-    console.log('Event :: ', event);
     setkeyboard(event.key);
   };
-
-  useEffect(() => {
-    document.addEventListener('keydown', _handleKeyPress, false);
-    return () => {
-      document.removeEventListener('keydown', _handleKeyPress, false);
-    };
-  }, []);
 
   useEffect(() => {
     if (keyboard === 'Enter') {
@@ -87,7 +88,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
 
   return (
     <Auth title="" subTitle={t('loginSubtitle')}>
-      <Alert setting={alertSetting} />
+      {alertSetting.show && <Alert setting={alertSetting} />}
       <SEO title="Login" />
       <form>
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 5 }}>
