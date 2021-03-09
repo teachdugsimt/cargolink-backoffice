@@ -34,7 +34,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
 
   useEffect(() => {
     setSearchValue({ page: 0 });
-    userStore.getUser({ page: 0 });
+    userStore.getUsers({ page: 0 });
   }, []);
 
   useEffect(() => {
@@ -58,52 +58,48 @@ const MultipleRole: React.FC<Props> = observer(() => {
         title: error_response.title || '',
         content: error_response.content || '',
       });
+    } else {
+      setAlertSetting(defaultAlertSetting);
     }
   }, [userStore.error_response]);
 
   useEffect(() => {
     const data_user = JSON.parse(JSON.stringify(userStore.data_user));
-    if (data_user) {
+    if (data_user?.content) {
       const rows = createRow(data_user.content, t);
       setRowData(rows);
     }
-  }, [userStore.data_user, userStore.data_user?.content?.length]);
+  }, [userStore.data_user, userStore.data_user?.reRender, userStore.data_user?.content?.length]);
 
   const onSearch = (value: string) => {
     if (value) {
-      let productIds: number[] = [];
-      rowData &&
-        rowData.forEach((e: any) => {
-          const thereIs = e.name.includes(value.trim());
-          if (thereIs) productIds.push(e.id);
-        });
       const search = {
         page: 0,
-        productName: value,
-        owner: value,
-        productType: productIds,
-        from: value,
-        to: value,
-        weight: parseInt(value, 10),
+        fullName: value,
+        phoneNumber: value,
+        registerDate: value,
+        email: value,
+        jobCount: parseInt(value, 10),
+        truckCount: parseInt(value, 10),
       };
       setPage(1);
       setSearchValue(search);
-      userStore.getUser(search);
+      userStore.getUsers(search);
     } else {
       setPage(1);
       setSearchValue({ page: 0 });
-      userStore.getUser({ page: 0 });
+      userStore.getUsers({ page: 0 });
     }
   };
 
   return (
     <Card>
       <CardHeader>
-        <Alert setting={alertSetting} />
+        {alertSetting.show && <Alert setting={alertSetting} />}
         <div className="block-data-header">
           <span className="font-data-header">{t('userManagement')}</span>
           <div style={{ display: 'flex' }}>
-            <SearchForm onSearch={(value: any) => setRowData(value)} />
+            <SearchForm onSearch={(value: any) => onSearch(value)} />
           </div>
         </div>
       </CardHeader>
@@ -146,14 +142,14 @@ const MultipleRole: React.FC<Props> = observer(() => {
               const search = { ...searchValue, descending, sortBy: sort.key };
               setSortable({ sortKey: sort.key, sortOrder: sort.sortOrder });
               setSearchValue(search);
-              userStore.getUser(search);
+              userStore.getUsers(search);
             }}
             onSetPage={(pagination) => {
               setPage(pagination);
               let search = JSON.parse(JSON.stringify(searchValue));
               search['page'] = pagination - 1;
               setSearchValue(search);
-              userStore.getUser(search);
+              userStore.getUsers(search);
             }}
           />
         </Wrapper>

@@ -2,8 +2,6 @@ import React from 'react';
 import { Button, ButtonLink } from '@paljs/ui/Button';
 import moment from 'moment';
 
-import { users } from './users';
-
 import { Icon } from 'react-icons-kit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
 import 'moment/locale/th';
@@ -72,10 +70,10 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const createRow = (user: any, t: any) => {
-  return user.map((user: any, index: number) => {
+export const createRow = (users: any, t: any) => {
+  return users.map((user: any, index: number) => {
     return {
-      key: `row-${index}-${user.id}`,
+      key: `row-${index}-${user.phoneNumber}`,
       cells: [
         // {
         //   key: user.id,

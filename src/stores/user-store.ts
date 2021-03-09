@@ -29,13 +29,13 @@ export const UserStore = types
   })
   .actions((self) => {
     return {
-      getUser: flow(function* getUser(params) {
+      getUsers: flow(function* getUsers(params) {
         self.loading = true;
         self.data_user = null;
         self.error_response = null;
         try {
           const response = yield userApi.User(params);
-          console.log('getUser response :> ', response);
+          console.log('getUsers response :> ', response);
           if (response && response.ok) {
             const { data } = response;
             self.loading = false;
@@ -43,17 +43,12 @@ export const UserStore = types
             const content = data.content;
             let user: { content: any; reRender: boolean } = { content: [], reRender: true };
             const ct = {
-              id: null,
-              truckType: null,
-              loadingWeight: null,
-              owner: null,
-              stallHeight: null,
-              createdAt: null,
-              updatedAt: null,
-              approveStatus: null,
-              registrationNumber: null,
-              workingZones: null,
-              tipper: null,
+              fullName: null,
+              phoneNumber: null,
+              registerDate: null,
+              email: null,
+              jobCount: null,
+              truckCount: null,
             };
             if (pageNumber == 0) {
               //? in th first time, we get user
@@ -72,16 +67,16 @@ export const UserStore = types
             self.data_user = null;
             self.error_response = {
               title: response.problem,
-              content: 'GET user : ' + response.originalError.message,
+              content: 'GET users : ' + response.originalError.message,
             };
           }
         } catch (error) {
-          console.error('Failed to getUser :> ', error);
+          console.error('Failed to getUsers :> ', error);
           self.loading = false;
           self.data_user = null;
           self.error_response = {
             title: '',
-            content: 'Failed to get all drivers by carrier',
+            content: 'Failed to get all user-management',
           };
         }
       }),

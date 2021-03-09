@@ -42,6 +42,8 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
         title: error_response.title || '',
         content: error_response.content || '',
       });
+    } else {
+      setAlertSetting(defaultAlertSetting);
     }
   }, [carrierStore.error_response]);
 

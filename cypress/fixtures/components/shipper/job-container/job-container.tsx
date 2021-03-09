@@ -66,6 +66,8 @@ const JobContainer: React.FC<Props> = observer(() => {
         title: error_response.title || '',
         content: error_response.content || '',
       });
+    } else {
+      setAlertSetting(defaultAlertSetting);
     }
   }, [shipperStore.error_response]);
 
