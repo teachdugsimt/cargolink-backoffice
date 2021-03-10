@@ -47,6 +47,21 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
     }
   }, [carrierStore.error_response]);
 
+  useEffect(() => {
+    const { error_response } = masterTypeStore;
+    if (error_response) {
+      setAlertSetting({
+        icon: 'error',
+        show: true,
+        type: 'general',
+        title: error_response.title || '',
+        content: error_response.content || '',
+      });
+    } else {
+      setAlertSetting(defaultAlertSetting);
+    }
+  }, [masterTypeStore.error_response]);
+
   const onDetail = (id: string) => {
     carrierStore.getTruckDeyailById(id);
     navigate('/truck-detail');
