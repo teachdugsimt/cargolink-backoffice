@@ -14,9 +14,18 @@ interface User {
   register_date: string;
   date_approve: string;
 }
+
 function sortByDate(input: string) {
   return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
+
+export const sortabled: any = {
+  phoneNumber: true, //! Note that: DESC = true, ASC = fasle
+  fullName: true,
+  registerDate: true,
+  jobCount: true,
+  truckCount: true,
+};
 
 export const createHead = (withWidth: boolean) => {
   return {
@@ -89,7 +98,7 @@ export const createRow = (users: any, t: any) => {
         },
         {
           key: sortByDate(user.registerDate),
-          content: moment(user.registerDate, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
+          content: sortByDate(user.registerDate),
         },
         {
           key: user.jobCount,
