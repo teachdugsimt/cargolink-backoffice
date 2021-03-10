@@ -25,7 +25,7 @@ interface Props {}
 
 const MultipleRole: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
-  const { userStore } = useMst();
+  const { userStore, loginStore } = useMst();
   const [rowData, setRowData] = useState([]);
   const [submit, setSubmit] = useState(false);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
@@ -67,19 +67,20 @@ const MultipleRole: React.FC<Props> = observer(() => {
   useEffect(() => {
     const data_user = JSON.parse(JSON.stringify(userStore.data_user));
     if (data_user?.content) {
-      const rows = createRow(data_user.content, t);
+      const rows = createRow(data_user.content, loginStore.language);
       setRowData(rows);
     }
   }, [userStore.data_user, userStore.data_user?.reRender, userStore.data_user?.content?.length]);
 
   const onSearch = (value: string) => {
     if (value) {
+      const date = moment(value);
       const search = {
         type: 0,
         page: 0,
         fullName: value,
         phoneNumber: value,
-        registerDate: moment(value).format('YYYY-MM-DD'),
+        registerDate: date.isValid() ? moment(value).format('YYYY-MM-DD') : '',
         jobCount: parseInt(value, 10),
         truckCount: parseInt(value, 10),
       };

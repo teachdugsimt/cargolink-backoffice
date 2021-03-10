@@ -4,20 +4,7 @@ import moment from 'moment';
 
 import { Icon } from 'react-icons-kit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
-import 'moment/locale/th';
-moment.locale('th');
-interface User {
-  id: number;
-  full_name: string;
-  status: string;
-  phone: string;
-  register_date: string;
-  date_approve: string;
-}
-
-function sortByDate(input: string) {
-  return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
-}
+import { DateFormat } from '../../../simple-data';
 
 export const sortabled: any = {
   phoneNumber: true, //! Note that: DESC = true, ASC = fasle
@@ -79,7 +66,7 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const createRow = (users: any, t: any) => {
+export const createRow = (users: any, language: string) => {
   return users.map((user: any, index: number) => {
     return {
       key: `row-${index}-${user.phoneNumber}`,
@@ -97,8 +84,8 @@ export const createRow = (users: any, t: any) => {
           content: user.fullName,
         },
         {
-          key: sortByDate(user.registerDate),
-          content: sortByDate(user.registerDate),
+          key: moment(user.registerDate, 'DD-MM-YYYY HH:mm').format('YYYYMMDDHHmm'),
+          content: DateFormat(user.registerDate, language),
         },
         {
           key: user.jobCount,
