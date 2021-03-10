@@ -5,12 +5,23 @@ import images from '../../../Themes/images';
 import { momentFormatDateTime } from '../../../simple-data';
 import { Button } from '@paljs/ui/Button';
 
+export const sortabled: any = {
+  id: true, //! Note that: DESC = true, ASC = fasle
+  productName: true,
+  companyName: true,
+  productTypeId: true,
+  route: true,
+  weight: true,
+  status: true,
+};
+
 export const createHead = (withWidth: boolean) => {
   return {
     cells: [
       {
         key: 'id',
         content: 'Job No.',
+        shouldTruncate: true,
         isSortable: true,
         // width: withWidth ? 10 : undefined,
       },
