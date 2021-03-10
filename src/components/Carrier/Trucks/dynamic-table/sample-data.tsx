@@ -3,6 +3,17 @@ import moment from 'moment';
 import 'moment/locale/th';
 moment.locale('th');
 
+export const sortabled: any = {
+  id: true, //! Note that: DESC = true, ASC = fasle
+  workingZones: true,
+  registrationNumber: true,
+  truckType: true,
+  loadingWeight: true,
+  stallHeight: true,
+  approveStatus: true,
+  createdAt: true,
+};
+
 export const createHead = (withWidth: boolean) => {
   return {
     cells: [

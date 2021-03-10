@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import DynamicTable from '@atlaskit/dynamic-table';
-import { head } from './dynamic-table/sample-data';
+import { head, sortabled } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
 import { ic_add } from 'react-icons-kit/md/ic_add';
 import { Button } from '@paljs/ui/Button';
@@ -28,7 +28,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
   const [submit, setSubmit] = useState(false);
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState({});
-  const [sortable, setSortable] = useState({ sortKey: '', sortOrder: 'DESC' });
+  const [sortable, setSortable] = useState(sortabled);
 
   useEffect(() => {
     setSearchValue({ page: 0 });
@@ -184,9 +184,9 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
             // defaultSortKey="id"
             defaultSortOrder="DESC"
             onSort={(sort) => {
-              const descending = sort.sortOrder === 'DESC' ? true : false;
+              const descending = !sortable[sort.key];
               const search = { ...searchValue, descending, sortBy: sort.key };
-              setSortable({ sortKey: sort.key, sortOrder: sort.sortOrder });
+              setSortable({ ...sortable, [sort.key]: descending });
               setSearchValue(search);
               carrierStore.getAllTrucksByCarrier(search);
             }}

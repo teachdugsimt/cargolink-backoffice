@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import DynamicTable from '@atlaskit/dynamic-table';
 import { Button } from '@paljs/ui/Button';
-import { head, createRow } from './dynamic-table/sample-data';
+import { head, createRow, sortabled } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
 import { ic_add } from 'react-icons-kit/md/ic_add';
 import styled from 'styled-components';
@@ -35,7 +35,7 @@ const JobContainer: React.FC<Props> = observer(() => {
   const [completed, setCompleted] = useState(false);
   const [all, setAll] = useState(false);
   const [searchValue, setSearchValue] = useState({});
-  const [sortable, setSortable] = useState({ sortKey: '', sortOrder: 'DESC' });
+  const [sortable, setSortable] = useState(sortabled);
 
   useEffect(() => {
     shipperStore.getProductTypes();
@@ -255,9 +255,9 @@ const JobContainer: React.FC<Props> = observer(() => {
             // defaultSortKey="id"
             defaultSortOrder="DESC"
             onSort={(sort) => {
-              const descending = sort.sortOrder === 'DESC' ? true : false;
+              const descending = !sortable[sort.key];
               const search = { ...searchValue, descending, sortBy: sort.key };
-              setSortable({ sortKey: sort.key, sortOrder: sort.sortOrder });
+              setSortable({ ...sortable, [sort.key]: descending });
               setSearchValue(search);
               shipperStore.getAllJobsByShipper(search);
             }}
