@@ -83,7 +83,6 @@ const MultipleRole: React.FC<Props> = observer(() => {
         jobCount: parseInt(value, 10),
         truckCount: parseInt(value, 10),
       };
-      console.log('search :> ', search);
       setPage(1);
       setSearchValue(search);
       userStore.getUsers(search);
@@ -119,6 +118,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
               backgroundColor: submit ? '#00B132' : 'white',
               color: submit ? 'white' : '#00B132',
             }}
+            onClick={() => setSubmit(true)}
           >
             <Icon icon={ic_add} /> {t('addNewAccount')}
           </Button>

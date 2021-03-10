@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import Swal from 'sweetalert2';
 import images from './Themes/images';
@@ -8,8 +8,8 @@ const Alert = (props) => {
 
   // icon = {success, error, warning, info}
   const alertGeneral = (icon = '', show = false, title = '', content = '') => {
-    {
-      show &&
+    useEffect(() => {
+      if (show) {
         Swal.fire({
           icon: icon,
           title: title,
@@ -18,13 +18,14 @@ const Alert = (props) => {
           showConfirmButton: true,
           confirmButtonColor: '#3366ff',
         });
-    }
+      }
+    }, [show]);
     return;
   };
 
   const alertConfirm = (show = false, title = '', content = '') => {
-    {
-      show &&
+    useEffect(() => {
+      if (show) {
         Swal.fire({
           icon: 'question',
           title: title,
@@ -38,7 +39,8 @@ const Alert = (props) => {
           /* Read more about isConfirmed, isDenied below */
           console.log('result alertconfirm :> ', result);
         });
-    }
+      }
+    }, [show]);
     return;
   };
 
