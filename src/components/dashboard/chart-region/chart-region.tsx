@@ -59,10 +59,10 @@ const ChartCar: React.FC<Props> = observer(() => {
       <Series valueField="south" name="South" />
       <Series valueField="northEast" name="Northeast" />
       <ArgumentAxis>
-        <Label />
+        <Label rotationAngle={45} overlappingBehavior="rotate" />
       </ArgumentAxis>
       <ValueAxis position="left"></ValueAxis>
-      <Legend verticalAlignment="bottom" horizontalAlignment="center" itemTextPosition="bottom" />
+      {/* <Legend verticalAlignment="bottom" horizontalAlignment="center" itemTextPosition="bottom" /> */}
       <Tooltip enabled={true} location="edge" customizeTooltip={customizeTooltip} />
     </Chart>
   );

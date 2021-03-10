@@ -63,10 +63,10 @@ const ChartArea: React.FC<Props> = observer(() => {
       <Series color="green" valueField="south" name="South" />
       <Series color="purple" valueField="nationalWide" name="Northeast" />
       <ArgumentAxis>
-        <Label />
+        <Label rotationAngle={45} overlappingBehavior="rotate" />
       </ArgumentAxis>
       <ValueAxis position="left"></ValueAxis>
-      <Legend verticalAlignment="bottom" horizontalAlignment="center" itemTextPosition="bottom" />
+      {/* <Legend verticalAlignment="bottom" horizontalAlignment="center" itemTextPosition="bottom" /> */}
       <Tooltip enabled={true} location="edge" customizeTooltip={customizeTooltip} />
     </Chart>
   );
