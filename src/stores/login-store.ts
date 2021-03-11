@@ -81,6 +81,7 @@ export const LoginStore = types
         self.data_signin = {
           idToken: '',
         };
+        localStorage.removeItem('profileLocal')
         self.error_login = '';
       }),
     };
