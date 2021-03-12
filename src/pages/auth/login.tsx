@@ -49,7 +49,9 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
   }, [loginStore.data_signin.idToken, loginStore.error_login, loginStore.fetching_login, toggle]);
 
   const onChangeCheckbox = (value: boolean, name: number) => {
-    setCheckbox({ ...checkbox, [name]: value });
+    // setCheckbox({ ...checkbox, [name]: value });
+    console.log("On change check box :: ", value)
+    loginStore.setRememberProfile(value)
   };
 
   const onChangeEmail = (value: string) => {
@@ -131,7 +133,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           </span>
         ) : null}
         <Group>
-          <Checkbox checked={checkbox[1]} onChange={(value) => onChangeCheckbox(value, 1)}>
+          <Checkbox checked={loginStore.rememberProfile} onChange={(value) => onChangeCheckbox(value, 1)}>
             {t('rememberMe')}
           </Checkbox>
           <Link id="forgotPassword" to="/auth/request-password" style={{ textDecoration: 'none' }}>
@@ -159,8 +161,8 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
               .
             </div>
           ) : (
-            `${t('login')}`
-          )}
+              `${t('login')}`
+            )}
         </Button>
       </form>
       <p id="loginDescription">
