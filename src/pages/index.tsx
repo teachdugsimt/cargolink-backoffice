@@ -3,13 +3,14 @@ import { observer } from 'mobx-react-lite';
 import { navigate } from 'gatsby';
 import { useMst } from '../stores/root-store';
 
-interface Props {}
+interface Props { }
 
 const Index: React.FC<Props> = observer(() => {
   const { loginStore } = useMst();
 
   const [token, setToken] = useState(false);
 
+  console.log("__________ Index In page :: _______________", loginStore.data_signin)
   useEffect(() => {
     if (loginStore.data_signin.idToken) {
       setToken(true);
@@ -24,7 +25,9 @@ const Index: React.FC<Props> = observer(() => {
     }
   }, [token]);
 
-  return <div />;
+  return <div>
+    <h1>Index page</h1>
+  </div>;
 });
 
 export default Index;
