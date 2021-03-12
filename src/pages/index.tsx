@@ -10,7 +10,6 @@ const Index: React.FC<Props> = observer(() => {
 
   const [token, setToken] = useState(false);
 
-  console.log("__________ Index In page :: _______________", loginStore.data_signin)
   useEffect(() => {
     if (loginStore.data_signin.idToken) {
       setToken(true);

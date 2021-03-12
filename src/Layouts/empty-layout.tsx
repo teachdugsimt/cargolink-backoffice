@@ -4,15 +4,18 @@ import { useMst } from '../stores/root-store';
 import { observer } from 'mobx-react-lite';
 import MainLayout from './main-layout'
 import Login from '../pages/auth/login'
+import Register from '../pages/auth/register'
+import RequestPassword from '../pages/auth/request-password'
+import ResetPassword from '../pages/auth/reset-password'
 import { navigate } from 'gatsby';
 
-const EmptyLayout: React.FC<{ pageContext: any, custom404: any }> = observer(({ children, pageContext, custom404 }) => {
+const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }> = observer(({ children, pageContext, custom404 }) => {
     const { loginStore } = useMst();
 
     const token = loginStore.data_signin.idToken
     // const loading_signin = loginStore.fetching_login
+    console.log("Page context @ emmptylayout :: ", children)
 
-    
     const _clearDataSignin = () => {
         loginStore.requestLogout();
         navigate('/auth/login');
@@ -39,19 +42,44 @@ const EmptyLayout: React.FC<{ pageContext: any, custom404: any }> = observer(({ 
     }
 
     useEffect(() => {
+        console.log("________Use Effect Token _________ ,", token)
+        setTimeout(() => {
+            if (token) { navigate('/dashboard') }
+            else navigate('/auth/login');
+        }, 500);
+    }, [loginStore.data_signin.idToken])
+
+    useEffect(() => {
+        console.log("_________ Untrack Use Effect ___________")
         _updateChecking()
     }, [])
 
-    useEffect(() => {
-        if (token) { navigate('/dashboard') }
-        else navigate('/auth/login');
-    }, [token])
 
-    if (!token) {
-        return (<Login pageContext={{ layout: 'auth' }} />);
-    } else {
-        return (<MainLayout pageContext={pageContext} custom404={custom404}>{children}</MainLayout>);
-    }
+    // const _filterPath = (path: string) => {
+    //     if (path.includes("/auth/login")) return <Login pageContext={{ layout: '/auth' }} />
+    //     else if (path.includes("/auth/request-password")) return <RequestPassword />
+    //     else if (path.includes("/auth/register")) return <Register />
+    //     else if (path.includes("/auth/reset-password")) return <ResetPassword />
+    //     else return <Login pageContext={{ layout: '/auth' }} />
+    // }
+
+    // const _navigatePath = (path: string) => {
+    //     if (path.includes("/auth/login")) navigate('/autth/login')
+    //     else if (path.includes("/auth/request-password")) navigate('/auth/request-password')
+    //     else if (path.includes("/auth/register")) navigate("/auth/register")
+    //     else if (path.includes("/auth/reset-password")) navigate("/auth/reset-password")
+    //     else navigate('/autth/login')
+    // }
+
+    // if (!token) {
+    //     console.log("Return LoginComponent :: ")
+    //     // return (<Login pageContext={{ layout: '/auth' }} />);
+    //     if (children?.key)
+    //         return _filterPath(children.key)
+    //     else return (<Login pageContext={{ layout: '/auth' }} />);
+    // } else {
+    return (<MainLayout pageContext={pageContext} custom404={custom404}>{children}</MainLayout>);
+    // }
 });
 
 export default EmptyLayout;
