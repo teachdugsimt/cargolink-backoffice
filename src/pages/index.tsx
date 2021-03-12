@@ -16,17 +16,15 @@ const Index: React.FC<Props> = observer(() => {
     }
   }, [loginStore.data_signin.idToken]);
 
-  useEffect(() => {
-    if (token) {
-      navigate('/dashboard');
-    } else {
-      navigate('/auth/login');
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   if (token) {
+  //     navigate('/dashboard');
+  //   } else {
+  //     navigate('/auth/login');
+  //   }
+  // }, [token]);
 
-  return <div>
-    <h1>Index page</h1>
-  </div>;
+  return <div></div>;
 });
 
 export default Index;

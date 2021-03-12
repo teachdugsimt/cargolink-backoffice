@@ -41,10 +41,20 @@ const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }>
         window.onbeforeunload = () => update(0);
     }
 
+    const _getPathFromChildren = (child: any) => {
+        const normalPath = "/dashboard"
+        const { key } = child
+        let path = normalPath
+        if (key && key != null) {
+            path = key.includes("/auth") ? normalPath : (key == "/" ? normalPath : key)
+        }
+        return path
+    }
+
     useEffect(() => {
-        console.log("________Use Effect Token _________ ,", token)
+        console.log("________Use Effect Token _________ ,", children)
         setTimeout(() => {
-            if (token) { navigate('/dashboard') }
+            if (token) { navigate(_getPathFromChildren(children)) }
             else navigate('/auth/login');
         }, 500);
     }, [loginStore.data_signin.idToken])
