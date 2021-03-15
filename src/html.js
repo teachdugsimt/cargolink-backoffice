@@ -23,7 +23,7 @@ export default class HTML extends React.Component {
             id="___gatsby"
             dangerouslySetInnerHTML={{ __html: addScript }}
           />
-          {/* <div
+          <div
             key={`loader`}
             id="___loader"
             style={{
@@ -39,8 +39,11 @@ export default class HTML extends React.Component {
               zIndex: 100,
             }}
           >
-            <h1>Loading</h1>
-          </div> */}
+            <img
+              src={"https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif"}
+              alt="loading spinner"
+            />
+          </div>
           {this.props.postBodyComponents}
         </body>
       </html>
