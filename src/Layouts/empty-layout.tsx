@@ -8,7 +8,6 @@ import Register from '../pages/auth/register'
 import RequestPassword from '../pages/auth/request-password'
 import ResetPassword from '../pages/auth/reset-password'
 import { navigate } from 'gatsby';
-
 const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }> = observer(({ children, pageContext, custom404 }) => {
     const { loginStore } = useMst();
 
@@ -49,15 +48,19 @@ const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }>
         const { key } = child
         let path = normalPath
         if (key && key != null) {
-            path = key.includes("/auth") ? normalPath : (key == "/" ? normalPath : key)
+            const newKey = key.slice(0, key.length - 1)
+            path = newKey.includes("/auth") ? normalPath : (newKey == "/" ? normalPath : newKey)
         }
         return path
     }
 
     useEffect(() => {
         // setTimeout(() => {
-            if (token) { navigate(_getPathFromChildren(children)) }
-            else navigate('/auth/login');
+        if (token) {
+            let path = _getPathFromChildren(children)
+            // navigate(_getPathFromChildren(children)) 
+        }
+        else navigate('/auth/login');
         // }, 500);
     }, [loginStore.data_signin.idToken, key])
 
@@ -65,15 +68,6 @@ const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }>
         _updateChecking()
     }, [])
 
-    // if (!token) {
-    //     console.log("Return LoginComponent :: ")
-    //     // return (<Login pageContext={{ layout: '/auth' }} />);
-    //     if (children?.key)
-    //         return _filterPath(children.key)
-    //     else return (<Login pageContext={{ layout: '/auth' }} />);
-    // } else {
-    // return (<MainLayout pageContext={pageContext} custom404={custom404}>{children}</MainLayout>);
-    // }
     return (<MainLayout pageContext={pageContext} custom404={custom404}>{children}</MainLayout>);
 });
 

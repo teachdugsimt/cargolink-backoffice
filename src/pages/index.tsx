@@ -12,7 +12,8 @@ const Index: React.FC<Props> = observer(() => {
 
   useEffect(() => {
     if (loginStore.data_signin.idToken) {
-      setToken(true);
+      navigate('/dashboard');
+      // setToken(true);
     }
   }, [loginStore.data_signin.idToken]);
 
