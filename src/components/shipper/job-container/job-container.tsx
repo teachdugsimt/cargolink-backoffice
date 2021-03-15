@@ -36,12 +36,17 @@ const JobContainer: React.FC<Props> = observer(() => {
   const [all, setAll] = useState(false);
   const [searchValue, setSearchValue] = useState({});
   const [sortable, setSortable] = useState(sortabled);
+  const [btnStatus, setBtnStatus] = useState<any>({ 0: true });
 
   useEffect(() => {
     shipperStore.getProductTypes();
     shipperStore.clearShipperStore();
     setSearchValue({ page: 0 });
     shipperStore.getAllJobsByShipper({ page: 0 });
+
+    return () => {
+      setBtnStatus({ 0: true });
+    };
   }, []);
 
   useEffect(() => {
@@ -127,6 +132,19 @@ const JobContainer: React.FC<Props> = observer(() => {
     shipperStore.getAllJobsByShipper({ page: 0 });
   };
 
+  const onClickStatus = (jobStatus: number) => {
+    setBtnStatus({
+      [jobStatus]: true,
+    });
+    if (jobStatus === 0) {
+      setSearchValue({ page: 0 });
+      shipperStore.getAllJobsByShipper({ page: 0 });
+    } else {
+      setSearchValue({ page: 0, status: jobStatus });
+      shipperStore.getAllJobsByShipper({ page: 0, status: jobStatus });
+    }
+  };
+
   const onSearch = (value: string) => {
     if (value) {
       let productIds: number[] = [];
@@ -170,12 +188,13 @@ const JobContainer: React.FC<Props> = observer(() => {
           <div>
             <Button
               size="Small"
-              onClick={() => onClickAll()}
+              // onClick={() => onClickAll()}
+              onClick={() => onClickStatus(0)}
               style={{
                 marginRight: 10,
                 borderColor: '#FBBC12',
-                backgroundColor: all ? '#FBBC12' : 'white',
-                color: all ? 'white' : 'black',
+                backgroundColor: btnStatus[0] ? '#FBBC12' : 'white',
+                color: btnStatus[0] ? 'white' : 'black',
               }}
             >
               {t('all')}
@@ -183,25 +202,27 @@ const JobContainer: React.FC<Props> = observer(() => {
             <Button
               status="Warning"
               size="Small"
+              // onClick={() => onClickOpen()}
+              onClick={() => onClickStatus(1)}
               style={{
                 marginRight: 10,
                 borderColor: '#FBBC12',
-                backgroundColor: open ? '#FBBC12' : 'white',
-                color: open ? 'white' : 'black',
+                backgroundColor: btnStatus[1] ? '#FBBC12' : 'white',
+                color: btnStatus[1] ? 'white' : 'black',
               }}
-              onClick={() => onClickOpen()}
             >
               {t('OPEN')}
             </Button>
             <Button
               status="Warning"
               size="Small"
-              onClick={() => onClickInProgress()}
+              // onClick={() => onClickInProgress()}
+              onClick={() => onClickStatus(3)}
               style={{
                 marginRight: 10,
                 borderColor: '#FBBC12',
-                backgroundColor: inProgress ? '#FBBC12' : 'white',
-                color: inProgress ? 'white' : 'black',
+                backgroundColor: btnStatus[3] ? '#FBBC12' : 'white',
+                color: btnStatus[3] ? 'white' : 'black',
               }}
             >
               {t('IN-PROGRESS')}
@@ -209,11 +230,12 @@ const JobContainer: React.FC<Props> = observer(() => {
             <Button
               status="Warning"
               size="Small"
-              onClick={() => onClickCompleted()}
+              // onClick={() => onClickCompleted()}
+              onClick={() => onClickStatus(7)}
               style={{
                 borderColor: '#FBBC12',
-                backgroundColor: completed ? '#FBBC12' : 'white',
-                color: completed ? 'white' : 'black',
+                backgroundColor: btnStatus[7] ? '#FBBC12' : 'white',
+                color: btnStatus[7] ? 'white' : 'black',
               }}
             >
               {t('COMPLETED')}

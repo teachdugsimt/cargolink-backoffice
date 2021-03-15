@@ -12,12 +12,15 @@ import 'moment/locale/th';
 moment.locale('th');
 interface Shipper {
   id: number;
-  full_name: string;
-  member_type: string;
-  phone: string;
-  register_date: string;
-  date_approve: string;
-  sales_code: string;
+  fullName: string;
+  phoneNumber: string;
+  registerDate: string;
+  email: string;
+  jobCount: number;
+  truckCount: number;
+  member_type?: string;
+  date_approve?: string;
+  sales_code?: string;
 }
 
 function createKey(input: string) {
@@ -86,49 +89,51 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const rows = shippers.map((shipper: Shipper, index: number) => ({
-  key: `row-${index}-${shipper.id}`,
-  cells: [
-    {
-      key: shipper.id,
-      content: shipper.id,
-    },
-    {
-      key: shipper.phone,
-      content: shipper.phone,
-    },
-    {
-      key: shipper.full_name,
-      content: shipper.full_name,
-    },
-    {
-      key: shipper.member_type,
-      content: shipper.member_type,
-    },
-    {
-      key: sortByDate(shipper.register_date),
-      content: moment(shipper.register_date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
-    },
-    {
-      key: shipper.date_approve,
-      content: shipper.date_approve,
-    },
-    {
-      key: shipper.sales_code,
-      content: shipper.sales_code,
-    },
-    {
-      key: shipper.id,
-      content: (
-        <div>
-          <Button appearance="ghost" status="Basic" size="Small">
-            <Icon icon={edit} />
-          </Button>
-          <Button appearance="ghost" status="Basic" size="Small">
-            <Icon icon={ic_delete} />
-          </Button>
-        </div>
-      ),
-    },
-  ],
-}));
+export const createRow = (shippers: any, language: string) => {
+  return shippers.map((shipper: Shipper, index: number) => ({
+    key: `row-${index}-${shipper.id}`,
+    cells: [
+      {
+        key: shipper.id,
+        content: shipper.id,
+      },
+      {
+        key: shipper.phoneNumber,
+        content: shipper.phoneNumber,
+      },
+      {
+        key: shipper.phoneNumber,
+        content: shipper.phoneNumber,
+      },
+      {
+        key: shipper.member_type,
+        content: shipper.member_type,
+      },
+      {
+        key: sortByDate(shipper.registerDate),
+        content: moment(shipper.registerDate, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
+      },
+      {
+        key: shipper.date_approve,
+        content: shipper.date_approve,
+      },
+      {
+        key: shipper.sales_code,
+        content: shipper.sales_code,
+      },
+      {
+        key: shipper.id,
+        content: (
+          <div>
+            <Button appearance="ghost" status="Basic" size="Small">
+              <Icon icon={edit} />
+            </Button>
+            <Button appearance="ghost" status="Basic" size="Small">
+              <Icon icon={ic_delete} />
+            </Button>
+          </div>
+        ),
+      },
+    ],
+  }));
+};

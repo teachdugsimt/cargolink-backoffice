@@ -1,55 +1,74 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DynamicTable from '@atlaskit/dynamic-table';
 import { Button } from '@paljs/ui/Button';
-import { head, rows } from './dynamic-table/sample-data';
+import { head, createRow } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
 import { ic_add } from 'react-icons-kit/md/ic_add';
 import SearchForm from '../../search-form';
 import styled from 'styled-components';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
+import { useMst } from '../../../stores/root-store';
+import { observer } from 'mobx-react-lite';
 
 const Wrapper = styled.div`
   margin-top: 10px;
   min-width: 600px;
 `;
 
-const JobContainer = (props: any) => {
+const JobContainer = observer((props: any) => {
   const { t } = useTranslation();
-  const [rowData, setRowData] = useState(rows);
+  const [rowData, setRowData] = useState([]);
   const [panding, setPanding] = useState(false);
   const [approved, setApproved] = useState(false);
   const [all, setAll] = useState(false);
   const [submit, setSubmit] = useState(false);
+  const { userStore, loginStore } = useMst();
+
+  useEffect(() => {
+    userStore.getUsers({
+      type: 1,
+      page: 0,
+    });
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    const data_user = JSON.parse(JSON.stringify(userStore.data_user));
+    if (data_user?.content) {
+      const rows = createRow(data_user.content, loginStore.language);
+      setRowData(rows);
+    }
+  }, [JSON.stringify(userStore.data_user)]);
 
   const onClickPending = () => {
-    setPanding(true);
-    setApproved(false);
-    setAll(false);
-    const filteredData = rows.filter((item) => {
-      const data = item.cells.filter((key) => key.key == 'Pending');
-      return data && data.length ? true : false;
-    });
-    setRowData(filteredData);
+    // setPanding(true);
+    // setApproved(false);
+    // setAll(false);
+    // const filteredData = rows.filter((item) => {
+    //   const data = item.cells.filter((key) => key.key == 'Pending');
+    //   return data && data.length ? true : false;
+    // });
+    // setRowData(filteredData);
   };
 
   const onClickApproved = () => {
-    setApproved(true);
-    setPanding(false);
-    setAll(false);
-    const filteredData = rows.filter((item) => {
-      const data = item.cells.filter((key) => key.key == 'Approved');
-      return data && data.length ? true : false;
-    });
-    setRowData(filteredData);
+    // setApproved(true);
+    // setPanding(false);
+    // setAll(false);
+    // const filteredData = rows.filter((item) => {
+    //   const data = item.cells.filter((key) => key.key == 'Approved');
+    //   return data && data.length ? true : false;
+    // });
+    // setRowData(filteredData);
   };
 
   const onClickAll = () => {
-    setAll(true);
-    setPanding(false);
-    setApproved(false);
-    setRowData(rows);
+    // setAll(true);
+    // setPanding(false);
+    // setApproved(false);
+    // setRowData(rows);
   };
 
   return (
@@ -58,7 +77,7 @@ const JobContainer = (props: any) => {
         <div className="block-data-header">
           <span className="font-data-header">{t('shipperaccount')}</span>
           <div style={{ display: 'flex' }}>
-            <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
+            <SearchForm data={rowData} onSearch={(value: any) => setRowData(value)} />
           </div>
         </div>
       </CardHeader>
@@ -102,5 +121,5 @@ const JobContainer = (props: any) => {
       </CardBody>
     </Card>
   );
-};
+});
 export default JobContainer;
