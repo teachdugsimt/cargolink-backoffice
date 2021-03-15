@@ -14,6 +14,8 @@ const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }>
 
     const token = loginStore.data_signin.idToken
     // const loading_signin = loginStore.fetching_login
+    const { key } = children
+    console.log("children :: ", children)
 
     const _clearDataSignin = () => {
         loginStore.requestLogout();
@@ -53,11 +55,11 @@ const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }>
     }
 
     useEffect(() => {
-        setTimeout(() => {
+        // setTimeout(() => {
             if (token) { navigate(_getPathFromChildren(children)) }
             else navigate('/auth/login');
-        }, 500);
-    }, [loginStore.data_signin.idToken])
+        // }, 500);
+    }, [loginStore.data_signin.idToken, key])
 
     useEffect(() => {
         _updateChecking()
