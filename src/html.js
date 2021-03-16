@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-
+import loading from './loading-web-cargo.gif'
 export default class HTML extends React.Component {
   render() {
     const allScript = this.props.body
@@ -40,7 +40,8 @@ export default class HTML extends React.Component {
             }}
           >
             <img
-              src={"https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif"}
+              // src={"https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif"}
+              src={loading}
               alt="loading spinner"
             />
           </div>
