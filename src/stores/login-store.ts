@@ -21,9 +21,15 @@ export const LoginStore = types
     data_signin: token,
     error_login: types.string,
     data_profile: types.maybeNull(profile),
+
+    rememberProfile: types.boolean
   })
   .actions((self) => {
     return {
+      setRememberProfile(val: boolean) {
+        self.rememberProfile = val
+      },
+
       setLanguage: flow(function* setLanguage(param) {
         self.language = param;
         localStorage.setItem('profileLanguage', param);
@@ -81,7 +87,9 @@ export const LoginStore = types
         self.data_signin = {
           idToken: '',
         };
+        localStorage.removeItem('profileLocal')
         self.error_login = '';
+        self.rememberProfile = false
       }),
     };
   })
