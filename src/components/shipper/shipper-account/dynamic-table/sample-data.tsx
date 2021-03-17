@@ -1,10 +1,6 @@
 import React from 'react';
-
 import { Button, ButtonLink } from '@paljs/ui/Button';
-
-import { shippers } from './shippers';
 import moment from 'moment';
-
 import { Icon } from 'react-icons-kit';
 import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
@@ -31,17 +27,32 @@ function sortByDate(input: string) {
   return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
 
+const dateFormat = (date: string) => {
+  const d = moment(date, 'DD-MM-YYYY HH:mm');
+  return d.isValid() ? d.add(543, 'year').format('ll') : '';
+};
+
+const headerContent = (value: string) => {
+  return <div style={{ textAlign: 'center' }}>{value}</div>;
+};
+
+const numberContent = (num: number | string) => {
+  return <div style={{ textAlign: 'right' }}>{num}</div>;
+};
+
 export const createHead = (withWidth: boolean) => {
   return {
     cells: [
       {
         key: 'id',
+        // content: headerContent('ID'),
         content: 'ID',
         isSortable: true,
         // width: withWidth ? 10 : undefined,
       },
       {
         key: 'phone',
+        // content: headerContent('Phone number'),
         content: 'Phone number',
         shouldTruncate: true,
         isSortable: true,
@@ -49,37 +60,43 @@ export const createHead = (withWidth: boolean) => {
       },
       {
         key: 'full_name',
+        // content: headerContent('Full name'),
         content: 'Full name',
         shouldTruncate: true,
         isSortable: true,
         // width: withWidth ? 15 : undefined,
       },
       {
-        key: 'member_type',
-        content: 'Member Type',
+        key: 'emaiil',
+        // content: headerContent('Email'),
+        content: 'Email',
         shouldTruncate: true,
         isSortable: true,
       },
       {
         key: 'register_date',
+        // content: headerContent('Register Date'),
         content: 'Register Date',
         shouldTruncate: true,
         isSortable: true,
       },
       {
-        key: 'date_approve',
-        content: 'Date of approval',
+        key: 'job_count',
+        // content: headerContent('Job Count'),
+        content: 'Job Count',
         shouldTruncate: true,
         isSortable: true,
       },
       {
-        key: 'sales_code',
-        content: 'Sales code',
+        key: 'truck_count',
+        // content: headerContent('Truck Count'),
+        content: 'Truck Count',
         shouldTruncate: true,
         isSortable: true,
       },
       {
         key: 'action',
+        // content: headerContent('Action'),
         content: 'Action',
         shouldTruncate: true,
       },
@@ -95,31 +112,31 @@ export const createRow = (shippers: any, language: string) => {
     cells: [
       {
         key: shipper.id,
-        content: shipper.id,
+        content: index + 1,
       },
       {
         key: shipper.phoneNumber,
-        content: shipper.phoneNumber,
+        content: shipper.phoneNumber || '-',
       },
       {
-        key: shipper.phoneNumber,
-        content: shipper.phoneNumber,
+        key: shipper.fullName,
+        content: shipper.fullName || '-',
       },
       {
-        key: shipper.member_type,
-        content: shipper.member_type,
+        key: shipper.email,
+        content: shipper.email || '-',
       },
       {
         key: sortByDate(shipper.registerDate),
-        content: moment(shipper.registerDate, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll'),
+        content: dateFormat(shipper.registerDate),
       },
       {
-        key: shipper.date_approve,
-        content: shipper.date_approve,
+        key: shipper.jobCount,
+        content: numberContent(shipper.jobCount),
       },
       {
-        key: shipper.sales_code,
-        content: shipper.sales_code,
+        key: shipper.truckCount,
+        content: numberContent(shipper.truckCount),
       },
       {
         key: shipper.id,

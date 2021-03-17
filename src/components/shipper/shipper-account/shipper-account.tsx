@@ -11,6 +11,7 @@ import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
 import { useMst } from '../../../stores/root-store';
 import { observer } from 'mobx-react-lite';
+import moment from 'moment';
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -25,8 +26,11 @@ const JobContainer = observer((props: any) => {
   const [all, setAll] = useState(false);
   const [submit, setSubmit] = useState(false);
   const { userStore, loginStore } = useMst();
+  const [page, setPage] = useState<number>(1);
+  const [searchValue, setSearchValue] = useState({});
 
   useEffect(() => {
+    setSearchValue({ page: 0 });
     userStore.getUsers({
       type: 1,
       page: 0,
@@ -35,9 +39,9 @@ const JobContainer = observer((props: any) => {
   }, []);
 
   useEffect(() => {
-    const data_user = JSON.parse(JSON.stringify(userStore.data_user));
-    if (data_user?.content) {
-      const rows = createRow(data_user.content, loginStore.language);
+    const dataUser = JSON.parse(JSON.stringify(userStore.data_user));
+    if (dataUser?.content) {
+      const rows = createRow(dataUser.content, loginStore.language);
       setRowData(rows);
     }
   }, [JSON.stringify(userStore.data_user)]);
@@ -71,13 +75,44 @@ const JobContainer = observer((props: any) => {
     // setRowData(rows);
   };
 
+  const onSetPage = (page: number) => {
+    setPage(page);
+    let search = JSON.parse(JSON.stringify(searchValue));
+    search['page'] = page - 1;
+    search['type'] = 1;
+    setSearchValue(search);
+    userStore.getUsers(search);
+  };
+
+  const onSearch = (value: string) => {
+    if (value) {
+      const date = moment(value);
+      const search = {
+        type: 1,
+        page: 0,
+        fullName: value,
+        phoneNumber: value,
+        registerDate: date.isValid() ? moment(value).format('YYYY-MM-DD') : '',
+        jobCount: parseInt(value, 10),
+        truckCount: parseInt(value, 10),
+      };
+      setPage(1);
+      setSearchValue(search);
+      userStore.getUsers(search);
+    } else {
+      setPage(1);
+      setSearchValue({ page: 0 });
+      userStore.getUsers({ page: 0 });
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
         <div className="block-data-header">
           <span className="font-data-header">{t('shipperaccount')}</span>
           <div style={{ display: 'flex' }}>
-            <SearchForm data={rowData} onSearch={(value: any) => setRowData(value)} />
+            <SearchForm onSearch={(value: any) => onSearch(value)} />
           </div>
         </div>
       </CardHeader>
@@ -107,6 +142,7 @@ const JobContainer = observer((props: any) => {
             //   caption={caption}
             head={head}
             rows={rowData}
+            page={page}
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
@@ -115,7 +151,7 @@ const JobContainer = observer((props: any) => {
             // defaultSortKey="term"
             defaultSortOrder="ASC"
             onSort={() => console.log('onSort')}
-            onSetPage={() => console.log('onSetPage')}
+            onSetPage={(pagination: number) => onSetPage(pagination)}
           />
         </Wrapper>
       </CardBody>
