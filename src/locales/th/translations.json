@@ -100,5 +100,9 @@
   "truckAmount_1":"จำนวนรถ",
   "productType_1":"ประเภทสินค้า",
   "companyName":"ชื่อบริษัท",
-  "selectLocation": "กรุณาเลือกสถานที่"
+  "selectLocation": "กรุณาเลือกสถานที่",
+  "City": "City",
+  "Area": "Area",
+  "State": "State",
+  "Address": "ที่อยู่"
 }

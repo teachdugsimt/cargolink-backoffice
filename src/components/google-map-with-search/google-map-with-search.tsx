@@ -136,7 +136,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
         }));
     };
 
-    const onInfoWindowClose = (event: any) => { };
+    const onInfoWindowClose = () => { };
 
     const onMarkerDragEnd = (event: any) => {
         let newLat = event.latLng.lat(),
@@ -222,14 +222,15 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
     const AsyncMap: any = withScriptjs(
         withGoogleMap((props) => (
             <GoogleMap
-                options={google}
                 // google={google || new google.maps.DirectionsService()}
+                options={google}
                 defaultZoom={zoom}
                 defaultCenter={{ lat: mapPosition.lat, lng: mapPosition.lng }}
             >
                 {/* InfoWindow on top of marker */}
                 <InfoWindow
-                    onClose={onInfoWindowClose}
+                    // onClose={onInfoWindowClose}
+                    onCloseClick={onInfoWindowClose}
                     position={{ lat: markerPosition.lat + 0.0018, lng: markerPosition.lng }}
                 >
                     <div>
@@ -269,7 +270,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
             <div>
                 <div>
                     <div className="form-group">
-                        <label htmlFor="">City</label>
+                        <span>{t('City')}</span>
                         <input
                             type="text"
                             name="city"
@@ -280,7 +281,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="">Area</label>
+                        <span>{t('Area')}</span>
                         <input
                             type="text"
                             name="area"
@@ -291,7 +292,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="">State</label>
+                        <span>{t('State')}</span>
                         <input
                             type="text"
                             name="state"
@@ -302,7 +303,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="">Address</label>
+                        <span>{t('Address')}</span>
                         <input
                             type="text"
                             name="address"
