@@ -1,5 +1,12 @@
 import React from 'react'
 import { GoogleMap, Marker, withGoogleMap } from "react-google-maps"
+import styled from 'styled-components'
+
+const ContainerMap = styled.div`
+    minHeight: 50vh;
+    maxHeight: 80vh;
+    height: 65vh;
+`
 
 const GoogleMapPure = withGoogleMap((props: any) => {
     return <GoogleMap
@@ -11,10 +18,8 @@ const GoogleMapPure = withGoogleMap((props: any) => {
 })
 
 export const MyGoogleMap = (props: any) => {
-    return <div>
-        <GoogleMapPure
-            containerElement={<div style={{ height: `500px`, width: '500px' }} />}
+    return <GoogleMapPure
+            containerElement={<div style={{ flex: 1, height: '100%', width: '100%' }} />}
             mapElement={<div style={{ height: `100%` }} />}
         />
-    </div>
 }
