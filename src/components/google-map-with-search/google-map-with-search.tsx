@@ -46,7 +46,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
     const { t, i18n } = useTranslation();
     Geocode.setLanguage(i18n.language);
     Geocode.setRegion(i18n.language);
-    const { center, google, zoom, height } = props
+    const { center, zoom, height } = props
     const [{ address, city, area, state, mapPosition,
         markerPosition }, setState] = useState(initialState)
 
@@ -223,7 +223,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
         withGoogleMap((props) => (
             <GoogleMap
                 // google={google || new google.maps.DirectionsService()}
-                options={google}
+                // options={new google.maps.DirectionsService()}
                 defaultZoom={zoom}
                 defaultCenter={{ lat: mapPosition.lat, lng: mapPosition.lng }}
             >
@@ -242,7 +242,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
                     // google={google}
                     // name={'Dolores park'}
                     title={"CargoLink"}
-                    options={google}
+                    // options={new google.maps.DirectionsService()}
                     draggable={true}
                     onDragEnd={onMarkerDragEnd}
                     position={{ lat: markerPosition.lat, lng: markerPosition.lng }}

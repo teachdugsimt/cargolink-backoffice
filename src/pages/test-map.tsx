@@ -22,10 +22,6 @@ const TestMap = (props: any) => {
     //     }
     //   }, [carrierStore.error_response]);
 
-    let google_service = null
-    if (typeof window !== undefined)
-        google_service = new google.maps.DirectionsService()
-    console.log("New google map Direction :; ", google_service)
     return (
         <Card size="Giant">
             <Alert setting={alertSetting} />
@@ -33,12 +29,11 @@ const TestMap = (props: any) => {
                 <Text tx={'selectLocation'} preset="title" />
             </CardHeader>
             <CardBody style={{ flex: 1, width: '100%', height: '100%' }}>
-                {google_service != null && <GoogleMapWithSearch
-                    google={new google.maps.DirectionsService()}
+                <GoogleMapWithSearch
                     center={{ lat: 13.736717, lng: 100.523186 }}
                     height="400px"
                     zoom={15}
-                />}
+                />
             </CardBody>
         </Card>
     );
