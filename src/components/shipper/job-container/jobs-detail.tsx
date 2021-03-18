@@ -9,6 +9,22 @@ import { useMst } from '../../../stores/root-store';
 import { ic_check_circle } from 'react-icons-kit/md/ic_check_circle';
 import { defaultIcons } from '../../../Layouts/Sidebar/Icon/defaultIcons';
 import Icon from 'react-icons-kit';
+import { MyGoogleMap } from '../../google-map/google-map';
+import { decode } from '@mapbox/polyline';
+
+interface Direction {
+  lat: number;
+  lng: number;
+}
+
+interface Coordinate {
+  contactMobileNo: string;
+  contactName: string;
+  dateTime: string;
+  lat: string;
+  lng: string;
+  name: string;
+}
 
 const TrucksDetail: React.FC<{}> = observer(({}) => {
   const { t } = useTranslation();
@@ -25,6 +41,8 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
   const [productTypes, setProductTypes] = useState([]);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
+  const [directions, setDirections] = useState<Array<Array<Direction>>>([]);
+  const [coordinates, setCoordinates] = useState<Array<Coordinate>>([]);
 
   useEffect(() => {
     shipperStore.getProductTypes();
@@ -35,6 +53,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
     setJobDetail(job);
     if (job?.to && job?.from) {
       const data = [job.from, ...job.to];
+      setCoordinates(data);
       getGoogleApi(data);
     }
   }, [shipperStore.job_detail]);
@@ -60,6 +79,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
 
   const getGoogleApi = async (coordinates: any) => {
     let arrDistances = [];
+    let arrDirections = [];
     let summaryDistance = 0;
     let summaryDuration = 0;
     let province = {};
@@ -94,6 +114,17 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
             distance: distanceValue,
             duration: durationValue,
           });
+
+          if (mapData?.overview_polyline) {
+            const points = decode(mapData.overview_polyline.points);
+            const coords = points.map((point: any) => {
+              return {
+                lat: point[0],
+                lng: point[1],
+              };
+            });
+            arrDirections[index] = coords;
+          }
         }
       }
     }
@@ -102,7 +133,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
       duration: number,
       format: 'HHmmssms' | 'HHmmss' | 'HHmm' | 'HH' | 'mmssms' | 'mmss' | 'mm' | 'ssms' | 'ss' | 'ms',
     ) => {
-      const time = {
+      const time: any = {
         ms: (duration % 1000) / 100,
         ss: Math.floor((duration / 1000) % 60),
         mm: Math.floor((duration / (1000 * 60)) % 60),
@@ -120,6 +151,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
     };
     setDistance((summaryDistance / 1000).toFixed(2));
     setDuration(time_convert(summaryDuration * 1000, 'HHmm'));
+    setDirections(arrDirections);
   };
 
   return (
@@ -135,7 +167,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
             </Col>
             <Col breakPoint={{ xs: false, md: 1, lg: 2 }} style={{ margin: '6px 0' }} />
             <Col breakPoint={{ xs: 12, md: 7, lg: 6 }} style={{ margin: '6px 0' }}>
-              <span style={{ display: 'flex', alignItems: 'center', margin: '6px 0px' }}>
+              <span style={{ display: 'flex', alignItems: 'center', margin: '6px 0px', padding: '0 0 4px 0' }}>
                 <img src={images.pinDrop2} style={{ width: 18 }} />
                 <span style={{ fontWeight: 'bold', margin: '0 8px' }}>{t('from')}:</span>
                 {`${jobDetail && jobDetail.from && jobDetail.from.name ? jobDetail.from.name : ''}`}
@@ -145,7 +177,7 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                 jobDetail.to.map((e: any, i: number) => {
                   return (
                     <div key={i}>
-                      <span style={{ display: 'flex', alignItems: 'center', margin: '6px 0px' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', margin: '6px 0px', padding: '4px 0' }}>
                         {i === 0 ? <img src={images.pinDrop} style={{ width: 18 }} /> : <div style={{ width: 18 }} />}
                         <span style={{ fontWeight: 'bold', marginLeft: 8, marginRight: 14 }}>{t('to')}:</span>
                         {`${e?.name}`}
@@ -227,6 +259,16 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
                 </Col>
               </Row>
             </Col>
+          </Row>
+        </CardBody>
+      </Card>
+      <Card>
+        <CardHeader>
+          <span>{'แผนที่'}</span> {/* translate */}
+        </CardHeader>
+        <CardBody>
+          <Row>
+            <Col>{<MyGoogleMap directions={directions} coordinates={coordinates} />}</Col>
           </Row>
         </CardBody>
       </Card>

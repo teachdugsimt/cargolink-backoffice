@@ -91,6 +91,7 @@ const JobContainer = observer((props: any) => {
         type: 1,
         page: 0,
         fullName: value,
+        email: value,
         phoneNumber: value,
         registerDate: date.isValid() ? moment(value).format('YYYY-MM-DD') : '',
         jobCount: parseInt(value, 10),
