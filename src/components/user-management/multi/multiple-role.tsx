@@ -14,6 +14,7 @@ import { observer } from 'mobx-react-lite';
 import { defaultAlertSetting } from '../../simple-data';
 import Alert from '../../alert';
 import moment from 'moment';
+import { navigate } from 'gatsby';
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -119,7 +120,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
               backgroundColor: submit ? '#00B132' : 'white',
               color: submit ? 'white' : '#00B132',
             }}
-            onClick={() => setSubmit(true)}
+            onClick={() => navigate('/user-management/user')}
           >
             <Icon icon={ic_add} /> {t('addNewAccount')}
           </Button>

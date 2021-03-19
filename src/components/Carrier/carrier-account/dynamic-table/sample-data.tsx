@@ -4,6 +4,7 @@ import { Icon } from 'react-icons-kit';
 import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
 import moment from 'moment';
+import { DateFormat } from '../../../simple-data';
 import 'moment/locale/th';
 moment.locale('th');
 interface Carrier {
@@ -22,11 +23,6 @@ interface Carrier {
 function sortByDate(input: string) {
   return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
-
-const dateFormat = (date: string) => {
-  const d = moment(date, 'DD-MM-YYYY HH:mm');
-  return d.isValid() ? d.add(543, 'year').format('ll') : '';
-};
 
 const headerContent = (value: string) => {
   return <span style={{ textAlign: 'center' }}>{value}</span>;
@@ -120,7 +116,7 @@ export const createRow = (carriers: any, language: string) => {
       },
       {
         key: sortByDate(carrier.registerDate),
-        content: dateFormat(carrier.registerDate),
+        content: DateFormat(carrier.registerDate, language),
       },
       {
         key: carrier.jobCount,

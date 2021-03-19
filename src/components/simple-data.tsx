@@ -10,10 +10,12 @@ export const defaultAlertSetting = {
 };
 export const DateFormat = (date: string, language: string) => {
   moment.locale(language);
+  const d = moment(date, 'DD-MM-YYYY HH:mm');
   if (language === 'th') {
-    return moment(date, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
+    const d = moment(date, 'DD-MM-YYYY HH:mm');
+    return d.isValid() ? d.add(543, 'year').format('ll') : '';
   } else {
-    return moment(date, 'DD-MM-YYYY HH:mm').format('ll');
+    return d.isValid() ? d.format('ll') : '';
   }
 };
 
