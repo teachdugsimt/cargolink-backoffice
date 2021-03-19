@@ -8,6 +8,7 @@ import { useMst } from '../../../stores/root-store';
 import { navigate } from 'gatsby';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
+import { GoogleMapWithSearch } from '../../google-map-with-search/google-map-with-search';
 // import DatePicker from 'react-datepicker';
 import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -15,6 +16,7 @@ import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
 import { Box } from 'theme-ui';
 import { EvaIcon } from '@paljs/ui/Icon';
+import { Accordion, AccordionItem } from '@paljs/ui/Accordion';
 import th from 'date-fns/locale/th';
 registerLocale('th', th);
 
@@ -151,6 +153,19 @@ const AddJobs: React.FC<{}> = observer(() => {
           <p>
             {t('typeCar')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
+
+          <div style={{ paddingBottom: 20 }}>
+            <Accordion>
+              <AccordionItem uniqueKey={1} title={t("selectLocation")}>
+                <GoogleMapWithSearch
+                  center={{ lat: 13.736717, lng: 100.523186 }}
+                  height="400px"
+                  zoom={15}
+                />
+              </AccordionItem>
+            </Accordion>
+          </div>
+
           <Controller
             as={
               <Select
@@ -484,18 +499,18 @@ const AddJobs: React.FC<{}> = observer(() => {
                 {index == 0 ? (
                   <></>
                 ) : (
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.125rem' }}>
-                    <Button
-                      type="button"
-                      size="Small"
-                      shape="SemiRound"
-                      style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
-                      onClick={() => remove(index)}
-                    >
-                      <EvaIcon name="minus-outline" />
-                    </Button>
-                  </div>
-                )}
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.125rem' }}>
+                      <Button
+                        type="button"
+                        size="Small"
+                        shape="SemiRound"
+                        style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
+                        onClick={() => remove(index)}
+                      >
+                        <EvaIcon name="minus-outline" />
+                      </Button>
+                    </div>
+                  )}
                 <hr style={{ margin: '1.125rem 0 0' }} />
               </div>
             );
