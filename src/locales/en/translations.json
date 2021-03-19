@@ -100,5 +100,9 @@
   "truckAmount_1":"Truck Amount",
   "productType_1":"Product Type",
   "companyName":"Company Name",
-  "selectLocation": "Please select location"
+  "selectLocation": "Please select location",
+  "City": "City",
+  "Area": "Area",
+  "State": "State",
+  "Address": "Address"
 }
