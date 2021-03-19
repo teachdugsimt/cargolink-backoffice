@@ -174,7 +174,7 @@ const AddUser: React.FC<Props> = observer(() => {
   };
 
   return (
-    <Card>
+    <div>
       <CardHeader>
         <div className="block-data-header">
           <span className="font-data-header">{'Add new account'}</span> {/* translate */}
@@ -382,7 +382,7 @@ const AddUser: React.FC<Props> = observer(() => {
           )}
         </Form>
       </CardBody>
-    </Card>
+    </div>
   );
 });
 

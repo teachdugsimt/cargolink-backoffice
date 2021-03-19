@@ -96,7 +96,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
   };
 
   return (
-    <Card>
+    <div>
       <CardHeader>
         {alertSetting.show && <Alert setting={alertSetting} />}
         <div className="block-data-header">
@@ -158,7 +158,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
           />
         </Wrapper>
       </CardBody>
-    </Card>
+    </div>
   );
 });
 export default MultipleRole;

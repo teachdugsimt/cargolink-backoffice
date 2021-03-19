@@ -105,7 +105,7 @@ const CarrierAccount = observer((props: any) => {
   };
 
   return (
-    <Card>
+    <div>
       <CardHeader>
         <div className="block-data-header">
           <span className="font-data-header">{t('carrieraccount')}</span>
@@ -180,7 +180,7 @@ const CarrierAccount = observer((props: any) => {
           />
         </Wrapper>
       </CardBody>
-    </Card>
+    </div>
   );
 });
 export default CarrierAccount;

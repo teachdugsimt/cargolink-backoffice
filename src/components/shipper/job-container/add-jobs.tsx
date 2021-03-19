@@ -143,7 +143,7 @@ const AddJobs: React.FC<{}> = observer(() => {
   };
 
   return (
-    <Card>
+    <div>
       <Alert setting={alertSetting} />
       <CardHeader>
         <span>{t('addDataCar')}</span>
@@ -545,7 +545,7 @@ const AddJobs: React.FC<{}> = observer(() => {
           </div>
         </form>
       </CardBody>
-    </Card>
+    </div>
   );
 });
 export default AddJobs;

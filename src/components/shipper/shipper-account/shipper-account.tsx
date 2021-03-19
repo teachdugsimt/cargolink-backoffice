@@ -108,7 +108,7 @@ const JobContainer = observer((props: any) => {
   };
 
   return (
-    <Card>
+    <div>
       <CardHeader>
         <div className="block-data-header">
           <span className="font-data-header">{t('shipperaccount')}</span>
@@ -156,7 +156,7 @@ const JobContainer = observer((props: any) => {
           />
         </Wrapper>
       </CardBody>
-    </Card>
+    </div>
   );
 });
 export default JobContainer;
