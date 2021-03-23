@@ -6,6 +6,7 @@ import { Icon } from 'react-icons-kit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
 import { edit } from 'react-icons-kit/fa/edit';
 import { DateFormat } from '../../../simple-data';
+import { navigate } from 'gatsby';
 
 export const sortabled: any = {
   phoneNumber: true, //! Note that: DESC = true, ASC = fasle
@@ -104,16 +105,17 @@ export const createRow = (users: any, language: string) => {
                 appearance="ghost"
                 status="Basic"
                 size="Small"
-                onClick={() => console.log('click edit', index + 1)}
+                onClick={() =>
+                  navigate('/user-management/user', {
+                    state: {
+                      id: index + 1,
+                    },
+                  })
+                }
               >
                 <Icon icon={edit} />
               </Button>
-              <Button
-                appearance="ghost"
-                status="Basic"
-                size="Small"
-                onClick={() => console.log('click delete', index + 1)}
-              >
+              <Button appearance="ghost" status="Basic" size="Small" onClick={() => navigate('/user-management/user')}>
                 <Icon icon={ic_delete} />
               </Button>
             </div>

@@ -11,6 +11,7 @@
     "@atlaskit/dynamic-table": "^14.1.5",
     "@atlaskit/form": "^8.2.2",
     "@atlaskit/radio": "^5.0.4",
+    "@atlaskit/select": "^13.2.0",
     "@atlaskit/table-tree": "^9.0.7",
     "@atlaskit/textfield": "^5.0.1",
     "@ckeditor/ckeditor5-build-classic": "23.0.0",

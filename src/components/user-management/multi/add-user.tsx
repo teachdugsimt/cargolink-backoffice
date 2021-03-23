@@ -102,12 +102,6 @@ const FormStyled = {
   paddingRight: 50,
 };
 
-const options: OptionsPropType = [
-  { name: 'userType', value: 'shipper', label: 'Shipper' },
-  { name: 'userType', value: 'Carrier', label: 'Carrier' },
-  { name: 'userType', value: 'both', label: 'Both' },
-];
-
 const startAdornmentIcon = (iconName: 'user' | 'phone' | 'password') => {
   let icon = '';
   if (iconName === 'user') {
@@ -137,6 +131,17 @@ const AddUser: React.FC<Props> = observer(() => {
   const [validatePassword, setValidatePassword] = useState<boolean>(false);
 
   // const onSubmit = data => console.log(data);
+
+  const userTypeOptions: OptionsPropType = [
+    { name: 'userType', value: 'shipper', label: t('shipper') },
+    { name: 'userType', value: 'Carrier', label: t('carrier') },
+    { name: 'userType', value: 'both', label: t('both') },
+  ];
+
+  const legalTypeOptions: OptionsPropType = [
+    { name: 'legalType', value: 'individual', label: t('individual') },
+    { name: 'legalType', value: 'company', label: t('company') },
+  ];
 
   useEffect(() => {
     return () => {
@@ -177,7 +182,7 @@ const AddUser: React.FC<Props> = observer(() => {
     <div>
       <CardHeader>
         <div className="block-data-header">
-          <span className="font-data-header">{'Add new account'}</span> {/* translate */}
+          <span className="font-data-header">{t('addNewAccount')}</span>
         </div>
       </CardHeader>
       <CardBody>
@@ -187,7 +192,28 @@ const AddUser: React.FC<Props> = observer(() => {
               <Row style={RowStyled}>
                 <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
                   <Field
-                    label="Full name / Company name" // {/* translate */}
+                    label={t('legalType')}
+                    isRequired
+                    name="legalType"
+                    // validate={validate}
+                    defaultValue=""
+                  >
+                    {({ fieldProps, error, meta: { valid } }: any) => (
+                      <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <RadioGroup
+                          options={legalTypeOptions}
+                          // onChange={onChange}
+                          onChange={(event: any) => fieldProps.onChange(event)}
+                        />
+                      </div>
+                    )}
+                  </Field>
+                </Col>
+              </Row>
+              <Row style={RowStyled}>
+                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+                  <Field
+                    label={`${t('fullName')} / ${t('companyName')}`}
                     isRequired
                     name="fullName"
                     // validate={validate}
@@ -195,7 +221,11 @@ const AddUser: React.FC<Props> = observer(() => {
                   >
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <Fragment>
-                        <Textfield {...fieldProps} elemBeforeInput={startAdornmentIcon('user')} />
+                        <Textfield
+                          {...fieldProps}
+                          elemBeforeInput={startAdornmentIcon('user')}
+                          placeholder={`${t('fullName')} / ${t('companyName')}`}
+                        />
                         {error === 'INCORRECT_PHRASE' && (
                           <ErrorMessage>Incorrect, try &lsquo;open sesame&rsquo;</ErrorMessage>
                         )}
@@ -206,7 +236,7 @@ const AddUser: React.FC<Props> = observer(() => {
 
                 <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
                   <Field
-                    label="Phone number" // {/* translate */}
+                    label={t('phoneNumber')}
                     isRequired
                     name="phoneNumber"
                     // validate={validate}
@@ -214,7 +244,11 @@ const AddUser: React.FC<Props> = observer(() => {
                   >
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <Fragment>
-                        <Textfield {...fieldProps} elemBeforeInput={startAdornmentIcon('phone')} />
+                        <Textfield
+                          {...fieldProps}
+                          elemBeforeInput={startAdornmentIcon('phone')}
+                          placeholder={t('phoneNumber')}
+                        />
                         {error === 'INCORRECT_PHRASE' && (
                           <ErrorMessage>Incorrect, try &lsquo;open sesame&rsquo;</ErrorMessage>
                         )}
@@ -227,7 +261,7 @@ const AddUser: React.FC<Props> = observer(() => {
               <Row style={RowStyled}>
                 <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
                   <Field
-                    label="Password" // {/* translate */}
+                    label={t('password')}
                     isRequired
                     name="password"
                     // validate={validate}
@@ -239,6 +273,7 @@ const AddUser: React.FC<Props> = observer(() => {
                           <Textfield
                             {...fieldProps}
                             type={showPassword ? 'text' : 'password'}
+                            placeholder={t('password')}
                             onChange={(event: any) => {
                               setPassword(event.target.value);
                               fieldProps.onChange(event);
@@ -252,17 +287,18 @@ const AddUser: React.FC<Props> = observer(() => {
                                   onClick={handleClickShowPassword}
                                   onMouseDown={handleMouseDownPassword}
                                 >
-                                  {showPassword ? <Icon icon={eye} size={20} /> : <Icon icon={eyeSlash} size={20} />}
+                                  {/* {showPassword ? <Icon icon={eye} size={20} /> : <Icon icon={eyeSlash} size={20} />} */}
+                                  <Icon icon={showPassword ? eye : eyeSlash} size={20} style={{ paddingBottom: 4 }} />
                                 </IconButton>
                               </InputAdornment>
                             }
                           />
                           {/* {valid && <ValidMessage>Your wish granted</ValidMessage>}
-                                                    {error === 'INCORRECT_PHRASE' && (
-                                                        <ErrorMessage>
-                                                            Incorrect, try &lsquo;open sesame&rsquo;
-                                                        </ErrorMessage>
-                                                    )} */}
+                          {error === 'INCORRECT_PHRASE' && (
+                            <ErrorMessage>
+                              Incorrect, try &lsquo;open sesame&rsquo;
+                            </ErrorMessage>
+                          )} */}
                         </Fragment>
                       );
                     }}
@@ -271,7 +307,7 @@ const AddUser: React.FC<Props> = observer(() => {
 
                 <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
                   <Field
-                    label="Confirm password" // {/* translate */}
+                    label={t('confirmPassword')}
                     isRequired
                     name="confirmPassword"
                     // validate={validate}
@@ -282,6 +318,7 @@ const AddUser: React.FC<Props> = observer(() => {
                         <Textfield
                           {...fieldProps}
                           type={showPassword ? 'text' : 'password'}
+                          placeholder={t('password')}
                           onChange={(event: any) => {
                             setConfirmPassword(event.target.value);
                             fieldProps.onChange(event);
@@ -295,17 +332,18 @@ const AddUser: React.FC<Props> = observer(() => {
                                 onClick={handleClickShowPassword}
                                 onMouseDown={handleMouseDownPassword}
                               >
-                                {showPassword ? <Icon icon={eye} size={20} /> : <Icon icon={eyeSlash} size={20} />}
+                                {/* {showPassword ? <Icon icon={eye} size={20} /> : <Icon icon={eyeSlash} size={20} />} */}
+                                <Icon icon={showPassword ? eye : eyeSlash} size={20} style={{ paddingBottom: 4 }} />
                               </IconButton>
                             </InputAdornment>
                           }
                         />
                         {/* {valid && <ValidMessage>Your wish granted</ValidMessage>}
-                                                {error === 'INCORRECT_PHRASE' && (
-                                                    <ErrorMessage>
-                                                        Incorrect, try &lsquo;open sesame&rsquo;
-                                                    </ErrorMessage>
-                                                )} */}
+                        {error === 'INCORRECT_PHRASE' && (
+                          <ErrorMessage>
+                            Incorrect, try &lsquo;open sesame&rsquo;
+                          </ErrorMessage>
+                        )} */}
                       </Fragment>
                     )}
                   </Field>
@@ -315,16 +353,15 @@ const AddUser: React.FC<Props> = observer(() => {
               {validatePassword && (
                 <Row>
                   <Col style={{ textAlign: 'right' }}>
-                    <ValidatePassword>{'** รหัสผ่านไม่ตรงกัน'}</ValidatePassword> {/* translate */}
+                    <ValidatePassword>{`** ${t('passwordNotMatch')}`}</ValidatePassword>
                   </Col>
                 </Row>
               )}
 
-              <Row style={{ alignItems: 'center', padding: '8px 8px 12px' }}>
+              <Row style={RowStyled}>
                 <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
                   <Field
-                    label="Citizen ID / Company Certificate" // {/* translate */}
-                    isRequired
+                    label={`${t('citizenId')} / ${t('companyCertificate')}`}
                     name="uploadFile"
                     // validate={validate}
                     defaultValue=""
@@ -338,7 +375,7 @@ const AddUser: React.FC<Props> = observer(() => {
                         >
                           <Input type={'file'} />
                           <Icon icon={upload} size={20} />
-                          <TextUpload>Upload</TextUpload>
+                          <TextUpload>{t('upload')}</TextUpload>
                         </MaterialButton>
                         <ShowFileName>{file?.name || ''}</ShowFileName>
                       </div>
@@ -347,7 +384,7 @@ const AddUser: React.FC<Props> = observer(() => {
                 </Col>
                 <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
                   <Field
-                    label="" // {/* translate */}
+                    label={t('userType')}
                     isRequired
                     name="userType"
                     // validate={validate}
@@ -356,7 +393,7 @@ const AddUser: React.FC<Props> = observer(() => {
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div style={{ display: 'flex', flexDirection: 'row' }}>
                         <RadioGroup
-                          options={options}
+                          options={userTypeOptions}
                           // onChange={onChange}
                           onChange={(event: any) => fieldProps.onChange(event)}
                         />
