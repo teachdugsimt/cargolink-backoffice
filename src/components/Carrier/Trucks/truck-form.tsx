@@ -93,7 +93,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
   };
 
   return (
-    <Card>
+    <div>
       <Alert setting={alertSetting} />
       <CardHeader>
         <div className="block-data-header">
@@ -200,7 +200,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
           />
         </Wrapper>
       </CardBody>
-    </Card>
+    </div>
   );
 });
 export default TruckForm;

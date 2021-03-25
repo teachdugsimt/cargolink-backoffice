@@ -6,8 +6,8 @@ import Alert from '../components/alert';
 import { defaultAlertSetting } from '../components/simple-data';
 
 const TestMap = (props: any) => {
-    const { t } = useTranslation();
-    const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
+  const { t } = useTranslation();
+  const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
     return (
         <Card size="Giant">
@@ -16,11 +16,11 @@ const TestMap = (props: any) => {
                 <Text tx={'selectLocation'} preset="title" />
             </CardHeader>
             <CardBody style={{ flex: 1, width: '100%', height: '100%' }}>
-                <GoogleMapWithSearch
+                {/* <GoogleMapWithSearch
                     center={{ lat: 13.736717, lng: 100.523186 }}
                     height="400px"
                     zoom={15}
-                />
+                /> */}
             </CardBody>
         </Card>
     );

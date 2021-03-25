@@ -67,7 +67,7 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
   };
 
   return (
-    <Card>
+    <div>
       <CardHeader>
         <div className="block-data-header">
           <span className="font-data-header">{t('drivers')}</span>
@@ -138,7 +138,7 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
           />
         </Wrapper>
       </CardBody>
-    </Card>
+    </div>
   );
 });
 

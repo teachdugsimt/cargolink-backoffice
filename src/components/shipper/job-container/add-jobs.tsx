@@ -166,7 +166,7 @@ const AddJobs: React.FC<{}> = observer(() => {
   }
 
   return (
-    <Card>
+    <div>
       <Alert setting={alertSetting} />
       <CardHeader>
         <span>{t('addDataCar')}</span>
@@ -595,18 +595,18 @@ const AddJobs: React.FC<{}> = observer(() => {
                 {index == 0 ? (
                   <></>
                 ) : (
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.125rem' }}>
-                      <Button
-                        type="button"
-                        size="Small"
-                        shape="SemiRound"
-                        style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
-                        onClick={() => remove(index)}
-                      >
-                        <EvaIcon name="minus-outline" />
-                      </Button>
-                    </div>
-                  )}
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.125rem' }}>
+                    <Button
+                      type="button"
+                      size="Small"
+                      shape="SemiRound"
+                      style={{ backgroundColor: '#e03616', borderColor: '#e03616' }}
+                      onClick={() => remove(index)}
+                    >
+                      <EvaIcon name="minus-outline" />
+                    </Button>
+                  </div>
+                )}
                 <hr style={{ margin: '1.125rem 0 0' }} />
               </div>
             );
@@ -645,7 +645,7 @@ const AddJobs: React.FC<{}> = observer(() => {
           </div>
         </form>
       </CardBody>
-    </Card>
+    </div>
   );
 });
 export default AddJobs;

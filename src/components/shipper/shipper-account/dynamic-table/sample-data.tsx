@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Icon } from 'react-icons-kit';
 import { edit } from 'react-icons-kit/fa/edit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
+import { DateFormat } from '../../../simple-data';
 import 'moment/locale/th';
 moment.locale('th');
 interface Shipper {
@@ -26,11 +27,6 @@ function createKey(input: string) {
 function sortByDate(input: string) {
   return moment(input, 'DD-MM-YYYY HH:mm').add(543, 'year').format('ll');
 }
-
-const dateFormat = (date: string) => {
-  const d = moment(date, 'DD-MM-YYYY HH:mm');
-  return d.isValid() ? d.add(543, 'year').format('ll') : '';
-};
 
 const headerContent = (value: string) => {
   return <div style={{ textAlign: 'center' }}>{value}</div>;
@@ -128,7 +124,7 @@ export const createRow = (shippers: any, language: string) => {
       },
       {
         key: sortByDate(shipper.registerDate),
-        content: dateFormat(shipper.registerDate),
+        content: DateFormat(shipper.registerDate, language),
       },
       {
         key: shipper.jobCount,

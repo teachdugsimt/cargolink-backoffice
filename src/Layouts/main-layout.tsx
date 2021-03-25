@@ -22,8 +22,7 @@ const getDefaultTheme = (): DefaultTheme['name'] => {
   }
 };
 
-
-const MainLayout: React.FC<{ pageContext: any, custom404: any }> = observer(({ children, pageContext, custom404 }) => {
+const MainLayout: React.FC<{ pageContext: any; custom404: any }> = observer(({ children, pageContext, custom404 }) => {
   const { loginStore } = useMst();
   const { i18n } = useTranslation();
   const [dir, setDir] = useState<'ltr' | 'rtl'>('ltr');
@@ -62,20 +61,20 @@ const MainLayout: React.FC<{ pageContext: any, custom404: any }> = observer(({ c
         )}
         <LayoutContainer>
           {pageContext.layout !== 'auth' && !custom404 && <SidebarCustom ref={sidebarRef} />}
-          <LayoutContent>
+          <LayoutContent style={{ backgroundColor: '#fff' }}>
             {custom404 ? (
               <NotFound />
             ) : (
-                <LayoutColumns>
-                  <LayoutColumn className="main-content">{children}</LayoutColumn>
-                </LayoutColumns>
-              )}
-            {pageContext.layout !== 'auth' && !custom404 && <LayoutFooter>Footer</LayoutFooter>}
+              <LayoutColumns>
+                <LayoutColumn className="main-content">{children}</LayoutColumn>
+              </LayoutColumns>
+            )}
+            {/* {pageContext.layout !== 'auth' && !custom404 && <LayoutFooter>Footer</LayoutFooter>} */}
           </LayoutContent>
         </LayoutContainer>
       </Layout>
     </div>
-  )
+  );
 });
 
 export default MainLayout;
