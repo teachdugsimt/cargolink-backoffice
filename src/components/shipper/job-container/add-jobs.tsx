@@ -9,7 +9,7 @@ import { navigate } from 'gatsby';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { GoogleMapWithSearch } from '../../google-map-with-search/google-map-with-search';
-// import DatePicker from 'react-datepicker';
+import { Text } from '../../text-span/text'
 import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Alert from '../../alert';
@@ -37,7 +37,7 @@ const AddJobs: React.FC<{}> = observer(() => {
       truckAmount: null,
       truckType: null,
       weight: null,
-      items: [{ contactMobileNo: null, contactName: null, exdate: null, name: null }],
+      items: [{ contactMobileNo: null, contactName: null, exdate: null, name: null, region: null }],
     },
   });
   const [truckTypeOptions, setTruckTypeOptions] = useState();
@@ -110,37 +110,60 @@ const AddJobs: React.FC<{}> = observer(() => {
   }, [shipperStore.product_types, shipperStore.product_types?.length]);
 
   const onSubmit = (data: any) => {
+    console.log("Onsubmmit data :: ", data)
+
     if (data && data.truckType.value && data.productTypeId.value) {
-      shipperStore.postJobs({
-        truckType: data.truckType.value,
-        weight: data.weight,
-        from: {
-          contactMobileNo: data.contactMobileNo,
-          contactName: data.contactName,
-          dateTime: moment(data.start).format('DD-MM-YYYY HH:mm'),
-          // lat: "13.788485",
-          // lng: "100.6079443",
-          name: data.name,
-        },
-        to:
-          data &&
-          data.items &&
-          data.items.map((e: any, i: any) => {
-            return {
-              contactMobileNo: e.contactMobileNo,
-              contactName: e.contactName,
-              dateTime: moment(e.exdate).format('DD-MM-YYYY HH:mm'),
-              name: e.name,
-            };
-          }),
-        truckAmount: data.truckAmount,
-        productTypeId: data.productTypeId.value,
-        productName: data.productName,
-        // expiredTime: moment(new Date().toDateString()).subtract(1, 'days').format('DD-MM-YYYY HH:mm'),
-        expiredTime: moment(new Date().toDateString()).add(2, 'days').format('DD-MM-YYYY HH:mm'),
-      });
+      const a = new Date()
+      const expiredDate = moment(a).add(2, 'days');
+      console.log("Expired Date new date () :: ", expiredDate.format("DD-MM-YYYY HH:mm"))
+      console.log("Expired time with - 1 day :: ", moment(data.start).subtract(1, 'days').format("DD-MM-YYYY HH:mm"))
+      console.log('Check receive time <= expired time :: ', data.start <= expiredDate)
+      if (data.start <= expiredDate) {
+        alert("Check loading date please")
+      } else {
+        shipperStore.postJobs({
+          truckType: data.truckType.value,
+          weight: data.weight,
+          from: {
+            contactMobileNo: data.contactMobileNo,
+            contactName: data.contactName,
+            dateTime: moment(data.start).format('DD-MM-YYYY HH:mm'),
+            lat: data?.pickupRegion?.lat,
+            lng: data?.pickupRegion?.lng,
+            name: data.name,
+          },
+          to:
+            data &&
+            data.items &&
+            data.items.map((e: any, i: any) => {
+              return {
+                contactMobileNo: e.contactMobileNo,
+                contactName: e.contactName,
+                dateTime: moment(e.exdate).format('DD-MM-YYYY HH:mm'),
+                name: e.name,
+                lat: e?.region?.lat,
+                lng: e?.region?.lng
+              };
+            }),
+          truckAmount: data.truckAmount,
+          productTypeId: data.productTypeId.value,
+          productName: data.productName,
+          expiredTime: moment(data.start).subtract(1, 'days').format("DD-MM-YYYY HH:mm"),
+        });
+      }
     }
   };
+
+  let formControllerValue = control.getValues()
+
+  const onSubmitLocation = (addr: string, region: { lat: number, lng: number }, key: { address: string, region: string }) => {
+    control.setValue(key.address, addr)
+    control.setValue(key.region, region)
+  }
+  const onSubmitLocation2 = (addr: string, region: { lat: number, lng: number }, indexx: number) => {
+    control.setValue(`items[${indexx}].contactName`, addr)
+    control.setValue(`items[${indexx}].region`, region)
+  }
 
   return (
     <Card>
@@ -153,18 +176,6 @@ const AddJobs: React.FC<{}> = observer(() => {
           <p>
             {t('typeCar')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
-
-          <div style={{ paddingBottom: 20 }}>
-            <Accordion>
-              <AccordionItem uniqueKey={1} title={t("selectLocation")}>
-                <GoogleMapWithSearch
-                  center={{ lat: 13.736717, lng: 100.523186 }}
-                  height="400px"
-                  zoom={15}
-                />
-              </AccordionItem>
-            </Accordion>
-          </div>
 
           <Controller
             as={
@@ -277,27 +288,68 @@ const AddJobs: React.FC<{}> = observer(() => {
           )}
           <hr style={{ margin: '1.125rem 0 0' }} />
           <p style={{ fontWeight: 'bold', backgroundColor: '#253858', padding: 10, color: 'white' }}>
-            {t('deliveryPoint')}
+            {t('pickUp')}
           </p>
           <p>
             {t('deliveryLocation')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
-          <input
-            className="new-input-component"
-            type="text"
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <Controller
+            name="pickupRegion"
+            control={control}
+            defaultValue=""
+            render={({ onChange, value }) => <></>}
+          />
+          <Controller
             name="contactName"
-            id="contactName"
-            style={{
-              borderColor: errors.contactName ? '#ff3d71' : '',
-            }}
-            ref={register({ required: true })}
-            aria-invalid={errors.contactName ? 'true' : 'false'}
+            control={control}
+            defaultValue=""
+            render={({ onChange, value }) => <>
+              <Accordion>
+                <AccordionItem uniqueKey={1} title={<Text tx={"selectLocation"} preset="content" />}>
+                  <GoogleMapWithSearch
+                    center={{ lat: 13.736717, lng: 100.523186 }}
+                    height="500px"
+                    zoom={15}
+                    onAddressChange={(addr, region) => onSubmitLocation(addr, region, { address: "contactName", region: "pickupRegion" })}
+                  />
+                </AccordionItem>
+              </Accordion>
+            </>}
+            register={register({ required: true })}
+            rules={{ required: 'Address can not null.' }}
           />
           {errors.contactName && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+            <span style={{ color: '#ff3d71', marginLeft: 10, marginTop: 20, fontSize: '0.7375rem' }} role="alert">
               {t('fieldDeliveryLocation')}
             </span>
           )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <p>
             {t('dateStart')} <span style={{ color: '#ff3d71' }}>*</span>
           </p>
@@ -385,7 +437,7 @@ const AddJobs: React.FC<{}> = observer(() => {
               marginBottom: 0,
             }}
           >
-            {t('pickUp')}
+            {t('deliveryPoint')}
           </p>
           {fields.map(({ id, contactName, name, contactMobileNo, exdate }, index) => {
             const toDate = watch(`items[${index}].exdate`);
@@ -399,7 +451,47 @@ const AddJobs: React.FC<{}> = observer(() => {
                     {t('pickupLocation')} <span style={{ color: '#ff3d71' }}>*</span>
                   </p>
                 </div>
-                <input
+
+
+
+
+
+
+
+
+
+
+                <Controller
+                  name={`items[${index}].region`}
+                  control={control}
+                  defaultValue=""
+                  render={({ onChange, value }) => <></>}
+                />
+                <Controller
+                  name={`items[${index}].contactName`}
+                  control={control}
+                  defaultValue=""
+                  render={({ onChange, value }) => <>
+                    <Accordion>
+                      <AccordionItem uniqueKey={1} title={<Text tx={"selectLocation"} preset="content" />}>
+                        <GoogleMapWithSearch
+                          center={{ lat: 13.736717, lng: 100.523186 }}
+                          height="500px"
+                          zoom={15}
+                          onAddressChange={(addr, region) => onSubmitLocation2(addr, region, index)}
+                        />
+                      </AccordionItem>
+                    </Accordion>
+                  </>}
+                  register={register({ required: true })}
+                  rules={{ required: 'Address can not null.' }}
+                />
+                {errors.items && errors.items[index]?.contactName && (
+                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                    {t('fieldPickupLocation')}
+                  </span>
+                )}
+                {/* <input
                   className="new-input-component"
                   type="text"
                   style={{
@@ -410,11 +502,15 @@ const AddJobs: React.FC<{}> = observer(() => {
                   ref={register({ required: true })}
                   aria-invalid={errors.items && errors.items[index]?.contactName ? 'true' : 'false'}
                 />
-                {errors.items && errors.items[index]?.contactName && (
-                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-                    {t('fieldPickupLocation')}
-                  </span>
-                )}
+               */}
+
+
+
+
+
+
+
+
                 <p>
                   {t('endDate')} <span style={{ color: '#ff3d71' }}>*</span>
                 </p>

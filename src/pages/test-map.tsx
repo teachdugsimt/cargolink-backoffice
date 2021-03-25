@@ -9,19 +9,6 @@ const TestMap = (props: any) => {
     const { t } = useTranslation();
     const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
-    // useEffect(() => {
-    //     const { error_response } = carrierStore;
-    //     if (error_response) {
-    //       setAlertSetting({
-    //         icon: 'error',
-    //         show: true,
-    //         type: 'general',
-    //         title: error_response.title || '',
-    //         content: error_response.content || '',
-    //       });
-    //     }
-    //   }, [carrierStore.error_response]);
-
     return (
         <Card size="Giant">
             <Alert setting={alertSetting} />

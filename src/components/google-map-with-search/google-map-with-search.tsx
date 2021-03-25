@@ -16,6 +16,7 @@ interface PropsGoogleMap {
     google?: any
     zoom?: number
     center?: location
+    onAddressChange?: (address: any, region: any)  => void
 }
 
 interface PropsInitialState {
@@ -46,7 +47,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
     const { t, i18n } = useTranslation();
     Geocode.setLanguage(i18n.language);
     Geocode.setRegion(i18n.language);
-    const { center, zoom, height } = props
+    const { center, zoom, height, onAddressChange } = props
     const [{ address, city, area, state, mapPosition,
         markerPosition }, setState] = useState(initialState)
 
@@ -79,9 +80,11 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
     }, [])
 
     useEffect(() => {
+
         if (check_update >= 1) {
             if (markerPosition.lat || address || city || area || state) {
-                setReRender(!reRender)
+                // setReRender(!reRender)
+                onAddressChange(address, markerPosition)
             }
             // else if (center?.lat === center?.lat) {
             //     // setReRender(reRender)
@@ -211,13 +214,13 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
 
 
 
-    console.log("Language :: ", i18n.language)
-    console.log("Address :: ", address)
-    console.log("City :: ", city)
-    console.log("Area :: ", area)
-    console.log("State :: ", state)
-    console.log("Map Position :: ", mapPosition)
-    console.log("Marker Position :: ", markerPosition)
+    // console.log("Language :: ", i18n.language)
+    // console.log("Address :: ", address)
+    // console.log("City :: ", city)
+    // console.log("Area :: ", area)
+    // console.log("State :: ", state)
+    // console.log("Map Position :: ", mapPosition)
+    // console.log("Marker Position :: ", markerPosition)
 
     const AsyncMap: any = withScriptjs(
         withGoogleMap((props) => (
@@ -231,7 +234,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
                 <InfoWindow
                     // onClose={onInfoWindowClose}
                     onCloseClick={onInfoWindowClose}
-                    position={{ lat: markerPosition.lat + 0.0018, lng: markerPosition.lng }}
+                    position={{ lat: (markerPosition?.lat || center?.lat) + 0.0018, lng: (markerPosition?.lng || center?.lng) }}
                 >
                     <div>
                         <span style={{ padding: 0, margin: 0 }}>{address}</span>
@@ -255,7 +258,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
                         height: '40px',
                         paddingLeft: '16px',
                         marginTop: '2px',
-                        marginBottom: '500px',
+                        marginBottom: '20px',
                     }}
                     onPlaceSelected={onPlaceSelected}
                     types={['(regions)']}
@@ -268,7 +271,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
         const lang = i18n.language || 'th'
         map = (
             <div>
-                <div>
+                {/* <div>
                     <div className="form-group">
                         <span>{t('City')}</span>
                         <input
@@ -313,7 +316,7 @@ export const GoogleMapWithSearch = (props: PropsGoogleMap) => {
                             value={address}
                         />
                     </div>
-                </div>
+                </div> */}
 
                 <AsyncMap
                     googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${GoogleMapsAPI}&libraries=places&language=${lang}&region=${lang}`}

@@ -16,6 +16,10 @@ input {
   font-family: 'Prompt', sans-serif !important;
 }
 
+body {
+  font-family: 'Prompt', sans-serif !important;
+}
+
 input[type='file'] {
   display: none;
 }
