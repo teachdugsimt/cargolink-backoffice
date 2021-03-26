@@ -125,5 +125,13 @@
   "status": "Status",
   "statusWaitForApproval": "Wait for Approval",
   "statusApproved": "Approved",
-  "statusRejected": "Rejected"
+  "statusRejected": "Rejected",
+  "generalAddr": "General Address",
+  "documentDeliverAddr": "Document delivery address",
+  "subDistrict": "Sub District",
+  "district": "District",
+  "postcode": "Postcode",
+  "addressNo": "Address No.",
+  "alley": "Alley",
+  "street": "Street"
 }

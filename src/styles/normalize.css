@@ -9,8 +9,8 @@
  */
 
 my-text {
-   font-size: 1.2em;
-   color:  red;
+  font-size: 1.2em;
+  color: red;
 }
 
 html {
@@ -172,8 +172,6 @@ textarea {
   line-height: 1.15; /* 1 */
   margin: 0; /* 2 */
 }
-
-
 
 /**
  * Show the overflow in IE.

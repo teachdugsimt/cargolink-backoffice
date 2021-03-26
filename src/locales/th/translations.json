@@ -125,5 +125,13 @@
   "status": "สถานะ",
   "statusWaitForApproval": "รอการอนุมัติ",
   "statusApproved": "ได้รับการอนุมัติ",
-  "statusRejected": "ถูกปฏิเสธ"
+  "statusRejected": "ถูกปฏิเสธ",
+  "generalAddr": "ที่อยู่ทั่วไป",
+  "documentDeliverAddr": "ที่อยู่จัดส่งเอกสาร",
+  "subDistrict": "ตำบล",
+  "district": "อำเภอ",
+  "postcode": "รหัสไปรษณีย์",
+  "addressNo": "ที่อยู่",
+  "alley": "ซอย",
+  "street": "ถนน"
 }
