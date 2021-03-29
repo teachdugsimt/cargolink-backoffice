@@ -19,6 +19,8 @@ const Unorderlist = styled.ul`
   padding-left: 0;
   margin-top: 0;
   box-shadow: 2px 2px 3px #b9b9b940;
+  position: absolute;
+  z-index: 2;
 `;
 
 const List = styled.li`
@@ -27,6 +29,7 @@ const List = styled.li`
   padding-left: 15px;
   border: 1px solid #ebecf0;
   cursor: pointer;
+  background-color: #fff;
 
   &:hover {
     background-color: #ebecf0;
@@ -34,7 +37,7 @@ const List = styled.li`
 `;
 
 const AutoCompleteTypeahead = function AutoCompleteTypeahead(props: AutoCompleteTypeaheadProps) {
-  const { data, handleValue } = props;
+  const { data, numberOfRow = 5, handleValue } = props;
 
   const [addressObj, setAddressObj] = useState<any>([]);
   const [openOn, setOpenOn] = useState<string>('');
@@ -82,10 +85,15 @@ const AutoCompleteTypeahead = function AutoCompleteTypeahead(props: AutoComplete
   return (
     <Row>
       {/* {Object.keys(fieldsEnum).map((key: string) => { */}
-      {data.map(({ type, label, breakPoint }) => {
+      {data.map(({ type, label, breakPoint, isRequired }) => {
         return (
-          <Col key={type} breakPoint={{ md: 6 }}>
-            <Field label={label} name={label || ''} defaultValue={searchStr[fieldsEnum[type]] || ''}>
+          <Col key={type} breakPoint={{ ...breakPoint }}>
+            <Field
+              label={label}
+              name={type.toLocaleLowerCase() || ''}
+              isRequired={!!isRequired}
+              defaultValue={searchStr[fieldsEnum[type]] || ''}
+            >
               {({ fieldProps, error, meta: { valid } }: any) => (
                 <Textfield
                   {...fieldProps}
@@ -104,7 +112,7 @@ const AutoCompleteTypeahead = function AutoCompleteTypeahead(props: AutoComplete
             {openOn === fieldsEnum[type] && (
               <Unorderlist>
                 {addressObj
-                  ?.filter((_: any, i: number) => i < 5)
+                  ?.filter((_: any, i: number) => i < numberOfRow)
                   .map((item: any, i: number) => (
                     <List key={i} onClick={() => onSelectOption(addressObj[i])}>
                       <span>

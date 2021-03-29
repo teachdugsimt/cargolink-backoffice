@@ -2,11 +2,14 @@ import React, { CSSProperties, useEffect, useState } from 'react';
 import { FormEditProps } from './form-edit.props';
 import styled from 'styled-components';
 import { Icon } from 'react-icons-kit';
-import { edit } from 'react-icons-kit/fa/edit';
+// import { edit } from 'react-icons-kit/fa/edit';
 import { Field } from '@atlaskit/form';
 import Textfield from '@atlaskit/textfield';
-import { checkSquareO } from 'react-icons-kit/fa/checkSquareO';
+// import { checkSquareO } from 'react-icons-kit/fa/checkSquareO';
 import Select from '@atlaskit/select';
+import { pencil } from 'react-icons-kit/fa/pencil';
+import { check } from 'react-icons-kit/fa/check';
+import { ErrorMessage } from '@atlaskit/form';
 
 const TextInLine = styled.div`
   display: flex;
@@ -50,11 +53,15 @@ export function FormEdit(props: FormEditProps) {
     containerStyle,
     labelStyle,
     valueStyle,
+    validateMessage,
+    messageForCheck,
     handleSave,
+    validateForm = undefined,
   } = props;
 
   const [showForm, setShowForm] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<any>(null);
+  const [isValid, setIsValid] = useState<boolean>(true);
 
   useEffect(() => {
     if (type === 'text') {
@@ -96,7 +103,7 @@ export function FormEdit(props: FormEditProps) {
         {!showForm ? (
           <p style={integrateValueStyle}>{value}</p>
         ) : type === 'text' ? (
-          <Field label="" name={label || ''} defaultValue={value}>
+          <Field label="" name={label || ''} defaultValue={value} validate={validateForm}>
             {({ fieldProps, error, meta: { valid } }: any) => (
               <div style={INPUT_BOX}>
                 <Textfield
@@ -109,6 +116,7 @@ export function FormEdit(props: FormEditProps) {
                     height: 26,
                   }}
                 />
+                {error === messageForCheck && <ErrorMessage>{validateMessage}</ErrorMessage>}
               </div>
             )}
           </Field>
@@ -125,11 +133,11 @@ export function FormEdit(props: FormEditProps) {
         {showEditIcon &&
           (!showForm ? (
             <button style={BUTTON} onClick={handleClick}>
-              <Icon icon={edit} style={ICON_STYLED} size={22} />
+              <Icon icon={pencil} style={ICON_STYLED} size={22} />
             </button>
           ) : (
             <button style={BUTTON} onClick={handleSubmit}>
-              <Icon icon={checkSquareO} style={ICON_STYLED} size={22} />
+              <Icon icon={check} style={ICON_STYLED} size={22} />
             </button>
           ))}
       </TextInLine>

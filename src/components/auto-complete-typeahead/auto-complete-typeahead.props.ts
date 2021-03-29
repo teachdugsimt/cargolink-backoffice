@@ -4,6 +4,8 @@ export interface AutoCompleteTypeaheadProps {
 
     label: string;
 
+    isRequired?: boolean;
+
     breakPoint?: {
       xs?: number;
 
@@ -14,6 +16,8 @@ export interface AutoCompleteTypeaheadProps {
       lg?: number;
     };
   }>;
+
+  numberOfRow?: number; // number of result address
 
   handleValue: (value: any) => void;
 }

@@ -133,5 +133,7 @@
   "postcode": "รหัสไปรษณีย์",
   "addressNo": "ที่อยู่",
   "alley": "ซอย",
-  "street": "ถนน"
+  "street": "ถนน",
+  "sameGeneralAddress": "เหมือนกับที่อยู่ทั่วไป",
+  "invalidEmail": "อีเมลไม่ถูกต้อง"
 }

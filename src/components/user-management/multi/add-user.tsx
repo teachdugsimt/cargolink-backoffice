@@ -98,8 +98,8 @@ const BottomSubmitStyled = {
 };
 
 const FormStyled = {
-  paddingLeft: 50,
-  paddingRight: 50,
+  paddingLeft: 15,
+  paddingRight: 15,
 };
 
 const startAdornmentIcon = (iconName: 'user' | 'phone' | 'password') => {

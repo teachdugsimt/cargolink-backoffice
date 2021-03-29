@@ -133,5 +133,7 @@
   "postcode": "Postcode",
   "addressNo": "Address No.",
   "alley": "Alley",
-  "street": "Street"
+  "street": "Street",
+  "sameGeneralAddress": "Same as general address",
+  "invalidEmail": "Invalid email"
 }

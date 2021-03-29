@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 
 export interface FormEditProps {
   label?: string;
@@ -21,5 +21,11 @@ export interface FormEditProps {
     isSelected?: boolean;
   }>;
 
+  validateMessage?: string;
+
+  messageForCheck?: string;
+
   handleSave?: (value: string | number | object) => void;
+
+  validateForm?: (value: any) => any;
 }
