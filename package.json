@@ -80,7 +80,13 @@
     "dev": "gatsby develop",
     "start": "npm run dev",
     "serve": "gatsby serve",
-    "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\""
+    "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\"",
+    "release": "standard-version",
+    "release:major": "standard-version --release-as major",
+    "release:minor": "standard-version --release-as minor",
+    "release:patch": "standard-version --release-as patch",
+    "release:alpha": "standard-version --prerelease alpha",
+    "release:beta": "standard-version --prerelease beta"
   },
   "repository": {
     "type": "git",
@@ -90,8 +96,10 @@
     "url": "https://github.com/paljs/gatsby-admin-template/issues"
   },
   "devDependencies": {
-    "@types/mapbox__polyline": "^1.0.2",
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
     "@types/googlemaps": "^3.43.3",
+    "@types/mapbox__polyline": "^1.0.2",
     "@types/node": "14.11.8",
     "@types/react": "16.9.52",
     "@types/react-datepicker": "^3.1.5",
@@ -106,12 +114,13 @@
     "eslint-config-prettier": "6.12.0",
     "eslint-plugin-prettier": "3.1.4",
     "eslint-plugin-react": "7.21.4",
-    "husky": "4.3.0",
+    "husky": "^6.0.0",
     "miragejs": "^0.1.41",
     "mochawesome-report-generator": "^5.1.0",
     "prettier": "2.1.2",
     "pretty-quick": "3.0.2",
     "react-live": "2.2.2",
+    "standard-version": "^9.3.0",
     "typescript": "4.0.3"
   },
   "husky": {
