@@ -15,19 +15,19 @@ const Home = () => {
   // }, [])
   return (
     <div>
-      <Card>
-        <CardHeader>
-          <span style={{ fontSize: 20 }}>{t('dashboard')}</span>
-        </CardHeader>
-        <CardBody>
-          <div style={{ display: 'flex', flexDirection: 'column', padding: 10 }}>
-            <span style={{ fontSize: 20, marginBottom: 20 }}>{t('truckstype')}</span>
-            <ChartArea />
-            <span style={{ fontSize: 20, marginBottom: 20 }}>{t('JobsRegion')}</span>
-            <ChartRegion />
-          </div>
-        </CardBody>
-      </Card>
+      {/* <Card> */}
+      <CardHeader>
+        <span style={{ fontSize: 20 }}>{t('dashboard')}</span>
+      </CardHeader>
+      <CardBody>
+        <div style={{ display: 'flex', flexDirection: 'column', padding: 10 }}>
+          <span style={{ fontSize: 20, marginBottom: 20 }}>{t('truckstype')}</span>
+          <ChartArea />
+          <span style={{ fontSize: 20, marginBottom: 20 }}>{t('JobsRegion')}</span>
+          <ChartRegion />
+        </div>
+      </CardBody>
+      {/* </Card> */}
     </div>
   );
 };

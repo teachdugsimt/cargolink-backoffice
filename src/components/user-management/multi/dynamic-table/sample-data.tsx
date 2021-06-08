@@ -4,7 +4,9 @@ import moment from 'moment';
 
 import { Icon } from 'react-icons-kit';
 import { ic_delete } from 'react-icons-kit/md/ic_delete';
+import { edit } from 'react-icons-kit/fa/edit';
 import { DateFormat } from '../../../simple-data';
+import { navigate } from 'gatsby';
 
 export const sortabled: any = {
   phoneNumber: true, //! Note that: DESC = true, ASC = fasle
@@ -17,12 +19,12 @@ export const sortabled: any = {
 export const createHead = (withWidth: boolean) => {
   return {
     cells: [
-      // {
-      //   key: 'id',
-      //   content: 'Id',
-      //   isSortable: true,
-      //   width: withWidth ? 5 : undefined,
-      // },
+      {
+        key: 'id',
+        content: 'Id',
+        isSortable: true,
+        width: withWidth ? 5 : undefined,
+      },
       {
         key: 'phoneNumber',
         content: 'Phone number',
@@ -44,20 +46,20 @@ export const createHead = (withWidth: boolean) => {
         isSortable: true,
       },
       {
-        key: 'jobCount',
-        content: 'job count',
+        key: 'userType',
+        content: 'User Type',
         shouldTruncate: true,
         isSortable: true,
       },
       {
-        key: 'truckCount',
-        content: 'truck count',
+        key: 'legalType',
+        content: 'Lefal Type',
         shouldTruncate: true,
         isSortable: true,
       },
       {
         key: 'action',
-        content: 'Action',
+        content: '',
         shouldTruncate: true,
       },
     ],
@@ -71,10 +73,10 @@ export const createRow = (users: any, language: string) => {
     return {
       key: `row-${index}-${user.phoneNumber}`,
       cells: [
-        // {
-        //   key: user.id,
-        //   content: user.id,
-        // },
+        {
+          key: index,
+          content: index + 1,
+        },
         {
           key: user.phoneNumber,
           content: user.phoneNumber,
@@ -98,9 +100,25 @@ export const createRow = (users: any, language: string) => {
         {
           key: user.id,
           content: (
-            <Button appearance="ghost" status="Basic" size="Small">
-              <Icon icon={ic_delete} />
-            </Button>
+            <div style={{ textAlign: 'right' }}>
+              <Button
+                appearance="ghost"
+                status="Basic"
+                size="Small"
+                onClick={() =>
+                  navigate('/user-management/user', {
+                    state: {
+                      id: index + 1,
+                    },
+                  })
+                }
+              >
+                <Icon icon={edit} />
+              </Button>
+              <Button appearance="ghost" status="Basic" size="Small" onClick={() => navigate('/user-management/user')}>
+                <Icon icon={ic_delete} />
+              </Button>
+            </div>
           ),
         },
       ],

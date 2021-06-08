@@ -173,7 +173,7 @@ const JobContainer: React.FC<Props> = observer(() => {
   };
 
   return (
-    <Card>
+    <div>
       <Alert setting={alertSetting} />
       <CardHeader>
         <div className="block-data-header">
@@ -293,7 +293,7 @@ const JobContainer: React.FC<Props> = observer(() => {
           />
         </Wrapper>
       </CardBody>
-    </Card>
+    </div>
   );
 });
 export default JobContainer;

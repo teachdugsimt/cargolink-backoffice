@@ -113,7 +113,9 @@ const Sidebar = React.forwardRef<SidebarRefObject, SidebarProps>((props, ref) =>
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
     >
-      <div className="main-container">{props.children}</div>
+      <div className="main-container" style={{ backgroundColor: '#f5f5f5' }}>
+        {props.children}
+      </div>
     </SidebarStyle>
   );
 });
