@@ -45,15 +45,15 @@ export const createHead = (withWidth: boolean) => {
         shouldTruncate: true,
         isSortable: true,
       },
-      {
-        key: 'userType',
-        content: 'User Type',
-        shouldTruncate: true,
-        isSortable: true,
-      },
+      // {
+      //   key: 'userType',
+      //   content: 'User Type',
+      //   shouldTruncate: true,
+      //   isSortable: true,
+      // },
       {
         key: 'legalType',
-        content: 'Lefal Type',
+        content: 'Legal Type',
         shouldTruncate: true,
         isSortable: true,
       },
@@ -69,6 +69,7 @@ export const createHead = (withWidth: boolean) => {
 export const head = createHead(true);
 
 export const createRow = (users: any, language: string) => {
+  console.log('keys',users);
   return users.map((user: any, index: number) => {
     return {
       key: `row-${index}-${user.phoneNumber}`,
@@ -93,10 +94,10 @@ export const createRow = (users: any, language: string) => {
           key: user.jobCount,
           content: user.jobCount,
         },
-        {
-          key: user.truckCount,
-          content: user.truckCount,
-        },
+        // {
+        //   key: user.truckCount,
+        //   content: user.truckCount,
+        // },
         {
           key: user.id,
           content: (
