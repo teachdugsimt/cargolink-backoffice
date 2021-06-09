@@ -56,11 +56,12 @@ const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }>
 
     useEffect(() => {
         // setTimeout(() => {
+        const urlPath = children.props.location.pathname;
         if (token) {
             let path = _getPathFromChildren(children)
             // navigate(_getPathFromChildren(children)) 
         }
-        else navigate('/auth/login');
+        else if(!urlPath.substr('/auth/')) navigate('/auth/login');
         // }, 500);
     }, [loginStore.data_signin.idToken, key])
 
