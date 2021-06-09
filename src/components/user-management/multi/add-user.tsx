@@ -14,12 +14,14 @@ import { upload } from 'react-icons-kit/ikons/upload';
 import { ic_person } from 'react-icons-kit/md/ic_person';
 import { ic_phone } from 'react-icons-kit/md/ic_phone';
 import { ic_lock } from 'react-icons-kit/md/ic_lock';
+import { ic_email } from 'react-icons-kit/md/ic_email';
 import { eye } from 'react-icons-kit/fa/eye';
 import { eyeSlash } from 'react-icons-kit/fa/eyeSlash';
 import Form, { ErrorMessage, Field, FormFooter, ValidMessage } from '@atlaskit/form';
 import Textfield from '@atlaskit/textfield';
 import { RadioGroup } from '@atlaskit/radio';
 import { OptionsPropType } from '@atlaskit/radio/types';
+// import { Browser } from '@atlaskit/media-picker';
 
 interface Props {}
 
@@ -33,12 +35,13 @@ interface FileProps {
 }
 
 interface InputData {
-  confirmPassword: string;
+  // confirmPassword: string;
   fullName: string;
-  password: string;
+  // password: string;
   phoneNumber: string;
   uploadFile?: string;
-  userType: string;
+  email?: string;
+  // userType: string;
 }
 
 const ButtonStyled = styled.div`
@@ -102,12 +105,14 @@ const FormStyled = {
   paddingRight: 15,
 };
 
-const startAdornmentIcon = (iconName: 'user' | 'phone' | 'password') => {
+const startAdornmentIcon = (iconName: 'user' | 'phone' | 'password' | 'email') => {
   let icon = '';
   if (iconName === 'user') {
     icon = ic_person;
   } else if (iconName === 'phone') {
     icon = ic_phone;
+  } else if (iconName === 'email') {
+    icon = ic_email;
   } else {
     icon = ic_lock;
   }
@@ -261,102 +266,21 @@ const AddUser: React.FC<Props> = observer(() => {
               <Row style={RowStyled}>
                 <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
                   <Field
-                    label={t('password')}
-                    isRequired
-                    name="password"
-                    // validate={validate}
-                    defaultValue=""
-                  >
-                    {({ fieldProps, error, meta: { valid } }: any) => {
-                      return (
-                        <Fragment>
-                          <Textfield
-                            {...fieldProps}
-                            type={showPassword ? 'text' : 'password'}
-                            placeholder={t('password')}
-                            onChange={(event: any) => {
-                              setPassword(event.target.value);
-                              fieldProps.onChange(event);
-                            }}
-                            onBlur={handleValidatePassword}
-                            elemBeforeInput={startAdornmentIcon('password')}
-                            elemAfterInput={
-                              <InputAdornment position="end">
-                                <IconButton
-                                  aria-label="toggle password visibility"
-                                  onClick={handleClickShowPassword}
-                                  onMouseDown={handleMouseDownPassword}
-                                >
-                                  {/* {showPassword ? <Icon icon={eye} size={20} /> : <Icon icon={eyeSlash} size={20} />} */}
-                                  <Icon icon={showPassword ? eye : eyeSlash} size={20} style={{ paddingBottom: 4 }} />
-                                </IconButton>
-                              </InputAdornment>
-                            }
-                          />
-                          {/* {valid && <ValidMessage>Your wish granted</ValidMessage>}
-                          {error === 'INCORRECT_PHRASE' && (
-                            <ErrorMessage>
-                              Incorrect, try &lsquo;open sesame&rsquo;
-                            </ErrorMessage>
-                          )} */}
-                        </Fragment>
-                      );
-                    }}
-                  </Field>
-                </Col>
-
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
-                  <Field
-                    label={t('confirmPassword')}
-                    isRequired
-                    name="confirmPassword"
-                    // validate={validate}
-                    defaultValue=""
-                  >
+                    label={t('email')}
+                    name="email"
+                    >
                     {({ fieldProps, error, meta: { valid } }: any) => (
-                      <Fragment>
+                      <div style={{ display: 'flex' }}>
                         <Textfield
                           {...fieldProps}
-                          type={showPassword ? 'text' : 'password'}
-                          placeholder={t('password')}
-                          onChange={(event: any) => {
-                            setConfirmPassword(event.target.value);
-                            fieldProps.onChange(event);
-                          }}
-                          onBlur={handleValidatePassword}
-                          elemBeforeInput={startAdornmentIcon('password')}
-                          elemAfterInput={
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                              >
-                                {/* {showPassword ? <Icon icon={eye} size={20} /> : <Icon icon={eyeSlash} size={20} />} */}
-                                <Icon icon={showPassword ? eye : eyeSlash} size={20} style={{ paddingBottom: 4 }} />
-                              </IconButton>
-                            </InputAdornment>
-                          }
+                          elemBeforeInput={startAdornmentIcon('email')}
+                          placeholder={t('email')}
                         />
-                        {/* {valid && <ValidMessage>Your wish granted</ValidMessage>}
-                        {error === 'INCORRECT_PHRASE' && (
-                          <ErrorMessage>
-                            Incorrect, try &lsquo;open sesame&rsquo;
-                          </ErrorMessage>
-                        )} */}
-                      </Fragment>
+                      </div>
                     )}
                   </Field>
                 </Col>
               </Row>
-
-              {validatePassword && (
-                <Row>
-                  <Col style={{ textAlign: 'right' }}>
-                    <ValidatePassword>{`** ${t('passwordNotMatch')}`}</ValidatePassword>
-                  </Col>
-                </Row>
-              )}
 
               <Row style={RowStyled}>
                 <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
@@ -368,6 +292,19 @@ const AddUser: React.FC<Props> = observer(() => {
                   >
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div style={{ display: 'flex' }}>
+                        {/* <Browser
+                          config={{
+                            multiple: false,
+                            fileExtensions: ['image/jpg', 'image/png'],
+                          }}
+                          isOpen={true}
+                          onBrowseFn={e => console.log('browse', e || '')}
+                          onCancelFn={e => console.log('cancel', e || '')}
+                          onUploadStart={e => console.log('upload start', e || '')}
+                          onPreviewUpdate={e => console.log('preview update', e || '')}
+                          onError={e => console.log('error', e || '')}
+                          onEnd={e => console.log('end', e || '')}
+                        /> */}
                         <MaterialButton
                           variant="contained"
                           component="label"
@@ -378,25 +315,6 @@ const AddUser: React.FC<Props> = observer(() => {
                           <TextUpload>{t('upload')}</TextUpload>
                         </MaterialButton>
                         <ShowFileName>{file?.name || ''}</ShowFileName>
-                      </div>
-                    )}
-                  </Field>
-                </Col>
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
-                  <Field
-                    label={t('userType')}
-                    isRequired
-                    name="userType"
-                    // validate={validate}
-                    defaultValue=""
-                  >
-                    {({ fieldProps, error, meta: { valid } }: any) => (
-                      <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        <RadioGroup
-                          options={userTypeOptions}
-                          // onChange={onChange}
-                          onChange={(event: any) => fieldProps.onChange(event)}
-                        />
                       </div>
                     )}
                   </Field>
