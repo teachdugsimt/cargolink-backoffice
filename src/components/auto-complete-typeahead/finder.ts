@@ -79,7 +79,7 @@ const resolveResultbyField = (type: string, searchStr: string) => {
   return possibles;
 };
 
-exports.resolveResultbyField = resolveResultbyField;
-exports.fieldsEnum = fieldsEnum;
+// exports.resolveResultbyField = resolveResultbyField;
+// exports.fieldsEnum = fieldsEnum;
 
 export { resolveResultbyField, fieldsEnum };
