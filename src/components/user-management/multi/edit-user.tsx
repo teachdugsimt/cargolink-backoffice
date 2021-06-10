@@ -164,6 +164,12 @@ const SPACE_ROW: CSSProperties = {
   paddingBottom: 10,
 };
 
+const ADDRESS_FORM_STYLE: CSSProperties = {
+  ...SPACE_ROW,
+  width: '100%',
+  margin: 0,
+}
+
 const IMAGE_CONTAINER: CSSProperties = {
   ...SPACE_ROW,
   display: 'flex',
@@ -361,7 +367,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
 
   const addressForm = (
     <>
-      <Row>
+      <Row style={ADDRESS_FORM_STYLE}>
         <Col breakPoint={{ md: 6 }}>
           <Field label={t('addressNo')} name={'addressNo'} defaultValue={''}>
             {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
@@ -381,7 +387,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
 
       <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} />
 
-      <Row>
+      <Row style={ADDRESS_FORM_STYLE}>
         <Col>
           <FormFooter>
             <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
@@ -518,17 +524,6 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                         </Col>
                       );
                     })}
-
-                    <Col style={{ marginTop: 20 }}>
-                      <FormEdit
-                        label={`${t('status')} :`}
-                        value={'Wait for Approval'}
-                        valueStyle={{ color: 'orangered' }}
-                        type={'dropdown'}
-                        dropDownOption={statusOptions}
-                        handleSave={handleSave}
-                      />
-                    </Col>
                   </Row>
                 </Col>
 
@@ -585,9 +580,8 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                     )}
                   </div>
                 </Col>
+                {(isOpenDocumentAddress) && addressForm}
               </Row>
-
-              {(isOpenDocumentAddress) && addressForm}
             </form>
           )}
         </Form>
