@@ -23,6 +23,7 @@ import { Checkbox } from '@atlaskit/checkbox';
 import { close } from 'react-icons-kit/fa/close';
 import { pencil } from 'react-icons-kit/fa/pencil';
 import UploadButton from '../../UploadButton';
+import Swal from 'sweetalert2';
 
 interface Props {
   id?: number;
@@ -415,13 +416,6 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                     dropDownOption={legalTypeOptions}
                     handleSave={handleSave}
                   />
-                  <FormEdit
-                    label={`${t('userType')} :`}
-                    value={'Shipper'}
-                    type={'dropdown'}
-                    dropDownOption={userTypeOptions}
-                    handleSave={handleSave}
-                  />
                   <FormEdit label={`${t('phoneNumber')} :`} value={'+66922211112'} handleSave={handleSave} />
                   <FormEdit
                     label={`${t('email')} :`}
@@ -467,7 +461,23 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                           <ListFile
                             fileName={file.name}
                             date={file.date}
-                            handleDelete={() => handleDeletFile(file.id)}
+                            handleDelete={() => {
+                              const red = '#E03616';
+                              const blue = '#3085D6';
+                              Swal.mixin({
+                                iconColor: red,
+                                confirmButtonColor: red,
+                                cancelButtonColor: blue,
+                                confirmButtonText: t('delete'),
+                                cancelButtonText: t('cancel'),
+                              }).fire({
+                                title: t('deleteConfirmAlertTitle'),
+                                titleText: t('deleteConfirmAlertText'),
+                                icon: 'warning',
+                                showCancelButton: true,
+                              }).then(({ isConfirmed }) => isConfirmed && handleDeletFile(file.id))
+                            }
+                            }
                           />
                         </Col>
                       );
