@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect, CSSProperties, useCallback, ChangeEvent } from 'react';
+import React, { useState, Fragment, useEffect, CSSProperties, useCallback, ChangeEvent, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
@@ -22,7 +22,6 @@ import { camera } from 'react-icons-kit/fa/camera';
 import { Checkbox } from '@atlaskit/checkbox';
 import { close } from 'react-icons-kit/fa/close';
 import { pencil } from 'react-icons-kit/fa/pencil';
-import Swal from 'sweetalert2';
 
 interface Props {
   id?: number;
@@ -164,12 +163,6 @@ const SPACE_ROW: CSSProperties = {
   paddingBottom: 10,
 };
 
-const ADDRESS_FORM_STYLE: CSSProperties = {
-  ...SPACE_ROW,
-  width: '100%',
-  margin: 0,
-}
-
 const IMAGE_CONTAINER: CSSProperties = {
   ...SPACE_ROW,
   display: 'flex',
@@ -211,9 +204,9 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     // }
   };
 
-  const handleUploadFile = (event: any) => {
+  const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
-    setFile(file);
+    file && setFile(file);
   };
 
   const handleDeletFile = (id: number | string) => {
@@ -365,45 +358,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     },
   ];
 
-  const addressForm = (
-    <>
-      <Row style={ADDRESS_FORM_STYLE}>
-        <Col breakPoint={{ md: 6 }}>
-          <Field label={t('addressNo')} name={'addressNo'} defaultValue={''}>
-            {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
-          </Field>
-        </Col>
-        <Col breakPoint={{ md: 3 }}>
-          <Field label={t('alley')} name={'alley'} defaultValue={''}>
-            {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
-          </Field>
-        </Col>
-        <Col breakPoint={{ md: 3 }}>
-          <Field label={t('street')} name={'street'} defaultValue={''}>
-            {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
-          </Field>
-        </Col>
-      </Row>
-
-      <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} />
-
-      <Row style={ADDRESS_FORM_STYLE}>
-        <Col>
-          <FormFooter>
-            <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
-              <BackText>{t('back')}</BackText>
-            </Button>
-            <Button type="button" style={BottomSubmitStyled} onClick={() => handleConfirmAddress()}>
-              <SubmitText>
-                <Icon icon={save} size={20} style={{ paddingRight: 5, color: '#000' }} />
-                {t('confirm')}
-              </SubmitText>
-            </Button>
-          </FormFooter>
-        </Col>
-      </Row>
-    </>
-  );
+  const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <div>
@@ -461,6 +416,13 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                     dropDownOption={legalTypeOptions}
                     handleSave={handleSave}
                   />
+                  <FormEdit
+                    label={`${t('userType')} :`}
+                    value={'Shipper'}
+                    type={'dropdown'}
+                    dropDownOption={userTypeOptions}
+                    handleSave={handleSave}
+                  />
                   <FormEdit label={`${t('phoneNumber')} :`} value={'+66922211112'} handleSave={handleSave} />
                   <FormEdit
                     label={`${t('email')} :`}
@@ -480,7 +442,18 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                       <Field label="" name="uploadFile" defaultValue="">
                         {({ fieldProps, error, meta: { valid } }: any) => (
                           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <MaterialButton
+                            <Button
+                              appearance="primary"
+                              onClick={() => uploadInputRef.current?.click()} >
+                              {t('upload')}
+                            </Button>
+                            <input
+                              type="file"
+                              style={{ display: 'none' }}
+                              onChange={e => handleUploadFile(e)}
+                              accept=".pdf"
+                              ref={uploadInputRef} />
+                            {/* <MaterialButton
                               variant="contained"
                               component="label"
                               onChange={(event: any) => handleUploadFile(event)}
@@ -488,7 +461,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                               <input type={'file'} accept={'.pdf'} />
                               <Icon icon={upload} size={20} />
                               <TextUpload>{t('upload')}</TextUpload>
-                            </MaterialButton>
+                            </MaterialButton> */}
                             {/* <ShowFileName>{file?.name || ''}</ShowFileName> */}
                           </div>
                         )}
@@ -503,27 +476,12 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                           <ListFile
                             fileName={file.name}
                             date={file.date}
-                            handleDelete={() => {
-                              const redButtonColor = '#E03616';
-                              Swal.mixin({
-                                iconColor: redButtonColor,
-                                confirmButtonColor: redButtonColor,
-                                cancelButtonColor: '#3085D6',
-                                confirmButtonText: t('delete'),
-                                cancelButtonText: t('cancel'),
-                              }).fire({
-                                title: t('deleteConfirmAlertTitle'),
-                                text: t("deleteConfirmAlertText"),
-                                icon: 'warning',
-                                showCancelButton: true,
-                              }).then(({ isConfirmed }) => {
-                                isConfirmed && handleDeletFile(file.id);
-                              })
-                            }}
+                            handleDelete={() => handleDeletFile(file.id)}
                           />
                         </Col>
                       );
                     })}
+
                     <Col style={{ marginTop: 20 }}>
                       <FormEdit
                         label={`${t('status')} :`}
@@ -555,8 +513,6 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                   </div>
                 </Col>
 
-                {isOpenGeneralAddress && addressForm}
-
                 <Col style={SPACE_ROW}>
                   <Name style={{ marginBottom: 12 }}>{t('documentDeliverAddr')}</Name>
                   <div style={ADDRESS_WITH_CHECKBOX}>
@@ -572,26 +528,63 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                         size={'large'}
                       />
                     </div>
-                    {!isChecked && (
-                      <div style={AddressStyled}>
-                        <Address>
-                          {'91/1 Songphol Soi 9, Tambon Lam Phaya, Mueang Nakhon Pathom District, Nakhon Pathom 73000'}
-                        </Address>
-                        <button
-                          style={BUTTON}
-                          onClick={() => {
-                            setIsOpenDocumentAddress((currentValue) => !currentValue);
-                            setIsOpenGeneralAddress(false);
-                          }}
-                        >
-                          <Icon icon={isOpenDocumentAddress ? close : pencil} style={ICON_STYLED} size={22} />
-                        </button>
-                      </div>
-                    )}
+                    <div style={AddressStyled}>
+                      <Address>
+                        {'91/1 Songphol Soi 9, Tambon Lam Phaya, Mueang Nakhon Pathom District, Nakhon Pathom 73000'}
+                      </Address>
+                      <button
+                        style={BUTTON}
+                        onClick={() => {
+                          setIsOpenDocumentAddress((currentValue) => !currentValue);
+                          setIsOpenGeneralAddress(false);
+                        }}
+                      >
+                        <Icon icon={isOpenDocumentAddress ? close : pencil} style={ICON_STYLED} size={22} />
+                      </button>
+                    </div>
                   </div>
                 </Col>
-                {(isOpenDocumentAddress) && addressForm}
               </Row>
+
+              {(isOpenGeneralAddress || isOpenDocumentAddress) && (
+                <>
+                  <Row>
+                    <Col breakPoint={{ md: 6 }}>
+                      <Field label={t('addressNo')} name={'addressNo'} defaultValue={''}>
+                        {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
+                      </Field>
+                    </Col>
+                    <Col breakPoint={{ md: 3 }}>
+                      <Field label={t('alley')} name={'alley'} defaultValue={''}>
+                        {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
+                      </Field>
+                    </Col>
+                    <Col breakPoint={{ md: 3 }}>
+                      <Field label={t('street')} name={'street'} defaultValue={''}>
+                        {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
+                      </Field>
+                    </Col>
+                  </Row>
+
+                  <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} />
+
+                  <Row>
+                    <Col>
+                      <FormFooter>
+                        <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
+                          <BackText>{t('back')}</BackText>
+                        </Button>
+                        <Button type="button" style={BottomSubmitStyled} onClick={() => handleConfirmAddress()}>
+                          <SubmitText>
+                            <Icon icon={save} size={20} style={{ paddingRight: 5, color: '#000' }} />
+                            {t('confirm')}
+                          </SubmitText>
+                        </Button>
+                      </FormFooter>
+                    </Col>
+                  </Row>
+                </>
+              )}
             </form>
           )}
         </Form>
