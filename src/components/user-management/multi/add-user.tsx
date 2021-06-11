@@ -21,9 +21,9 @@ import Form, { ErrorMessage, Field, FormFooter, ValidMessage } from '@atlaskit/f
 import Textfield from '@atlaskit/textfield';
 import { RadioGroup } from '@atlaskit/radio';
 import { OptionsPropType } from '@atlaskit/radio/types';
-// import { Browser } from '@atlaskit/media-picker';
+import UploadButton from '../../UploadButton';
 
-interface Props {}
+interface Props { }
 
 interface FileProps {
   lastModified?: number;
@@ -178,9 +178,9 @@ const AddUser: React.FC<Props> = observer(() => {
     console.log('form state', formState);
   };
 
-  const handleUploadFile = (event: any) => {
+  const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
-    setFile(file);
+    file && setFile(file);
   };
 
   return (
@@ -282,6 +282,14 @@ const AddUser: React.FC<Props> = observer(() => {
                 </Col>
               </Row>
 
+              {validatePassword && (
+                <Row>
+                  <Col style={{ textAlign: 'right' }}>
+                    <ValidatePassword>{`** ${t('passwordNotMatch')}`}</ValidatePassword>
+                  </Col>
+                </Row>
+              )}
+
               <Row style={RowStyled}>
                 <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
                   <Field
@@ -291,30 +299,30 @@ const AddUser: React.FC<Props> = observer(() => {
                     defaultValue=""
                   >
                     {({ fieldProps, error, meta: { valid } }: any) => (
-                      <div style={{ display: 'flex' }}>
-                        {/* <Browser
-                          config={{
-                            multiple: false,
-                            fileExtensions: ['image/jpg', 'image/png'],
-                          }}
-                          isOpen={true}
-                          onBrowseFn={e => console.log('browse', e || '')}
-                          onCancelFn={e => console.log('cancel', e || '')}
-                          onUploadStart={e => console.log('upload start', e || '')}
-                          onPreviewUpdate={e => console.log('preview update', e || '')}
-                          onError={e => console.log('error', e || '')}
-                          onEnd={e => console.log('end', e || '')}
-                        /> */}
-                        <MaterialButton
-                          variant="contained"
-                          component="label"
-                          onChange={(event: any) => handleUploadFile(event)}
-                        >
-                          <Input type={'file'} />
-                          <Icon icon={upload} size={20} />
-                          <TextUpload>{t('upload')}</TextUpload>
-                        </MaterialButton>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <UploadButton
+                          accept=".pdf"
+                          onChange={handleUploadFile} />
                         <ShowFileName>{file?.name || ''}</ShowFileName>
+                      </div>
+                    )}
+                  </Field>
+                </Col>
+                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+                  <Field
+                    label={t('userType')}
+                    isRequired
+                    name="userType"
+                    // validate={validate}
+                    defaultValue=""
+                  >
+                    {({ fieldProps, error, meta: { valid } }: any) => (
+                      <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <RadioGroup
+                          options={userTypeOptions}
+                          // onChange={onChange}
+                          onChange={(event: any) => fieldProps.onChange(event)}
+                        />
                       </div>
                     )}
                   </Field>

@@ -83,7 +83,7 @@ const AutoCompleteTypeahead = function AutoCompleteTypeahead(props: AutoComplete
   };
 
   return (
-    <Row>
+    <Row style={{ width: '100%', margin: 0 }}>
       {/* {Object.keys(fieldsEnum).map((key: string) => { */}
       {data.map(({ type, label, breakPoint, isRequired }) => {
         return (

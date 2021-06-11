@@ -22,6 +22,7 @@ import { camera } from 'react-icons-kit/fa/camera';
 import { Checkbox } from '@atlaskit/checkbox';
 import { close } from 'react-icons-kit/fa/close';
 import { pencil } from 'react-icons-kit/fa/pencil';
+import UploadButton from '../../UploadButton';
 
 interface Props {
   id?: number;
@@ -204,9 +205,9 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     // }
   };
 
-  const handleUploadFile = (event: any) => {
+  const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
-    setFile(file);
+    file && setFile(file);
   };
 
   const handleDeletFile = (id: number | string) => {
@@ -440,7 +441,10 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                       <Field label="" name="uploadFile" defaultValue="">
                         {({ fieldProps, error, meta: { valid } }: any) => (
                           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <MaterialButton
+                            <UploadButton
+                              accept=".pdf"
+                              onChange={handleUploadFile} />
+                            {/* <MaterialButton
                               variant="contained"
                               component="label"
                               onChange={(event: any) => handleUploadFile(event)}
@@ -448,7 +452,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                               <input type={'file'} accept={'.pdf'} />
                               <Icon icon={upload} size={20} />
                               <TextUpload>{t('upload')}</TextUpload>
-                            </MaterialButton>
+                            </MaterialButton> */}
                             {/* <ShowFileName>{file?.name || ''}</ShowFileName> */}
                           </div>
                         )}
