@@ -517,6 +517,16 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                         </Col>
                       );
                     })}
+                    <Col style={{ marginTop: 20 }}>
+                      <FormEdit
+                        label={`${t('status')} :`}
+                        value={'Wait for Approval'}
+                        valueStyle={{ color: 'orangered' }}
+                        type={'dropdown'}
+                        dropDownOption={statusOptions}
+                        handleSave={handleSave}
+                      />
+                    </Col>
                   </Row>
                 </Col>
 
