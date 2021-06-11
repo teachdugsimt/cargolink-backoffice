@@ -504,9 +504,15 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                             fileName={file.name}
                             date={file.date}
                             handleDelete={() => {
-                              Swal.fire({
+                              const redButtonColor = '#E03616';
+                              Swal.mixin({
+                                iconColor: redButtonColor,
+                                confirmButtonColor: redButtonColor,
+                                cancelButtonColor: '#3085D6',
+                                confirmButtonText: 'Delete',
+                              }).fire({
                                 title: 'Delete file',
-                                text: 'Are you sure',
+                                text: 'Are you sure ?',
                                 icon: 'warning',
                                 showCancelButton: true,
                               }).then(({ isConfirmed }) => {
