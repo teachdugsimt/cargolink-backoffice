@@ -360,6 +360,46 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     },
   ];
 
+  const addressForm = (
+    <>
+      <Row style={{ margin: 0, width: '100%' }}>
+        <Col breakPoint={{ md: 6 }}>
+          <Field label={t('addressNo')} name={'addressNo'} defaultValue={''}>
+            {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
+          </Field>
+        </Col>
+        <Col breakPoint={{ md: 3 }}>
+          <Field label={t('alley')} name={'alley'} defaultValue={''}>
+            {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
+          </Field>
+        </Col>
+        <Col breakPoint={{ md: 3 }}>
+          <Field label={t('street')} name={'street'} defaultValue={''}>
+            {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
+          </Field>
+        </Col>
+      </Row>
+
+      <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} />
+
+      <Row style={{ margin: 0, width: '100%' }}>
+        <Col>
+          <FormFooter>
+            <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
+              <BackText>{t('back')}</BackText>
+            </Button>
+            <Button type="button" style={BottomSubmitStyled} onClick={() => handleConfirmAddress()}>
+              <SubmitText>
+                <Icon icon={save} size={20} style={{ paddingRight: 5, color: '#000' }} />
+                {t('confirm')}
+              </SubmitText>
+            </Button>
+          </FormFooter>
+        </Col>
+      </Row>
+    </>
+  );
+
   return (
     <div>
       <CardHeader>
@@ -514,6 +554,8 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                   </div>
                 </Col>
 
+                {isOpenGeneralAddress && addressForm}
+
                 <Col style={SPACE_ROW}>
                   <Name style={{ marginBottom: 12 }}>{t('documentDeliverAddr')}</Name>
                   <div style={ADDRESS_WITH_CHECKBOX}>
@@ -529,62 +571,28 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                         size={'large'}
                       />
                     </div>
-                    <div style={AddressStyled}>
-                      <Address>
-                        {'91/1 Songphol Soi 9, Tambon Lam Phaya, Mueang Nakhon Pathom District, Nakhon Pathom 73000'}
-                      </Address>
-                      <button
-                        style={BUTTON}
-                        onClick={() => {
-                          setIsOpenDocumentAddress((currentValue) => !currentValue);
-                          setIsOpenGeneralAddress(false);
-                        }}
-                      >
-                        <Icon icon={isOpenDocumentAddress ? close : pencil} style={ICON_STYLED} size={22} />
-                      </button>
-                    </div>
+                    {!isChecked && (
+                      <div style={AddressStyled}>
+                        <Address>
+                          {'91/1 Songphol Soi 9, Tambon Lam Phaya, Mueang Nakhon Pathom District, Nakhon Pathom 73000'}
+                        </Address>
+                        <button
+                          style={BUTTON}
+                          onClick={() => {
+                            setIsOpenDocumentAddress((currentValue) => !currentValue);
+                            setIsOpenGeneralAddress(false);
+                          }}
+                        >
+                          <Icon icon={isOpenDocumentAddress ? close : pencil} style={ICON_STYLED} size={22} />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </Col>
               </Row>
 
-              {(isOpenGeneralAddress || isOpenDocumentAddress) && (
-                <>
-                  <Row>
-                    <Col breakPoint={{ md: 6 }}>
-                      <Field label={t('addressNo')} name={'addressNo'} defaultValue={''}>
-                        {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
-                      </Field>
-                    </Col>
-                    <Col breakPoint={{ md: 3 }}>
-                      <Field label={t('alley')} name={'alley'} defaultValue={''}>
-                        {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
-                      </Field>
-                    </Col>
-                    <Col breakPoint={{ md: 3 }}>
-                      <Field label={t('street')} name={'street'} defaultValue={''}>
-                        {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
-                      </Field>
-                    </Col>
-                  </Row>
-
-                  <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} />
-
-                  <Row>
-                    <Col>
-                      <FormFooter>
-                        <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
-                          <BackText>{t('back')}</BackText>
-                        </Button>
-                        <Button type="button" style={BottomSubmitStyled} onClick={() => handleConfirmAddress()}>
-                          <SubmitText>
-                            <Icon icon={save} size={20} style={{ paddingRight: 5, color: '#000' }} />
-                            {t('confirm')}
-                          </SubmitText>
-                        </Button>
-                      </FormFooter>
-                    </Col>
-                  </Row>
-                </>
+              {(isOpenDocumentAddress) && (
+                addressForm
               )}
             </form>
           )}
