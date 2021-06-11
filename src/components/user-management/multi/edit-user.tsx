@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect, CSSProperties, useCallback, ChangeEvent, useRef } from 'react';
+import React, { useState, Fragment, useEffect, CSSProperties, useCallback, ChangeEvent } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
@@ -22,6 +22,7 @@ import { camera } from 'react-icons-kit/fa/camera';
 import { Checkbox } from '@atlaskit/checkbox';
 import { close } from 'react-icons-kit/fa/close';
 import { pencil } from 'react-icons-kit/fa/pencil';
+import UploadButton from '../../UploadButton';
 
 interface Props {
   id?: number;
@@ -358,8 +359,6 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     },
   ];
 
-  const uploadInputRef = useRef<HTMLInputElement | null>(null);
-
   return (
     <div>
       <CardHeader>
@@ -442,17 +441,9 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                       <Field label="" name="uploadFile" defaultValue="">
                         {({ fieldProps, error, meta: { valid } }: any) => (
                           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <Button
-                              appearance="primary"
-                              onClick={() => uploadInputRef.current?.click()} >
-                              {t('upload')}
-                            </Button>
-                            <input
-                              type="file"
-                              style={{ display: 'none' }}
-                              onChange={e => handleUploadFile(e)}
+                            <UploadButton
                               accept=".pdf"
-                              ref={uploadInputRef} />
+                              onChange={handleUploadFile} />
                             {/* <MaterialButton
                               variant="contained"
                               component="label"
