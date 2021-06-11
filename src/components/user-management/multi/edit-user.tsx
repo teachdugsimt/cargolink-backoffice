@@ -461,13 +461,6 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                     dropDownOption={legalTypeOptions}
                     handleSave={handleSave}
                   />
-                  <FormEdit
-                    label={`${t('userType')} :`}
-                    value={'Shipper'}
-                    type={'dropdown'}
-                    dropDownOption={userTypeOptions}
-                    handleSave={handleSave}
-                  />
                   <FormEdit label={`${t('phoneNumber')} :`} value={'+66922211112'} handleSave={handleSave} />
                   <FormEdit
                     label={`${t('email')} :`}
