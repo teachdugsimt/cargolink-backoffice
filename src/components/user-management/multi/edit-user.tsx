@@ -509,10 +509,11 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                                 iconColor: redButtonColor,
                                 confirmButtonColor: redButtonColor,
                                 cancelButtonColor: '#3085D6',
-                                confirmButtonText: 'Delete',
+                                confirmButtonText: t('delete'),
+                                cancelButtonText: t('cancel'),
                               }).fire({
-                                title: 'Delete file',
-                                text: 'Are you sure ?',
+                                title: t('deleteConfirmAlertTitle'),
+                                text: t("deleteConfirmAlertText"),
                                 icon: 'warning',
                                 showCancelButton: true,
                               }).then(({ isConfirmed }) => {

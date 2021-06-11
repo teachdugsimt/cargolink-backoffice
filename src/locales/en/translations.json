@@ -135,5 +135,9 @@
   "alley": "Alley",
   "street": "Street",
   "sameGeneralAddress": "Same as general address",
-  "invalidEmail": "Invalid email"
+  "invalidEmail": "Invalid email",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "deleteConfirmAlertTitle": "Delete file",
+  "deleteConfirmAlertText": "Are you sure ?"
 }

@@ -135,5 +135,9 @@
   "alley": "ซอย",
   "street": "ถนน",
   "sameGeneralAddress": "เหมือนกับที่อยู่ทั่วไป",
-  "invalidEmail": "อีเมลไม่ถูกต้อง"
+  "invalidEmail": "อีเมลไม่ถูกต้อง",
+  "delete": "ลบ",
+  "cancel": "ยกเลิก",
+  "deleteConfirmAlertTitle": "ลบไฟล์",
+  "deleteConfirmAlertText": "ยืนยันการลบ ?"
 }
