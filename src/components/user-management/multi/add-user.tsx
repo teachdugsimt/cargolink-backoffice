@@ -308,25 +308,6 @@ const AddUser: React.FC<Props> = observer(() => {
                     )}
                   </Field>
                 </Col>
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
-                  <Field
-                    label={t('userType')}
-                    isRequired
-                    name="userType"
-                    // validate={validate}
-                    defaultValue=""
-                  >
-                    {({ fieldProps, error, meta: { valid } }: any) => (
-                      <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        <RadioGroup
-                          options={userTypeOptions}
-                          // onChange={onChange}
-                          onChange={(event: any) => fieldProps.onChange(event)}
-                        />
-                      </div>
-                    )}
-                  </Field>
-                </Col>
               </Row>
 
               <Row style={{ display: 'flex', justifyContent: 'flex-end' }}>
