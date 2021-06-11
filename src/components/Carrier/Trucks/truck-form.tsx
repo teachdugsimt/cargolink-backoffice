@@ -179,7 +179,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
-            isLoading={false}
+            isLoading={carrierStore.loading}
             // isFixedSize
             // defaultSortKey="id"
             defaultSortOrder="DESC"

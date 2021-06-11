@@ -23,13 +23,13 @@ const TruckForApproval: React.FC<{}> = observer(({}) => {
 
   useEffect(() => {
     const { loading } = carrierStore;
-    setAlertSetting({
-      icon: '',
-      show: loading,
-      type: 'loading',
-      title: '',
-      content: t('LOADING'),
-    });
+    // setAlertSetting({
+    //   icon: '',
+    //   show: loading,
+    //   type: 'loading',
+    //   title: '',
+    //   content: t('LOADING'),
+    // });
   }, [carrierStore.loading]);
 
   useEffect(() => {

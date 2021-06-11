@@ -41,13 +41,13 @@ const MultipleRole: React.FC<Props> = observer(() => {
 
   useEffect(() => {
     const { loading } = userStore;
-    setAlertSetting({
-      icon: '',
-      show: loading,
-      type: 'loading',
-      title: '',
-      content: t('LOADING'),
-    });
+    // setAlertSetting({
+    //   icon: '',
+    //   show: loading,
+    //   type: 'loading',
+    //   title: '',
+    //   content: t('LOADING'),
+    // });
   }, [userStore.loading]);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
-            isLoading={false}
+            isLoading={userStore.loading}
             // isFixedSize
             // defaultSortKey="id"
             defaultSortOrder="DESC"

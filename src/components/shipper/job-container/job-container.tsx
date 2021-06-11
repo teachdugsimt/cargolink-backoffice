@@ -51,13 +51,13 @@ const JobContainer: React.FC<Props> = observer(() => {
 
   useEffect(() => {
     const { loading } = shipperStore;
-    setAlertSetting({
-      icon: '',
-      show: loading,
-      type: 'loading',
-      title: '',
-      content: t('LOADING'),
-    });
+    // setAlertSetting({
+    //   icon: '',
+    //   show: loading,
+    //   type: 'loading',
+    //   title: '',
+    //   content: t('LOADING'),
+    // });
   }, [shipperStore.loading]);
 
   useEffect(() => {
@@ -272,7 +272,7 @@ const JobContainer: React.FC<Props> = observer(() => {
             rowsPerPage={10}
             defaultPage={1}
             loadingSpinnerSize="large"
-            isLoading={false}
+            isLoading={shipperStore.loading}
             // isFixedSize
             // defaultSortKey="id"
             defaultSortOrder="DESC"
