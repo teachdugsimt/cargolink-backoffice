@@ -9,6 +9,7 @@ import Textfield from '@atlaskit/textfield';
 import Select from '@atlaskit/select';
 import { pencil } from 'react-icons-kit/fa/pencil';
 import { check } from 'react-icons-kit/fa/check';
+import { close } from 'react-icons-kit/fa/close';
 import { ErrorMessage } from '@atlaskit/form';
 
 const TextInLine = styled.div`
@@ -94,7 +95,7 @@ export function FormEdit(props: FormEditProps) {
   const integrateLableStyle = { ...TEXT_LABEL, ...labelStyle };
   const integrateValueStyle = { ...TEXT_VALUE, ...valueStyle };
 
-  const onSave = handleSave ? (val: string | number | object) => handleSave(val) : () => {};
+  const onSave = handleSave ? (val: string | number | object) => handleSave(val) : () => { };
 
   return (
     <div style={{ ...containerStyle }}>
@@ -132,9 +133,14 @@ export function FormEdit(props: FormEditProps) {
         )}
         {showEditIcon &&
           (!showForm ? (
-            <button style={BUTTON} onClick={handleClick}>
-              <Icon icon={pencil} style={ICON_STYLED} size={22} />
-            </button>
+            <>
+              <button style={BUTTON} onClick={() => setShowForm(false)}>
+                <Icon icon={close} style={ICON_STYLED} size={22} />
+              </button>
+              <button style={{ ...BUTTON, marginLeft: 0 }} onClick={handleClick}>
+                <Icon icon={pencil} style={ICON_STYLED} size={22} />
+              </button>
+            </>
           ) : (
             <button style={BUTTON} onClick={handleSubmit}>
               <Icon icon={check} style={ICON_STYLED} size={22} />
