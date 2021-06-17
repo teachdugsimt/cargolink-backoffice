@@ -68,7 +68,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
   useEffect(() => {
     const data_user = JSON.parse(JSON.stringify(userStore.data_user));
     if (data_user?.content) {
-      const rows = createRow(data_user.content, loginStore.language);
+      const rows = createRow(data_user.content, loginStore.language, t);
       setRowData(rows);
     }
   }, [userStore.data_user, userStore.data_user?.reRender, userStore.data_user?.content?.length]);

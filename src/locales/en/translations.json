@@ -139,5 +139,8 @@
   "delete": "Delete",
   "cancel": "Cancel",
   "deleteConfirmAlertTitle": "Delete file",
-  "deleteConfirmAlertText": "Are you sure ?"
+  "deleteConfirmAlertText": "Are you sure ?",
+  "uploadLink": "Upload Link",
+  "copy": "copy",
+  "URLCopied": "URL has been copied."
 }

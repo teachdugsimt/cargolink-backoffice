@@ -139,5 +139,8 @@
   "delete": "ลบ",
   "cancel": "ยกเลิก",
   "deleteConfirmAlertTitle": "ลบไฟล์",
-  "deleteConfirmAlertText": "ยืนยันการลบ ?"
+  "deleteConfirmAlertText": "ยืนยันการลบ ?",
+  "uploadLink": "ลิงก์อัพโหลด",
+  "copy": "คัดลอก",
+  "URLCopied": "อัพโหลด URL แล้ว"
 }
