@@ -144,5 +144,9 @@
   "baht": "Baht",
   "priceData": "Price Information",
   "perTrip": "per trip",
-  "perTon": "per ton"
+  "perTon": "per ton",
+  "uploadLink": "Upload Link",
+  "copy": "copy",
+  "URLCopied": "URL has been copied.",
+  "userUploadTitle": "Upload Documents"
 }

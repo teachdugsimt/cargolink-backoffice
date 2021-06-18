@@ -145,5 +145,9 @@
   "priceData": "ข้อมูลราคา",
   "deliveryPrice": "อัตราค่าขนส่ง",
   "perTrip": "ต่อเที่ยว",
-  "perTon": "ต่อตัน"
+  "perTon": "ต่อตัน",
+  "uploadLink": "ลิงก์อัพโหลด",
+  "copy": "คัดลอก",
+  "URLCopied": "อัพโหลด URL แล้ว",
+  "userUploadTitle": "อัพโหลดเอกสาร"
 }
