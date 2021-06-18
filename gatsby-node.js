@@ -12,7 +12,7 @@
 exports.onCreatePage = ({ page, actions }) => {
   const { createPage } = actions;
 
-  if (page.path.match(/auth/)) {
+  if (page.path.match(/auth/) || page.path.match(/user\/upload/)) {
     page.context.layout = 'auth';
     createPage(page);
   }

@@ -60,8 +60,7 @@ const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }>
         if (token) {
             let path = _getPathFromChildren(children)
             // navigate(_getPathFromChildren(children)) 
-        }
-        else if(!urlPath.substr('/auth/')) navigate('/auth/login');
+        } else if (!urlPath.substr('/auth/') && !urlPath.startsWith('/user/upload')) navigate('/auth/login');
         // }, 500);
     }, [loginStore.data_signin.idToken, key])
 
