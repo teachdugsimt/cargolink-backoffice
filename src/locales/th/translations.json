@@ -62,7 +62,7 @@
   "consigneeName":"ชื่อผู้ขึ้นสินค้า",
   "fieldConsigneeName":"ต้องระบุชื่อผู้ขึ้นสินค้าในฟิลด์นี้",
   "tipper":"รถมีที่ดั้มหรือไม่?",
-  "stallHeight":"ความสูงของคอกรถ (หน่วยเป็นเมตร)",
+  "stallHeight":"ความสูงของคอกรถ",
   "fieldStallHeight":"ต้องระบุความสูงในฟิลด์นี้",
   "registrationNumber":"เลขทะเบียนรถ",
   "fieldRegistrationNumber":"ต้องระบุเลขทะเบียนรถในฟิลด์นี้",

@@ -161,7 +161,7 @@ const TruckForm: React.FC<{ rows: any; alertSetting: any }> = observer(({ rows, 
             }}
             onClick={() => {
               setSubmit(true);
-              navigate('/add-truck');
+              navigate('/vehicles/add');
             }}
           >
             <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} /> {t('addNewTruck')}

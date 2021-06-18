@@ -16,8 +16,10 @@ import { EvaIcon } from '@paljs/ui/Icon';
 import '../../../Layouts/css/style.css';
 import Row from '@paljs/ui/Row';
 import Col from '@paljs/ui/Col';
+import Toggle from '@atlaskit/toggle';
+import { FormFooter } from '@atlaskit/form';
 
-interface Props {}
+interface Props { }
 
 const userOptions: any = [
   { value: 'virachai', label: 'virachai' },
@@ -231,130 +233,140 @@ const AddTruck: React.FC<Props> = observer(() => {
     }
   };
 
+  const Required = <span style={{ color: '#FF3D71' }}>*</span>;
+
   return (
-    <Card>
+    <Card style={{ boxShadow: 'none' }}>
       <Alert setting={alertSetting} />
       <CardHeader>
         <span>{t('addDataCar')}</span>
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)} className="form-add-data">
-          <p>
-            {t('user')} <span style={{ color: '#ff3d71' }}>*</span>
-          </p>
-          <Controller
-            as={
-              <Select
-                options={userOptions}
-                status={errors.user ? 'Danger' : 'Basic'}
-                placeholder={t('pleaseselect')}
-                fullWidth
-              />
-            }
-            id="user"
-            control={control}
-            valueName="selected"
-            rules={{ required: 'Truck type cannot be null.' }}
-            name="user"
-            ref={register({ required: true })}
-            aria-invalid={errors.user ? 'true' : 'false'}
-          />
-          {errors.user && (
-            <span id="user" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('user')}
-            </span>
-          )}
-          <p>
-            {t('typeCar')} <span style={{ color: '#ff3d71' }}>*</span>
-          </p>
-          <Controller
-            as={({ onChange, value }) => {
-              return (
-                <Select
-                  options={truckTypeOptions}
-                  status={errors.truckType ? 'Danger' : 'Basic'}
-                  placeholder={t('pleaseselect')}
-                  fullWidth
-                  value={value}
-                  onChange={(event: any) => {
-                    onChange(event);
-                    onChangeTruckType(event);
-                  }}
-                />
-              );
-            }}
-            id="truckType"
-            control={control}
-            valueName="selected"
-            rules={{ required: 'Truck type cannot be null.' }}
-            name="truckType"
-            ref={register({ required: true })}
-            aria-invalid={errors.truckType ? 'true' : 'false'}
-          />
-          {errors.truckType && (
-            <span id="fieldTruckType" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldTruckType')}
-            </span>
-          )}
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <p>{t('tipper')}</p>
-            <Switch
-              id="tipper"
-              checked={checkbox}
-              onChange={() => setCheckbox(!checkbox)}
-              disabled={valueTruck == 26 || valueTruck == 42 || valueTruck == 36 ? false : true}
-              color="primary"
-              style={{ color: checkbox ? '#00B132' : '' }}
-            />
-          </div>
-          <p>{t('stallHeight')}</p>
-          <Controller
-            as={
-              <Select
-                options={stallHeights}
-                status={errors.stallHeight ? 'Danger' : 'Basic'}
-                placeholder={t('pleaseselect')}
-                fullWidth
-                isDisabled={
-                  valueTruck == 49 || valueTruck == 3 || valueTruck == 26 || valueTruck == 42 || valueTruck == 36
-                    ? false
-                    : true
+          <Row>
+            <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+              <p>
+                {t('user')} {Required}
+              </p>
+              <Controller
+                as={
+                  <Select
+                    options={userOptions}
+                    status={errors.user ? 'Danger' : 'Basic'}
+                    placeholder={t('pleaseselect')}
+                    fullWidth
+                  />
                 }
+                id="user"
+                control={control}
+                valueName="selected"
+                rules={{ required: 'Truck type cannot be null.' }}
+                name="user"
+                ref={register({ required: true })}
+                aria-invalid={errors.user ? 'true' : 'false'}
               />
-            }
-            id="stallHeight"
-            control={control}
-            valueName="selected"
-            // rules={{ required: 'Stall height cannot be null.' }}
-            name="stallHeight"
-            // ref={register({ required: false })}
-            aria-invalid={errors.stallHeight ? 'true' : 'false'}
-          />
-          <p>
-            {t('amountWeight')} <span style={{ color: '#ff3d71' }}>*</span>
-          </p>
-          <input
-            id="loadingWeight"
-            className="new-input-component"
-            name="loadingWeight"
-            type="number"
-            step="0.01"
-            style={{
-              borderColor: errors.loadingWeight ? '#ff3d71' : '',
-            }}
-            ref={register({ required: true, min: 0 })}
-            aria-invalid={errors.loadingWeight ? 'true' : 'false'}
-          />
-          {errors.loadingWeight && errors.loadingWeight.type === 'required' && (
-            <span id="fieldWeight" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldWeight')}
-            </span>
-          )}
-          {errors.loadingWeight && errors.loadingWeight.type === 'min' && (
-            <span id="minWeight" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('minWeight')}
-            </span>
-          )}
+              {errors.user && (
+                <span id="user" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('user')}
+                </span>
+              )}
+            </Col>
+            <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+              <p>
+                {t('typeCar')} {Required}
+              </p>
+              <Controller
+                as={({ onChange, value }) => {
+                  return (
+                    <Select
+                      options={truckTypeOptions}
+                      status={errors.truckType ? 'Danger' : 'Basic'}
+                      placeholder={t('pleaseselect')}
+                      fullWidth
+                      value={value}
+                      onChange={(event: any) => {
+                        onChange(event);
+                        onChangeTruckType(event);
+                      }}
+                    />
+                  );
+                }}
+                id="truckType"
+                control={control}
+                valueName="selected"
+                rules={{ required: 'Truck type cannot be null.' }}
+                name="truckType"
+                ref={register({ required: true })}
+                aria-invalid={errors.truckType ? 'true' : 'false'}
+              />
+              {errors.truckType && (
+                <span id="fieldTruckType" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('fieldTruckType')}
+                </span>
+              )}
+            </Col>
+            <Col breakPoint={{ xs: 3, sm: 2, md: 2 }}>
+              <p>{t('tipper')}</p>
+              <Toggle
+                id="tipper"
+                size="large"
+                isChecked={checkbox}
+                onChange={() => setCheckbox(!checkbox)}
+                isDisabled={valueTruck == 26 || valueTruck == 42 || valueTruck == 36 ? false : true} />
+            </Col>
+            <Col breakPoint={{ xs: 9, sm: 4, md: 4 }}>
+              <p>{t('stallHeight')}</p>
+              <Controller
+                as={
+                  <Select
+                    options={stallHeights}
+                    status={errors.stallHeight ? 'Danger' : 'Basic'}
+                    placeholder={t('pleaseselect')}
+                    fullWidth
+                    isDisabled={
+                      valueTruck == 49 || valueTruck == 3 || valueTruck == 26 || valueTruck == 42 || valueTruck == 36
+                        ? false
+                        : true
+                    }
+                  />
+                }
+                id="stallHeight"
+                control={control}
+                valueName="selected"
+                // rules={{ required: 'Stall height cannot be null.' }}
+                name="stallHeight"
+                // ref={register({ required: false })}
+                aria-invalid={errors.stallHeight ? 'true' : 'false'}
+              />
+            </Col>
+            <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+              <p>
+                {t('amountWeight')} <span style={{ color: '#ff3d71' }}>*</span>
+              </p>
+              <input
+                id="loadingWeight"
+                className="new-input-component"
+                name="loadingWeight"
+                type="number"
+                step="0.01"
+                style={{
+                  borderColor: errors.loadingWeight ? '#ff3d71' : '',
+                }}
+                ref={register({ required: true, min: 0 })}
+                aria-invalid={errors.loadingWeight ? 'true' : 'false'}
+              />
+              {errors.loadingWeight && errors.loadingWeight.type === 'required' && (
+                <span id="fieldWeight" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('fieldWeight')}
+                </span>
+              )}
+              {errors.loadingWeight && errors.loadingWeight.type === 'min' && (
+                <span id="minWeight" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('minWeight')}
+                </span>
+              )}
+            </Col>
+          </Row>
           <hr style={{ margin: '1.125rem 0 0' }} />
           <div style={{ display: 'flex' }}>
             <p style={{ fontWeight: 'bold', marginRight: 5 }}>ข้อมูลรถของคุณ: </p>
@@ -500,12 +512,18 @@ const AddTruck: React.FC<Props> = observer(() => {
                       valueName="selected"
                       // rules={{ required: 'Province cannot be null.' }}
                       name={`zones[${index}].province`}
-                      // ref={register({ required: true })}
-                      // aria-invalid={errors.province ? 'true' : 'false'}
+                    // ref={register({ required: true })}
+                    // aria-invalid={errors.province ? 'true' : 'false'}
                     />
                   </Col>
                   {index == 0 ? (
-                    <></>
+                    <Button
+                      type="button"
+                      size="Small"
+                      style={{ visibility: 'hidden' }}
+                    >
+                      <EvaIcon name="minus-outline" />
+                    </Button>
                   ) : (
                     <Button
                       type="button"
@@ -532,30 +550,32 @@ const AddTruck: React.FC<Props> = observer(() => {
           </Button>
           <br />
           <br />
-          <div style={{ display: 'flex' }}>
-            <Button
-              id="back"
-              type="button"
-              status="Warning"
-              shape="Rectangle"
-              fullWidth
-              onClick={() => navigate('/trucks')}
-              style={{ marginRight: 10, backgroundColor: '#FBBC12', borderColor: '#FBBC12' }}
-            >
-              {t('back')}
-            </Button>
-            <Button
-              id="confirm"
-              status="Success"
-              type="submit"
-              shape="Rectangle"
-              fullWidth
-              style={{ backgroundColor: '#00B132', borderColor: '#00B132' }}
-              onClick={() => setToggle(true)}
-            >
-              {t('confirm')}
-            </Button>
-          </div>
+          <Row style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Col>
+              <FormFooter>
+                <Button
+                  type="button"
+                  style={{
+                    margin: '0 6px',
+                    border: '1px solid #FBBC12',
+                    backgroundColor: '#FBBC12',
+                  }}
+                  onClick={() => navigate('/vehicles')}>
+                  <span style={{ color: 'white' }}>{t('back')}</span>
+                </Button>
+                <Button
+                  type="submit"
+                  style={{
+                    margin: '0 6px',
+                    border: '1px solid #FBBC12',
+                    backgroundColor: '#FBBC12',
+                  }}
+                  onClick={() => setToggle(true)}>
+                  <span style={{ color: '#000' }}>{t('confirm')}</span>
+                </Button>
+              </FormFooter>
+            </Col>
+          </Row>
         </form>
       </CardBody>
     </Card>
