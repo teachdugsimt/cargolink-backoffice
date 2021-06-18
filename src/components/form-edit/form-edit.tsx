@@ -36,7 +36,7 @@ const TEXT_VALUE: CSSProperties = {
 const BUTTON: CSSProperties = {
   backgroundColor: 'transparent',
   border: 'none',
-  marginLeft: 12,
+  marginLeft: 6,
 };
 
 const INPUT_BOX: CSSProperties = {
@@ -126,7 +126,7 @@ export function FormEdit(props: FormEditProps) {
             value={inputValue}
             options={dropDownOption}
             styles={{
-              container: (base) => ({ ...base, minWidth: '50%' }),
+              container: (base) => ({ ...base, minWidth: '50%', marginLeft: 6 }),
             }}
             onChange={(e: any) => handleChangeDropdown(e)}
           />
