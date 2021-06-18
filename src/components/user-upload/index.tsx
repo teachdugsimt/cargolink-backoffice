@@ -32,7 +32,7 @@ interface IUploadPageProps {
   token: string | null;
 }
 const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageProps) => {
-  if (!token) navigate('/404');
+  if (!token) return <h1>Forbidden</h1>;
   const { t } = useTranslation();
 
   const [citizenIdFile, setCitizenIdFile] = useState<File>();
