@@ -139,5 +139,10 @@
   "delete": "Delete",
   "cancel": "Cancel",
   "deleteConfirmAlertTitle": "Delete file",
-  "deleteConfirmAlertText": "Are you sure ?"
+  "deleteConfirmAlertText": "Are you sure ?",
+  "price": "price",
+  "baht": "Baht",
+  "priceData": "Price Information",
+  "perTrip": "per trip",
+  "perTon": "per ton"
 }

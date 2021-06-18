@@ -17,8 +17,18 @@ import { defaultAlertSetting } from '../../simple-data';
 import { Box } from 'theme-ui';
 import { EvaIcon } from '@paljs/ui/Icon';
 import { Accordion, AccordionItem } from '@paljs/ui/Accordion';
+import Row from '@paljs/ui/Row';
+import Col from '@paljs/ui/Col';
+import PriceTypeToggle, { PriceTypeEnum } from './price-type-toggle';
+import { FormFooter } from '@atlaskit/form';
 import th from 'date-fns/locale/th';
 registerLocale('th', th);
+
+const userOptions: any = [
+  { value: 'virachai', label: 'virachai' },
+  { value: 'miww', label: 'Miww' },
+  { value: 'cargolink', label: 'cargolink' },
+];
 
 const AddJobs: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
@@ -165,268 +175,334 @@ const AddJobs: React.FC<{}> = observer(() => {
     control.setValue(`items[${indexx}].region`, region)
   }
 
+  const Required = <span style={{ color: '#FF3D71' }}>*</span>
+
   return (
     <div>
       <Alert setting={alertSetting} />
       <CardHeader>
-        <span>{t('addDataCar')}</span>
+        <span>{t('addNewJob')}</span>
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)} className="form-add-data">
-          <p>
-            {t('typeCar')} <span style={{ color: '#ff3d71' }}>*</span>
-          </p>
+          <Row>
+            <Col breakPoint={{ xs: 12, sm: 12, md: 4 }}>
+              <p>
+                {t('user')} {Required}
+              </p>
+              <Controller
+                as={
+                  <Select
+                    options={userOptions}
+                    status={errors.user ? 'Danger' : 'Basic'}
+                    placeholder={t('pleaseselect')}
+                    fullWidth
+                  />
+                }
+                id="user"
+                control={control}
+                valueName="selected"
+                rules={{ required: 'Truck type cannot be null.' }}
+                name="user"
+                ref={register({ required: true })}
+                aria-invalid={errors.user ? 'true' : 'false'}
+              />
+              {errors.user && (
+                <span id="user" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('user')}
+                </span>
+              )}
+            </Col>
+            <Col breakPoint={{ xs: 12, sm: 6, md: 4 }}>
+              <p>
+                {t('typeCar')} {Required}
+              </p>
+              <Controller
+                as={
+                  <Select
+                    options={truckTypeOptions}
+                    status={errors.truckType ? 'Danger' : 'Basic'}
+                    placeholder={t('pleaseselect')}
+                    fullWidth
+                  />
+                }
+                control={control}
+                valueName="selected"
+                rules={{ required: 'Truck Type cannot be null.' }}
+                name="truckType"
+                ref={register({ required: true })}
+                aria-invalid={errors.truckType ? 'true' : 'false'}
+              />
+              {errors.truckType && (
+                <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('fieldTruckType')}
+                </span>
+              )}
+            </Col>
+            <Col breakPoint={{ xs: 12, sm: 6, md: 4 }}>
+              <p>
+                {t('truckAmount')} {Required}
+              </p>
+              <input
+                className="new-input-component"
+                type="number"
+                style={{
+                  borderColor: errors.truckAmount ? '#ff3d71' : '',
+                }}
+                name="truckAmount"
+                id="truckAmount"
+                ref={register({ required: true })}
+                aria-invalid={errors.truckAmount ? 'true' : 'false'}
+              />
+              {errors.truckAmount && (
+                <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('fieldTruckAmount')}
+                </span>
+              )}
+            </Col>
+          </Row>
 
-          <Controller
-            as={
-              <Select
-                options={truckTypeOptions}
-                status={errors.truckType ? 'Danger' : 'Basic'}
-                placeholder={t('pleaseselect')}
-                fullWidth
-              />
-            }
-            control={control}
-            valueName="selected"
-            rules={{ required: 'Truck Type cannot be null.' }}
-            name="truckType"
-            ref={register({ required: true })}
-            aria-invalid={errors.truckType ? 'true' : 'false'}
-          />
-          {errors.truckType && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldTruckType')}
-            </span>
-          )}
-          <p>
-            {t('truckAmount')} <span style={{ color: '#ff3d71' }}>*</span>
-          </p>
-          <input
-            className="new-input-component"
-            type="number"
-            style={{
-              borderColor: errors.truckAmount ? '#ff3d71' : '',
-            }}
-            name="truckAmount"
-            id="truckAmount"
-            ref={register({ required: true })}
-            aria-invalid={errors.truckAmount ? 'true' : 'false'}
-          />
-          {errors.truckAmount && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldTruckAmount')}
-            </span>
-          )}
           <hr style={{ margin: '1.125rem 0' }} />
-          <p>
-            {t('productType')} <span style={{ color: '#ff3d71' }}>*</span>
-          </p>
-          <Controller
-            as={
-              <Select
-                options={productTypeIdOptions}
-                status={errors.productTypeId ? 'Danger' : 'Basic'}
-                placeholder={t('pleaseselect')}
-                fullWidth
+          <Row>
+            <Col breakPoint={{ xs: 12, sm: 12, md: 4 }}>
+              <p>
+                {t('productType')} {Required}
+              </p>
+              <Controller
+                as={
+                  <Select
+                    options={productTypeIdOptions}
+                    status={errors.productTypeId ? 'Danger' : 'Basic'}
+                    placeholder={t('pleaseselect')}
+                    fullWidth
+                  />
+                }
+                control={control}
+                valueName="selected"
+                rules={{ required: 'Product Type cannot be null.' }}
+                name="productTypeId"
+                ref={register({ required: true })}
+                aria-invalid={errors.productTypeId ? 'true' : 'false'}
               />
-            }
-            control={control}
-            valueName="selected"
-            rules={{ required: 'Product Type cannot be null.' }}
-            name="productTypeId"
-            ref={register({ required: true })}
-            aria-invalid={errors.productTypeId ? 'true' : 'false'}
-          />
-          {errors.productTypeId && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldproductType')}
-            </span>
-          )}
-          <p>
-            {t('productName')} <span style={{ color: '#ff3d71' }}>*</span>
+              {errors.productTypeId && (
+                <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('fieldproductType')}
+                </span>
+              )}
+            </Col>
+            <Col breakPoint={{ xs: 12, sm: 6, md: 4 }}>
+              <p>
+                {t('productName')} {Required}
+              </p>
+              <input
+                className="new-input-component"
+                type="text"
+                name="productName"
+                id="productName"
+                ref={register({ required: true })}
+                style={{
+                  borderColor: errors.productName ? '#ff3d71' : '',
+                }}
+                aria-invalid={errors.productName ? 'true' : 'false'}
+              />
+              {errors.productName && (
+                <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('fieldproductName')}
+                </span>
+              )}
+            </Col>
+            <Col breakPoint={{ xs: 12, sm: 6, md: 4 }}>
+              <p>
+                {t('amountWeight')} {Required}
+              </p>
+              <input
+                className="new-input-component"
+                type="number"
+                step="0.01"
+                name="weight"
+                id="weight"
+                style={{
+                  borderColor: errors.weight ? '#ff3d71' : '',
+                }}
+                ref={register({ required: true, min: 0 })}
+                aria-invalid={errors.weight ? 'true' : 'false'}
+              />
+              {errors.weight && errors.weight.type === 'required' && (
+                <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('fieldWeight')}
+                </span>
+              )}
+              {errors.weight && errors.weight.type === 'min' && (
+                <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('minWeight')}
+                </span>
+              )}
+            </Col>
+          </Row>
+
+          <hr style={{ margin: '1.125rem 0 0' }} />
+          <p style={{ fontWeight: 'bold', backgroundColor: '#253858', padding: 10, color: 'white' }}>
+            {t('priceData')}
           </p>
-          <input
-            className="new-input-component"
-            type="text"
-            name="productName"
-            id="productName"
-            ref={register({ required: true })}
-            style={{
-              borderColor: errors.productName ? '#ff3d71' : '',
-            }}
-            aria-invalid={errors.productName ? 'true' : 'false'}
-          />
-          {errors.productName && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldproductName')}
-            </span>
-          )}
-          <p>
-            {t('amountWeight')} <span style={{ color: '#ff3d71' }}>*</span>
-          </p>
-          <input
-            className="new-input-component"
-            type="number"
-            step="0.01"
-            name="weight"
-            id="weight"
-            style={{
-              borderColor: errors.weight ? '#ff3d71' : '',
-            }}
-            ref={register({ required: true, min: 0 })}
-            aria-invalid={errors.weight ? 'true' : 'false'}
-          />
-          {errors.weight && errors.weight.type === 'required' && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldWeight')}
-            </span>
-          )}
-          {errors.weight && errors.weight.type === 'min' && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('minWeight')}
-            </span>
-          )}
+          <Row>
+            <Col breakPoint={{ xs: 12, sm: 12, md: 12 }}>
+              <p style={{ fontWeight: 'bold' }}>
+                {t('deliveryPrice')} {Required}
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <p style={{ fontWeight: 'bold', marginRight: 5 }}>{t('price')}</p>
+                <Controller
+                  name="price"
+                  control={control}
+                  defaultValue={0}
+                  render={({ onChange, value }) => (
+                    <input
+                      className="new-input-component"
+                      type="number"
+                      value={value}
+                      style={{ width: 'clamp(200px, 200px, 100%)' }}
+                      onChange={(e) => onChange(e.target.value)}
+                    />
+                  )} />
+                <p style={{ fontWeight: 'bold', marginRight: 20, marginLeft: 5 }}>{t('baht')}</p>
+                <Controller
+                  name="priceType"
+                  control={control}
+                  defaultValue={PriceTypeEnum.PER_TRIP}
+                  render={({ onChange, value }) => (
+                    <PriceTypeToggle priceType={value} onChange={(changeTo) => onChange(changeTo)} />
+                  )}
+                />
+              </div>
+            </Col>
+          </Row>
+
           <hr style={{ margin: '1.125rem 0 0' }} />
           <p style={{ fontWeight: 'bold', backgroundColor: '#253858', padding: 10, color: 'white' }}>
             {t('pickUp')}
           </p>
-          <p>
-            {t('deliveryLocation')} <span style={{ color: '#ff3d71' }}>*</span>
-          </p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-          <Controller
-            name="pickupRegion"
-            control={control}
-            defaultValue=""
-            render={({ onChange, value }) => <></>}
-          />
-          <Controller
-            name="contactName"
-            control={control}
-            defaultValue=""
-            render={({ onChange, value }) => <>
-              <Accordion>
-                <AccordionItem uniqueKey={1} title={<Text tx={"selectLocation"} preset="content" />}>
-                  <GoogleMapWithSearch
-                    center={{ lat: 13.736717, lng: 100.523186 }}
-                    height="500px"
-                    zoom={15}
-                    onAddressChange={(addr, region) => onSubmitLocation(addr, region, { address: "contactName", region: "pickupRegion" })}
-                  />
-                </AccordionItem>
-              </Accordion>
-            </>}
-            register={register({ required: true })}
-            rules={{ required: 'Address can not null.' }}
-          />
-          {errors.contactName && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, marginTop: 20, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldDeliveryLocation')}
-            </span>
-          )}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          <p>
-            {t('dateStart')} <span style={{ color: '#ff3d71' }}>*</span>
-          </p>
-          <Box sx={{ maxWidth: '400px' }} as="form" onSubmit={handleSubmit((data) => console.log(data))}>
-            <Controller
-              as={
-                <ReactDatePicker
-                  className={errors.start ? 'errors-input-component' : 'new-input-component'}
-                  locale={loginStore.language}
-                  dateFormat="d MMM yyyy HH:mm"
-                  selected={startDate ? new Date(startDate) : null}
-                  showTimeSelect
-                  // todayButton="Today"
-                  dropdownMode="select"
-                  isClearable
-                  placeholderText={t('clickTime')}
-                  timeFormat="HH:mm"
-                  timeIntervals={1}
-                  shouldCloseOnSelect
+          <Row>
+            <Col breakPoint={{ xs: 12, sm: 12, md: 12 }}>
+              <p>
+                {t('deliveryLocation')} {Required}
+              </p>
+              <Controller
+                name="pickupRegion"
+                control={control}
+                defaultValue=""
+                render={({ onChange, value }) => <></>}
+              />
+              <Controller
+                name="contactName"
+                control={control}
+                defaultValue=""
+                render={({ onChange, value }) => <>
+                  <Accordion>
+                    <AccordionItem uniqueKey={1} title={<Text tx={"selectLocation"} preset="content" />}>
+                      <GoogleMapWithSearch
+                        center={{ lat: 13.736717, lng: 100.523186 }}
+                        height="500px"
+                        zoom={15}
+                        onAddressChange={(addr, region) => onSubmitLocation(addr, region, { address: "contactName", region: "pickupRegion" })}
+                      />
+                    </AccordionItem>
+                  </Accordion>
+                </>}
+                register={register({ required: true })}
+                rules={{ required: 'Address can not null.' }}
+              />
+              {errors.contactName && (
+                <span style={{ color: '#ff3d71', marginLeft: 10, marginTop: 20, fontSize: '0.7375rem' }} role="alert">
+                  {t('fieldDeliveryLocation')}
+                </span>
+              )}
+            </Col>
+          </Row>
+          <Row>
+            <Col breakPoint={{ xs: 12, sm: 12, md: 4 }}>
+              <p>
+                {t('dateStart')} {Required}
+              </p>
+              <Box sx={{ maxWidth: '400px' }} as="form" onSubmit={handleSubmit((data) => console.log(data))}>
+                <Controller
+                  as={
+                    <ReactDatePicker
+                      className={errors.start ? 'errors-input-component' : 'new-input-component'}
+                      locale={loginStore.language}
+                      dateFormat="d MMM yyyy HH:mm"
+                      selected={startDate ? new Date(startDate) : null}
+                      showTimeSelect
+                      // todayButton="Today"
+                      dropdownMode="select"
+                      isClearable
+                      placeholderText={t('clickTime')}
+                      timeFormat="HH:mm"
+                      timeIntervals={1}
+                      shouldCloseOnSelect
+                    />
+                  }
+                  control={control}
+                  register={register({ required: true })}
+                  rules={{ required: 'Start from cannot be null.' }}
+                  name="start"
+                  aria-invalid={errors.start ? 'true' : 'false'}
+                  onChange={([selected]: any) => {
+                    return { value: selected };
+                  }}
                 />
-              }
-              control={control}
-              register={register({ required: true })}
-              rules={{ required: 'Start from cannot be null.' }}
-              name="start"
-              aria-invalid={errors.start ? 'true' : 'false'}
-              onChange={([selected]: any) => {
-                return { value: selected };
-              }}
-            />
-          </Box>
-          {errors.start && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldDateStart')}
-            </span>
-          )}
-          <div style={{ display: 'flex' }}>
-            <p style={{ fontWeight: 'bold', marginRight: 5 }}>{t('deliveryPointInformation')}: </p>
-            <p>
-              {t('shipperName')} <span style={{ color: '#ff3d71' }}>*</span>
-            </p>
-          </div>
-          <input
-            className="new-input-component"
-            type="text"
-            name="name"
-            id="name"
-            style={{
-              borderColor: errors.name ? '#ff3d71' : '',
-            }}
-            ref={register({ required: true })}
-            aria-invalid={errors.name ? 'true' : 'false'}
-          />
-          {errors.name && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldShipperName')}
-            </span>
-          )}
-          <p>
-            {t('contactNumber')} <span style={{ color: '#ff3d71' }}>*</span>
-          </p>
-          <input
-            className="new-input-component"
-            type="text"
-            name="contactMobileNo"
-            maxLength={10}
-            style={{
-              borderColor: errors.contactMobileNo ? '#ff3d71' : '',
-            }}
-            ref={register({ required: true })}
-            aria-invalid={errors.contactMobileNo ? 'true' : 'false'}
-          />
-          {errors.contactMobileNo && (
-            <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-              {t('fieldContactNumber')}
-            </span>
-          )}
+              </Box>
+              {errors.start && (
+                <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('fieldDateStart')}
+                </span>
+              )}
+            </Col>
+            <Col breakPoint={{ xs: 12, sm: 12, md: 4 }}>
+              <div style={{ display: 'flex' }}>
+                <p style={{ fontWeight: 'bold', marginRight: 5 }}>{t('deliveryPointInformation')}: </p>
+                <p>
+                  {t('shipperName')} {Required}
+                </p>
+              </div>
+              <input
+                className="new-input-component"
+                type="text"
+                name="name"
+                id="name"
+                style={{
+                  borderColor: errors.name ? '#ff3d71' : '',
+                }}
+                ref={register({ required: true })}
+                aria-invalid={errors.name ? 'true' : 'false'}
+              />
+              {errors.name && (
+                <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('fieldShipperName')}
+                </span>
+              )}
+            </Col>
+            <Col breakPoint={{ xs: 12, sm: 12, md: 4 }}>
+              <p>
+                {t('contactNumber')} {Required}
+              </p>
+              <input
+                className="new-input-component"
+                type="text"
+                name="contactMobileNo"
+                maxLength={10}
+                style={{
+                  borderColor: errors.contactMobileNo ? '#ff3d71' : '',
+                }}
+                ref={register({ required: true })}
+                aria-invalid={errors.contactMobileNo ? 'true' : 'false'}
+              />
+              {errors.contactMobileNo && (
+                <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                  {t('fieldContactNumber')}
+                </span>
+              )}
+            </Col>
+          </Row>
           <hr style={{ margin: '1.125rem 0 0' }} />
           <p
             style={{
@@ -442,55 +518,47 @@ const AddJobs: React.FC<{}> = observer(() => {
           {fields.map(({ id, contactName, name, contactMobileNo, exdate }, index) => {
             const toDate = watch(`items[${index}].exdate`);
             return (
-              <div key={id}>
-                <div style={{ display: 'flex' }}>
-                  <p style={{ fontWeight: 'bold', marginRight: 5 }}>
-                    {t('pickUpAt')} {index == 0 ? 1 : index + 1}:{' '}
-                  </p>
-                  <p>
-                    {t('pickupLocation')} <span style={{ color: '#ff3d71' }}>*</span>
-                  </p>
-                </div>
-
-
-
-
-
-
-
-
-
-
-                <Controller
-                  name={`items[${index}].region`}
-                  control={control}
-                  defaultValue=""
-                  render={({ onChange, value }) => <></>}
-                />
-                <Controller
-                  name={`items[${index}].contactName`}
-                  control={control}
-                  defaultValue=""
-                  render={({ onChange, value }) => <>
-                    <Accordion>
-                      <AccordionItem uniqueKey={1} title={<Text tx={"selectLocation"} preset="content" />}>
-                        <GoogleMapWithSearch
-                          center={{ lat: 13.736717, lng: 100.523186 }}
-                          height="500px"
-                          zoom={15}
-                          onAddressChange={(addr, region) => onSubmitLocation2(addr, region, index)}
-                        />
-                      </AccordionItem>
-                    </Accordion>
-                  </>}
-                  register={register({ required: true })}
-                  rules={{ required: 'Address can not null.' }}
-                />
-                {errors.items && errors.items[index]?.contactName && (
-                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-                    {t('fieldPickupLocation')}
-                  </span>
-                )}
+              <Row key={id}>
+                <Col breakPoint={{ xs: 12, sm: 12, md: 12 }}>
+                  <div style={{ display: 'flex' }}>
+                    <p style={{ fontWeight: 'bold', marginRight: 5 }}>
+                      {t('pickUpAt')} {index == 0 ? 1 : index + 1}:{' '}
+                    </p>
+                    <p>
+                      {t('pickupLocation')} {Required}
+                    </p>
+                  </div>
+                  <Controller
+                    name={`items[${index}].region`}
+                    control={control}
+                    defaultValue=""
+                    render={({ onChange, value }) => <></>}
+                  />
+                  <Controller
+                    name={`items[${index}].contactName`}
+                    control={control}
+                    defaultValue=""
+                    render={({ onChange, value }) => <>
+                      <Accordion>
+                        <AccordionItem uniqueKey={1} title={<Text tx={"selectLocation"} preset="content" />}>
+                          <GoogleMapWithSearch
+                            center={{ lat: 13.736717, lng: 100.523186 }}
+                            height="500px"
+                            zoom={15}
+                            onAddressChange={(addr, region) => onSubmitLocation2(addr, region, index)}
+                          />
+                        </AccordionItem>
+                      </Accordion>
+                    </>}
+                    register={register({ required: true })}
+                    rules={{ required: 'Address can not null.' }}
+                  />
+                  {errors.items && errors.items[index]?.contactName && (
+                    <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                      {t('fieldPickupLocation')}
+                    </span>
+                  )}
+                </Col>
                 {/* <input
                   className="new-input-component"
                   type="text"
@@ -503,95 +571,93 @@ const AddJobs: React.FC<{}> = observer(() => {
                   aria-invalid={errors.items && errors.items[index]?.contactName ? 'true' : 'false'}
                 />
                */}
-
-
-
-
-
-
-
-
-                <p>
-                  {t('endDate')} <span style={{ color: '#ff3d71' }}>*</span>
-                </p>
-                <Box sx={{ maxWidth: '400px' }} as="form" onSubmit={handleSubmit((data) => console.log(data))}>
-                  <Controller
-                    as={
-                      <ReactDatePicker
-                        className={
-                          errors.items && errors.items[index]?.exdate ? 'errors-input-component' : 'new-input-component'
-                        }
-                        locale={loginStore.language}
-                        dateFormat="d MMM yyyy HH:mm"
-                        selected={toDate ? new Date(toDate) : null}
-                        showTimeSelect
-                        // todayButton="Today"
-                        dropdownMode="select"
-                        isClearable
-                        placeholderText={t('clickTime')}
-                        timeFormat="HH:mm"
-                        timeIntervals={1}
-                        shouldCloseOnSelect
-                      />
-                    }
-                    control={control}
-                    name={`items[${index}].exdate`}
-                    rules={{ required: 'Department cannot be null.' }}
-                    ref={register({ required: true })}
-                    aria-invalid={errors.items && errors.items[index]?.exdate ? 'true' : 'false'}
-                    defaultValue={toDate}
-                    onChange={([selected]: any) => {
-                      return { value: selected };
-                    }}
-                  />
-                </Box>
-                {errors.items && errors.items[index]?.exdate && (
-                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-                    {t('fieldDateStart')}
-                  </span>
-                )}
-                <div style={{ display: 'flex' }}>
-                  <p style={{ fontWeight: 'bold', marginRight: 5 }}>{t('pickUpPointInformation')}: </p>
+                <Col breakPoint={{ xs: 12, sm: 12, md: 4 }}>
                   <p>
-                    {t('consigneeName')} <span style={{ color: '#ff3d71' }}>*</span>
+                    {t('endDate')} {Required}
                   </p>
-                </div>
-                <input
-                  className="new-input-component"
-                  type="text"
-                  name={`items[${index}].name`}
-                  style={{
-                    borderColor: errors.items && errors.items[index]?.name ? '#ff3d71' : '',
-                  }}
-                  ref={register({ required: true })}
-                  aria-invalid={errors.items && errors.items[index]?.name ? 'true' : 'false'}
-                  defaultValue={name}
-                />
-                {errors.items && errors.items[index]?.name && (
-                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-                    {t('fieldConsigneeName')}
-                  </span>
-                )}
-                <p>
-                  {t('contactNumber')} <span style={{ color: '#ff3d71' }}>*</span>
-                </p>
-                <input
-                  className="new-input-component"
-                  type="text"
-                  name={`items[${index}].contactMobileNo`}
-                  maxLength={10}
-                  style={{
-                    borderColor: errors.items && errors.items[index]?.contactMobileNo ? '#ff3d71' : '',
-                  }}
-                  defaultValue={contactMobileNo}
-                  ref={register({ required: true })}
-                  aria-invalid={errors.items && errors.items[index]?.contactMobileNo ? 'true' : 'false'}
-                />
-                {errors.items && errors.items[index]?.contactMobileNo && (
-                  <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
-                    {t('fieldContactNumber')}
-                  </span>
-                )}
+                  <Box sx={{ maxWidth: '400px' }} as="form" onSubmit={handleSubmit((data) => console.log(data))}>
+                    <Controller
+                      as={
+                        <ReactDatePicker
+                          className={
+                            errors.items && errors.items[index]?.exdate ? 'errors-input-component' : 'new-input-component'
+                          }
+                          locale={loginStore.language}
+                          dateFormat="d MMM yyyy HH:mm"
+                          selected={toDate ? new Date(toDate) : null}
+                          showTimeSelect
+                          // todayButton="Today"
+                          dropdownMode="select"
+                          isClearable
+                          placeholderText={t('clickTime')}
+                          timeFormat="HH:mm"
+                          timeIntervals={1}
+                          shouldCloseOnSelect
+                        />
+                      }
+                      control={control}
+                      name={`items[${index}].exdate`}
+                      rules={{ required: 'Department cannot be null.' }}
+                      ref={register({ required: true })}
+                      aria-invalid={errors.items && errors.items[index]?.exdate ? 'true' : 'false'}
+                      defaultValue={toDate}
+                      onChange={([selected]: any) => {
+                        return { value: selected };
+                      }}
+                    />
+                  </Box>
+                  {errors.items && errors.items[index]?.exdate && (
+                    <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                      {t('fieldDateStart')}
+                    </span>
+                  )}
+                </Col>
+                <Col breakPoint={{ xs: 12, sm: 6, md: 4 }}>
+                  <div style={{ display: 'flex' }}>
+                    <p style={{ fontWeight: 'bold', marginRight: 5 }}>{t('pickUpPointInformation')}: </p>
+                    <p>
+                      {t('consigneeName')} {Required}
+                    </p>
+                  </div>
+                  <input
+                    className="new-input-component"
+                    type="text"
+                    name={`items[${index}].name`}
+                    style={{
+                      borderColor: errors.items && errors.items[index]?.name ? '#ff3d71' : '',
+                    }}
+                    ref={register({ required: true })}
+                    aria-invalid={errors.items && errors.items[index]?.name ? 'true' : 'false'}
+                    defaultValue={name}
+                  />
+                  {errors.items && errors.items[index]?.name && (
+                    <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                      {t('fieldConsigneeName')}
+                    </span>
+                  )}
+                </Col>
+                <Col breakPoint={{ xs: 12, sm: 12, md: 4 }}>
+                  <p>
+                    {t('contactNumber')} {Required}
+                  </p>
+                  <input
+                    className="new-input-component"
+                    type="text"
+                    name={`items[${index}].contactMobileNo`}
+                    maxLength={10}
+                    style={{
+                      borderColor: errors.items && errors.items[index]?.contactMobileNo ? '#ff3d71' : '',
+                    }}
+                    defaultValue={contactMobileNo}
+                    ref={register({ required: true })}
+                    aria-invalid={errors.items && errors.items[index]?.contactMobileNo ? 'true' : 'false'}
+                  />
+                  {errors.items && errors.items[index]?.contactMobileNo && (
+                    <span style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                      {t('fieldContactNumber')}
+                    </span>
+                  )}
+                </Col>
                 {index == 0 ? (
                   <></>
                 ) : (
@@ -608,7 +674,7 @@ const AddJobs: React.FC<{}> = observer(() => {
                   </div>
                 )}
                 <hr style={{ margin: '1.125rem 0 0' }} />
-              </div>
+              </Row>
             );
           })}
           <Button
@@ -622,27 +688,28 @@ const AddJobs: React.FC<{}> = observer(() => {
           </Button>
           <br />
           <br />
-          <div style={{ display: 'flex' }}>
-            <Button
-              type="button"
-              status="Warning"
-              shape="Rectangle"
-              fullWidth
-              onClick={() => navigate('/jobs')}
-              style={{ marginRight: 10, backgroundColor: '#FBBC12', borderColor: '#FBBC12' }}
-            >
-              {t('back')}
-            </Button>
-            <Button
-              status="Success"
-              type="submit"
-              shape="Rectangle"
-              fullWidth
-              style={{ backgroundColor: '#00B132', borderColor: '#00B132' }}
-            >
-              {t('confirm')}
-            </Button>
-          </div>
+          <Row style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Col>
+              <FormFooter>
+                <Button type="button" style={{
+                  margin: '0 6px',
+                  border: '1px solid #FBBC12',
+                  backgroundColor: 'transparent',
+                  color: '#fbbc12',
+                }} onClick={() => navigate('/jobs')}>
+                  <span>{t('back')}</span>
+                </Button>
+                <Button type="submit" style={{
+                  margin: '0 6px',
+                  border: '1px solid #FBBC12',
+                  backgroundColor: '#FBBC12',
+                  color: '#000',
+                }}>
+                  <span>{t('confirm')}</span>
+                </Button>
+              </FormFooter>
+            </Col>
+          </Row>
         </form>
       </CardBody>
     </div>

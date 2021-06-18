@@ -139,5 +139,11 @@
   "delete": "ลบ",
   "cancel": "ยกเลิก",
   "deleteConfirmAlertTitle": "ลบไฟล์",
-  "deleteConfirmAlertText": "ยืนยันการลบ ?"
+  "deleteConfirmAlertText": "ยืนยันการลบ ?",
+  "price": "ราคา",
+  "baht": "บาท",
+  "priceData": "ข้อมูลราคา",
+  "deliveryPrice": "อัตราค่าขนส่ง",
+  "perTrip": "ต่อเที่ยว",
+  "perTon": "ต่อตัน"
 }

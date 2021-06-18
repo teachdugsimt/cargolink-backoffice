@@ -254,7 +254,7 @@ const JobContainer: React.FC<Props> = observer(() => {
             }}
             onClick={() => {
               setSubmit(true);
-              navigate('/add-job');
+              navigate('/jobs/add');
             }}
           >
             <Icon icon={ic_add} /> {t('addNewJob')}
