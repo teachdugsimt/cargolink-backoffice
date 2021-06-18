@@ -117,7 +117,7 @@ export function FormEdit(props: FormEditProps) {
                     height: 26,
                   }}
                 />
-                {error === messageForCheck && <ErrorMessage>{validateMessage}</ErrorMessage>}
+                {/* {error === messageForCheck && <ErrorMessage>{validateMessage}</ErrorMessage>} */}
               </div>
             )}
           </Field>
