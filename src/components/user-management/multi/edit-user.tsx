@@ -591,11 +591,10 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                     )}
                   </div>
                 </Col>
+                {(isOpenDocumentAddress) && (
+                  <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} />
+                )}
               </Row>
-
-              {(isOpenDocumentAddress) && (
-                <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} />
-              )}
             </form>
           )}
         </Form>
