@@ -142,5 +142,6 @@
   "deleteConfirmAlertText": "ยืนยันการลบ ?",
   "uploadLink": "ลิงก์อัพโหลด",
   "copy": "คัดลอก",
-  "URLCopied": "อัพโหลด URL แล้ว"
+  "URLCopied": "อัพโหลด URL แล้ว",
+  "userUploadTitle": "อัพโหลดเอกสาร"
 }

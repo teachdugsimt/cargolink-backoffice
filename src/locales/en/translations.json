@@ -142,5 +142,6 @@
   "deleteConfirmAlertText": "Are you sure ?",
   "uploadLink": "Upload Link",
   "copy": "copy",
-  "URLCopied": "URL has been copied."
+  "URLCopied": "URL has been copied.",
+  "userUploadTitle": "Upload Documents"
 }
