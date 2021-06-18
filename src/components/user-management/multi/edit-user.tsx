@@ -360,45 +360,47 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     },
   ];
 
-  const addressForm = (
-    <>
-      <Row style={{ margin: 0, width: '100%' }}>
-        <Col breakPoint={{ md: 6 }}>
-          <Field label={t('addressNo')} name={'addressNo'} defaultValue={''}>
-            {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
-          </Field>
-        </Col>
-        <Col breakPoint={{ md: 3 }}>
-          <Field label={t('alley')} name={'alley'} defaultValue={''}>
-            {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
-          </Field>
-        </Col>
-        <Col breakPoint={{ md: 3 }}>
-          <Field label={t('street')} name={'street'} defaultValue={''}>
-            {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
-          </Field>
-        </Col>
-      </Row>
+  const AddressForm = ({ onDismiss }: { onDismiss: () => any }) => {
+    return (
+      <>
+        <Row style={{ margin: 0, width: '100%' }}>
+          <Col breakPoint={{ md: 6 }}>
+            <Field label={t('addressNo')} name={'addressNo'} defaultValue={''}>
+              {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
+            </Field>
+          </Col>
+          <Col breakPoint={{ md: 3 }}>
+            <Field label={t('alley')} name={'alley'} defaultValue={''}>
+              {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
+            </Field>
+          </Col>
+          <Col breakPoint={{ md: 3 }}>
+            <Field label={t('street')} name={'street'} defaultValue={''}>
+              {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
+            </Field>
+          </Col>
+        </Row>
 
-      <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} />
+        <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} />
 
-      <Row style={{ margin: 0, width: '100%' }}>
-        <Col>
-          <FormFooter>
-            <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
-              <BackText>{t('back')}</BackText>
-            </Button>
-            <Button type="button" style={BottomSubmitStyled} onClick={() => handleConfirmAddress()}>
-              <SubmitText>
-                <Icon icon={save} size={20} style={{ paddingRight: 5, color: '#000' }} />
-                {t('confirm')}
-              </SubmitText>
-            </Button>
-          </FormFooter>
-        </Col>
-      </Row>
-    </>
-  );
+        <Row style={{ margin: 0, width: '100%' }}>
+          <Col>
+            <FormFooter>
+              <Button type="button" style={BottomBackStyled} onClick={onDismiss}>
+                <BackText>{t('cancel')}</BackText>
+              </Button>
+              <Button type="button" style={BottomSubmitStyled} onClick={() => handleConfirmAddress()}>
+                <SubmitText>
+                  <Icon icon={save} size={20} style={{ paddingRight: 5, color: '#000' }} />
+                  {t('confirm')}
+                </SubmitText>
+              </Button>
+            </FormFooter>
+          </Col>
+        </Row>
+      </>
+    );
+  }
 
   return (
     <div>
@@ -554,7 +556,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                   </div>
                 </Col>
 
-                {isOpenGeneralAddress && addressForm}
+                {isOpenGeneralAddress && <AddressForm onDismiss={() => setIsOpenGeneralAddress(false)} />}
 
                 <Col style={SPACE_ROW}>
                   <Name style={{ marginBottom: 12 }}>{t('documentDeliverAddr')}</Name>
@@ -592,7 +594,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
               </Row>
 
               {(isOpenDocumentAddress) && (
-                addressForm
+                <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} />
               )}
             </form>
           )}
