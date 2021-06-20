@@ -51,7 +51,7 @@ export const LoginStore = types
             const { data } = response;
             self.fetching_login = false;
             const data_signin = {
-              idToken: responseHeader,
+              idToken: data.token.idToken,
             };
             self.data_signin = data_signin;
             self.error_login = '';
