@@ -71,7 +71,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
     setToggle(true);
     if (email && password) {
       loginStore.requestLogin({
-        loginId: email,
+        email: email,
         password: password,
         // userType: 0,
       });
