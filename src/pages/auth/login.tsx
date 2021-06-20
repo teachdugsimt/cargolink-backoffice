@@ -1,4 +1,5 @@
-import { Button } from '@paljs/ui/Button';
+// import { Button } from '@paljs/ui/Button';
+import {LoadingButton} from '@atlaskit/button';
 import { InputGroup } from '@paljs/ui/Input';
 import { Checkbox } from '@paljs/ui/Checkbox';
 import React, { useEffect, useState } from 'react';
@@ -140,7 +141,16 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
             {t('forgotPassword')}
           </Link>
         </Group>
-        <Button
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+          <LoadingButton
+            appearance="warning"
+            isLoading={loginStore.fetching_login}
+            onClick={submit}
+          >
+            {t('login')}
+          </LoadingButton>
+        </div>
+        {/* <Button
           style={{
             position: loginStore.fetching_login ? 'relative' : 'initial',
             backgroundColor: '#00b132',
@@ -163,7 +173,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           ) : (
               `${t('login')}`
             )}
-        </Button>
+        </Button> */}
       </form>
       <p id="loginDescription">
         {t('loginDescription')}{' '}
