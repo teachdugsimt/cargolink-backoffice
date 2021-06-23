@@ -81,6 +81,8 @@ const Header: React.FC<HeaderProps> = observer((props) => {
     }
   }, [loginStore.data_profile]);
 
+  const displayName = profile?.fullname || profile?.companyName || profile?.email || 'No data';
+
   return (
     <StyleHeader fixed>
       <HeaderStyle>
@@ -136,9 +138,7 @@ const Header: React.FC<HeaderProps> = observer((props) => {
                       Link={Link}
                     >
                       {/* <User color="#fff" name="Wirachai Khueankaew" title="Manger" size="Medium"/> */}
-                      {profile && profile.lastName && profile.firstName
-                        ? profile.firstName + ' ' + profile.lastName
-                        : 'No data'}
+                      {displayName}
                     </ContextMenu>
                   )}
                 </Location>

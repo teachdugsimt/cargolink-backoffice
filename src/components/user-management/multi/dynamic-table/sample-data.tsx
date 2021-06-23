@@ -10,6 +10,7 @@ import { DateFormat } from '../../../simple-data';
 import { navigate } from 'gatsby';
 import Swal from 'sweetalert2';
 import { TFunction, useTranslation } from 'react-i18next';
+import { IUserDTO, IUserNull } from '../../../../stores/user-store';
 
 export const sortabled: any = {
   phoneNumber: true, //! Note that: DESC = true, ASC = fasle
@@ -36,6 +37,12 @@ export const createHead = (withWidth: boolean) => {
         // width: withWidth ? 15 : undefined,
       },
       {
+        key: 'email',
+        content: 'Email',
+        shouldTruncate: true,
+        isSortable: true,
+      },
+      {
         key: 'fullName',
         content: 'Full name',
         shouldTruncate: true,
@@ -43,17 +50,11 @@ export const createHead = (withWidth: boolean) => {
         // width: withWidth ? 10 : undefined,
       },
       {
-        key: 'registerDate',
+        key: 'createdAt',
         content: 'Register Date',
         shouldTruncate: true,
         isSortable: true,
       },
-      // {
-      //   key: 'userType',
-      //   content: 'User Type',
-      //   shouldTruncate: true,
-      //   isSortable: true,
-      // },
       {
         key: 'legalType',
         content: 'Legal Type',
@@ -99,34 +100,34 @@ export const createRow = (users: any, language: string, t: TFunction<string>) =>
       }
     });
   }
-  return users.map((user: any, index: number) => {
+  return users.map((user: IUserDTO | IUserNull, index: number) => {
     return {
       key: `row-${index}-${user.phoneNumber}`,
       cells: [
         {
-          key: index,
-          content: index + 1,
+          key: user.id,
+          content: user.id,
         },
         {
           key: user.phoneNumber,
-          content: user.phoneNumber,
+          content: user.phoneNumber || '-',
+        },
+        {
+          key: user.email,
+          content: user.email || '-',
         },
         {
           key: user.fullName,
-          content: user.fullName,
+          content: user.fullName || '-',
         },
         {
-          key: moment(user.registerDate, 'DD-MM-YYYY HH:mm').format('YYYYMMDDHHmm'),
-          content: DateFormat(user.registerDate, language),
+          key: moment(user.createdAt, 'DD-MM-YYYY HH:mm').format('YYYYMMDDHHmm'),
+          content: DateFormat(user.createdAt as string, language),
         },
         {
-          key: user.jobCount,
-          content: user.jobCount,
+          key: user.userId,
+          content: '-',
         },
-        // {
-        //   key: user.truckCount,
-        //   content: user.truckCount,
-        // },
         {
           key: user.id,
           content: (

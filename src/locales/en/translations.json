@@ -148,5 +148,6 @@
   "uploadLink": "Upload Link",
   "copy": "copy",
   "URLCopied": "URL has been copied.",
-  "userUploadTitle": "Upload Documents"
+  "userUploadTitle": "Upload Documents",
+  "backToLogin": "Back to Log In"
 }

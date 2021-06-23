@@ -1,30 +1,14 @@
 import React from 'react';
-import { Button } from '@paljs/ui/Button';
-import { InputGroup } from '@paljs/ui/Input';
-import { Link } from 'gatsby';
+import { PageProps } from 'gatsby';
 
-import SEO from '../../components/SEO';
-import Auth, { Group } from '../../components/Auth';
+import ChangePassword from '../../components/Auth/ChangePassword';
+import { searchToQueryParams } from '../../utils';
 
-export default function ResetPassword() {
-  return (
-    <Auth title="Change Password" subTitle="Please set a new password">
-      <SEO title="Change Password" />
-      <form>
-        <InputGroup fullWidth>
-          <input type="password" placeholder="New Password" />
-        </InputGroup>
-        <InputGroup fullWidth>
-          <input type="password" placeholder="Confirm Password" />
-        </InputGroup>
-        <Button status="Success" type="button" shape="SemiRound" fullWidth>
-          Change Password
-        </Button>
-      </form>
-      <Group>
-        <Link to="/auth/login">Back to Log In</Link>
-        <Link to="/auth/register">Register</Link>
-      </Group>
-    </Auth>
-  );
+export default function ResetPassword({ location }: PageProps) {
+  const { search } = location;
+  const params = searchToQueryParams(search);
+  let token: string | null = null;
+  if (params && Object.keys(params).includes('token')) token = params.token;
+  if (!token) return <h1>Forbidden</h1>;
+  return <ChangePassword token={token} />;
 }

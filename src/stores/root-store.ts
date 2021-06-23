@@ -6,6 +6,8 @@ import { CarrierStore } from './carrier-store';
 import { ShipperStore } from './shipper-store';
 import { MasterTypeStore } from './master-type-store';
 import { UserStore } from './user-store';
+import { PasswordResetStore } from './password-reset-store';
+import { PasswordChangeStore } from './password-change-store';
 
 const RootModel = types.model({
   loginStore: LoginStore,
@@ -13,6 +15,8 @@ const RootModel = types.model({
   shipperStore: ShipperStore,
   masterTypeStore: MasterTypeStore,
   userStore: UserStore,
+  passwordResetStore: PasswordResetStore,
+  passwordChangeStore: PasswordChangeStore,
 });
 
 let initialState = RootModel.create({
@@ -20,6 +24,7 @@ let initialState = RootModel.create({
     language: 'th',
     data_signin: {
       idToken: '',
+      accessToken: '',
     },
     error_login: '',
     data_profile: null,
@@ -39,6 +44,17 @@ let initialState = RootModel.create({
   userStore: {
     data_user: null,
   },
+  passwordResetStore: {
+    data_password: {
+      message: null,
+      alreadySent: null,
+    },
+    error_password: null,
+  },
+  passwordChangeStore: {
+    response: { message: null },
+    error: null,
+  }
 });
 
 if (typeof window !== 'undefined') {

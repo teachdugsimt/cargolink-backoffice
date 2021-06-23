@@ -11,7 +11,7 @@ import { navigate } from 'gatsby';
 const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }> = observer(({ children, pageContext, custom404 }) => {
     const { loginStore } = useMst();
 
-    const token = loginStore.data_signin.idToken
+    const token = loginStore.data_signin.accessToken;
     // const loading_signin = loginStore.fetching_login
     const { key } = children
     console.log("children :: ", children)
@@ -57,10 +57,10 @@ const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }>
     useEffect(() => {
         // setTimeout(() => {
         const urlPath = children.props.location.pathname;
-        if (token) {
+        if (token && token.length) {
             let path = _getPathFromChildren(children)
             // navigate(_getPathFromChildren(children)) 
-        } else if (!urlPath.substr('/auth/') && !urlPath.startsWith('/user/upload')) navigate('/auth/login');
+        } else if (!urlPath.startsWith('/auth/') && !urlPath.startsWith('/user/upload')) navigate('/auth/login');
         // }, 500);
     }, [loginStore.data_signin.idToken, key])
 

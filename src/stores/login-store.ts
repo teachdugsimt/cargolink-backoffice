@@ -1,17 +1,19 @@
+import { LoginPayload, LoginResponse } from './../services/login-api';
 import { types, flow } from 'mobx-state-tree';
 import { LoginApi } from '../services';
+import { AxiosResponse } from 'axios';
 
 const token = types.model({
+  accessToken: types.string,
   idToken: types.string,
 });
 
 const profile = types.model({
-  id: types.maybeNull(types.number),
-  loginId: types.maybeNull(types.string),
-  firstName: types.maybeNull(types.string),
-  lastName: types.maybeNull(types.string),
-  role: types.maybeNull(types.string),
-  roles: types.maybeNull(types.array(types.string)),
+  id: types.string,
+  companyName: types.string,
+  fullname: types.string,
+  email: types.string,
+  avatar: types.maybeNull(types.string),
 });
 
 export const LoginStore = types
@@ -22,7 +24,7 @@ export const LoginStore = types
     error_login: types.string,
     data_profile: types.maybeNull(profile),
 
-    rememberProfile: types.boolean
+    rememberProfile: types.boolean,
   })
   .actions((self) => {
     return {
@@ -35,9 +37,10 @@ export const LoginStore = types
         localStorage.setItem('profileLanguage', param);
       }),
 
-      requestLogin: flow(function* requestLogin(params) {
+      requestLogin: flow(function* requestLogin(params: LoginPayload) {
         self.fetching_login = true;
         self.data_signin = {
+          accessToken: '',
           idToken: '',
         };
         self.error_login = '';
@@ -48,25 +51,20 @@ export const LoginStore = types
           console.log('requestLogin response :> ', response);
           if (response && response.ok) {
             const responseHeader = response.headers.authorization;
-            const { data } = response;
+            const { data } = response as AxiosResponse<LoginResponse>;
             self.fetching_login = false;
             const data_signin = {
               idToken: data.token.idToken,
+              accessToken: data.token.accessToken,
             };
             self.data_signin = data_signin;
             self.error_login = '';
-            self.data_profile = {
-              id: data.id,
-              loginId: data.loginId,
-              firstName: data.firstName,
-              lastName: data.lastName,
-              role: data.role,
-              roles: data.roles,
-            };
+            self.data_profile = data.userProfile;
             localStorage.setItem('profileLocal', JSON.stringify(data_signin));
           } else {
             self.fetching_login = false;
             self.data_signin = {
+              accessToken: '',
               idToken: '',
             };
             const { validMsgList } = response.data;
@@ -78,6 +76,7 @@ export const LoginStore = types
           self.fetching_login = false;
           self.data_signin = {
             idToken: '',
+            accessToken: '',
           };
           self.error_login = 'Failed to request login store';
         }
@@ -86,6 +85,7 @@ export const LoginStore = types
         console.log('requestLogout response :> success');
         self.data_signin = {
           idToken: '',
+          accessToken: '',
         };
         localStorage.removeItem('profileLocal')
         self.error_login = '';

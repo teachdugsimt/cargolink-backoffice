@@ -1,18 +1,29 @@
 import { types, flow } from 'mobx-state-tree';
-import userApi from '../services/user-api';
+import userApi, { GetUsersListParams, GetUsersListResponse } from '../services/user-api';
 
 const user = types.model({
+  id: types.maybeNull(types.string),
+  avatar: types.maybeNull(types.string),
+  enabled: types.maybeNull(types.boolean),
   fullName: types.maybeNull(types.string),
   phoneNumber: types.maybeNull(types.string),
-  registerDate: types.maybeNull(types.string),
   email: types.maybeNull(types.string),
-  jobCount: types.maybeNull(types.number),
-  truckCount: types.maybeNull(types.number),
+  userType: types.maybeNull(types.number),
+  userId: types.maybeNull(types.string),
+  createdAt: types.maybeNull(types.string),
+  createdBy: types.maybeNull(types.string),
+  updatedAt: types.maybeNull(types.string),
+  updatedBy: types.maybeNull(types.string),
+  confirmationToken: types.maybeNull(types.string),
+  deviceToken: types.maybeNull(types.string),
+  status: types.maybeNull(types.string),
+  documentStatus: types.maybeNull(types.string),
 });
 
 const userManagement = types.model({
   content: types.maybeNull(types.array(user)),
   reRender: types.boolean,
+  lengthPerPage: types.maybeNull(types.number),
 });
 
 export const UserStore = types
@@ -26,42 +37,50 @@ export const UserStore = types
       }),
     ),
     data_user: types.maybeNull(userManagement),
+    isFirstLoad: true,
   })
   .actions((self) => {
     return {
-      getUsers: flow(function* getUsers(params) {
+      getUsers: flow(function* getUsers(params: GetUsersListParams) {
         self.loading = true;
         self.data_user = null;
         self.error_response = null;
         try {
-          const response = yield userApi.User(params);
+          const response = yield userApi.getUser(params);
           console.log('getUsers response :> ', response);
           if (response && response.ok) {
-            const { data } = response;
+            const { data, size, totalElements, totalPages }: GetUsersListResponse = response.data;
             self.loading = false;
-            const pageNumber = data.pageable.pageNumber * 10;
-            const content = data.content;
-            let user: { content: any; reRender: boolean } = { content: [], reRender: true };
-            const ct = {
-              fullName: null,
-              phoneNumber: null,
-              registerDate: null,
-              email: null,
-              jobCount: null,
-              truckCount: null,
+            const currentPage = (params?.page || 0) + 1;
+            const content = data;
+            const user: IUserManagementProps = {
+              content: [],
+              reRender: true,
+              lengthPerPage: size,
             };
-            if (pageNumber == 0) {
-              //? in th first time, we get user
-              user.content = [...content, ...Array(data.totalElements - content.length).fill(ct)];
+            const emptyContent = Object.keys(content).reduce(
+              (object: any, curr: string) => ({
+                ...object,
+                [curr]: null,
+              }),
+              {},
+            );
+            if (self.isFirstLoad) {
+              self.isFirstLoad = false;
+              user.content = [...content, ...Array(totalElements - content.length).fill(emptyContent)];
             } else {
-              user.content = Array(data.totalElements).fill(ct);
-              const pageSize = data.numberOfElements;
-              for (let i = pageNumber, j = 0; i < pageNumber + pageSize; i++, j++) {
-                user.content[i] = content[j];
-              }
+              const pageBeforeCurrent = currentPage - 1;
+              const emptyContentBeforeFirstItem = pageBeforeCurrent * size;
+              const pagesAfterCurrent = totalPages - currentPage;
+              const emptyContentAfterLastItem = pagesAfterCurrent * size;
+              user.content = [
+                ...Array(emptyContentBeforeFirstItem).fill(emptyContent),
+                ...content,
+                ...Array(emptyContentAfterLastItem).fill(emptyContent),
+              ];
               user.reRender = !!!self.data_user?.reRender;
             }
-            self.data_user = user;
+            self.data_user = user as any;
           } else {
             self.loading = false;
             self.data_user = null;
@@ -82,3 +101,48 @@ export const UserStore = types
       }),
     };
   });
+
+interface IUserManagementProps {
+  content: (IUserDTO | IUserNull)[];
+  reRender: boolean;
+  lengthPerPage: number | null;
+}
+
+//? User schema from API calls.
+export interface IUserDTO {
+  id: string;
+  avatar: string | null;
+  enabled: boolean;
+  fullName: string | null;
+  phoneNumber: string | null;
+  email: string;
+  userType: number;
+  userId: string;
+  createdAt: string;
+  createdBy: string | null;
+  updatedAt: string | null;
+  updatedBy: string | null;
+  confirmationToken: string;
+  deviceToken: string | null;
+  status: string | null;
+  documentStatus: string | null;
+}
+
+export interface IUserNull {
+  id: null;
+  avatar: null;
+  enabled: null;
+  fullName: null;
+  phoneNumber: null;
+  email: null;
+  userType: null;
+  userId: null;
+  createdAt: null;
+  createdBy: null;
+  updatedAt: null;
+  updatedBy: null;
+  confirmationToken: null;
+  deviceToken: null;
+  status: string | null;
+  documentStatus: string | null;
+}
