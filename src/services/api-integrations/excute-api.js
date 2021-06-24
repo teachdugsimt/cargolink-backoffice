@@ -9,7 +9,7 @@ const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = t
       await Header(
         admin_api,
         url.includes('login') ? true : null,
-        url.includes('upload') && method == 'post' ? 'upload' : null,
+        url.includes('upload') && !url.includes('gen-doc-upload-link') && method == 'post' ? 'upload' : null,
         timeout,
         requiredToken,
       ),

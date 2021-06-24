@@ -11,6 +11,7 @@ import { navigate } from 'gatsby';
 import Swal from 'sweetalert2';
 import { TFunction, useTranslation } from 'react-i18next';
 import { IUserDTO, IUserNull } from '../../../../stores/user-store';
+import { UserApi } from '../../../../services';
 
 export const sortabled: any = {
   phoneNumber: true, //! Note that: DESC = true, ASC = fasle
@@ -74,15 +75,23 @@ export const head = createHead(true);
 
 export const createRow = (users: any, language: string, t: TFunction<string>) => {
   console.log('keys', users);
-  const requestUploadToken = (id: any) => {
-    //TODO request token from api
-    return 'dummytokenfromid';
+  const requestUploadToken = async (id: any) => {
+    try {
+      const response = await UserApi.getUploadLink(id);
+      if (response && response.status === 200) return response.data.url;
+      console.error('get upload link error', response.status, response.data);
+    } catch (error) {
+      console.error('get upload link error', error);
+    }
+    Swal.fire({
+      icon: 'error',
+      text: 'Error while get upload link',
+    });
+    return null;
   }
-  const onCopyUploadLinkButtonClick = (id: any) => {
-    const token = requestUploadToken(id);
-    const dummyBaseURL = 'https://cargolink.com/user/upload';
-    const baseURL = dummyBaseURL;
-    const uploadLink = `${baseURL}?token=${token}`;
+  const onCopyUploadLinkButtonClick = async (id: any) => {
+    const uploadLink = await requestUploadToken(id);
+    if (!uploadLink) return;
     Swal.fire({
       titleText: t('uploadLink'),
       text: uploadLink,
@@ -91,7 +100,6 @@ export const createRow = (users: any, language: string, t: TFunction<string>) =>
       confirmButtonText: t('copy'),
     }).then(({ isConfirmed }) => {
       if (isConfirmed) {
-        // document?.execCommand('copy');
         navigator.clipboard.writeText(uploadLink);
         Swal.fire({
           icon: 'success',
