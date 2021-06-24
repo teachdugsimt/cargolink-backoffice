@@ -12,8 +12,8 @@ import { navigate } from 'gatsby';
 const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }> = observer(({ children, pageContext, custom404 }) => {
     const { loginStore } = useMst();
     const urlPath = children.props.location.pathname;
-    const shouldNotLogin = !urlPath.includes('/auth/') && !urlPath.includes('/user/upload');
-    console.log('login check', urlPath, shouldNotLogin);
+    const shouldLogin = !urlPath.includes('/auth/') && !urlPath.includes('/user/upload');
+    console.log('login check', urlPath, shouldLogin, children);
 
     const token = loginStore.data_signin.accessToken;
     // const loading_signin = loginStore.fetching_login
@@ -35,7 +35,7 @@ const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }>
             if (set && typeof cur[tabid] == 'undefined' && !Object.values(cur).reduce((a: any, b: any) => a + b, 0)) {
                 if (!loginStore.rememberProfile) {
                     localStore.clear();
-                    if (!shouldNotLogin) _clearDataSignin();
+                    if (shouldLogin) _clearDataSignin();
                 }
                 cur = {};
             }
@@ -63,7 +63,7 @@ const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }>
         if (token && token.length) {
             let path = _getPathFromChildren(children)
             // navigate(_getPathFromChildren(children)) 
-        } else if (shouldNotLogin) navigate('/auth/login');
+        } else if (shouldLogin) navigate('/auth/login');
         // }, 500);
     }, [loginStore.data_signin.idToken, key])
 
