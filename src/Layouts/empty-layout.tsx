@@ -12,7 +12,8 @@ import { navigate } from 'gatsby';
 const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }> = observer(({ children, pageContext, custom404 }) => {
     const { loginStore } = useMst();
     const urlPath = children.props.location.pathname;
-    const shouldNotLogin = !urlPath.startsWith('/auth/') && !urlPath.startsWith('/user/upload');
+    const shouldNotLogin = !urlPath.includes('/auth/') && !urlPath.includes('/user/upload');
+    console.log('login check', urlPath, shouldNotLogin);
 
     const token = loginStore.data_signin.accessToken;
     // const loading_signin = loginStore.fetching_login
