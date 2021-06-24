@@ -89,7 +89,7 @@
     "dev": "gatsby develop",
     "start": "npm run dev",
     "serve": "gatsby serve",
-    "test": "cypress open",
+    "test": "cypress run --record --key d7222821-aeec-46cb-b9a6-c75789d66ce7",
     "release": "standard-version",
     "release:major": "standard-version --release-as major",
     "release:minor": "standard-version --release-as minor",
