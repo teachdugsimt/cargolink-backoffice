@@ -1,72 +1,56 @@
 import { types, flow } from 'mobx-state-tree';
-import { UploadFileApi } from '../services';
+import { AxiosResponse } from 'axios';
+import UploadApi, { UploadFilePath, UploadFileResponse } from '../services/upload-api';
+
+export const fileResponse = types.model({
+  attachCode: types.maybeNull(types.string),
+  token: types.maybeNull(types.string),
+  fileName: types.maybeNull(types.string),
+  userId: types.maybeNull(types.string),
+  type: types.maybeNull(types.string),
+  status: types.maybeNull(types.string),
+  fileUrl: types.maybeNull(types.string),
+  fileType: types.maybeNull(types.string),
+  uploadedDate: types.maybeNull(types.string),
+})
 
 export const UploadFileStore = types
   .model('UploadFileStore', {
     loading: false,
-    truckPhotos: types.model({
-      front: types.maybeNull(types.string),
-      back: types.maybeNull(types.string),
-      left: types.maybeNull(types.string),
-      right: types.maybeNull(types.string),
-    }),
     error_response: types.maybeNull(
       types.model({
         title: types.maybeNull(types.string),
         content: types.maybeNull(types.string),
       }),
     ),
+    file: types.maybeNull(fileResponse),
   })
   .actions((self) => {
     return {
-      uploadImage: flow(function* uploadImage(params, imageName) {
+      clear: flow(function* clear() {
+        self.error_response = null;
+        self.file = null;
+      }),
+      uploadFile: flow(function* uploadFile(fileType: UploadFilePath, file: File) {
         self.loading = true;
         self.error_response = null;
 
-        const formData = new FormData();
-        formData.append('file', params);
-
         try {
-          const response = yield UploadFileApi.uploadPicture(formData);
-          console.log('uploadPicture response :> ', response);
+          const response = yield UploadApi.upload(fileType, file);
           if (response && response.ok) {
-            const { data } = response;
             self.loading = false;
-            let images = JSON.parse(JSON.stringify(self.truckPhotos));
-            images[`${imageName}`] = data.fileUrl;
-            self.truckPhotos = images;
-            self.error_response = null;
-          } else {
-            self.loading = false;
-            self.error_response = {
-              title: response.problem,
-              content: 'POST image : ' + response.originalError.message,
-            };
+            const { data } = response as AxiosResponse<UploadFileResponse>;
+            self.file = data;
           }
         } catch (error) {
-          console.error('Failed to request upload images store :> ', error);
           self.loading = false;
+          console.error('Failed to request upload file store :> ', error);
           self.error_response = {
             title: '',
-            content: 'Failed to request upload images store',
-          };
+            content: 'Failed to request upload file store',
+          }
+          self.file = null;
         }
-      }),
-
-      removeImage: flow(function* removeImage(imageName) {
-        let images = JSON.parse(JSON.stringify(self.truckPhotos));
-        images[`${imageName}`] = null;
-        self.truckPhotos = images;
-      }),
-
-      clearUploadFileStore: flow(function* clearUploadFileStore() {
-        self.truckPhotos = { front: null, back: null, left: null, right: null };
-        self.error_response = null;
-      }),
-    };
+      })
+    }
   })
-  .create({
-    loading: false,
-    truckPhotos: { front: null, back: null, left: null, right: null },
-    error_response: null,
-  });

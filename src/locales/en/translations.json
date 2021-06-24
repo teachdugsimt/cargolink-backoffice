@@ -149,5 +149,6 @@
   "copy": "copy",
   "URLCopied": "URL has been copied.",
   "userUploadTitle": "Upload Documents",
-  "backToLogin": "Back to Log In"
+  "backToLogin": "Back to Log In",
+  "noDocuments": "No Documents"
 }

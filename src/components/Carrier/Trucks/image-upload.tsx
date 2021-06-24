@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Icon from 'react-icons-kit';
 import { camera } from 'react-icons-kit/fa/camera';
 import { timesCircleO } from 'react-icons-kit/fa/timesCircleO';
-import { UploadFileStore } from '../../../stores/upload-file-store';
+import { UploadFileStore } from '../../../stores/upload-image-store';
 import images from '../../Themes/images';
 import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';

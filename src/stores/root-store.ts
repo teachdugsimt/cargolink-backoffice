@@ -8,6 +8,7 @@ import { MasterTypeStore } from './master-type-store';
 import { UserStore } from './user-store';
 import { PasswordResetStore } from './password-reset-store';
 import { PasswordChangeStore } from './password-change-store';
+import { UploadFileStore } from './upload-file-store';
 
 const RootModel = types.model({
   loginStore: LoginStore,
@@ -17,6 +18,7 @@ const RootModel = types.model({
   userStore: UserStore,
   passwordResetStore: PasswordResetStore,
   passwordChangeStore: PasswordChangeStore,
+  uploadFileStore: UploadFileStore,
 });
 
 let initialState = RootModel.create({
@@ -54,6 +56,11 @@ let initialState = RootModel.create({
   passwordChangeStore: {
     response: { message: null },
     error: null,
+  },
+  uploadFileStore: {
+    loading: false,
+    file: null,
+    error_response: null,
   }
 });
 

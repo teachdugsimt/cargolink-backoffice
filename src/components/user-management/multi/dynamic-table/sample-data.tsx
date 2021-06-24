@@ -150,14 +150,23 @@ export const createRow = (users: any, language: string, t: TFunction<string>) =>
                 onClick={() =>
                   navigate('/user-management/user', {
                     state: {
-                      id: index + 1,
+                      id: user.userId,
                     },
                   })
                 }
               >
                 <Icon icon={edit} />
               </Button>
-              <Button appearance="ghost" status="Basic" size="Small" onClick={() => navigate('/user-management/user')}>
+              <Button
+                appearance="ghost"
+                status="Basic"
+                size="Small"
+                onClick={() =>
+                  navigate('/user-management/user', {
+                    state: {
+                      id: user.userId,
+                    },
+              })}>
                 <Icon icon={ic_delete} />
               </Button>
             </div>
