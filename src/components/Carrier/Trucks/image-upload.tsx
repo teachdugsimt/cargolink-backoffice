@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Icon from 'react-icons-kit';
 import { camera } from 'react-icons-kit/fa/camera';
 import { timesCircleO } from 'react-icons-kit/fa/timesCircleO';
-import { UploadFileStore } from '../../../stores/upload-image-store';
+import { UploadImageStore } from '../../../stores/upload-image-store';
 import images from '../../Themes/images';
 import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
@@ -22,12 +22,12 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
 
   useEffect(() => {
-    UploadFileStore.clearUploadFileStore();
+    UploadImageStore.clearUploadImageStore();
     setAlertSetting(defaultAlertSetting);
   }, []);
 
   useEffect(() => {
-    const { loading } = UploadFileStore;
+    const { loading } = UploadImageStore;
     setAlertSetting({
       icon: '',
       show: loading,
@@ -35,10 +35,10 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
       title: '',
       content: t('LOADING'),
     });
-  }, [UploadFileStore.loading]);
+  }, [UploadImageStore.loading]);
 
   useEffect(() => {
-    const { error_response } = UploadFileStore;
+    const { error_response } = UploadImageStore;
     if (error_response) {
       setAlertSetting({
         icon: 'error',
@@ -48,7 +48,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
         content: error_response.content || '',
       });
     }
-  }, [UploadFileStore.error_response]);
+  }, [UploadImageStore.error_response]);
 
   const onChangePicture = (e: any, imageName: string) => {
     if (e.target.files[0]) {
@@ -56,7 +56,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
       images[`${imageName}`] = URL.createObjectURL(e.target.files[0]);
       setImageUpload(images);
       setRender(!render);
-      UploadFileStore.uploadImage(e.target.files[0], imageName); //! for upload image
+      UploadImageStore.uploadImage(e.target.files[0], imageName); //! for upload image
     }
   };
 
@@ -64,7 +64,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
     let images = JSON.parse(JSON.stringify(imageUpload));
     images[`${imageName}`] = '';
     setImageUpload(images);
-    UploadFileStore.removeImage(imageName);
+    UploadImageStore.removeImage(imageName);
     setRender(!render);
   };
 
@@ -75,7 +75,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
   //     let images = pictures;
   //     images.push(URL.createObjectURL(e.target.files[0]));
   //     setPictures(images);
-  //     // UploadFileStore.uploadImage(e.target.files[0]);   //! for upload image
+  //     // UploadImageStore.uploadImage(e.target.files[0]);   //! for upload image
 
   //     if (images.length === 4) setDisable(true);
 
