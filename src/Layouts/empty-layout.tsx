@@ -8,8 +8,11 @@ import Register from '../pages/auth/register'
 import RequestPassword from '../pages/auth/request-password'
 import ResetPassword from '../pages/auth/reset-password'
 import { navigate } from 'gatsby';
+
 const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }> = observer(({ children, pageContext, custom404 }) => {
     const { loginStore } = useMst();
+    const urlPath = children.props.location.pathname;
+    const shouldNotLogin = !urlPath.startsWith('/auth/') && !urlPath.startsWith('/user/upload');
 
     const token = loginStore.data_signin.accessToken;
     // const loading_signin = loginStore.fetching_login
@@ -31,7 +34,7 @@ const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }>
             if (set && typeof cur[tabid] == 'undefined' && !Object.values(cur).reduce((a: any, b: any) => a + b, 0)) {
                 if (!loginStore.rememberProfile) {
                     localStore.clear();
-                    _clearDataSignin()
+                    if (!shouldNotLogin) _clearDataSignin();
                 }
                 cur = {};
             }
@@ -56,11 +59,10 @@ const EmptyLayout: React.FC<{ children: any, pageContext: any, custom404: any }>
 
     useEffect(() => {
         // setTimeout(() => {
-        const urlPath = children.props.location.pathname;
         if (token && token.length) {
             let path = _getPathFromChildren(children)
             // navigate(_getPathFromChildren(children)) 
-        } else if (!urlPath.startsWith('/auth/') && !urlPath.startsWith('/user/upload')) navigate('/auth/login');
+        } else if (shouldNotLogin) navigate('/auth/login');
         // }, 500);
     }, [loginStore.data_signin.idToken, key])
 
