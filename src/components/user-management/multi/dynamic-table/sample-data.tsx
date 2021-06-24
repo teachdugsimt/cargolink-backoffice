@@ -10,6 +10,8 @@ import { DateFormat } from '../../../simple-data';
 import { navigate } from 'gatsby';
 import Swal from 'sweetalert2';
 import { TFunction, useTranslation } from 'react-i18next';
+import { IUserDTO, IUserNull } from '../../../../stores/user-store';
+import { UserApi } from '../../../../services';
 
 export const sortabled: any = {
   phoneNumber: true, //! Note that: DESC = true, ASC = fasle
@@ -36,6 +38,12 @@ export const createHead = (withWidth: boolean) => {
         // width: withWidth ? 15 : undefined,
       },
       {
+        key: 'email',
+        content: 'Email',
+        shouldTruncate: true,
+        isSortable: true,
+      },
+      {
         key: 'fullName',
         content: 'Full name',
         shouldTruncate: true,
@@ -43,17 +51,11 @@ export const createHead = (withWidth: boolean) => {
         // width: withWidth ? 10 : undefined,
       },
       {
-        key: 'registerDate',
+        key: 'createdAt',
         content: 'Register Date',
         shouldTruncate: true,
         isSortable: true,
       },
-      // {
-      //   key: 'userType',
-      //   content: 'User Type',
-      //   shouldTruncate: true,
-      //   isSortable: true,
-      // },
       {
         key: 'legalType',
         content: 'Legal Type',
@@ -73,15 +75,23 @@ export const head = createHead(true);
 
 export const createRow = (users: any, language: string, t: TFunction<string>) => {
   console.log('keys', users);
-  const requestUploadToken = (id: any) => {
-    //TODO request token from api
-    return 'dummytokenfromid';
+  const requestUploadToken = async (id: any) => {
+    try {
+      const response = await UserApi.getUploadLink(id);
+      if (response && response.status === 200) return response.data.url;
+      console.error('get upload link error', response.status, response.data);
+    } catch (error) {
+      console.error('get upload link error', error);
+    }
+    Swal.fire({
+      icon: 'error',
+      text: 'Error while get upload link',
+    });
+    return null;
   }
-  const onCopyUploadLinkButtonClick = (id: any) => {
-    const token = requestUploadToken(id);
-    const dummyBaseURL = 'https://cargolink.com/user/upload';
-    const baseURL = dummyBaseURL;
-    const uploadLink = `${baseURL}?token=${token}`;
+  const onCopyUploadLinkButtonClick = async (id: any) => {
+    const uploadLink = await requestUploadToken(id);
+    if (!uploadLink) return;
     Swal.fire({
       titleText: t('uploadLink'),
       text: uploadLink,
@@ -90,7 +100,6 @@ export const createRow = (users: any, language: string, t: TFunction<string>) =>
       confirmButtonText: t('copy'),
     }).then(({ isConfirmed }) => {
       if (isConfirmed) {
-        // document?.execCommand('copy');
         navigator.clipboard.writeText(uploadLink);
         Swal.fire({
           icon: 'success',
@@ -99,34 +108,34 @@ export const createRow = (users: any, language: string, t: TFunction<string>) =>
       }
     });
   }
-  return users.map((user: any, index: number) => {
+  return users.map((user: IUserDTO | IUserNull, index: number) => {
     return {
       key: `row-${index}-${user.phoneNumber}`,
       cells: [
         {
-          key: index,
-          content: index + 1,
+          key: user.id,
+          content: user.id,
         },
         {
           key: user.phoneNumber,
-          content: user.phoneNumber,
+          content: user.phoneNumber || '-',
+        },
+        {
+          key: user.email,
+          content: user.email || '-',
         },
         {
           key: user.fullName,
-          content: user.fullName,
+          content: user.fullName || '-',
         },
         {
-          key: moment(user.registerDate, 'DD-MM-YYYY HH:mm').format('YYYYMMDDHHmm'),
-          content: DateFormat(user.registerDate, language),
+          key: moment(user.createdAt, 'DD-MM-YYYY HH:mm').format('YYYYMMDDHHmm'),
+          content: DateFormat(user.createdAt as string, language),
         },
         {
-          key: user.jobCount,
-          content: user.jobCount,
+          key: user.userId,
+          content: '-',
         },
-        // {
-        //   key: user.truckCount,
-        //   content: user.truckCount,
-        // },
         {
           key: user.id,
           content: (

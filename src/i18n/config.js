@@ -5,12 +5,15 @@ i18next.init({
   resources: {
     th: {
       translations: require('../locales/th/translations.json'),
+      resetPassword: require('../locales/th/resetPassword.json'),
+      changePassword: require('../locales/th/changePassword.json'),
     },
     en: {
       translations: require('../locales/en/translations.json'),
+      resetPassword: require('../locales/en/resetPassword.json'),
+      changePassword: require('../locales/en/changePassword.json'),
     },
   },
-  ns: ['translations'],
   defaultNS: 'translations',
   returnObjects: true,
   debug: process.env.NODE_ENV === 'development',

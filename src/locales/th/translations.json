@@ -149,5 +149,6 @@
   "uploadLink": "ลิงก์อัพโหลด",
   "copy": "คัดลอก",
   "URLCopied": "อัพโหลด URL แล้ว",
-  "userUploadTitle": "อัพโหลดเอกสาร"
+  "userUploadTitle": "อัพโหลดเอกสาร",
+  "backToLogin": "กลับไปหน้าล็อกอิน"
 }

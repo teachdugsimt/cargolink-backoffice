@@ -1,15 +1,14 @@
-// import { Button } from '@paljs/ui/Button';
-import {LoadingButton} from '@atlaskit/button';
+import React, { useEffect, useState, useRef } from 'react';
+import { LoadingButton } from '@atlaskit/button';
 import { InputGroup } from '@paljs/ui/Input';
 import { Checkbox } from '@paljs/ui/Checkbox';
-import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'gatsby';
 import { navigate } from 'gatsby';
 import LanguageMenu from '../../components/language-menu';
 import Auth, { Group } from '../../components/Auth';
 import SEO from '../../components/SEO';
-import Spinner from '@paljs/ui/Spinner';
+// import Spinner from '@paljs/ui/Spinner';
 import Alert from '../../components/alert';
 import { useMst } from '../../stores/root-store';
 import { defaultAlertSetting } from '../../components/simple-data';
@@ -18,6 +17,9 @@ import { useTranslation } from 'react-i18next';
 const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageContext }) => {
   const { loginStore } = useMst();
   const { t } = useTranslation();
+
+  const submitRef = useRef<HTMLButtonElement | null>(null);
+
   const [checkbox, setCheckbox] = useState({ 1: false });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,9 +29,9 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
 
   useEffect(() => {
     document.addEventListener('keydown', _handleKeyPress, false);
-    // return () => {
-    document.removeEventListener('keydown', _handleKeyPress, false);
-    // };
+    return () => {
+      document.removeEventListener('keydown', _handleKeyPress, false);
+    };
   }, []);
 
   useEffect(() => {
@@ -67,7 +69,8 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
     setAlertSetting(defaultAlertSetting);
   };
 
-  const submit = () => {
+  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setToggle(true);
     if (email && password) {
       loginStore.requestLogin({
@@ -79,21 +82,17 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
     setAlertSetting(defaultAlertSetting);
   };
 
-  const _handleKeyPress = (event: any) => {
-    setkeyboard(event.key);
-  };
+  const clickSubmit = () => submitRef?.current?.click();
 
-  useEffect(() => {
-    if (keyboard === 'Enter') {
-      submit();
-    }
-  }, [keyboard]);
+  const _handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === 'Enter' && submitRef) clickSubmit();
+  };
 
   return (
     <Auth title="" subTitle={t('loginSubtitle')}>
       {alertSetting.show && <Alert setting={alertSetting} />}
       <SEO title="Login" />
-      <form>
+      <form onSubmit={submit}>
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 5 }}>
           <LanguageMenu />
         </div>
@@ -103,6 +102,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           fullWidth
         >
           <input
+            autoFocus={true}
             id="phoneNumber"
             type="text"
             placeholder={t('email')}
@@ -141,15 +141,12 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
             {t('forgotPassword')}
           </Link>
         </Group>
-        <div style={{display: 'flex', justifyContent: 'center'}}>
-          <LoadingButton
-            appearance="warning"
-            isLoading={loginStore.fetching_login}
-            onClick={submit}
-          >
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <LoadingButton appearance="warning" isLoading={loginStore.fetching_login} onClick={clickSubmit}>
             {t('login')}
           </LoadingButton>
         </div>
+        <button style={{ display: 'none' }} ref={submitRef} type="submit" disabled={loginStore.fetching_login} />
         {/* <Button
           style={{
             position: loginStore.fetching_login ? 'relative' : 'initial',

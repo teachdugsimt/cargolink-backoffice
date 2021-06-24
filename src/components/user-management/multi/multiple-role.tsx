@@ -15,6 +15,7 @@ import { defaultAlertSetting } from '../../simple-data';
 import Alert from '../../alert';
 import moment from 'moment';
 import { navigate } from 'gatsby';
+import { IUserDTO, IUserNull } from '../../../stores/user-store';
 
 const Wrapper = styled.div`
   margin-top: 10px;
@@ -22,12 +23,13 @@ const Wrapper = styled.div`
   background-color: '#5E6C84';
 `;
 
-interface Props {}
+interface Props { }
 
 const MultipleRole: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
   const { userStore, loginStore } = useMst();
-  const [rowData, setRowData] = useState([]);
+  const [rowData, setRowData] = useState<(IUserDTO | IUserNull)[]>([]);
+  const [rowLength, setRowLength] = useState(10);
   const [submit, setSubmit] = useState(false);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
   const [page, setPage] = useState(1);
@@ -68,8 +70,22 @@ const MultipleRole: React.FC<Props> = observer(() => {
   useEffect(() => {
     const data_user = JSON.parse(JSON.stringify(userStore.data_user));
     if (data_user?.content) {
-      const rows = createRow(data_user.content, loginStore.language, t);
+      const translateTel = (data: any) => {
+        if (!data || !data.length) return data;
+        return data.map(d => {
+          let { phoneNumber } = d;
+          if (phoneNumber && phoneNumber.startsWith('+66')) phoneNumber = `0${phoneNumber.substr(3)}`;
+          return {
+            ...d,
+            phoneNumber,
+          }
+        });
+      };
+      const content = translateTel(data_user.content);
+      const rows = createRow(content, loginStore.language, t);
       setRowData(rows);
+      const rowLen = data_user?.lengthPerPage;
+      rowLen != null && setRowLength(rowLen);
     }
   }, [userStore.data_user, userStore.data_user?.reRender, userStore.data_user?.content?.length]);
 
@@ -134,7 +150,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
             page={page}
             // sortKey={sortable.sortKey}
             // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
-            rowsPerPage={10}
+            rowsPerPage={rowLength}
             defaultPage={1}
             loadingSpinnerSize="large"
             isLoading={userStore.loading}

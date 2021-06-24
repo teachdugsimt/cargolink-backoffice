@@ -1,23 +1,11 @@
 const Header = async (admin_api = false, is_login = null, is_upload = null, timeout = 20000, requiredToken = true) => {
   const baseURL = admin_api ? process.env.API_ENDPOINT_ADMIN : process.env.API_ENDPOINT;
   let header = {};
-  let token = await JSON.parse(localStorage.getItem('profileLocal'));
   let language = await localStorage.getItem('profileLanguage');
   if (!language) language = 'th';
 
-  if (!token) {
-    token = {
-      idToken: '',
-    };
-  } else {
-    if (typeof token === 'object' && token) {
-      token = { ...token };
-    } else {
-      token = {
-        idToken: '',
-      };
-    }
-  }
+  const profileLocal = JSON.parse(localStorage.getItem('profileLocal'));
+  const accessToken = profileLocal?.accessToken || null;
 
   console.log('BASEURL :> ', baseURL);
 
@@ -37,7 +25,7 @@ const Header = async (admin_api = false, is_login = null, is_upload = null, time
       headers: {
         'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>',
         Accept: '*/*',
-        Authorization: 'Bearer ' + token.idToken,
+        Authorization: accessToken,
         'Accept-Language': language,
       },
       timeout: timeout,
@@ -48,7 +36,7 @@ const Header = async (admin_api = false, is_login = null, is_upload = null, time
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        Authorization: 'Bearer ' + token.idToken,
+        Authorization: accessToken,
         'Accept-Language': language,
       },
       timeout: timeout,
