@@ -8,16 +8,24 @@ require('dotenv').config({
 
 module.exports = {
   siteMetadata: {
-    title: 'Free React Admin dashboard template based on Gatsby',
-    description: 'Admin dashboard template based on Gatsby with @paljs/ui component package.',
-    author: 'Ahmed Elywa',
-    apiUrl: process.env.API_ENDPOINT,
+    title: 'CargoLink Backoffice',
+    // description: 'Admin dashboard template based on Gatsby with @paljs/ui component package.',
+    author: 'Katanyoo Ubalee',
+    // apiUrl: process.env.API_ENDPOINT,
   },
   plugins: [
     'gatsby-plugin-styled-components',
     'gatsby-plugin-notify',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-typescript',
+    {
+      resolve: 'gatsby-plugin-theme-ui',
+      options: {
+        preset: require("./src/theme/ui"),
+        // prismPreset: 'night-owl',
+        // preset: '@theme-ui/preset-funk',
+      },
+    },
     {
       resolve: `gatsby-source-sugarcrm`,
       options: {
@@ -47,16 +55,16 @@ module.exports = {
     },
     'gatsby-transformer-sharp',
     'gatsby-plugin-sharp',
-    {
-      resolve: 'gatsby-plugin-manifest',
-      options: {
-        name: 'cargolink-admin',
-        short_name: 'Cargolink',
-        start_url: '/dashboard',
-        display: 'minimal-ui',
-        icon: 'src/images/logo.png', // This path is relative to the root of the site.
-      },
-    },
+    // {
+    //   resolve: 'gatsby-plugin-manifest',
+    //   options: {
+    //     name: 'cargolink-admin',
+    //     short_name: 'Cargolink',
+    //     start_url: '/dashboard',
+    //     display: 'minimal-ui',
+    //     icon: 'src/images/logo.png', // This path is relative to the root of the site.
+    //   },
+    // },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {

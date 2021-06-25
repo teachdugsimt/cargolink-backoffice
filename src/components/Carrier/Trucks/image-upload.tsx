@@ -9,7 +9,7 @@ import { UploadFileStore } from '../../../stores/upload-file-store';
 import images from '../../Themes/images';
 import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
-import '../../../Layouts/css/style.css';
+// import '../../../Layouts/css/style.css';
 
 interface ImageProps {
   submitted: boolean;

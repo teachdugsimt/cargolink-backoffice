@@ -5,11 +5,11 @@
  */
 
 // You can delete this file if you're not using it
-import 'normalize.css';
+// import 'normalize.css';
 
 export const onInitialClientRender = () => {
-    setTimeout(function () {
-        if (document.getElementById("___loader"))
-            document.getElementById("___loader").style.display = "none"
-    }, 1000)
+  // setTimeout(function () {
+  //     if (document.getElementById("___loader"))
+  //         document.getElementById("___loader").style.display = "none"
+  // }, 1000)
 }

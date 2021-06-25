@@ -1,45 +1,53 @@
 import { MenuItemType } from '../Layouts/Sidebar/types';
 
+// menuHome: require('../../images/icons/pie-chart.png'),
+// menuTransport: require('../../images/icons/check-list.png'),
+// menuTruck: require('../../images/icons/delivery.png'),
+// menuJob: require('../../images/icons/warehouse.png'),
+// menuUser: require('../../images/icons/delivery-man.png'),
+// menuSetting: require('../../images/icons/settings.png'),
+
 const items: MenuItemType[] = [
   {
     title_th: 'ภาพรวม',
     title_en: 'Dashboard',
-    icon: 'home',
+    icon: 'pie-chart',
     link: { to: '/dashboard' },
   },
   {
     title_th: 'การขนส่ง',
     title_en: 'Transportation',
-    icon: 'briefcase',
+    icon: 'check-list',
     link: { to: '/job-status' },
   },
   {
     title_th: 'จัดการรถ',
     title_en: 'Trucks',
-    icon: 'truck',
+    icon: 'delivery',
     expanded: true,
-    children: [
-      // { title_th: 'บัญชีผู้ให้บริการขนส่ง', title_en: 'Carrier account', link: { to: '/carrier-account' } },
-      { title_th: 'รถบรรทุก', title_en: 'Trucks', link: { to: '/vehicles' } },
-      { title_th: 'คนขับรถ', title_en: 'Drivers', link: { to: '/drivers' } },
-    ],
+    link: { to: '/vehicles' }
+    // children: [
+    //   // { title_th: 'บัญชีผู้ให้บริการขนส่ง', title_en: 'Carrier account', link: { to: '/carrier-account' } },
+    //   { title_th: 'รถบรรทุก', title_en: 'Trucks', link: { to: '/vehicles' } },
+    //   { title_th: 'คนขับรถ', title_en: 'Drivers', link: { to: '/drivers' } },
+    // ],
   },
   {
     title_th: 'จัดการงาน',
     title_en: 'Jobs',
-    icon: 'archive',
+    icon: 'warehouse',
     link: { to: '/jobs' },
   },
   {
     title_th: 'ผู้ใช้งาน',
     title_en: 'Users',
-    icon: 'user',
+    icon: 'delivery-man',
     link: { to: '/user-management' },
   },
   {
     title_th: 'ตั้งค่า',
     title_en: 'Settings',
-    icon: 'cog',
+    icon: 'settings',
     link: { to: '#' },
   },
   // {

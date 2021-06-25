@@ -3,8 +3,9 @@ import { DefaultTheme, ThemeProvider } from 'styled-components';
 import themes from './themes';
 import { withTrans } from '../i18n/withTrans';
 import { Provider, rootStore } from '../stores/root-store';
-import '../Layouts/css/style.css';
+// import '../Layouts/css/style.css';
 import EmptyLayout from './empty-layout'
+import ParentLayout from './parent-layout';
 
 const getDefaultTheme = (): DefaultTheme['name'] => {
   if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
@@ -16,7 +17,10 @@ const getDefaultTheme = (): DefaultTheme['name'] => {
   }
 };
 
-const LayoutPage: React.FC<{ pageContext: { layout: string }, custom404: any }> = ({ custom404, children, pageContext }) => {
+const LayoutPage: React.FC<{
+  pageContext: { layout: string },
+  custom404: any
+}> = ({ custom404, children, pageContext }) => {
   const [theme, setTheme] = useState<DefaultTheme['name']>('default');
   const [dir, setDir] = useState<'ltr' | 'rtl'>('ltr');
 
@@ -29,9 +33,10 @@ const LayoutPage: React.FC<{ pageContext: { layout: string }, custom404: any }> 
 
   return (
     <Provider value={rootStore}>
-      <ThemeProvider theme={themes(theme, dir)}>
-        <EmptyLayout children={children} pageContext={pageContext} custom404={custom404} />
-      </ThemeProvider>
+      {/* <ThemeProvider theme={themes(theme, dir)}> */}
+      {/* <EmptyLayout children={children} pageContext={pageContext} custom404={custom404} /> */}
+      {/* </ThemeProvider> */}
+      <ParentLayout pageContext={pageContext}>{children}</ParentLayout>
     </Provider>
   );
 };

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import DynamicTable from '@atlaskit/dynamic-table';
 import { head, createRow } from './dynamic-table/sample-data';
-import { Button } from '@paljs/ui/Button';
-import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
-import Row from '@paljs/ui/Row';
+// import { Button } from '@paljs/ui/Button';
+// import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
+// import Row from '@paljs/ui/Row';
 import { useMst } from '../../../stores/root-store';
 import { observer } from 'mobx-react-lite';
 import SearchForm from '../../search-form';
@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   min-width: 600px;
 `;
 
-const DriverForApproval: React.FC<{}> = observer(({}) => {
+const DriverForApproval: React.FC<{}> = observer(({ }) => {
   const { carrierStore, loginStore } = useMst();
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
@@ -68,17 +68,17 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
 
   return (
     <div>
-      <CardHeader>
-        <div className="block-data-header">
-          <span className="font-data-header">{t('drivers')}</span>
-          <div style={{ display: 'flex' }}>
-            <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
-          </div>
+      {/* <CardHeader> */}
+      <div className="block-data-header">
+        <span className="font-data-header">{t('drivers')}</span>
+        <div style={{ display: 'flex' }}>
+          <SearchForm data={rows} onSearch={(value: any) => setRowData(value)} />
         </div>
-      </CardHeader>
-      <CardBody>
-        <Row style={{ padding: 5, marginBottom: 10 }}>
-          <Button
+      </div>
+      {/* </CardHeader> */}
+      {/* <CardBody> */}
+      {/* <Row style={{ padding: 5, marginBottom: 10 }}> */}
+      {/* <Button
             appearance={all ? 'filled' : 'outline'}
             status="Success"
             size="Small"
@@ -118,26 +118,26 @@ const DriverForApproval: React.FC<{}> = observer(({}) => {
             onClick={() => onClickApproved()}
           >
             {t('approved')}
-          </Button>
-        </Row>
-        <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
-        <Wrapper>
-          <DynamicTable
-            // caption={caption}
-            head={head}
-            rows={rowData}
-            rowsPerPage={10}
-            defaultPage={1}
-            loadingSpinnerSize="large"
-            isLoading={false}
-            // isFixedSize
-            // defaultSortKey="term"
-            defaultSortOrder="ASC"
-            onSort={() => console.log('onSort')}
-            onSetPage={() => console.log('onSetPage')}
-          />
-        </Wrapper>
-      </CardBody>
+          </Button> */}
+      {/* </Row> */}
+      <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
+      <Wrapper>
+        <DynamicTable
+          // caption={caption}
+          head={head}
+          rows={rowData}
+          rowsPerPage={10}
+          defaultPage={1}
+          loadingSpinnerSize="large"
+          isLoading={false}
+          // isFixedSize
+          // defaultSortKey="term"
+          defaultSortOrder="ASC"
+          onSort={() => console.log('onSort')}
+          onSetPage={() => console.log('onSetPage')}
+        />
+      </Wrapper>
+      {/* </CardBody> */}
     </div>
   );
 });
