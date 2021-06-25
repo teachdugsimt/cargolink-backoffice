@@ -24,6 +24,12 @@ import { close } from 'react-icons-kit/fa/close';
 import { pencil } from 'react-icons-kit/fa/pencil';
 import UploadButton from '../../UploadButton';
 import Swal from 'sweetalert2';
+import { IUserDTO } from '../../../stores/user-store';
+import { useMst } from '../../../stores/root-store';
+import { DateFormat } from '../../simple-data';
+import { UserApi } from '../../../services';
+import { UploadFileResponse } from '../../../services/upload-api';
+import { EditUserPayload } from '../../../services/user-api';
 
 interface Props {
   id?: number;
@@ -173,22 +179,66 @@ const IMAGE_CONTAINER: CSSProperties = {
 
 const EditUser: React.FC<Props> = observer((props: any) => {
   const { t } = useTranslation();
+  const { userStore, loginStore, uploadFileStore } = useMst();
   // const { control, handleSubmit } = useForm();
-  const [file, setFile] = useState<FileProps>({});
+  const [files, setFiles] = useState<UploadFileResponse[]>([]);
   const [profileImage, setProfileImage] = useState<any>(null);
   const [previewImage, setPreviewImage] = useState<any>(null);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isOpenGeneralAddress, setIsOpenGeneralAddress] = useState<boolean>(false);
   const [isOpenDocumentAddress, setIsOpenDocumentAddress] = useState<boolean>(false);
   const [address, setAddress] = useState<AddressProps>({});
+  const [userData, setUserData] = useState<IUserDTO | null>(null);
 
   // const onSubmit = data => console.log(data);
+  const userId = props.id;
+  type Fields = 'email' | 'legalType' | 'phoneNumber' | 'attachCode' | 'userType';
+
+  const getUser = async (userId: string) => {
+    UserApi.getUser(userId)
+      .then((response) => {
+        if (response && response.ok) {
+          const user: IUserDTO = {
+            ...response.data,
+            phoneNumber: response.data.phoneNumber ? `0${response.data.phoneNumber.substr(3)}` : null,
+          };
+          setUserData(user);
+        } else {
+          console.error('Unexpected error while loading user', response);
+        }
+      })
+      .catch((error) => {
+        console.error('Error while loading this user', error);
+        Swal.fire({
+          icon: 'error',
+          text: 'Error while loading this user',
+        });
+      });
+  };
 
   useEffect(() => {
+    if (!userId) navigate('/user-management');
+    else getUser(userId);
+    uploadFileStore.clear();
+
     return () => {
-      setFile({});
+      setFiles([]);
+      uploadFileStore.clear();
     };
   }, []);
+
+  useEffect(() => {
+    const newFile = JSON.parse(JSON.stringify(uploadFileStore.file));
+    const isNoFile = newFile == null || Object.keys(newFile).every((key) => newFile[key] == null);
+    if (!isNoFile) setFiles([...files, newFile]);
+  }, [uploadFileStore.file]);
+
+  useEffect(() => {
+    const filesPayload = files
+      .filter((file) => file && !Object.keys(file).every((key) => file[key] == null))
+      .map((file) => file.attachCode);
+    handleSave('attachCode', filesPayload);
+  }, [files]);
 
   useEffect(() => {
     console.log('isChecked :>> ', isChecked);
@@ -198,20 +248,18 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     console.log('form state', formState);
   };
 
-  const handleSave = (value: any) => {
-    console.log('value :>> ', value);
-    // if (value !== value) {
-    //   // on save
-    //   console.log('newValue !== oldValue -> go to save')
-    // }
+  const handleSave = (field: Fields, value: any) => {
+    console.log(field, ':>> ', value);
+    const payload: Partial<EditUserPayload> = { [field]: value };
+    //TODO patch user here
   };
 
   const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
-    file && setFile(file);
+    file && uploadFileStore.uploadFile('USER_DOC', file);
   };
 
-  const handleDeletFile = (id: number | string) => {
+  const handleDeleteFile = (id: number | string) => {
     console.log('file id :>> ', id);
   };
 
@@ -256,7 +304,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     return 'INVALID_EMAIL';
   };
 
-  const files: any = [
+  const filesMock: any = [
     {
       id: 1,
       name: 'filename1.pdf',
@@ -288,11 +336,11 @@ const EditUser: React.FC<Props> = observer((props: any) => {
   const legalTypeOptions: any = [
     {
       label: t('individual'),
-      value: 0,
+      value: 'INDIVIDUAL',
     },
     {
       label: t('company'),
-      value: 1,
+      value: 'JURISTIC',
       isSelected: true,
     },
   ];
@@ -400,7 +448,9 @@ const EditUser: React.FC<Props> = observer((props: any) => {
         </Row>
       </>
     );
-  }
+  };
+
+  if (!userData) return <></>;
 
   return (
     <div>
@@ -446,23 +496,30 @@ const EditUser: React.FC<Props> = observer((props: any) => {
 
                   <FormEdit
                     label={`${t('memberSince')} :`}
-                    value={'Jan 1, 2021 00:00:00'}
+                    value={DateFormat(userData.createdAt as string, loginStore.language)}
                     showEditIcon={false}
                     containerStyle={{ marginBottom: 12 }}
                     valueStyle={{ fontWeight: 0 }}
                   />
                   <FormEdit
                     label={`${t('legalType')} :`}
-                    value={'Company'}
+                    value={userData?.legalType === 'INDIVIDUAL' ? t('individual') : t('company')}
                     type={'dropdown'}
                     dropDownOption={legalTypeOptions}
-                    handleSave={handleSave}
+                    handleSave={(value) => handleSave('legalType', value)}
                   />
-                  <FormEdit label={`${t('phoneNumber')} :`} value={'+66922211112'} handleSave={handleSave} />
+                  <FormEdit
+                    label={`${t('phoneNumber')} :`}
+                    value={userData.phoneNumber || '-'}
+                    handleSave={(val) => {
+                      const value = `+66${val.substr(1)}`;
+                      handleSave('phoneNumber', value);
+                    }}
+                  />
                   <FormEdit
                     label={`${t('email')} :`}
-                    value={'my.mail@example.com'}
-                    handleSave={handleSave}
+                    value={userData.email}
+                    handleSave={(value) => handleSave('email', value)}
                     validateForm={validateEmail}
                     validateMessage={t('invalidEmail')}
                     messageForCheck={'INVALID_EMAIL'}
@@ -477,9 +534,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                       <Field label="" name="uploadFile" defaultValue="">
                         {({ fieldProps, error, meta: { valid } }: any) => (
                           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <UploadButton
-                              accept=".pdf"
-                              onChange={handleUploadFile} />
+                            <UploadButton accept=".pdf" onChange={handleUploadFile} />
                             {/* <MaterialButton
                               variant="contained"
                               component="label"
@@ -497,12 +552,12 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                   </Row>
 
                   <Row>
-                    {files.map((file: any) => {
+                    {files.length ? files.map((file: UploadFileResponse) => {
                       return (
-                        <Col key={file.id}>
+                        <Col key={file.attachCode}>
                           <ListFile
-                            fileName={file.name}
-                            date={file.date}
+                            fileName={file.fileName}
+                            date={file.uploadedDate}
                             handleDelete={() => {
                               const red = '#E03616';
                               const blue = '#3085D6';
@@ -512,18 +567,23 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                                 cancelButtonColor: blue,
                                 confirmButtonText: t('delete'),
                                 cancelButtonText: t('cancel'),
-                              }).fire({
-                                title: t('deleteConfirmAlertTitle'),
-                                titleText: t('deleteConfirmAlertText'),
-                                icon: 'warning',
-                                showCancelButton: true,
-                              }).then(({ isConfirmed }) => isConfirmed && handleDeletFile(file.id))
-                            }
-                            }
+                              })
+                                .fire({
+                                  title: t('deleteConfirmAlertTitle'),
+                                  titleText: t('deleteConfirmAlertText'),
+                                  icon: 'warning',
+                                  showCancelButton: true,
+                                })
+                                .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file.attachCode));
+                            }}
                           />
                         </Col>
                       );
-                    })}
+                    }) : (
+                      <Col>
+                        <span>{t('noDocuments')}</span>
+                      </Col>
+                    )}
 
                     <Col style={{ marginTop: 20 }}>
                       <FormEdit
@@ -591,9 +651,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                     )}
                   </div>
                 </Col>
-                {(isOpenDocumentAddress) && (
-                  <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} />
-                )}
+                {isOpenDocumentAddress && <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} />}
               </Row>
             </form>
           )}

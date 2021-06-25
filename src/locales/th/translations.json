@@ -148,7 +148,8 @@
   "perTon": "ต่อตัน",
   "uploadLink": "ลิงก์อัพโหลด",
   "copy": "คัดลอก",
-  "URLCopied": "อัพโหลด URL แล้ว",
+  "URLCopied": "คัดลอก URL แล้ว",
   "userUploadTitle": "อัพโหลดเอกสาร",
-  "backToLogin": "กลับไปหน้าล็อกอิน"
+  "backToLogin": "กลับไปหน้าล็อกอิน",
+  "noDocuments": "ไม่มีเอกสาร"
 }

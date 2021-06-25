@@ -167,7 +167,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
             onSetPage={(pagination) => {
               setPage(pagination);
               let search = JSON.parse(JSON.stringify(searchValue));
-              search['page'] = pagination - 1;
+              search['page'] = pagination;
               setSearchValue(search);
               userStore.getUsers(search);
             }}

@@ -46,12 +46,12 @@ export const UserStore = types
         self.data_user = null;
         self.error_response = null;
         try {
-          const response = yield userApi.getUser(params);
+          const response = yield userApi.getUsersList(params);
           console.log('getUsers response :> ', response);
           if (response && response.ok) {
             const { data, size, totalElements, totalPages }: GetUsersListResponse = response.data;
             self.loading = false;
-            const currentPage = (params?.page || 0) + 1;
+            const currentPage = params?.page || 1;
             const content = data;
             const user: IUserManagementProps = {
               content: [],
@@ -126,6 +126,7 @@ export interface IUserDTO {
   deviceToken: string | null;
   status: string | null;
   documentStatus: string | null;
+  files?: string[];
 }
 
 export interface IUserNull {
