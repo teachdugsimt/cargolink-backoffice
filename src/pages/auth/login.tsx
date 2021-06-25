@@ -39,7 +39,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
     if (toggle && !fetching_login) {
       if (error_login && !data_signin.idToken) {
         let content = error_login;
-        if (error_login === 'NotAuthorizedException') content = t('invalidEmailOrPassword');
+        if (error_login === 'NotAuthorizedException') content = t('invalidUsernameOrPassword');
         setAlertSetting({
           icon: 'error',
           show: true,

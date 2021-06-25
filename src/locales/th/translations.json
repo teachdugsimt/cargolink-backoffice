@@ -152,5 +152,5 @@
   "userUploadTitle": "อัพโหลดเอกสาร",
   "backToLogin": "กลับไปหน้าล็อกอิน",
   "noDocuments": "ไม่มีเอกสาร",
-  "invalidEmailOrPassword": "อีเมลหรือรหัสผ่านไม่ถูกต้อง"
+  "invalidUsernameOrPassword": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"
 }
