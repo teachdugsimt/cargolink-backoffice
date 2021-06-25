@@ -82,13 +82,28 @@ export const LoginStore = types
         }
       }),
       requestLogout: flow(function* requestLogout() {
-        console.log('requestLogout response :> success');
+        self.fetching_login = true;
+        self.error_login = '';
+        const { idToken } = self.data_signin;
+        if (idToken.length) {
+          try {
+            const response = yield LoginApi.LogoutApi(idToken);
+            console.log('requestLogout response :> ', response);
+            if (response && response.ok) {
+            } else {
+              self.error_login = response.originalError.message;
+            }
+          } catch (error) {
+            console.error('Failed to request logout store :> ', error);
+            self.error_login = 'Failed to request logout store';
+          }
+        }
+        self.fetching_login = false;
         self.data_signin = {
           idToken: '',
           accessToken: '',
         };
         localStorage.removeItem('profileLocal')
-        self.error_login = '';
         self.rememberProfile = false
       }),
     };
