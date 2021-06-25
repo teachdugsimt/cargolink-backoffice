@@ -20,6 +20,14 @@ body {
   font-family: 'Prompt', sans-serif !important;
 }
 
+.swal-validation-no-icon.swal2-validation-message {
+  background: transparent;
+}
+
+.swal-validation-no-icon::before {
+  display: none !important;
+}
+
 input[type='file'] {
   display: none;
 }
