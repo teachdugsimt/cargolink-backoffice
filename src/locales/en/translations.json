@@ -150,5 +150,6 @@
   "URLCopied": "URL has been copied.",
   "userUploadTitle": "Upload Documents",
   "backToLogin": "Back to Log In",
-  "noDocuments": "No Documents"
+  "noDocuments": "No Documents",
+  "invalidEmailOrPassword": "Invalid email or password"
 }
