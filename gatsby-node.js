@@ -12,10 +12,15 @@
 exports.onCreatePage = ({ page, actions }) => {
   const { createPage } = actions;
 
-  if (page.path.match(/auth/) || page.path.match(/user\/upload/)) {
+  if (page.path.match(/auth/)) {
     page.context.layout = 'auth';
-    createPage(page);
+  } else if (page.path.match(/user\/upload/)) {
+    page.context.layout = 'doc';
+  } else {
+    page.context.layout = 'primary';
   }
+
+  createPage(page);
 };
 
 // exports.onPostBuild = () => {

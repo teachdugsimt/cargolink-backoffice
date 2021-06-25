@@ -3,17 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Card, CardHeader, CardBody } from '@paljs/ui/Card';
 import Select from '@paljs/ui/Select';
-import Switch from '@material-ui/core/Switch';
+// import Switch from '@material-ui/core/Switch';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import ImageUpload from './image-upload';
 import { useMst } from '../../../stores/root-store';
 import Alert from '../../alert';
 import { defaultAlertSetting } from '../../simple-data';
 import { navigate } from 'gatsby';
-import { UploadFileStore } from '../../../stores/upload-file-store';
+import { UploadImageStore } from '../../../stores/upload-image-store';
 import { useTranslation } from 'react-i18next';
 import { EvaIcon } from '@paljs/ui/Icon';
-import '../../../Layouts/css/style.css';
+// import '../../../Layouts/css/style.css';
 import Row from '@paljs/ui/Row';
 import Col from '@paljs/ui/Col';
 import Toggle from '@atlaskit/toggle';
@@ -30,7 +30,7 @@ const userOptions: any = [
 const AddTruck: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
   const { carrierStore, loginStore, masterTypeStore } = useMst();
-  const truckPhotos = JSON.parse(JSON.stringify(UploadFileStore.truckPhotos));
+  const truckPhotos = JSON.parse(JSON.stringify(UploadImageStore.truckPhotos));
   const { register, handleSubmit, errors, control } = useForm({
     mode: 'onChange',
     reValidateMode: 'onChange',

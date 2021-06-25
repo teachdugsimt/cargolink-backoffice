@@ -58,7 +58,7 @@ export const UploadImageStore = types
         self.truckPhotos = images;
       }),
 
-      clearUploadFileStore: flow(function* clearUploadFileStore() {
+      clearUploadImageStore: flow(function* clearUploadFileStore() {
         self.truckPhotos = { front: null, back: null, left: null, right: null };
         self.error_response = null;
       }),

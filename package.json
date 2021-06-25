@@ -1,20 +1,26 @@
 {
-  "name": "gatsby-admin-template",
+  "name": "cgl-backoffice",
   "private": true,
-  "description": "Admin dashboard template based on Gatsby with @paljs/ui component package",
+  "description": "Backoffice for CargoLink",
   "version": "0.1.0",
-  "author": "Ahmed Elywa",
+  "author": "Katanyoo Ubalee",
   "dependencies": {
+    "@atlaskit/atlassian-navigation": "^1.0.0",
     "@atlaskit/avatar": "^20.0.8",
     "@atlaskit/button": "^15.1.5",
     "@atlaskit/checkbox": "^12.1.2",
     "@atlaskit/dropdown-menu": "^10.1.2",
     "@atlaskit/dynamic-table": "^14.1.5",
     "@atlaskit/form": "^8.2.2",
+    "@atlaskit/menu": "^1.0.1",
+    "@atlaskit/page-layout": "^1.0.1",
+    "@atlaskit/popup": "^1.0.7",
     "@atlaskit/radio": "^5.0.4",
     "@atlaskit/select": "^13.3.1",
+    "@atlaskit/side-navigation": "^1.0.1",
     "@atlaskit/table-tree": "^9.0.7",
     "@atlaskit/textfield": "^5.0.1",
+    "@atlaskit/theme": "^11.2.1",
     "@atlaskit/toggle": "^12.2.0",
     "@ckeditor/ckeditor5-build-classic": "23.0.0",
     "@ckeditor/ckeditor5-react": "2.1.0",
@@ -22,6 +28,7 @@
     "@material-ui/core": "^4.11.0",
     "@paljs/icons": "1.0.4",
     "@paljs/ui": "1.0.4",
+    "@theme-ui/prism": "^0.10.0",
     "@tinymce/tinymce-react": "3.7.0",
     "apisauce": "^2.0.0",
     "axios": "^0.21.0",
@@ -42,6 +49,7 @@
     "gatsby-plugin-react-helmet": "^3.3.14",
     "gatsby-plugin-sharp": "2.6.42",
     "gatsby-plugin-styled-components": "3.3.14",
+    "gatsby-plugin-theme-ui": "^0.10.1",
     "gatsby-plugin-typescript": "2.4.21",
     "gatsby-plugin-web-font-loader": "^1.0.4",
     "gatsby-source-filesystem": "2.3.34",
@@ -75,7 +83,7 @@
     "styled-components": "5.2.0",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^10.12.5",
-    "theme-ui": "^0.3.5"
+    "theme-ui": "^0.10.0"
   },
   "keywords": [
     "react",
@@ -89,20 +97,13 @@
     "dev": "gatsby develop",
     "start": "npm run dev",
     "serve": "gatsby serve",
-    "test": "cypress open",
+    "test": "cypress run --record --key d7222821-aeec-46cb-b9a6-c75789d66ce7",
     "release": "standard-version",
     "release:major": "standard-version --release-as major",
     "release:minor": "standard-version --release-as minor",
     "release:patch": "standard-version --release-as patch",
     "release:alpha": "standard-version --prerelease alpha",
     "release:beta": "standard-version --prerelease beta"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/paljs/gatsby-admin-template"
-  },
-  "bugs": {
-    "url": "https://github.com/paljs/gatsby-admin-template/issues"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",

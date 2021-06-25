@@ -1,0 +1,110 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 0,
+    "pending": 0,
+    "failures": 1,
+    "start": "2021-06-23T07:24:20.581Z",
+    "end": "2021-06-23T07:24:23.278Z",
+    "duration": 2697,
+    "testsRegistered": 1,
+    "passPercent": 0,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "89953017-8d42-4667-9e84-cdb2a3a4de23",
+      "title": "",
+      "fullFile": "cypress/integration/translation.spec.js",
+      "file": "cypress/integration/translation.spec.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "20c77ea1-a298-45cd-b73b-ef83361b21a1",
+          "title": "Window",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "ทดสอบการไม่กรอก รหัสผ่าน",
+              "fullTitle": "Window ทดสอบการไม่กรอก รหัสผ่าน",
+              "timedOut": null,
+              "duration": 2595,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.wait(1000);\ncy.get('#language').click();\ncy.wait(1000);\ncy.get('#th').click();\ncy.wait(1000);\ncy.get('#subTitle').should('contain', 'เข้าสู่ระบบด้วยหมายเลขโทรศัพท์ของคุณ');\ncy.get('#loginDescription').should('contain', 'ยังไม่มีบัญชี? สมัครสมาชิก');\ncy.get('#forgotPassword').should('contain', 'ลืมรหัสผ่าน?');\ncy.get('#phoneNumber').invoke('attr', 'placeholder').should('contain', 'หมายเลขโทรศัพท์');\ncy.get('#password').invoke('attr', 'placeholder').should('contain', 'รหัสผ่าน');\ncy.wait(1000);\ncy.get('#login').click();\ncy.wait(1000);\ncy.get('#loginError1').should('contain', '* กรุณาใส่หมายเลขโทรศัพท์ที่ถูกต้อง');\ncy.get('#loginError2').should('contain', '* กรุณาใส่รหัสผ่านที่ถูกต้อง');\ncy.wait(2000);",
+              "err": {
+                "message": "CypressError: `cy.visit()` failed trying to load:\n\nhttp://localhost:8000/auth/login\n\nWe attempted to make an http request to this URL but the request failed without a response.\n\nWe received this error at the network level:\n\n  > Error: connect ECONNREFUSED 127.0.0.1:8000\n\nCommon situations why this would fail:\n  - you don't have internet access\n  - you forgot to run / boot your web server\n  - your web server isn't accessible\n  - you have weird network configuration settings on your computer\n\nBecause this error occurred during a `before each` hook we are skipping the remaining tests in the current suite: `Window`",
+                "estack": "CypressError: `cy.visit()` failed trying to load:\n\nhttp://localhost:8000/auth/login\n\nWe attempted to make an http request to this URL but the request failed without a response.\n\nWe received this error at the network level:\n\n  > Error: connect ECONNREFUSED 127.0.0.1:8000\n\nCommon situations why this would fail:\n  - you don't have internet access\n  - you forgot to run / boot your web server\n  - your web server isn't accessible\n  - you have weird network configuration settings on your computer\n\nBecause this error occurred during a `before each` hook we are skipping the remaining tests in the current suite: `Window`\n    at http://localhost:56961/__cypress/runner/cypress_runner.js:138905:23\n    at visitFailedByErr (http://localhost:56961/__cypress/runner/cypress_runner.js:138264:12)\n    at http://localhost:56961/__cypress/runner/cypress_runner.js:138904:11\n    at tryCatcher (http://localhost:56961/__cypress/runner/cypress_runner.js:10798:23)\n    at Promise._settlePromiseFromHandler (http://localhost:56961/__cypress/runner/cypress_runner.js:8733:31)\n    at Promise._settlePromise (http://localhost:56961/__cypress/runner/cypress_runner.js:8790:18)\n    at Promise._settlePromise0 (http://localhost:56961/__cypress/runner/cypress_runner.js:8835:10)\n    at Promise._settlePromises (http://localhost:56961/__cypress/runner/cypress_runner.js:8911:18)\n    at _drainQueueStep (http://localhost:56961/__cypress/runner/cypress_runner.js:5505:12)\n    at _drainQueue (http://localhost:56961/__cypress/runner/cypress_runner.js:5498:9)\n    at Async.../../node_modules/bluebird/js/release/async.js.Async._drainQueues (http://localhost:56961/__cypress/runner/cypress_runner.js:5514:5)\n    at Async.drainQueues (http://localhost:56961/__cypress/runner/cypress_runner.js:5384:14)\nFrom Your Spec Code:\n    at Context.eval (http://localhost:56961/__cypress/tests?p=cypress/integration/translation.spec.js:102:8)\n\nFrom Node.js Internals:\n  Error: connect ECONNREFUSED 127.0.0.1:8000\n      at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1146:16)\n  ",
+                "diff": null
+              },
+              "uuid": "351e536a-627c-46c3-818a-22e97ecf3992",
+              "parentUUID": "20c77ea1-a298-45cd-b73b-ef83361b21a1",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [],
+          "failures": [
+            "351e536a-627c-46c3-818a-22e97ecf3992"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 2595,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "6.2.1"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/report/mochawesome-report",
+        "overwrite": true,
+        "html": true,
+        "json": true,
+        "timestamp": "mmddyyyy_HHMMss"
+      },
+      "version": "5.1.0"
+    }
+  }
+}

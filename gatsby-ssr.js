@@ -2,9 +2,9 @@ const React = require("react")
 const loading = require('./src/loading-web-cargo.gif')
 
 const HeadComponents = [
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw" />,
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw&libraries=places" />,
-    <div
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw" />,
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw&libraries=places" />,
+  <div
     key={`loader`}
     id="___loader"
     style={{
@@ -31,5 +31,5 @@ const HeadComponents = [
 
 
 exports.onRenderBody = ({ setHeadComponents }, pluginOptions) => {
-    setHeadComponents(HeadComponents)
+  // setHeadComponents(HeadComponents)
 }
