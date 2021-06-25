@@ -51,7 +51,7 @@ const RequestPassword = () => {
   const onSuccess = () => {
     Swal.fire({
       icon: 'success',
-      text: `Reset password link was sent to ${email}`,
+      text: t('sent', { email }),
     }).then(({ isConfirmed }) => {
       isConfirmed && navigate('/');
     });
