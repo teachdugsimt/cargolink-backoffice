@@ -22,6 +22,8 @@ import Textfield from '@atlaskit/textfield';
 import { RadioGroup } from '@atlaskit/radio';
 import { OptionsPropType } from '@atlaskit/radio/types';
 import UploadButton from '../../UploadButton';
+import { CreateUserPayload } from '../../../services/user-api';
+import { UploadFileStore } from '../../../stores/upload-image-store';
 
 interface Props { }
 
@@ -176,11 +178,15 @@ const AddUser: React.FC<Props> = observer(() => {
 
   const handleSubmit = (formState: InputData) => {
     console.log('form state', formState);
+    const payload: CreateUserPayload = {
+      ...formState,
+      userType: 0,
+    }
   };
 
   const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
-    file && setFile(file);
+    if (file) UploadFileStore.uploadFile();
   };
 
   return (
@@ -204,7 +210,7 @@ const AddUser: React.FC<Props> = observer(() => {
                     defaultValue=""
                   >
                     {({ fieldProps, error, meta: { valid } }: any) => (
-                      <div style={{ display: 'flex', flexDirection: 'row' }}>
+                      <div id="create-user-legal-type" style={{ display: 'flex', flexDirection: 'row' }}>
                         <RadioGroup
                           options={legalTypeOptions}
                           // onChange={onChange}
@@ -268,7 +274,7 @@ const AddUser: React.FC<Props> = observer(() => {
                   <Field
                     label={t('email')}
                     name="email"
-                    >
+                  >
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div style={{ display: 'flex' }}>
                         <Textfield
