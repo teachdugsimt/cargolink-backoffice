@@ -73,7 +73,7 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const createRow = (users: any, language: string, t: TFunction<string>) => {
+export const createRow = (users: any, language: string, t: TFunction<string>, deleteUserFunction?: (userId: string) => any) => {
   console.log('keys', users);
   const requestUploadToken = async (id: any) => {
     try {
@@ -108,6 +108,7 @@ export const createRow = (users: any, language: string, t: TFunction<string>) =>
       }
     });
   }
+  const deleteUser = deleteUserFunction ? deleteUserFunction : (userId: string) => null;
   return users.map((user: IUserDTO | IUserNull, index: number) => {
     return {
       key: `row-${index}-${user.phoneNumber}`,
@@ -161,12 +162,25 @@ export const createRow = (users: any, language: string, t: TFunction<string>) =>
                 appearance="ghost"
                 status="Basic"
                 size="Small"
-                onClick={() =>
-                  navigate('/user-management/user', {
-                    state: {
-                      id: user.userId,
-                    },
-              })}>
+                onClick={() => {
+                  const red = '#E03616';
+                  const blue = '#3085D6';
+                  Swal.mixin({
+                    iconColor: red,
+                    confirmButtonColor: red,
+                    cancelButtonColor: blue,
+                    confirmButtonText: t('delete'),
+                    cancelButtonText: t('cancel'),
+                  })
+                    .fire({
+                      title: t('deleteConfirmAlertTitle'),
+                      titleText: t('deleteConfirmAlertText'),
+                      icon: 'warning',
+                      showCancelButton: true,
+                    })
+                    .then(({ isConfirmed }) => isConfirmed && deleteUser(user.userId))
+                }
+                }>
                 <Icon icon={ic_delete} />
               </Button>
             </div>

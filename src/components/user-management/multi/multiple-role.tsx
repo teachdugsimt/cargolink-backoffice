@@ -36,6 +36,11 @@ const MultipleRole: React.FC<Props> = observer(() => {
   const [searchValue, setSearchValue] = useState({});
   const [sortable, setSortable] = useState(sortabled);
 
+  const deleteUser = (userId: string) => {
+    console.log('attempt to delete :>', userId);
+    //TODO bind api delete user here
+  }
+
   useEffect(() => {
     setSearchValue({ page: 0 });
     userStore.getUsers({ page: 0 });
@@ -82,7 +87,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
         });
       };
       const content = translateTel(data_user.content);
-      const rows = createRow(content, loginStore.language, t);
+      const rows = createRow(content, loginStore.language, t, deleteUser);
       setRowData(rows);
       const rowLen = data_user?.lengthPerPage;
       rowLen != null && setRowLength(rowLen);
