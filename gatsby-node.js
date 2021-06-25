@@ -21,6 +21,7 @@ exports.onCreatePage = ({ page, actions }) => {
   }
 
   createPage(page);
+  return;
 };
 
 // exports.onPostBuild = () => {

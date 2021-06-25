@@ -26,6 +26,7 @@ import {
 
 const PrimaryLayout = observer(({ children, location }) => {
   const { loginStore } = useMst()
+
   return (
     <PageLayout>
       <Content>

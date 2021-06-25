@@ -18,7 +18,7 @@ const getDefaultTheme = (): DefaultTheme['name'] => {
 };
 
 const LayoutPage: React.FC<{
-  location,
+  location: any,
   pageContext: { layout: string },
   custom404: any
 }> = ({ custom404, children, pageContext, location }) => {

@@ -13,15 +13,20 @@ const ParentLayout = observer(({ pageContext, children, location }) => {
   if (token && token.length) {
     // IS LOGGED IN
     if (pageContext.layout == 'auth') {
-      navigate('/dashboard')
-      return
+      if (typeof window !== `undefined`) {
+        navigate('/dashboard')
+      }
+      return <></>
     } else {
       return <PrimaryLayout location={location}>{children}</PrimaryLayout>
     }
   } else {
     // IS NOT LOGGED IN
     if (!['auth', 'doc'].includes(pageContext.layout)) {
-      navigate('/auth/login')
+      if (typeof window !== `undefined`) {
+        navigate('/auth/login')
+      }
+      return <></>
     } else {
       return <WhiteLayout>{children}</WhiteLayout>
     }
