@@ -12,6 +12,8 @@ import Swal from 'sweetalert2';
 import { TFunction, useTranslation } from 'react-i18next';
 import { IUserDTO, IUserNull } from '../../../../stores/user-store';
 import { UserApi } from '../../../../services';
+import InlineMessage from '@atlaskit/inline-message';
+import ReactDOMServer from 'react-dom/server';
 
 export const sortabled: any = {
   phoneNumber: true, //! Note that: DESC = true, ASC = fasle
@@ -88,26 +90,38 @@ export const createRow = (users: any, language: string, t: TFunction<string>) =>
       text: 'Error while get upload link',
     });
     return null;
-  }
-  const onCopyUploadLinkButtonClick = async (id: any) => {
-    const uploadLink = await requestUploadToken(id);
-    if (!uploadLink) return;
+  };
+  const onCopyUploadLinkButtonClick = (id: any) => {
+    let uploadLink = '';
+    const validationMessage = <InlineMessage type="confirmation" secondaryText={t('URLCopied')} />;
     Swal.fire({
-      titleText: t('uploadLink'),
-      text: uploadLink,
-      showCancelButton: true,
-      cancelButtonText: t('back'),
-      confirmButtonText: t('copy'),
-    }).then(({ isConfirmed }) => {
-      if (isConfirmed) {
-        navigator.clipboard.writeText(uploadLink);
-        Swal.fire({
-          icon: 'success',
-          text: t('URLCopied'),
+      didOpen: () => {
+        Swal.showLoading();
+        requestUploadToken(id).then((link) => {
+          if (link && link.length) {
+            Swal.hideLoading();
+            uploadLink = link;
+            Swal.update({
+              titleText: t('uploadLink'),
+              text: link,
+              showCancelButton: true,
+              cancelButtonText: t('back'),
+              confirmButtonText: t('copy'),
+            });
+          } else throw new Error('Upload link is empty');
         });
-      }
+      },
+      customClass: {
+        validationMessage: 'swal-validation-no-icon',
+      },
+      preConfirm: () => {
+        const hydrated = ReactDOMServer.renderToStaticMarkup(validationMessage)
+        Swal.showValidationMessage(hydrated);
+        navigator.clipboard.writeText(uploadLink);
+        return uploadLink;
+      },
     });
-  }
+  };
   return users.map((user: IUserDTO | IUserNull, index: number) => {
     return {
       key: `row-${index}-${user.phoneNumber}`,
@@ -140,7 +154,12 @@ export const createRow = (users: any, language: string, t: TFunction<string>) =>
           key: user.id,
           content: (
             <div style={{ textAlign: 'right' }}>
-              <Button appearance="ghost" status="Basic" size="Small" onClick={() => onCopyUploadLinkButtonClick(user.id)}>
+              <Button
+                appearance="ghost"
+                status="Basic"
+                size="Small"
+                onClick={() => onCopyUploadLinkButtonClick(user.id)}
+              >
                 <Icon icon={copy} />
               </Button>
               <Button
@@ -166,7 +185,9 @@ export const createRow = (users: any, language: string, t: TFunction<string>) =>
                     state: {
                       id: user.userId,
                     },
-              })}>
+                  })
+                }
+              >
                 <Icon icon={ic_delete} />
               </Button>
             </div>
