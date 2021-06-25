@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import Form, { Field, FormFooter } from '@atlaskit/form';
 import Button from '@atlaskit/button';
 import { navigate } from 'gatsby';
+import { observer } from 'mobx-react-lite';
+import { useMst } from '../../stores/root-store';
 
 const Wrapper = styled.div`
   display: flex;
@@ -23,33 +25,60 @@ const FileNameSpan = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
-interface InputData {
-  citizenIdCard?: string;
-  companyCertificate?: string;
-  token?: string;
-}
 interface IUploadPageProps {
   token: string | null;
 }
 const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageProps) => {
   if (!token) return <h1>Forbidden</h1>;
   const { t } = useTranslation();
+  const { uploadFileStore } = useMst();
 
   const [citizenIdFile, setCitizenIdFile] = useState<File>();
   const [companyCertificateFile, setCompanyCertificateFile] = useState<File>();
+  const [attachCodes, setAttachCodes] = useState<string[]>([]);
 
-  const handleSubmit = (formState: InputData) => {
-    console.log('submitted', formState);
+  const handleSubmit = () => {
+    const payload = {
+      url: attachCodes,
+      token,
+    }
+    console.log('submitted', payload);
   }
+
+  const uploadFile = (file: File) => {
+    uploadFileStore.uploadFile('USER_DOC', file);
+  }
+
   const handleUploadCitizenIdCard = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
-    file && setCitizenIdFile(file);
+    if (file) {
+      uploadFile(file);
+      setCitizenIdFile(file);
+    }
   }
   const handleUploadCompanyCertificate = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
-    file && setCompanyCertificateFile(file);
+    if (file) {
+      uploadFile(file);
+      setCompanyCertificateFile(file);
+    }
   }
 
+  const clearFiles = () => {
+    uploadFileStore.clear();
+  }
+
+  useEffect(() => {
+    const newFile = JSON.parse(JSON.stringify(uploadFileStore.file));
+    const isNoFile = newFile == null || Object.keys(newFile).every((key) => newFile[key] == null);
+    if (!isNoFile) {
+      setAttachCodes([...attachCodes, newFile.attachCode]);
+      clearFiles();
+    }
+  }, [uploadFileStore.file]);
+  useEffect(() => {
+    clearFiles();
+  }, []);
   useEffect(() => console.log('citizen id', citizenIdFile), [citizenIdFile]);
   useEffect(() => console.log('comp cert id', companyCertificateFile), [companyCertificateFile]);
   return (
@@ -103,4 +132,4 @@ const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageP
   );
 }
 
-export default UploadPageComponent;
+export default observer(UploadPageComponent);
