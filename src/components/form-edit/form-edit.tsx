@@ -62,7 +62,7 @@ export function FormEdit(props: FormEditProps) {
 
   const [showForm, setShowForm] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<any>(null);
-  const [isValid, setIsValid] = useState<boolean>(true);
+  const errorRef = React.useRef<React.MutableRefObject<HTMLSpanElement | null>>(null);
 
   useEffect(() => {
     if (type === 'text') {
@@ -82,6 +82,7 @@ export function FormEdit(props: FormEditProps) {
   };
 
   const handleSubmit = () => {
+    const isValid = errorRef?.current ? false : true;
     if (!isValid) {
       setShowForm(false);
       setInputValue(value);
@@ -112,7 +113,6 @@ export function FormEdit(props: FormEditProps) {
           <Field label="" name={label || ''} defaultValue={value} validate={validateForm}>
             {({ fieldProps, error, meta: { valid } }: any) => {
               const isInvalid = error === messageForCheck && messageForCheck != null;
-              if (isInvalid) setIsValid(false);
               return (
                 <div style={INPUT_BOX}>
                   <Textfield
@@ -125,7 +125,12 @@ export function FormEdit(props: FormEditProps) {
                       height: 26,
                     }}
                   />
-                  {isInvalid && <ErrorMessage>{validateMessage}</ErrorMessage>}
+                  {isInvalid && (
+                    <ErrorMessage>
+                      <span ref={errorRef}></span>
+                      {validateMessage}
+                    </ErrorMessage>
+                  )}
                 </div>
               )
             }}
