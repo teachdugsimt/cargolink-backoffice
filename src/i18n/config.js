@@ -7,11 +7,13 @@ i18next.init({
       translations: require('../locales/th/translations.json'),
       resetPassword: require('../locales/th/resetPassword.json'),
       changePassword: require('../locales/th/changePassword.json'),
+      docStatus: require('../locales/th/documentStatus.json'),
     },
     en: {
       translations: require('../locales/en/translations.json'),
       resetPassword: require('../locales/en/resetPassword.json'),
       changePassword: require('../locales/en/changePassword.json'),
+      docStatus: require('../locales/en/documentStatus.json'),
     },
   },
   defaultNS: 'translations',

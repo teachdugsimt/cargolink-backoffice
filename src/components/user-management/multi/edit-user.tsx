@@ -24,7 +24,7 @@ import { close } from 'react-icons-kit/fa/close';
 import { pencil } from 'react-icons-kit/fa/pencil';
 import UploadButton from '../../UploadButton';
 import Swal from 'sweetalert2';
-import { IUserDTO } from '../../../stores/user-store';
+import { IUserDTO, DocumentStatus } from '../../../stores/user-store';
 import { useMst } from '../../../stores/root-store';
 import { DateFormat } from '../../simple-data';
 import { UserApi } from '../../../services';
@@ -322,19 +322,22 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     },
   ];
 
-  const statusOptions: any = [
+  const statusOptions = [
     {
-      label: t('statusWaitForApproval'),
-      value: 0,
+      label: t('docStatus:noDocument'),
+      value: DocumentStatus.NO_DOCUMENT,
     },
     {
-      label: t('statusApproved'),
-      value: 1,
-      isSelected: true,
+      label: t('docStatus:waitForVerify'),
+      value: DocumentStatus.WAIT_FOR_VERIFIED,
     },
     {
-      label: t('statusRejected'),
-      value: 2,
+      label: t('docStatus:verified'),
+      value: DocumentStatus.VERIFIED,
+    },
+    {
+      label: t('docStatus:rejected'),
+      value: DocumentStatus.REJECTED,
     },
   ];
 
@@ -520,7 +523,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                     validateForm={validatePhoneNumber}
                     messageForCheck={'INVALID_PHONE_NUMBER'}
                     handleSave={(value) => {
-                      if(value.startsWith('0')) value = `+66${value.substr(1)}`;
+                      if (value.startsWith('0')) value = `+66${value.substr(1)}`;
                       handleSave('phoneNumber', value);
                     }}
                   />
@@ -596,11 +599,14 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                     <Col style={{ marginTop: 20 }}>
                       <FormEdit
                         label={`${t('status')} :`}
-                        value={'Wait for Approval'}
+                        value={userData?.documentStatus || t('docStatus:waitForVerify')}
                         valueStyle={{ color: 'orangered' }}
                         type={'dropdown'}
-                        dropDownOption={statusOptions}
-                        handleSave={handleSave}
+                        dropDownOption={statusOptions.map((option) => ({
+                          ...option,
+                          isSelected: option.value === userData?.documentStatus,
+                        }))}
+                        handleSave={(value) => {console.log('options status', value)}}
                       />
                     </Col>
                   </Row>

@@ -80,7 +80,7 @@ export const UserStore = types
               ];
               user.reRender = !!!self.data_user?.reRender;
             }
-            self.data_user = user as any;
+            self.data_user = user;
           } else {
             self.loading = false;
             self.data_user = null;
@@ -124,9 +124,17 @@ export interface IUserDTO {
   updatedBy: string | null;
   confirmationToken: string;
   deviceToken: string | null;
-  status: string | null;
-  documentStatus: string | null;
+  status: 'ACTIVE' | 'INACTIVE';
+  documentStatus: DocumentStatus;
+  legalType: 'INDIVIDUAL' | 'JURISTIC';
   files?: string[];
+}
+
+export enum DocumentStatus {
+  NO_DOCUMENT = 'NO_DOCUMENT',
+  WAIT_FOR_VERIFIED = 'WAIT_FOR_VERIFIED',
+  VERIFIED = 'VERIFIED',
+  REJECTED = 'REJECTED',
 }
 
 export interface IUserNull {
@@ -144,6 +152,8 @@ export interface IUserNull {
   updatedBy: null;
   confirmationToken: null;
   deviceToken: null;
-  status: string | null;
-  documentStatus: string | null;
+  status: null;
+  documentStatus: null;
+  legalType: null;
+  files: null;
 }
