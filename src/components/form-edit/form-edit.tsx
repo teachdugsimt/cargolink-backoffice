@@ -82,6 +82,11 @@ export function FormEdit(props: FormEditProps) {
   };
 
   const handleSubmit = () => {
+    if (!isValid) {
+      setShowForm(false);
+      setInputValue(value);
+      return false;
+    }
     onSave(type === 'text' ? inputValue : inputValue.value);
     setShowForm(!showForm);
   };
@@ -105,21 +110,25 @@ export function FormEdit(props: FormEditProps) {
           <p style={integrateValueStyle}>{value}</p>
         ) : type === 'text' ? (
           <Field label="" name={label || ''} defaultValue={value} validate={validateForm}>
-            {({ fieldProps, error, meta: { valid } }: any) => (
-              <div style={INPUT_BOX}>
-                <Textfield
-                  {...fieldProps}
-                  onChange={(e: any) => {
-                    setInputValue(e.target.value);
-                    fieldProps.onChange(e);
-                  }}
-                  style={{
-                    height: 26,
-                  }}
-                />
-                {/* {error === messageForCheck && <ErrorMessage>{validateMessage}</ErrorMessage>} */}
-              </div>
-            )}
+            {({ fieldProps, error, meta: { valid } }: any) => {
+              const isInvalid = error === messageForCheck && messageForCheck != null;
+              if (isInvalid) setIsValid(false);
+              return (
+                <div style={INPUT_BOX}>
+                  <Textfield
+                    {...fieldProps}
+                    onChange={(e: any) => {
+                      setInputValue(e.target.value);
+                      fieldProps.onChange(e);
+                    }}
+                    style={{
+                      height: 26,
+                    }}
+                  />
+                  {isInvalid && <ErrorMessage>{validateMessage}</ErrorMessage>}
+                </div>
+              )
+            }}
           </Field>
         ) : (
           <Select

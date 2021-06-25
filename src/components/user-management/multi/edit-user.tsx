@@ -304,6 +304,11 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     return 'INVALID_EMAIL';
   };
 
+  const validatePhoneNumber = (value: string) => {
+    const regex = /(\+66|0)([0-9]{8,9})/;
+    return regex.test(value) ? undefined : 'INVALID_PHONE_NUMBER';
+  }
+
   const filesMock: any = [
     {
       id: 1,
@@ -511,8 +516,11 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                   <FormEdit
                     label={`${t('phoneNumber')} :`}
                     value={userData.phoneNumber || '-'}
-                    handleSave={(val) => {
-                      const value = `+66${val.substr(1)}`;
+                    validateMessage={t('invalidPhoneNumber')}
+                    validateForm={validatePhoneNumber}
+                    messageForCheck={'INVALID_PHONE_NUMBER'}
+                    handleSave={(value) => {
+                      if(value.startsWith('0')) value = `+66${value.substr(1)}`;
                       handleSave('phoneNumber', value);
                     }}
                   />

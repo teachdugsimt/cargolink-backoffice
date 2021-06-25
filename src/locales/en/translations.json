@@ -136,6 +136,7 @@
   "street": "Street",
   "sameGeneralAddress": "Same as general address",
   "invalidEmail": "Invalid email",
+  "invalidPhoneNumber": "invalidPhoneNumber",
   "delete": "Delete",
   "cancel": "Cancel",
   "deleteConfirmAlertTitle": "Delete file",
