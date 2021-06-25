@@ -13,31 +13,43 @@ import Alert from '../../components/alert';
 import { useMst } from '../../stores/root-store';
 import { defaultAlertSetting } from '../../components/simple-data';
 import { useTranslation } from 'react-i18next';
+import TextField from '@atlaskit/textfield';
+import Form, {
+  ErrorMessage,
+  Field,
+  FormFooter,
+  HelperMessage,
+  ValidMessage,
+} from '@atlaskit/form';
 
 const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageContext }) => {
   const { loginStore } = useMst();
   const { t } = useTranslation();
 
-  const submitRef = useRef<HTMLButtonElement | null>(null);
+  // const submitRef = useRef<HTMLButtonElement | null>(null);
 
-  const [checkbox, setCheckbox] = useState({ 1: false });
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [toggle, setToggle] = useState(false);
+  // const [checkbox, setCheckbox] = useState({ 1: false });
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+  // const [toggle, setToggle] = useState(false);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
-  const [keyboard, setkeyboard] = useState('');
+  // const [keyboard, setkeyboard] = useState('');
 
+  // useEffect(() => {
+  //   document.addEventListener('keydown', _handleKeyPress, false);
+  //   return () => {
+  //     document.removeEventListener('keydown', _handleKeyPress, false);
+  //   };
+  // }, []);
   useEffect(() => {
-    document.addEventListener('keydown', _handleKeyPress, false);
-    return () => {
-      document.removeEventListener('keydown', _handleKeyPress, false);
-    };
-  }, []);
+    loginStore.setErrorLogin('')
+  }, [])
 
   useEffect(() => {
     const { fetching_login, error_login, data_signin } = loginStore;
-    if (toggle && !fetching_login) {
+    if (!fetching_login) {
       if (error_login && !data_signin.idToken) {
+        console.log("ABCDEF")
         setAlertSetting({
           icon: 'error',
           show: true,
@@ -45,33 +57,32 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
           title: '',
           content: error_login,
         });
-      } else if (loginStore.data_signin.idToken && !loginStore.error_login) {
-        navigate('/dashboard');
       }
     }
-  }, [loginStore.data_signin.idToken, loginStore.error_login, loginStore.fetching_login, toggle]);
+  }, [loginStore.data_signin.idToken, loginStore.error_login, loginStore.fetching_login]);
 
-  const onChangeCheckbox = (value: boolean, name: number) => {
-    // setCheckbox({ ...checkbox, [name]: value });
-    console.log("On change check box :: ", value)
-    loginStore.setRememberProfile(value)
-  };
+  // const onChangeCheckbox = (value: boolean, name: number) => {
+  //   // setCheckbox({ ...checkbox, [name]: value });
+  //   console.log("On change check box :: ", value)
+  //   loginStore.setRememberProfile(value)
+  // };
 
-  const onChangeEmail = (value: string) => {
-    setEmail(value);
-    setToggle(false);
-    setAlertSetting(defaultAlertSetting);
-  };
+  // const onChangeEmail = (value: string) => {
+  //   setEmail(value);
+  //   setToggle(false);
+  //   setAlertSetting(defaultAlertSetting);
+  // };
 
-  const onChangePassword = (value: string) => {
-    setPassword(value);
-    setToggle(false);
-    setAlertSetting(defaultAlertSetting);
-  };
+  // const onChangePassword = (value: string) => {
+  //   setPassword(value);
+  //   setToggle(false);
+  //   setAlertSetting(defaultAlertSetting);
+  // };
 
-  const submit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setToggle(true);
+  const submit = ({ email, password }) => {
+    // console.log(data)
+    // e.preventDefault();
+    // setToggle(true);
     if (email && password) {
       loginStore.requestLogin({
         email: email,
@@ -82,20 +93,89 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
     setAlertSetting(defaultAlertSetting);
   };
 
-  const clickSubmit = () => submitRef?.current?.click();
+  // const clickSubmit = () => submitRef?.current?.click();
 
-  const _handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === 'Enter' && submitRef) clickSubmit();
-  };
+  // const _handleKeyPress = (event: KeyboardEvent) => {
+  //   if (event.key === 'Enter' && submitRef) clickSubmit();
+  // };
 
   return (
-    <Auth title="" subTitle={t('loginSubtitle')}>
+    <Auth title={t('login')} subTitle={t('loginSubtitle')}>
       {alertSetting.show && <Alert setting={alertSetting} />}
       <SEO title="Login" />
-      <form onSubmit={submit}>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 5 }}>
-          <LanguageMenu />
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 5 }}>
+        <LanguageMenu />
+      </div>
+      <Form onSubmit={submit}>
+        {({ formProps }) => (
+          <form {...formProps}>
+            <Field
+              name="email"
+              label={t('email')}
+              defaultValue=""
+              isRequired
+            // validate={undefined}
+            >
+              {({ fieldProps, error, valid }) => (
+                <>
+                  <TextField {...fieldProps} />
+                  {error === 'TOO_SHORT' && (
+                    <ErrorMessage>
+                      Invalid username, needs to be more than 4 characters
+                    </ErrorMessage>
+                  )}
+                  {error === 'IN_USE' && (
+                    <ErrorMessage>
+                      Username already taken, try another one
+                    </ErrorMessage>
+                  )}
+                </>
+              )}
+            </Field>
+
+            <Field
+              name="password"
+              label={t('password')}
+              defaultValue=""
+              isRequired
+            // validate={undefined}
+            >
+              {({ fieldProps, error, valid }) => (
+                <>
+                  <TextField {...fieldProps} type="password" />
+                  {error === 'TOO_SHORT' && (
+                    <ErrorMessage>
+                      Invalid username, needs to be more than 4 characters
+                    </ErrorMessage>
+                  )}
+                  {error === 'IN_USE' && (
+                    <ErrorMessage>
+                      Username already taken, try another one
+                    </ErrorMessage>
+                  )}
+                </>
+              )}
+            </Field>
+            {/* <Group> */}
+            {/* <Checkbox checked={loginStore.rememberProfile} onChange={(value) => onChangeCheckbox(value, 1)}>
+                {t('rememberMe')}
+              </Checkbox> */}
+            <Link id="forgotPassword" to="/auth/request-password" style={{ textDecoration: 'none' }}>
+              {t('forgotPassword')}
+            </Link>
+            {/* </Group> */}
+
+            <FormFooter>
+              <LoadingButton appearance="warning" isLoading={loginStore.fetching_login} type="submit">
+                {t('login')}
+              </LoadingButton>
+            </FormFooter>
+          </form>
+        )}
+      </Form>
+
+      {/* <form onSubmit={submit}>
+
         <InputGroup
           status={toggle && !email ? 'Danger' : 'Basic'}
           style={{ marginBottom: toggle && !email ? 0 : '2rem' }}
@@ -146,8 +226,8 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
             {t('login')}
           </LoadingButton>
         </div>
-        <button style={{ display: 'none' }} ref={submitRef} type="submit" disabled={loginStore.fetching_login} />
-        {/* <Button
+        <button style={{ display: 'none' }} ref={submitRef} type="submit" disabled={loginStore.fetching_login} /> */}
+      {/* <Button
           style={{
             position: loginStore.fetching_login ? 'relative' : 'initial',
             backgroundColor: '#00b132',
@@ -171,13 +251,13 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
               `${t('login')}`
             )}
         </Button> */}
-      </form>
-      <p id="loginDescription">
+      {/* </form> */}
+      {/* <p id="loginDescription">
         {t('loginDescription')}{' '}
         <Link to="/auth/register" style={{ textDecoration: 'none' }}>
           {t('register')}
         </Link>
-      </p>
+      </p> */}
     </Auth>
   );
 });

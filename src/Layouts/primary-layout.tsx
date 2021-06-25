@@ -1,4 +1,10 @@
 import React from 'react'
+import images from '../components/Themes/images';
+import menuItems from './menu-item'
+import { navigate } from 'gatsby';
+import { observer } from 'mobx-react-lite';
+import { useMst } from '../stores/root-store';
+
 import {
   Content,
   LeftSidebar,
@@ -17,12 +23,9 @@ import {
   Footer,
   NavigationFooter,
 } from '@atlaskit/side-navigation';
-import images from '../components/Themes/images';
-import menuItems from './menu-item'
-import { navigate } from 'gatsby';
 
-const PrimaryLayout = ({ children, location }) => {
-  console.log(location)
+const PrimaryLayout = observer(({ children, location }) => {
+  const { loginStore } = useMst()
   return (
     <PageLayout>
       <Content>
@@ -56,6 +59,7 @@ const PrimaryLayout = ({ children, location }) => {
 
             </NestableNavigationContent>
             <NavigationFooter>
+              <ButtonItem onClick={() => { loginStore.requestLogout() }}>Logout</ButtonItem>
               <Footer>CargoLink Backoffice</Footer>
             </NavigationFooter>
           </SideNavigation>
@@ -67,6 +71,6 @@ const PrimaryLayout = ({ children, location }) => {
       </Content>
     </PageLayout >
   )
-}
+})
 
 export default PrimaryLayout

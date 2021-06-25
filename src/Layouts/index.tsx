@@ -3,7 +3,7 @@ import { DefaultTheme, ThemeProvider } from 'styled-components';
 import themes from './themes';
 import { withTrans } from '../i18n/withTrans';
 import { Provider, rootStore } from '../stores/root-store';
-// import '../Layouts/css/style.css';
+import '../Layouts/css/style.css';
 import EmptyLayout from './empty-layout'
 import ParentLayout from './parent-layout';
 

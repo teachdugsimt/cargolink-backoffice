@@ -9,6 +9,15 @@ import { useTranslation } from 'react-i18next';
 
 import SEO from '../../components/SEO';
 import Auth, { Group } from '../../components/Auth';
+import TextField from '@atlaskit/textfield';
+import Form, {
+  ErrorMessage,
+  Field,
+  FormFooter,
+  HelperMessage,
+  ValidMessage,
+} from '@atlaskit/form';
+
 
 const RequestPassword = () => {
   const { passwordResetStore } = useMst();
@@ -18,19 +27,19 @@ const RequestPassword = () => {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const submit = () => submitRef?.current?.click();
-  const submitResetPassword = (e?: React.FormEvent<HTMLFormElement>) => {
-    e?.preventDefault();
+  // const submit = () => submitRef?.current?.click();
+  const submitResetPassword = ({ email }) => {
+    // e?.preventDefault();
     if (email.length) {
       passwordResetStore.resetPassword(email);
       setSubmitted(true);
     }
     return false;
   }
-  const handleKeyPress = (event: KeyboardEvent) => {
-    const isEnterPressed = event.key === 'Enter';
-    if (isEnterPressed && submitRef) submitRef.current?.click();
-  }
+  // const handleKeyPress = (event: KeyboardEvent) => {
+  //   const isEnterPressed = event.key === 'Enter';
+  //   if (isEnterPressed && submitRef) submitRef.current?.click();
+  // }
 
   const onApiError = (message: string) => {
     Swal.fire({
@@ -65,19 +74,46 @@ const RequestPassword = () => {
     passwordResetStore.error_password,
     passwordResetStore.data_password,
   ]);
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress, false);
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress, false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   document.addEventListener('keydown', handleKeyPress, false);
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeyPress, false);
+  //   }
+  // }, []);
 
   const titleText = t('title');
   const subtitle = t('subtitle');
+
   return (
     <Auth title={titleText} subTitle={subtitle}>
       <SEO title={titleText} />
-      <form onSubmit={submitResetPassword}>
+      <Form onSubmit={submitResetPassword}>
+        {({ formProps }) => (
+          <form {...formProps}>
+            <Field
+              name="email"
+              label={t('email')}
+              defaultValue=""
+              isRequired
+            // validate={undefined}
+            >
+              {({ fieldProps, error, valid }) => (
+                <>
+                  <TextField {...fieldProps} />
+                </>
+              )}
+            </Field>
+
+
+            <FormFooter>
+              <LoadingButton appearance="warning" isLoading={passwordResetStore.fetching} type="submit">
+                {t('requestPassword')}
+              </LoadingButton>
+            </FormFooter>
+          </form>
+        )}
+      </Form>
+      {/* <form onSubmit={submitResetPassword}>
         <InputGroup fullWidth>
           <input
             autoFocus={true}
@@ -94,7 +130,7 @@ const RequestPassword = () => {
           </LoadingButton>
         </div>
         <button style={{ display: 'none' }} ref={submitRef} type="submit" disabled={passwordResetStore.fetching} />
-      </form>
+      </form> */}
       <Group>
         <Link to="/auth/login">{generalT('backToLogin')}</Link>
         <Link to="/auth/register">{generalT('register')}</Link>
