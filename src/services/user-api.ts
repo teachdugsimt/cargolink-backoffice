@@ -67,5 +67,5 @@ export interface EditUserPayload {
 export interface EditUserResponse {
   message: string;
   responseCode: number,
-  data: {}
+  data: any;
 }

@@ -29,7 +29,8 @@ import { useMst } from '../../../stores/root-store';
 import { DateFormat } from '../../simple-data';
 import { UserApi } from '../../../services';
 import { UploadFileResponse } from '../../../services/upload-api';
-import { EditUserPayload } from '../../../services/user-api';
+import { EditUserPayload, EditUserResponse } from '../../../services/user-api';
+import { AxiosResponse } from 'axios';
 
 interface Props {
   id?: number;
@@ -237,7 +238,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     const filesPayload = files
       .filter((file) => file && !Object.keys(file).every((key) => file[key] == null))
       .map((file) => file.attachCode);
-    handleSave('attachCode', filesPayload);
+    if (files.length && files != userData?.files) handleSave('attachCode', filesPayload);
   }, [files]);
 
   useEffect(() => {
@@ -251,7 +252,21 @@ const EditUser: React.FC<Props> = observer((props: any) => {
   const handleSave = (field: Fields, value: any) => {
     console.log(field, ':>> ', value);
     const payload: Partial<EditUserPayload> = { [field]: value };
-    //TODO patch user here
+    UserApi.editUser(userId, payload)
+      .then((response) => {
+        if (response && response.ok) {
+          const data = (response as AxiosResponse<EditUserResponse>).data;
+          console.log('edit user response', data);
+          return getUser(userId);
+        } else console.error('Unexpected error while loading user', response);
+      })
+      .catch((error) => {
+        console.error('Error while edit this user', error);
+        Swal.fire({
+          icon: 'error',
+          text: 'Error while edit this user',
+        });
+      });
   };
 
   const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -304,8 +319,9 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     return 'INVALID_EMAIL';
   };
 
-  const validatePhoneNumber = (value: string) => {
-    const regex = /(\+66|0)([0-9]{8,9})/;
+  const validatePhoneNumber = (value?: string) => {
+    if (value && value.startsWith('0')) value = `+66${value.substr(1)}`;
+    const regex = /^\+?([0-9]{2})\)??([0-9]{9})$/;
     return regex.test(value) ? undefined : 'INVALID_PHONE_NUMBER';
   }
 
@@ -523,6 +539,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                     validateForm={validatePhoneNumber}
                     messageForCheck={'INVALID_PHONE_NUMBER'}
                     handleSave={(value) => {
+                      if (!value) return;
                       if (value.startsWith('0')) value = `+66${value.substr(1)}`;
                       handleSave('phoneNumber', value);
                     }}
