@@ -18,9 +18,10 @@ const getDefaultTheme = (): DefaultTheme['name'] => {
 };
 
 const LayoutPage: React.FC<{
+  location,
   pageContext: { layout: string },
   custom404: any
-}> = ({ custom404, children, pageContext }) => {
+}> = ({ custom404, children, pageContext, location }) => {
   const [theme, setTheme] = useState<DefaultTheme['name']>('default');
   const [dir, setDir] = useState<'ltr' | 'rtl'>('ltr');
 
@@ -29,6 +30,7 @@ const LayoutPage: React.FC<{
     if (localTheme !== theme && theme === 'default') {
       setTheme(localTheme);
     }
+    console.log('location', location)
   }, []);
 
   return (
@@ -36,7 +38,7 @@ const LayoutPage: React.FC<{
       {/* <ThemeProvider theme={themes(theme, dir)}> */}
       {/* <EmptyLayout children={children} pageContext={pageContext} custom404={custom404} /> */}
       {/* </ThemeProvider> */}
-      <ParentLayout pageContext={pageContext}>{children}</ParentLayout>
+      <ParentLayout pageContext={pageContext} location={location}>{children}</ParentLayout>
     </Provider>
   );
 };

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { useMst } from '../stores/root-store';
 import { navigate } from 'gatsby';
 
-const ParentLayout = observer(({ pageContext, children }) => {
+const ParentLayout = observer(({ pageContext, children, location }) => {
 
   const { loginStore } = useMst();
   const token = loginStore.data_signin.accessToken
@@ -16,7 +16,7 @@ const ParentLayout = observer(({ pageContext, children }) => {
       navigate('/dashboard')
       return
     } else {
-      return <PrimaryLayout>{children}</PrimaryLayout>
+      return <PrimaryLayout location={location}>{children}</PrimaryLayout>
     }
   } else {
     // IS NOT LOGGED IN

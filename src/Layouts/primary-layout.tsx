@@ -21,7 +21,8 @@ import images from '../components/Themes/images';
 import menuItems from './menu-item'
 import { navigate } from 'gatsby';
 
-const PrimaryLayout = ({ children }) => {
+const PrimaryLayout = ({ children, location }) => {
+  console.log(location)
   return (
     <PageLayout>
       <Content>
@@ -31,13 +32,14 @@ const PrimaryLayout = ({ children }) => {
               <HeadingItem>
                 <img src={images.cargolinkLogo} style={{ maxWidth: 200, height: 'auto' }} />
               </HeadingItem>
-              {/* <Heading mixin={typography.h100()}>h100</Heading> */}
             </NavigationHeader>
+
             <NestableNavigationContent>
               <Section>
                 {
-                  menuItems.map(e => {
+                  menuItems.map((e: any) => {
                     return <ButtonItem
+                      isSelected={location.pathname.match(e.link.to)}
                       iconBefore={<img src={require('../images/icons/' + e.icon + '.png')} style={{ width: 20 }} />}
                       onClick={() => { navigate(e.link.to) }}
                     >
