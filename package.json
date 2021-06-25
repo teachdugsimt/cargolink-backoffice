@@ -11,6 +11,7 @@
     "@atlaskit/dropdown-menu": "^10.1.2",
     "@atlaskit/dynamic-table": "^14.1.5",
     "@atlaskit/form": "^8.2.2",
+    "@atlaskit/inline-message": "^11.0.8",
     "@atlaskit/radio": "^5.0.4",
     "@atlaskit/select": "^13.3.1",
     "@atlaskit/table-tree": "^9.0.7",
