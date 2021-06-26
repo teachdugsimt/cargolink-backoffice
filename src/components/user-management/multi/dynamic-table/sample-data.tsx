@@ -17,7 +17,7 @@ import ReactDOMServer from 'react-dom/server';
 
 export const sortabled: any = {
   phoneNumber: true, //! Note that: DESC = true, ASC = fasle
-  fullName: true,
+  fullname: true,
   registerDate: true,
   jobCount: true,
   truckCount: true,
@@ -46,7 +46,7 @@ export const createHead = (withWidth: boolean) => {
         isSortable: true,
       },
       {
-        key: 'fullName',
+        key: 'fullname',
         content: 'Full name',
         shouldTruncate: true,
         isSortable: true,
@@ -139,8 +139,8 @@ export const createRow = (users: any, language: string, t: TFunction<string>) =>
           content: user.email || '-',
         },
         {
-          key: user.fullName,
-          content: user.fullName || '-',
+          key: user.fullname,
+          content: user.fullname || '-',
         },
         {
           key: moment(user.createdAt, 'DD-MM-YYYY HH:mm').format('YYYYMMDDHHmm'),

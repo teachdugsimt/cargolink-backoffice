@@ -110,7 +110,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
       const search = {
         type: 0,
         page: 0,
-        fullName: value,
+        fullname: value,
         phoneNumber: value,
         registerDate: date.isValid() ? moment(value).format('YYYY-MM-DD') : '',
         jobCount: parseInt(value, 10),

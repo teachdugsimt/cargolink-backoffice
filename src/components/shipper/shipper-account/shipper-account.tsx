@@ -35,7 +35,7 @@ const JobContainer = observer((props: any) => {
       type: 1,
       page: 0,
     });
-    return () => {};
+    return () => { };
   }, []);
 
   useEffect(() => {
@@ -90,7 +90,7 @@ const JobContainer = observer((props: any) => {
       const search = {
         type: 1,
         page: 0,
-        fullName: value,
+        fullname: value,
         email: value,
         phoneNumber: value,
         registerDate: date.isValid() ? moment(value).format('YYYY-MM-DD') : '',

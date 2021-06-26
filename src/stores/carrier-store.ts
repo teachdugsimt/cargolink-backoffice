@@ -16,7 +16,7 @@ const objectOwner = types.model({
   avatar: types.maybeNull(AvatarObject),
   companyName: types.maybeNull(types.string),
   email: types.maybeNull(types.string),
-  fullName: types.maybeNull(types.string),
+  fullname: types.maybeNull(types.string),
   id: types.maybeNull(types.number),
   mobileNo: types.maybeNull(types.string),
   userId: types.maybeNull(types.string),
