@@ -22,9 +22,10 @@ import Textfield from '@atlaskit/textfield';
 import { RadioGroup } from '@atlaskit/radio';
 import { OptionsPropType } from '@atlaskit/radio/types';
 import UploadButton from '../../UploadButton';
+import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
+import PageHeader from '@atlaskit/page-header';
 
 interface Props { }
-
 interface FileProps {
   lastModified?: number;
   lastModifiedDate?: string;
@@ -137,6 +138,13 @@ const AddUser: React.FC<Props> = observer(() => {
 
   // const onSubmit = data => console.log(data);
 
+  const breadcrumbs = (
+    <Breadcrumbs onExpand={() => { }}>
+      <BreadcrumbsItem onClick={() => navigate('/user-management')} text={t('userManagement')} key="user-management" />
+      <BreadcrumbsItem text={t('addNewAccount')} key="user-info" />
+    </Breadcrumbs>
+  );
+
   const userTypeOptions: OptionsPropType = [
     { name: 'userType', value: 'shipper', label: t('shipper') },
     { name: 'userType', value: 'Carrier', label: t('carrier') },
@@ -185,11 +193,9 @@ const AddUser: React.FC<Props> = observer(() => {
 
   return (
     <div>
-      <CardHeader>
-        <div className="block-data-header">
-          <span className="font-data-header">{t('addNewAccount')}</span>
-        </div>
-      </CardHeader>
+      <PageHeader breadcrumbs={breadcrumbs}>
+        {t('addNewAccount')}
+      </PageHeader>
       <CardBody>
         <Form onSubmit={handleSubmit}>
           {({ formProps }) => (
@@ -268,7 +274,7 @@ const AddUser: React.FC<Props> = observer(() => {
                   <Field
                     label={t('email')}
                     name="email"
-                    >
+                  >
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div style={{ display: 'flex' }}>
                         <Textfield

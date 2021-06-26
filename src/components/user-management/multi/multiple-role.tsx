@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import DynamicTable from '@atlaskit/dynamic-table';
+import { RowType } from '@atlaskit/dynamic-table/types';
 import { head, createRow, sortabled } from './dynamic-table/sample-data';
 import { Icon } from 'react-icons-kit';
 import { ic_add } from 'react-icons-kit/md/ic_add';
 import SearchForm from '../../search-form';
-import { Button } from '@paljs/ui/Button';
+// import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
 import styled from 'styled-components';
@@ -19,6 +20,8 @@ import { IUserDTO, IUserNull } from '../../../stores/user-store';
 
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
+import Button from '@atlaskit/button'
+import AddCircleIcon from '@atlaskit/icon/glyph/add-circle';
 
 
 const Wrapper = styled.div`
@@ -123,73 +126,79 @@ const MultipleRole: React.FC<Props> = observer(() => {
     }
   };
 
+  const extendRows = (
+    rows: Array<RowType>,
+    onClick: (e: React.MouseEvent, rowIndex: number) => void,
+  ) => {
+    return rows.map((row, index) => ({
+      ...row,
+      onClick: (e: React.MouseEvent) => onClick(e, index),
+    }));
+  };
+
+  const onRowClick = (e: React.MouseEvent, rowIndex: number) => {
+    console.log("Row Click", rowIndex)
+    console.log(rowData[rowIndex])
+    navigate('/user-management/user', {
+      state: {
+        id: rowData[rowIndex].cells[5].key,
+      },
+    })
+  };
+
+
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>
         {t('userManagement')}
       </PageHeader>
-      <CardHeader>
-        {alertSetting.show && <Alert setting={alertSetting} />}
-        <div className="block-data-header">
-          <span className="font-data-header">{t('userManagement')}</span>
-          <div style={{ display: 'flex' }}>
-            <SearchForm onSearch={(value: any) => onSearch(value)} />
-          </div>
+      {alertSetting.show && <Alert setting={alertSetting} />}
+
+      <div style={{ display: 'flex', flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+
+        <Button
+          iconBefore={<AddCircleIcon label="" />}
+          onClick={() => navigate('/user-management/user')}
+          appearance="warning">
+          {t('addNewAccount')}
+        </Button>
+
+        <div style={{ width: 250 }}>
+          <SearchForm onSearch={(value: any) => onSearch(value)} />
         </div>
-      </CardHeader>
-      <CardBody>
-        <Row style={{ padding: 5, marginBottom: 10, display: 'flex', justifyContent: 'flex-end', minWidth: 600 }}>
-          <Button
-            appearance="outline"
-            status="Success"
-            size="Small"
-            style={{
-              marginRight: 10,
-              display: 'flex',
-              alignItems: 'center',
-              borderColor: '#00B132',
-              backgroundColor: submit ? '#00B132' : 'white',
-              color: submit ? 'white' : '#00B132',
-            }}
-            onClick={() => navigate('/user-management/user')}
-          >
-            <Icon icon={ic_add} /> {t('addNewAccount')}
-          </Button>
-        </Row>
-        <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
-        <Wrapper>
-          <DynamicTable
-            //   caption={caption}
-            head={head}
-            rows={rowData}
-            page={page}
-            // sortKey={sortable.sortKey}
-            // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
-            rowsPerPage={rowLength}
-            defaultPage={1}
-            loadingSpinnerSize="large"
-            isLoading={userStore.loading}
-            // isFixedSize
-            // defaultSortKey="id"
-            defaultSortOrder="DESC"
-            onSort={(sort) => {
-              const descending = !sortable[sort.key];
-              const search = { ...searchValue, descending, sortBy: sort.key };
-              setSortable({ ...sortable, [sort.key]: descending });
-              setSearchValue(search);
-              userStore.getUsers(search);
-            }}
-            onSetPage={(pagination) => {
-              setPage(pagination);
-              let search = JSON.parse(JSON.stringify(searchValue));
-              search['page'] = pagination;
-              setSearchValue(search);
-              userStore.getUsers(search);
-            }}
-          />
-        </Wrapper>
-      </CardBody>
-    </div>
+      </div>
+
+
+
+      <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
+      <DynamicTable
+        //   caption={caption}
+        head={head}
+        rows={extendRows(rowData, onRowClick)}
+        page={page}
+        // sortKey={sortable.sortKey}
+        // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
+        rowsPerPage={rowLength}
+        defaultPage={1}
+        loadingSpinnerSize="large"
+        isLoading={userStore.loading}
+        defaultSortOrder="DESC"
+        onSort={(sort) => {
+          const descending = !sortable[sort.key];
+          const search = { ...searchValue, descending, sortBy: sort.key };
+          setSortable({ ...sortable, [sort.key]: descending });
+          setSearchValue(search);
+          userStore.getUsers(search);
+        }}
+        onSetPage={(pagination) => {
+          setPage(pagination);
+          let search = JSON.parse(JSON.stringify(searchValue));
+          search['page'] = pagination;
+          setSearchValue(search);
+          userStore.getUsers(search);
+        }}
+      />
+    </div >
   );
 });
 export default MultipleRole;

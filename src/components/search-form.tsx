@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { SyntheticEvent, useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@paljs/ui/Button';
 import { Icon } from 'react-icons-kit';
 import { search } from 'react-icons-kit/icomoon/search';
+import Textfield from '@atlaskit/textfield';
+import SearchIcon from '@atlaskit/icon/glyph/search';
 interface SearchProps {
   // data: any;
   onSearch: (value: string) => void;
@@ -46,16 +48,24 @@ const SearchForm: React.FC<SearchProps> = observer((props) => {
   }, [keyboard]);
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <input
+    <>
+      {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+      {/* <input
         id="inputSearch"
         className="new-input-component"
         type="text"
         placeholder={t('inputSearch')}
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
+      /> */}
+      <Textfield
+        name="basic" aria-label="default text field"
+        placeholder="Search"
+        onSubmit={onClickSearch}
+        onChange={(e: SyntheticEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)}
+        elemBeforeInput={<SearchIcon label="" primaryColor="lightgray" />}
       />
-      <Button
+      {/* <Button
         id="search"
         appearance="filled"
         status="Basic"
@@ -63,8 +73,9 @@ const SearchForm: React.FC<SearchProps> = observer((props) => {
         onClick={() => onClickSearch()}
       >
         <Icon size={18} icon={search} />
-      </Button>
-    </div>
+      </Button> */}
+      {/* </div> */}
+    </>
   );
 });
 export default SearchForm;
