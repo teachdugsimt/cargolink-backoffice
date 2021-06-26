@@ -151,5 +151,7 @@
   "userUploadTitle": "Upload Documents",
   "backToLogin": "Back to Log In",
   "noDocuments": "No Documents",
-  "invalidUsernameOrPassword": "Invalid username or password"
+  "invalidUsernameOrPassword": "Invalid username or password",
+  "settings": "Settings",
+  "language": "Language"
 }

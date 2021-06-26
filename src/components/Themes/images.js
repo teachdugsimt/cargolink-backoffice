@@ -46,6 +46,7 @@ const images = {
   rightTruck: require('../../images/S2Truck.png'),
   pinDrop: require('../../images/pin-drop.png'),
   pinDrop2: require('../../images/pin-drop2.png'),
+  userIcon: require('../../images/icons/delivery-man.png')
 };
 
 export default images;

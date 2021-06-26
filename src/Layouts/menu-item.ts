@@ -48,7 +48,7 @@ const items: MenuItemType[] = [
     title_th: 'ตั้งค่า',
     title_en: 'Settings',
     icon: 'settings',
-    link: { to: '#' },
+    link: { to: '/settings' },
   },
   // {
   //   title_th: 'ผู้จัดส่ง',

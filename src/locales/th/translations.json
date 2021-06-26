@@ -15,7 +15,7 @@
   "jobs": "รับงาน",
   "trucks": "รถบรรทุก",
   "drivers": "คนขับ",
-  "userManagement": "จัดการผู้ใช้งาน",
+  "userManagement": "ผู้ใช้งาน",
   "truckstype": "ประเภทรถบรรทุก",
   "truckRegion": "ประเภทรถบรรทุกในแต่ละภูมิภาค",
   "JobsRegion": "งานทั้งหมด",
@@ -152,5 +152,7 @@
   "userUploadTitle": "อัพโหลดเอกสาร",
   "backToLogin": "กลับไปหน้าล็อกอิน",
   "noDocuments": "ไม่มีเอกสาร",
-  "invalidUsernameOrPassword": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"
+  "invalidUsernameOrPassword": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+  "settings": "ตั้งค่า",
+  "language": "ภาษา"
 }
