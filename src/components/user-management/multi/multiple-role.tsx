@@ -126,25 +126,25 @@ const MultipleRole: React.FC<Props> = observer(() => {
     }
   };
 
-  const extendRows = (
-    rows: Array<RowType>,
-    onClick: (e: React.MouseEvent, rowIndex: number) => void,
-  ) => {
-    return rows.map((row, index) => ({
-      ...row,
-      onClick: (e: React.MouseEvent) => onClick(e, index),
-    }));
-  };
+  // const extendRows = (
+  //   rows: Array<RowType>,
+  //   onClick: (e: React.MouseEvent, rowIndex: number) => void,
+  // ) => {
+  //   return rows.map((row, index) => ({
+  //     ...row,
+  //     onClick: (e: React.MouseEvent) => onClick(e, index),
+  //   }));
+  // };
 
-  const onRowClick = (e: React.MouseEvent, rowIndex: number) => {
-    console.log("Row Click", rowIndex)
-    console.log(rowData[rowIndex])
-    navigate('/user-management/user', {
-      state: {
-        id: rowData[rowIndex].cells[5].key,
-      },
-    })
-  };
+  // const onRowClick = (e: React.MouseEvent, rowIndex: number) => {
+  //   console.log("Row Click", rowIndex)
+  //   console.log(rowData[rowIndex])
+  //   navigate('/user-management/user', {
+  //     state: {
+  //       id: rowData[rowIndex].cells[5].key,
+  //     },
+  //   })
+  // };
 
 
   return (
@@ -174,7 +174,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
       <DynamicTable
         //   caption={caption}
         head={head}
-        rows={extendRows(rowData, onRowClick)}
+        rows={rowData}
         page={page}
         // sortKey={sortable.sortKey}
         // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}

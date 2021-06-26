@@ -10,7 +10,14 @@ import { useTranslation } from 'react-i18next';
 
 import Auth, { Group } from '.';
 import SEO from '../SEO';
-
+import TextField from '@atlaskit/textfield';
+import Form, {
+  ErrorMessage,
+  Field,
+  FormFooter,
+  HelperMessage,
+  ValidMessage,
+} from '@atlaskit/form';
 interface Props {
   token: string;
 }
@@ -26,8 +33,8 @@ const ChangePasswordComponent = ({ token }: Props) => {
 
   const submit = () => submitRef?.current?.click();
 
-  const submitChangePassword = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submitChangePassword = ({ password, passwordConfirm }) => {
+    // e.preventDefault();
     if (password != passwordConfirm) return onPasswordValidateFailed();
     const payload: ChangePasswordPayload = {
       token,
@@ -95,7 +102,50 @@ const ChangePasswordComponent = ({ token }: Props) => {
   return (
     <Auth title={title} subTitle={t('subtitle')}>
       <SEO title={title} />
-      <form onSubmit={submitChangePassword}>
+      <Form onSubmit={submitChangePassword}>
+        {({ formProps }) => (
+          <form {...formProps}>
+            <Field
+              name="password"
+              label={t('newPassword')}
+              defaultValue=""
+              isRequired
+            >
+              {({ fieldProps, error, valid }) => (
+                <>
+                  <TextField {...fieldProps} type="password" />
+                </>
+              )}
+            </Field>
+
+            <Field
+              name="passwordConfirm"
+              label={t('confirmPassword')}
+              defaultValue=""
+              isRequired
+            >
+              {({ fieldProps, error, valid }) => (
+                <>
+                  <TextField {...fieldProps} type="password" />
+                </>
+              )}
+            </Field>
+
+            <FormFooter>
+              <div style={{
+                display: 'flex', flex: 1, flexDirection: 'row',
+                justifyContent: 'space-between', alignItems: 'center'
+              }}>
+                <Link to="/auth/login">{generalT('backToLogin')}</Link>
+                <LoadingButton appearance="warning" isLoading={passwordChangeStore.fetching} type="submit">
+                  {t('changePassword')}
+                </LoadingButton>
+              </div>
+            </FormFooter>
+          </form>
+        )}
+      </Form>
+      {/* <form onSubmit={submitChangePassword}>
         <InputGroup fullWidth>
           <input
             type="password"
@@ -122,11 +172,11 @@ const ChangePasswordComponent = ({ token }: Props) => {
           </LoadingButton>
         </div>
         <button style={{ display: 'none' }} ref={submitRef} type="submit" disabled={passwordChangeStore.fetching} />
-      </form>
-      <Group>
-        <Link to="/auth/login">{generalT('backToLogin')}</Link>
-        <Link to="/auth/register">{generalT('register')}</Link>
-      </Group>
+      </form> */}
+      {/* <Group> */}
+      {/* <Link to="/auth/login">{generalT('backToLogin')}</Link> */}
+      {/* <Link to="/auth/register">{generalT('register')}</Link> */}
+      {/* </Group> */}
     </Auth>
   );
 }
