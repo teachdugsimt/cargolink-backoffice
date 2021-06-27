@@ -37,7 +37,7 @@ interface FileProps {
 
 interface InputData {
   // confirmPassword: string;
-  fullname: string;
+  fullName: string;
   // password: string;
   phoneNumber: string;
   uploadFile?: string;
@@ -224,9 +224,9 @@ const AddUser: React.FC<Props> = observer(() => {
               <Row style={RowStyled}>
                 <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
                   <Field
-                    label={`${t('fullname')} / ${t('companyName')}`}
+                    label={`${t('fullName')} / ${t('companyName')}`}
                     isRequired
-                    name="fullname"
+                    name="fullName"
                     // validate={validate}
                     defaultValue=""
                   >
@@ -235,7 +235,7 @@ const AddUser: React.FC<Props> = observer(() => {
                         <Textfield
                           {...fieldProps}
                           elemBeforeInput={startAdornmentIcon('user')}
-                          placeholder={`${t('fullname')} / ${t('companyName')}`}
+                          placeholder={`${t('fullName')} / ${t('companyName')}`}
                         />
                         {error === 'INCORRECT_PHRASE' && (
                           <ErrorMessage>Incorrect, try &lsquo;open sesame&rsquo;</ErrorMessage>

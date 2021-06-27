@@ -11,7 +11,7 @@ const token = types.model({
 const profile = types.model({
   id: types.string,
   companyName: types.string,
-  fullname: types.string,
+  fullName: types.string,
   email: types.string,
   avatar: types.maybeNull(types.string),
 });

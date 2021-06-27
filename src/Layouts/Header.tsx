@@ -127,7 +127,7 @@ const Header: React.FC<HeaderProps> = observer((props) => {
     }
   }, [loginStore.data_profile]);
 
-  // const displayName = profile?.fullname || profile?.companyName || profile?.email || 'No data';
+  // const displayName = profile?.fullName || profile?.companyName || profile?.email || 'No data';
 
 
 

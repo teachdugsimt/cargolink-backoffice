@@ -38,7 +38,7 @@ const PrimaryLayout = observer(({ children, location }) => {
               </HeadingItem>
               <div style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <AvatarItem
-                  primaryText={loginStore.data_profile?.fullname}
+                  primaryText={loginStore.data_profile?.fullName}
                   secondaryText={'Administrator'}
                   avatar={
                     <Avatar

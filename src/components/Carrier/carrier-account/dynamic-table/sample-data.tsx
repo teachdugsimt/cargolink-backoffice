@@ -9,7 +9,7 @@ import 'moment/locale/th';
 moment.locale('th');
 interface Carrier {
   id: number;
-  fullname: string;
+  fullName: string;
   phoneNumber: string;
   registerDate: string;
   email: string;
@@ -107,8 +107,8 @@ export const createRow = (carriers: any, language: string) => {
         content: carrier.phoneNumber || '-',
       },
       {
-        key: carrier.fullname,
-        content: carrier.fullname || '-',
+        key: carrier.fullName,
+        content: carrier.fullName || '-',
       },
       {
         key: carrier.email,

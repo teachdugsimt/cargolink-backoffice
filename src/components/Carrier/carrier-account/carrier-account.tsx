@@ -87,7 +87,7 @@ const CarrierAccount = observer((props: any) => {
       const search = {
         type: 2,
         page: 0,
-        fullname: value,
+        fullName: value,
         email: value,
         phoneNumber: value,
         registerDate: date.isValid() ? moment(value).format('YYYY-MM-DD') : '',

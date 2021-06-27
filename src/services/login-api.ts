@@ -38,7 +38,7 @@ export interface LoginResponse {
     id: string;
     userId: string;
     companyName: string;
-    fullname: string;
+    fullName: string;
     email: string;
     avatar: string | null;
   }

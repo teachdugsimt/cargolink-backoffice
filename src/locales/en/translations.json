@@ -105,7 +105,7 @@
   "Area": "Area",
   "State": "State",
   "Address": "Address",
-  "fullname": "Full name",
+  "fullName": "Full name",
   "confirmPassword": "Confirm password",
   "citizenId": "Citizen ID",
   "companyCertificate": "Company Certificate",
