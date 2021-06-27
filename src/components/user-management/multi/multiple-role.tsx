@@ -173,44 +173,34 @@ const MultipleRole: React.FC<Props> = observer(() => {
 
 
       <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
-      {userStore.loading ? (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Spinner size="large" />
-        </div>
-      ) : rowData.length ? (
-        <DynamicTable
-          //   caption={caption}
-          head={head}
-          rows={rowData}
-          page={page}
-          // sortKey={sortable.sortKey}
-          // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
-          rowsPerPage={rowLength}
-          defaultPage={1}
-          loadingSpinnerSize="large"
-          isLoading={userStore.loading}
-          defaultSortOrder="DESC"
-          onSort={(sort) => {
-            const descending = !sortable[sort.key];
-            const search = { ...searchValue, descending, sortBy: sort.key };
-            setSortable({ ...sortable, [sort.key]: descending });
-            setSearchValue(search);
-            userStore.getUsers(search);
-          }}
-          onSetPage={(pagination) => {
-            setPage(pagination);
-            let search = JSON.parse(JSON.stringify(searchValue));
-            search['page'] = pagination;
-            setSearchValue(search);
-            userStore.getUsers(search);
-          }}
-        />
-      ) : (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <p>{t('noData')}</p>
-        </div>
-      )}
-
+      <DynamicTable
+        //   caption={caption}
+        head={head}
+        rows={rowData}
+        page={page}
+        // sortKey={sortable.sortKey}
+        // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
+        emptyView={<p>{t('noData')}</p>}
+        rowsPerPage={rowLength}
+        defaultPage={1}
+        loadingSpinnerSize="large"
+        isLoading={userStore.loading}
+        defaultSortOrder="DESC"
+        onSort={(sort) => {
+          const descending = !sortable[sort.key];
+          const search = { ...searchValue, descending, sortBy: sort.key };
+          setSortable({ ...sortable, [sort.key]: descending });
+          setSearchValue(search);
+          userStore.getUsers(search);
+        }}
+        onSetPage={(pagination) => {
+          setPage(pagination);
+          let search = JSON.parse(JSON.stringify(searchValue));
+          search['page'] = pagination;
+          setSearchValue(search);
+          userStore.getUsers(search);
+        }}
+      />
     </div >
   );
 });
