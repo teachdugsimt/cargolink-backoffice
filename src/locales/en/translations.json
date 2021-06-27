@@ -154,5 +154,6 @@
   "noDocuments": "No Documents",
   "invalidUsernameOrPassword": "Invalid username or password",
   "settings": "Settings",
-  "language": "Language"
+  "language": "Language",
+  "fullNamePlaceholder": "unnamed user"
 }

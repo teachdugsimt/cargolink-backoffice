@@ -1,5 +1,5 @@
 import ExcuteApi from './api-integrations/excute-api';
-import { IUserDTO } from '../stores/user-store';
+import { DocumentStatus, IUserDTO } from '../stores/user-store';
 import { AxiosResponse } from 'axios';
 class UserApi {
   getUsersList = async (params: GetUsersListParams) => {
@@ -20,6 +20,10 @@ class UserApi {
   };
   editUser = async (userId: string, payload: Partial<EditUserPayload>) => {
     const response = await ExcuteApi(`/api/v1/users/${userId}`, payload, 'patch', 6e5, true, true);
+    return response;
+  };
+  changeDocStatus = async (userId: string, payload: ChangeDocStatusPayload) => {
+    const response = await ExcuteApi(`/api/v1/users/${userId}/doc-status`, payload, 'patch', 6e5, true, true);
     return response;
   }
 }
@@ -68,4 +72,8 @@ export interface EditUserResponse {
   message: string;
   responseCode: number,
   data: any;
+}
+
+export interface ChangeDocStatusPayload {
+  status: DocumentStatus;
 }

@@ -155,5 +155,6 @@
   "noDocuments": "ไม่มีเอกสาร",
   "invalidUsernameOrPassword": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
   "settings": "ตั้งค่า",
-  "language": "ภาษา"
+  "language": "ภาษา",
+  "fullNamePlaceholder": "unnamed user"
 }

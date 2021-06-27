@@ -87,10 +87,18 @@ const ImagePreview = styled.div`
   overflow: hidden;
 `;
 
-const Name = styled.p`
+interface FullNameProps {
+  isNoData?: boolean;
+}
+const Name = styled.p<FullNameProps>`
+  color: ${({ isNoData }) => (isNoData ? '#D8D8D8' : 'inherit')};
   margin-bottom: 0;
   font-size: 1.125rem;
   font-weight: 700;
+
+  :first-letter {
+    text-transform: capitalize;
+  }
 `;
 
 const Address = styled.p`
@@ -286,6 +294,17 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     console.log('file id :>> ', id);
   };
 
+  const handleChangeDocStatus = (status: DocumentStatus) => {
+    UserApi.changeDocStatus(userId, { status })
+      .then((response: any) => {
+        if (response && response.ok) {
+          console.log('change doc status result', response);
+          return getUser(userId);
+        }
+      })
+      .catch((error) => console.error('change doc status result', error));
+  };
+
   // const handleAddress = () => {
   //   setIsOpenFormAddress(currentValue => !currentValue)
   // };
@@ -331,20 +350,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     if (value && value.startsWith('0')) value = `+66${value.substr(1)}`;
     const regex = /^\+?([0-9]{2})\)??([0-9]{9})$/;
     return regex.test(value) ? undefined : 'INVALID_PHONE_NUMBER';
-  }
-
-  const filesMock: any = [
-    {
-      id: 1,
-      name: 'filename1.pdf',
-      date: 'Jan 1, 2021 00:00:00',
-    },
-    {
-      id: 2,
-      name: 'filename2.pdf',
-      date: 'Jan 1, 2021 00:00:00',
-    },
-  ];
+  };
 
   const statusOptions = [
     {
@@ -373,22 +379,6 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     {
       label: t('company'),
       value: 'JURISTIC',
-      isSelected: true,
-    },
-  ];
-
-  const userTypeOptions: any = [
-    {
-      label: t('shipper'),
-      value: 0,
-    },
-    {
-      label: t('carrier'),
-      value: 1,
-    },
-    {
-      label: t('both'),
-      value: 2,
       isSelected: true,
     },
   ];
@@ -483,12 +473,11 @@ const EditUser: React.FC<Props> = observer((props: any) => {
   };
 
   if (!userData) return <></>;
+  const fullNamePlaceholder = t('fullNamePlaceholder');
 
   return (
     <div>
-      <PageHeader breadcrumbs={breadcrumbs}>
-        {t('userInfo')}
-      </PageHeader>
+      <PageHeader breadcrumbs={breadcrumbs}>{t('userInfo')}</PageHeader>
 
       <CardBody>
         <Form onSubmit={handleSubmit}>
@@ -521,7 +510,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                 </Col>
                 <Col breakPoint={{ xs: 12, sm: 8, md: 5 }} style={SPACE_ROW}>
                   <div>
-                    <Name>{userData?.fullname || 'Unnamed user'}</Name>
+                    <Name isNoData={!userData?.fullName}>{userData?.fullname || fullNamePlaceholder}</Name>
                   </div>
 
                   <FormEdit
@@ -586,34 +575,36 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                   </Row>
 
                   <Row>
-                    {files.length ? files.map((file: UploadFileResponse) => {
-                      return (
-                        <Col key={file.attachCode}>
-                          <ListFile
-                            fileName={file.fileName}
-                            date={file.uploadedDate}
-                            handleDelete={() => {
-                              const red = '#E03616';
-                              const blue = '#3085D6';
-                              Swal.mixin({
-                                iconColor: red,
-                                confirmButtonColor: red,
-                                cancelButtonColor: blue,
-                                confirmButtonText: t('delete'),
-                                cancelButtonText: t('cancel'),
-                              })
-                                .fire({
-                                  title: t('deleteConfirmAlertTitle'),
-                                  titleText: t('deleteConfirmAlertText'),
-                                  icon: 'warning',
-                                  showCancelButton: true,
+                    {files.length ? (
+                      files.map((file: UploadFileResponse) => {
+                        return (
+                          <Col key={file.attachCode}>
+                            <ListFile
+                              fileName={file.fileName}
+                              date={file.uploadedDate}
+                              handleDelete={() => {
+                                const red = '#E03616';
+                                const blue = '#3085D6';
+                                Swal.mixin({
+                                  iconColor: red,
+                                  confirmButtonColor: red,
+                                  cancelButtonColor: blue,
+                                  confirmButtonText: t('delete'),
+                                  cancelButtonText: t('cancel'),
                                 })
-                                .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file.attachCode));
-                            }}
-                          />
-                        </Col>
-                      );
-                    }) : (
+                                  .fire({
+                                    title: t('deleteConfirmAlertTitle'),
+                                    titleText: t('deleteConfirmAlertText'),
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                  })
+                                  .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file.attachCode));
+                              }}
+                            />
+                          </Col>
+                        );
+                      })
+                    ) : (
                       <Col>
                         <span>{t('noDocuments')}</span>
                       </Col>
@@ -629,7 +620,14 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                           ...option,
                           isSelected: option.value === userData?.documentStatus,
                         }))}
-                        handleSave={(value) => {console.log('options status', value)}}
+                        handleSave={(value) => {
+                          try {
+                            const status = value as DocumentStatus;
+                            handleChangeDocStatus(status);
+                          } catch (error) {
+                            console.error('error casting document status change (maybe invalid status)', error);
+                          };
+                        }}
                       />
                     </Col>
                   </Row>
