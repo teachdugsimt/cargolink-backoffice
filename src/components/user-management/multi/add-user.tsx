@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment, useEffect, CSSProperties } from 'react';
 import { observer } from 'mobx-react-lite';
 import { CardBody } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
@@ -24,6 +24,8 @@ import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import { AxiosResponse } from 'axios';
 import Swal from 'sweetalert2';
+import { useWindowSize } from '../../../utils';
+import { Property } from 'csstype';
 
 interface Props { }
 interface FileProps {
@@ -138,6 +140,7 @@ const AddUser: React.FC<Props> = observer(() => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneError, setPhoneError] = useState(false);
   const [legalType, setLegalType] = useState<'INDIVIDUAL' | 'JURISTIC'>('INDIVIDUAL');
+  const [width] = useWindowSize();
 
   // const onSubmit = data => console.log(data);
 
@@ -218,7 +221,7 @@ const AddUser: React.FC<Props> = observer(() => {
     return value ? (regex.test(value) ? undefined : 'INVALID_PHONE_NUMBER') : undefined;
   };
 
-  const isDisabled = phoneError ? true : false;
+  const isDisabled = phoneError || !phoneNumber.length ? true : false;
 
   useEffect(() => {
     if (phoneNumber) {
@@ -226,15 +229,37 @@ const AddUser: React.FC<Props> = observer(() => {
       setPhoneError(isInvalid ? true : false);
     }
   }, [phoneNumber]);
+  const breakPoints = {
+    md: 768,
+  };
+  const windowMode = width > breakPoints.md ? 'lg' : 'sm';
+  const fieldItemStyle = (size: 'full' | 'half'): CSSProperties => {
+    let width: Property.Width = 'calc(100% - 1rem)';
+    if (windowMode === 'lg') {
+      if (size === 'half') width = 'calc(50% - 1rem)';
+    }
+    return {
+      display: 'flex',
+      justifyContent: 'flex-start',
+      width,
+      margin: '0 .5rem',
+    };
+  };
+  const groupItemsStyle: CSSProperties = {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    margin: '0 -.5rem',
+  };
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('addNewAccount')}</PageHeader>
       <CardBody>
         <Form onSubmit={handleSubmit}>
           {({ formProps }) => (
-            <form {...formProps} name="add-user" style={FormStyled}>
-              <Row style={RowStyled}>
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+            <form {...formProps} name="add-user" style={{ overflow: 'hidden' }}>
+              <div style={groupItemsStyle}>
+                <div style={fieldItemStyle('full')}>
                   <Field label={t('legalType')} isRequired name="legalType">
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div id="create-user-legal-type" style={{ display: 'flex', flexDirection: 'row' }}>
@@ -246,10 +271,8 @@ const AddUser: React.FC<Props> = observer(() => {
                       </div>
                     )}
                   </Field>
-                </Col>
-              </Row>
-              <Row style={RowStyled}>
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+                </div>
+                <div style={fieldItemStyle('half')}>
                   <Field
                     label={`${t('fullName')} / ${t('companyName')}`}
                     isRequired
@@ -270,9 +293,8 @@ const AddUser: React.FC<Props> = observer(() => {
                       </Fragment>
                     )}
                   </Field>
-                </Col>
-
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+                </div>
+                <div style={fieldItemStyle('half')}>
                   <Field
                     label={t('phoneNumber')}
                     isRequired
@@ -293,15 +315,9 @@ const AddUser: React.FC<Props> = observer(() => {
                       </Fragment>
                     )}
                   </Field>
-                </Col>
-              </Row>
-
-              <Row style={RowStyled}>
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
-                  <Field
-                    label={t('email')}
-                    name="email"
-                  >
+                </div>
+                <div style={fieldItemStyle('half')}>
+                  <Field label={t('email')} name="email">
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div style={{ display: 'flex' }}>
                         <Textfield
@@ -312,19 +328,15 @@ const AddUser: React.FC<Props> = observer(() => {
                       </div>
                     )}
                   </Field>
-                </Col>
-              </Row>
-
-              {validatePassword && (
-                <Row>
-                  <Col style={{ textAlign: 'right' }}>
-                    <ValidatePassword>{`** ${t('passwordNotMatch')}`}</ValidatePassword>
-                  </Col>
-                </Row>
-              )}
-
-              <Row style={RowStyled}>
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+                </div>
+              </div>
+              <div
+                style={{
+                  ...groupItemsStyle,
+                  marginTop: '1rem',
+                  borderTop: '1px solid #D8D8D8',
+                }}>
+                <div style={fieldItemStyle('half')}>
                   <Field
                     label={`${t('citizenId')} / ${t('companyCertificate')}`}
                     name="uploadFile"
@@ -333,40 +345,35 @@ const AddUser: React.FC<Props> = observer(() => {
                   >
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <UploadButton
-                          accept=".pdf"
-                          onChange={handleUploadFile} />
+                        <UploadButton accept=".pdf" onChange={handleUploadFile} />
                         <ShowFileName>{file?.name || ''}</ShowFileName>
                       </div>
                     )}
                   </Field>
-                </Col>
-              </Row>
-
-              <Row style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Col>
-                  <FormFooter>
-                    <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
-                      <BackText>{t('back')}</BackText>
-                    </Button>
-                    <Button
-                      type="submit"
-                      isDisabled={isDisabled}
-                      style={
-                        isDisabled
-                          ? {
-                              ...BottomSubmitStyled,
-                              backgroundColor: '#D8D8D8',
-                              border: 'none',
-                            }
-                          : BottomSubmitStyled
-                      }
-                    >
-                      <SubmitText>{t('confirm')}</SubmitText>
-                    </Button>
-                  </FormFooter>
-                </Col>
-              </Row>
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '0 -.5rem', marginTop: '2rem' }}>
+                <FormFooter>
+                  <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
+                    <BackText>{t('back')}</BackText>
+                  </Button>
+                  <Button
+                    type="submit"
+                    isDisabled={isDisabled}
+                    style={
+                      isDisabled
+                        ? {
+                          ...BottomSubmitStyled,
+                          backgroundColor: '#D8D8D8',
+                          border: 'none',
+                        }
+                        : BottomSubmitStyled
+                    }
+                  >
+                    <SubmitText>{t('confirm')}</SubmitText>
+                  </Button>
+                </FormFooter>
+              </div>
             </form>
           )}
         </Form>
