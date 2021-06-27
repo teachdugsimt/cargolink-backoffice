@@ -33,6 +33,9 @@ import { EditUserPayload, EditUserResponse } from '../../../services/user-api';
 import { AxiosResponse } from 'axios';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
+import { breakPoints, useWindowSize } from '../../../utils';
+import { Property } from 'csstype';
+
 interface Props {
   id?: number;
 }
@@ -91,8 +94,8 @@ interface FullNameProps {
   isNoData?: boolean;
 }
 const Name = styled.p<FullNameProps>`
-  color: ${({ isNoData }) => (isNoData ? '#D8D8D8' : 'inherit')};
-  margin-bottom: 0;
+  color: ${({ isNoData }) => (isNoData ? '#AAA' : 'inherit')};
+  margin: 0;
   font-size: 1.125rem;
   font-weight: 700;
 
@@ -141,7 +144,7 @@ const BUTTON: CSSProperties = {
 };
 
 const BottomStyled: CSSProperties = {
-  margin: '0 6px',
+  margin: '0 .5rem',
 };
 
 const BottomBackStyled: CSSProperties = {
@@ -181,12 +184,6 @@ const SPACE_ROW: CSSProperties = {
   paddingBottom: 10,
 };
 
-const IMAGE_CONTAINER: CSSProperties = {
-  ...SPACE_ROW,
-  display: 'flex',
-  justifyContent: 'center',
-};
-
 const EditUser: React.FC<Props> = observer((props: any) => {
   const { t } = useTranslation();
   const { userStore, loginStore, uploadFileStore } = useMst();
@@ -199,8 +196,8 @@ const EditUser: React.FC<Props> = observer((props: any) => {
   const [isOpenDocumentAddress, setIsOpenDocumentAddress] = useState<boolean>(false);
   const [address, setAddress] = useState<AddressProps>({});
   const [userData, setUserData] = useState<IUserDTO | null>(null);
+  const [width] = useWindowSize();
 
-  // const onSubmit = data => console.log(data);
   const userId = props.id;
   type Fields = 'email' | 'legalType' | 'phoneNumber' | 'attachCode' | 'userType';
 
@@ -433,207 +430,242 @@ const EditUser: React.FC<Props> = observer((props: any) => {
   const AddressForm = ({ onDismiss }: { onDismiss: () => any }) => {
     return (
       <>
-        <Row style={{ margin: 0, width: '100%' }}>
-          <Col breakPoint={{ md: 6 }}>
+        <div
+          style={{
+            ...groupItemsStyle,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ ...fieldItemStyle('half') }}>
             <Field label={t('addressNo')} name={'addressNo'} defaultValue={''}>
               {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
             </Field>
-          </Col>
-          <Col breakPoint={{ md: 3 }}>
+          </div>
+          <div style={{ ...fieldItemStyle('quart') }}>
             <Field label={t('alley')} name={'alley'} defaultValue={''}>
               {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
             </Field>
-          </Col>
-          <Col breakPoint={{ md: 3 }}>
+          </div>
+          <div style={{ ...fieldItemStyle('quart') }}>
             <Field label={t('street')} name={'street'} defaultValue={''}>
               {({ fieldProps, error, meta: { valid } }: any) => <Textfield {...fieldProps} />}
             </Field>
-          </Col>
-        </Row>
-
-        <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} />
-
-        <Row style={{ margin: 0, width: '100%' }}>
-          <Col>
-            <FormFooter>
-              <Button type="button" style={BottomBackStyled} onClick={onDismiss}>
-                <BackText>{t('cancel')}</BackText>
-              </Button>
-              <Button type="button" style={BottomSubmitStyled} onClick={() => handleConfirmAddress()}>
-                <SubmitText>
-                  <Icon icon={save} size={20} style={{ paddingRight: 5, color: '#000' }} />
-                  {t('confirm')}
-                </SubmitText>
-              </Button>
-            </FormFooter>
-          </Col>
-        </Row>
+          </div>
+          <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} fieldStyle={fieldItemStyle('half')} />
+        </div>
+        <FormFooter>
+          <div style={{
+            ...groupItemsStyle,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+            <Button type="button" style={BottomBackStyled} onClick={onDismiss}>
+              <BackText>{t('cancel')}</BackText>
+            </Button>
+            <Button type="button" style={BottomSubmitStyled} onClick={() => handleConfirmAddress()}>
+              <SubmitText>
+                <Icon icon={save} size={20} style={{ paddingRight: 5, color: '#000' }} />
+                {t('confirm')}
+              </SubmitText>
+            </Button>
+          </div>
+        </FormFooter>
       </>
     );
   };
 
   if (!userData) return <></>;
   const fullNamePlaceholder = t('fullNamePlaceholder');
+  const windowMode = width > breakPoints.md ? 'lg' : 'sm';
+  const fieldItemStyle = (size: 'full' | 'half' | 'quart'): CSSProperties => {
+    let width: Property.Width = 'calc(100% - 1rem)';
+    if (windowMode === 'lg') {
+      if (size === 'half') width = 'calc(50% - 1rem)';
+      else if (size === 'quart') width = 'calc(25% - 1rem)';
+    }
+    return {
+      display: 'flex',
+      justifyContent: 'flex-start',
+      width,
+      margin: '0 .5rem',
+      flexDirection: 'column',
+    };
+  };
+  const groupItemsStyle: CSSProperties = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    margin: '0 -.5rem',
+  };
 
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('userInfo')}</PageHeader>
 
-      <CardBody>
+      <CardBody style={{ overflow: 'hidden' }}>
         <Form onSubmit={handleSubmit}>
           {({ formProps }) => (
             <form {...formProps} name="add-user" style={FormStyled}>
-              <Row>
-                <Col breakPoint={{ xs: 12, sm: 4, md: 2 }} style={IMAGE_CONTAINER}>
-                  <ImageFram>
-                    <ImagePreview>
-                      {previewImage ? (
-                        <img src={previewImage} alt="" style={IMAGE_PROFILE} />
-                      ) : (
-                        <Icon icon={ic_person} size={50} />
-                      )}
-                    </ImagePreview>
-                    <Field label="" name="imageProfile" defaultValue="">
-                      {({ fieldProps, error, meta: { valid } }: any) => (
-                        <MaterialButton
-                          variant="contained"
-                          component="label"
-                          style={CAMERA}
-                          onChange={(event: any) => handleChaneImage(event)}
-                        >
-                          <input type={'file'} accept={'image/*'} />
-                          <Icon icon={camera} size={25} />
-                        </MaterialButton>
-                      )}
-                    </Field>
-                  </ImageFram>
-                </Col>
-                <Col breakPoint={{ xs: 12, sm: 8, md: 5 }} style={SPACE_ROW}>
+              <div style={groupItemsStyle}>
+                <div
+                  style={{
+                    ...fieldItemStyle('half'),
+                    flexDirection: 'row',
+                  }}
+                >
                   <div>
-                    <Name isNoData={!userData?.fullName}>{userData?.fullname || fullNamePlaceholder}</Name>
-                  </div>
-
-                  <FormEdit
-                    label={`${t('memberSince')} :`}
-                    value={DateFormat(userData.createdAt as string, loginStore.language)}
-                    showEditIcon={false}
-                    containerStyle={{ marginBottom: 12 }}
-                    valueStyle={{ fontWeight: 0 }}
-                  />
-                  <FormEdit
-                    label={`${t('legalType')} :`}
-                    value={userData?.legalType === 'INDIVIDUAL' ? t('individual') : t('company')}
-                    type={'dropdown'}
-                    dropDownOption={legalTypeOptions}
-                    handleSave={(value) => handleSave('legalType', value)}
-                  />
-                  <FormEdit
-                    label={`${t('phoneNumber')} :`}
-                    value={userData.phoneNumber || '-'}
-                    validateMessage={t('invalidPhoneNumber')}
-                    validateForm={validatePhoneNumber}
-                    messageForCheck={'INVALID_PHONE_NUMBER'}
-                    handleSave={(value) => {
-                      if (!value) return;
-                      if (value.startsWith('0')) value = `+66${value.substr(1)}`;
-                      handleSave('phoneNumber', value);
-                    }}
-                  />
-                  <FormEdit
-                    label={`${t('email')} :`}
-                    value={userData.email}
-                    handleSave={(value) => handleSave('email', value)}
-                    validateForm={validateEmail}
-                    validateMessage={t('invalidEmail')}
-                    messageForCheck={'INVALID_EMAIL'}
-                  />
-                </Col>
-                <Col breakPoint={{ xs: 12, sm: 12, md: 5 }} style={SPACE_ROW}>
-                  <Row style={{ marginBottom: 12 }}>
-                    <Col breakPoint={{ xs: 5, sm: 5, md: 6 }}>
-                      <Name>{t('userDoc')}</Name>
-                    </Col>
-                    <Col breakPoint={{ xs: 7, sm: 7, md: 6 }}>
-                      <Field label="" name="uploadFile" defaultValue="">
+                    <ImageFram
+                      style={{
+                        display: 'flex',
+                        flex: 1,
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <ImagePreview>
+                        {previewImage ? (
+                          <img src={previewImage} alt="" style={IMAGE_PROFILE} />
+                        ) : (
+                          <Icon icon={ic_person} size={50} />
+                        )}
+                      </ImagePreview>
+                      <Field label="" name="imageProfile" defaultValue="">
                         {({ fieldProps, error, meta: { valid } }: any) => (
-                          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <UploadButton accept=".pdf" onChange={handleUploadFile} />
-                            {/* <MaterialButton
-                              variant="contained"
-                              component="label"
-                              onChange={(event: any) => handleUploadFile(event)}
-                            >
-                              <input type={'file'} accept={'.pdf'} />
-                              <Icon icon={upload} size={20} />
-                              <TextUpload>{t('upload')}</TextUpload>
-                            </MaterialButton> */}
-                            {/* <ShowFileName>{file?.name || ''}</ShowFileName> */}
-                          </div>
+                          <MaterialButton
+                            variant="contained"
+                            component="label"
+                            style={CAMERA}
+                            onChange={(event: any) => handleChaneImage(event)}
+                          >
+                            <input type={'file'} accept={'image/*'} />
+                            <Icon icon={camera} size={25} />
+                          </MaterialButton>
                         )}
                       </Field>
-                    </Col>
-                  </Row>
-
-                  <Row>
-                    {files.length ? (
-                      files.map((file: UploadFileResponse) => {
-                        return (
-                          <Col key={file.attachCode}>
-                            <ListFile
-                              fileName={file.fileName}
-                              date={file.uploadedDate}
-                              handleDelete={() => {
-                                const red = '#E03616';
-                                const blue = '#3085D6';
-                                Swal.mixin({
-                                  iconColor: red,
-                                  confirmButtonColor: red,
-                                  cancelButtonColor: blue,
-                                  confirmButtonText: t('delete'),
-                                  cancelButtonText: t('cancel'),
+                    </ImageFram>
+                  </div>
+                  <div
+                    style={{
+                      flex: 4,
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                      flexDirection: 'column',
+                      margin: '0 1rem',
+                    }}
+                  >
+                    <Name isNoData={!userData?.fullName}>{userData?.fullname || fullNamePlaceholder}</Name>
+                    <FormEdit
+                      label={`${t('memberSince')} :`}
+                      value={DateFormat(userData.createdAt as string, loginStore.language)}
+                      showEditIcon={false}
+                      containerStyle={{ marginBottom: 12 }}
+                      valueStyle={{ fontWeight: 0 }}
+                    />
+                    <FormEdit
+                      label={`${t('legalType')} :`}
+                      value={userData?.legalType === 'INDIVIDUAL' ? t('individual') : t('company')}
+                      type={'dropdown'}
+                      dropDownOption={legalTypeOptions}
+                      handleSave={(value) => handleSave('legalType', value)}
+                    />
+                    <FormEdit
+                      label={`${t('phoneNumber')} :`}
+                      value={userData.phoneNumber || '-'}
+                      validateMessage={t('invalidPhoneNumber')}
+                      validateForm={validatePhoneNumber}
+                      messageForCheck={'INVALID_PHONE_NUMBER'}
+                      handleSave={(value) => {
+                        if (!value) return;
+                        if (value.startsWith('0')) value = `+66${value.substr(1)}`;
+                        handleSave('phoneNumber', value);
+                      }}
+                    />
+                    <FormEdit
+                      label={`${t('email')} :`}
+                      value={userData.email}
+                      handleSave={(value) => handleSave('email', value)}
+                      validateForm={validateEmail}
+                      validateMessage={t('invalidEmail')}
+                      messageForCheck={'INVALID_EMAIL'}
+                    />
+                  </div>
+                </div>
+                <div
+                  style={{
+                    ...fieldItemStyle('half'),
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'baseline',
+                    }}
+                  >
+                    <Name>{t('userDoc')}</Name>
+                    <Field label="" name="uploadFile" defaultValue="">
+                      {({ fieldProps, error, meta: { valid } }: any) => (
+                        <UploadButton accept=".pdf" onChange={handleUploadFile} />
+                      )}
+                    </Field>
+                  </div>
+                  {files.length ? (
+                    files.map((file: UploadFileResponse) => {
+                      return (
+                        <div key={file.attachCode}>
+                          <ListFile
+                            fileName={file.fileName}
+                            date={file.uploadedDate}
+                            handleDelete={() => {
+                              const red = '#E03616';
+                              const blue = '#3085D6';
+                              Swal.mixin({
+                                iconColor: red,
+                                confirmButtonColor: red,
+                                cancelButtonColor: blue,
+                                confirmButtonText: t('delete'),
+                                cancelButtonText: t('cancel'),
+                              })
+                                .fire({
+                                  title: t('deleteConfirmAlertTitle'),
+                                  titleText: t('deleteConfirmAlertText'),
+                                  icon: 'warning',
+                                  showCancelButton: true,
                                 })
-                                  .fire({
-                                    title: t('deleteConfirmAlertTitle'),
-                                    titleText: t('deleteConfirmAlertText'),
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                  })
-                                  .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file.attachCode));
-                              }}
-                            />
-                          </Col>
-                        );
-                      })
-                    ) : (
-                      <Col>
-                        <span>{t('noDocuments')}</span>
-                      </Col>
-                    )}
-
-                    <Col style={{ marginTop: 20 }}>
-                      <FormEdit
-                        label={`${t('status')} :`}
-                        value={userData?.documentStatus || t('docStatus:waitForVerify')}
-                        valueStyle={{ color: 'orangered' }}
-                        type={'dropdown'}
-                        dropDownOption={statusOptions.map((option) => ({
-                          ...option,
-                          isSelected: option.value === userData?.documentStatus,
-                        }))}
-                        handleSave={(value) => {
-                          try {
-                            const status = value as DocumentStatus;
-                            handleChangeDocStatus(status);
-                          } catch (error) {
-                            console.error('error casting document status change (maybe invalid status)', error);
-                          };
-                        }}
-                      />
-                    </Col>
-                  </Row>
-                </Col>
-
-                <Col style={SPACE_ROW}>
+                                .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file.attachCode));
+                            }}
+                          />
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <span>{t('noDocuments')}</span>
+                  )}
+                  <div style={{ marginTop: '1rem' }}>
+                    <FormEdit
+                      label={`${t('status')} :`}
+                      value={userData?.documentStatus || t('docStatus:waitForVerify')}
+                      valueStyle={{ color: 'orangered' }}
+                      type={'dropdown'}
+                      dropDownOption={statusOptions.map((option) => ({
+                        ...option,
+                        isSelected: option.value === userData?.documentStatus,
+                      }))}
+                      handleSave={(value) => {
+                        try {
+                          const status = value as DocumentStatus;
+                          handleChangeDocStatus(status);
+                        } catch (error) {
+                          console.error('error casting document status change (maybe invalid status)', error);
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div style={groupItemsStyle}>
+                <div style={fieldItemStyle('full')}>
                   <Name style={{ marginBottom: 12 }}>{t('generalAddr')}</Name>
                   <div style={AddressStyled}>
                     <Address>
@@ -649,45 +681,47 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                       <Icon icon={isOpenGeneralAddress ? close : pencil} style={ICON_STYLED} size={22} />
                     </button>
                   </div>
-                </Col>
-
-                {isOpenGeneralAddress && <AddressForm onDismiss={() => setIsOpenGeneralAddress(false)} />}
-
-                <Col style={SPACE_ROW}>
+                  {isOpenGeneralAddress && <AddressForm onDismiss={() => setIsOpenGeneralAddress(false)} />}
+                </div>
+              </div>
+              <div style={{
+                ...groupItemsStyle,
+                marginTop: '1rem',
+              }}>
+                <div style={fieldItemStyle('full')}>
                   <Name style={{ marginBottom: 12 }}>{t('documentDeliverAddr')}</Name>
-                  <div style={ADDRESS_WITH_CHECKBOX}>
-                    <div style={{ paddingBottom: 8 }}>
-                      <Checkbox
-                        value={1}
-                        isChecked={isChecked}
-                        isDisabled={isOpenDocumentAddress || isOpenGeneralAddress}
-                        label={t('sameGeneralAddress').toString()}
-                        onChange={handleCheckBox}
-                        name="checkbox-default"
-                        testId="same-general-address"
-                        size={'large'}
-                      />
+                  <Checkbox
+                    value={1}
+                    isChecked={isChecked}
+                    isDisabled={isOpenDocumentAddress || isOpenGeneralAddress}
+                    label={t('sameGeneralAddress').toString()}
+                    onChange={handleCheckBox}
+                    name="checkbox-default"
+                    testId="same-general-address"
+                    size={'large'}
+                  />
+                  {!isChecked && (
+                    <div style={{
+                      ...AddressStyled,
+                      marginTop: '1rem',
+                    }}>
+                      <Address>
+                        {'91/1 Songphol Soi 9, Tambon Lam Phaya, Mueang Nakhon Pathom District, Nakhon Pathom 73000'}
+                      </Address>
+                      <button
+                        style={BUTTON}
+                        onClick={() => {
+                          setIsOpenDocumentAddress((currentValue) => !currentValue);
+                          setIsOpenGeneralAddress(false);
+                        }}
+                      >
+                        <Icon icon={isOpenDocumentAddress ? close : pencil} style={ICON_STYLED} size={22} />
+                      </button>
                     </div>
-                    {!isChecked && (
-                      <div style={AddressStyled}>
-                        <Address>
-                          {'91/1 Songphol Soi 9, Tambon Lam Phaya, Mueang Nakhon Pathom District, Nakhon Pathom 73000'}
-                        </Address>
-                        <button
-                          style={BUTTON}
-                          onClick={() => {
-                            setIsOpenDocumentAddress((currentValue) => !currentValue);
-                            setIsOpenGeneralAddress(false);
-                          }}
-                        >
-                          <Icon icon={isOpenDocumentAddress ? close : pencil} style={ICON_STYLED} size={22} />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </Col>
-                {isOpenDocumentAddress && <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} />}
-              </Row>
+                  )}
+                  {isOpenDocumentAddress && <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} />}
+                </div>
+              </div>
             </form>
           )}
         </Form>

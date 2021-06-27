@@ -37,7 +37,7 @@ const List = styled.li`
 `;
 
 const AutoCompleteTypeahead = function AutoCompleteTypeahead(props: AutoCompleteTypeaheadProps) {
-  const { data, numberOfRow = 5, handleValue } = props;
+  const { data, numberOfRow = 5, handleValue, fieldStyle } = props;
 
   const [addressObj, setAddressObj] = useState<any>([]);
   const [openOn, setOpenOn] = useState<string>('');
@@ -83,11 +83,10 @@ const AutoCompleteTypeahead = function AutoCompleteTypeahead(props: AutoComplete
   };
 
   return (
-    <Row style={{ width: '100%', margin: 0 }}>
-      {/* {Object.keys(fieldsEnum).map((key: string) => { */}
+    <div style={{ width: '100%', margin: 0, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
       {data.map(({ type, label, breakPoint, isRequired }) => {
         return (
-          <Col key={type} breakPoint={{ ...breakPoint }}>
+          <div key={type} style={{ ...fieldStyle }}>
             <Field
               label={label}
               name={type.toLocaleLowerCase() || ''}
@@ -123,10 +122,10 @@ const AutoCompleteTypeahead = function AutoCompleteTypeahead(props: AutoComplete
                   ))}
               </Unorderlist>
             )}
-          </Col>
+          </div>
         );
       })}
-    </Row>
+    </div>
   );
 };
 
