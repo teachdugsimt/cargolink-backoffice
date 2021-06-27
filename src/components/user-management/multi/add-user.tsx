@@ -1,10 +1,7 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment, useEffect, CSSProperties } from 'react';
 import { observer } from 'mobx-react-lite';
 import { CardBody } from '@paljs/ui/Card';
-import Row from '@paljs/ui/Row';
-import Col from '@paljs/ui/Col';
 import { useTranslation } from 'react-i18next';
-// import { Button } from '@paljs/ui/Button';
 import Button from '@atlaskit/button/standard-button';
 import { navigate } from 'gatsby';
 import styled from 'styled-components';
@@ -24,6 +21,8 @@ import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import { AxiosResponse } from 'axios';
 import Swal from 'sweetalert2';
+import { useWindowSize, breakPoints } from '../../../utils';
+import { Property } from 'csstype';
 
 interface Props { }
 interface FileProps {
@@ -45,32 +44,11 @@ interface InputData {
   // userType: string;
 }
 
-const ButtonStyled = styled.div`
-  display: flex;
-  justifycontent: flex-end;
-`;
-
-const UploadStyled = styled.span`
-  display: flex;
-  align-item: center;
-  justify-content: center;
-`;
-
-const TextUpload = styled.span`
-  padding-left: 6px;
-  padding-top: 2px;
-`;
-
 const ShowFileName = styled.p`
   padding-left: 8px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-`;
-
-const ValidatePassword = styled.p`
-  margin: 0;
-  color: red;
 `;
 
 const BackText = styled.span`
@@ -80,10 +58,6 @@ const BackText = styled.span`
 const SubmitText = styled.span`
   color: #000;
 `;
-
-const RowStyled = {
-  padding: '8px 8px 12px 8px',
-};
 
 const BottomStyled = {
   margin: '0 6px',
@@ -101,11 +75,6 @@ const BottomSubmitStyled = {
   backgroundColor: '#FBBC12',
 };
 
-const FormStyled = {
-  paddingLeft: 15,
-  paddingRight: 15,
-};
-
 const startAdornmentIcon = (iconName: 'user' | 'phone' | 'password' | 'email') => {
   let icon = '';
   if (iconName === 'user') {
@@ -120,13 +89,6 @@ const startAdornmentIcon = (iconName: 'user' | 'phone' | 'password' | 'email') =
   return <Icon icon={icon} style={{ paddingLeft: 6, color: 'gray' }} size={22} />;
 };
 
-const validate = (value: unknown) => {
-  if (value !== 'open sesame') {
-    return 'INCORRECT_PHRASE';
-  }
-  return undefined;
-};
-
 const AddUser: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
   // const { control, handleSubmit } = useForm();
@@ -138,6 +100,7 @@ const AddUser: React.FC<Props> = observer(() => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneError, setPhoneError] = useState(false);
   const [legalType, setLegalType] = useState<'INDIVIDUAL' | 'JURISTIC'>('INDIVIDUAL');
+  const [width] = useWindowSize();
 
   // const onSubmit = data => console.log(data);
 
@@ -165,27 +128,13 @@ const AddUser: React.FC<Props> = observer(() => {
     };
   }, []);
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleMouseDownPassword = (event: any) => {
-    event.preventDefault();
-  };
-
-  const handleValidatePassword = () => {
-    if (password !== confirmPassword && password && confirmPassword) {
-      setValidatePassword(true);
-    } else {
-      setValidatePassword(false);
-    }
-  };
-
   const handleSubmit = (formState: InputData) => {
     const payload: CreateUserPayload = {
-      ...formState,
+      fullName: formState.fullName,
+      email: formState.email,
       userType: 0,
       phoneNumber: `+66${phoneNumber.substr(1)}`,
+      legalType,
     };
     userApi
       .createUser(payload)
@@ -216,7 +165,7 @@ const AddUser: React.FC<Props> = observer(() => {
     return value ? (regex.test(value) ? undefined : 'INVALID_PHONE_NUMBER') : undefined;
   };
 
-  const isDisabled = phoneError ? true : false;
+  const isDisabled = phoneError || !phoneNumber.length ? true : false;
 
   useEffect(() => {
     if (phoneNumber) {
@@ -224,15 +173,33 @@ const AddUser: React.FC<Props> = observer(() => {
       setPhoneError(isInvalid ? true : false);
     }
   }, [phoneNumber]);
+  const windowMode = width > breakPoints.md ? 'lg' : 'sm';
+  const fieldItemStyle = (size: 'full' | 'half'): CSSProperties => {
+    let width: Property.Width = 'calc(100% - 1rem)';
+    if (windowMode === 'lg') {
+      if (size === 'half') width = 'calc(50% - 1rem)';
+    }
+    return {
+      display: 'flex',
+      justifyContent: 'flex-start',
+      width,
+      margin: '0 .5rem',
+    };
+  };
+  const groupItemsStyle: CSSProperties = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    margin: '0 -.5rem',
+  };
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('addNewAccount')}</PageHeader>
       <CardBody>
         <Form onSubmit={handleSubmit}>
           {({ formProps }) => (
-            <form {...formProps} name="add-user" style={FormStyled}>
-              <Row style={RowStyled}>
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+            <form {...formProps} name="add-user" style={{ overflow: 'hidden' }}>
+              <div style={groupItemsStyle}>
+                <div style={fieldItemStyle('full')}>
                   <Field label={t('legalType')} isRequired name="legalType">
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div id="create-user-legal-type" style={{ display: 'flex', flexDirection: 'row' }}>
@@ -244,10 +211,8 @@ const AddUser: React.FC<Props> = observer(() => {
                       </div>
                     )}
                   </Field>
-                </Col>
-              </Row>
-              <Row style={RowStyled}>
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+                </div>
+                <div style={fieldItemStyle('half')}>
                   <Field
                     label={`${t('fullName')} / ${t('companyName')}`}
                     isRequired
@@ -268,9 +233,8 @@ const AddUser: React.FC<Props> = observer(() => {
                       </Fragment>
                     )}
                   </Field>
-                </Col>
-
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+                </div>
+                <div style={fieldItemStyle('half')}>
                   <Field
                     label={t('phoneNumber')}
                     isRequired
@@ -291,15 +255,9 @@ const AddUser: React.FC<Props> = observer(() => {
                       </Fragment>
                     )}
                   </Field>
-                </Col>
-              </Row>
-
-              <Row style={RowStyled}>
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
-                  <Field
-                    label={t('email')}
-                    name="email"
-                  >
+                </div>
+                <div style={fieldItemStyle('half')}>
+                  <Field label={t('email')} name="email">
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div style={{ display: 'flex' }}>
                         <Textfield
@@ -310,19 +268,15 @@ const AddUser: React.FC<Props> = observer(() => {
                       </div>
                     )}
                   </Field>
-                </Col>
-              </Row>
-
-              {validatePassword && (
-                <Row>
-                  <Col style={{ textAlign: 'right' }}>
-                    <ValidatePassword>{`** ${t('passwordNotMatch')}`}</ValidatePassword>
-                  </Col>
-                </Row>
-              )}
-
-              <Row style={RowStyled}>
-                <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+                </div>
+              </div>
+              <div
+                style={{
+                  ...groupItemsStyle,
+                  marginTop: '1rem',
+                  borderTop: '1px solid #D8D8D8',
+                }}>
+                <div style={fieldItemStyle('half')}>
                   <Field
                     label={`${t('citizenId')} / ${t('companyCertificate')}`}
                     name="uploadFile"
@@ -331,40 +285,35 @@ const AddUser: React.FC<Props> = observer(() => {
                   >
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <UploadButton
-                          accept=".pdf"
-                          onChange={handleUploadFile} />
+                        <UploadButton accept=".pdf" onChange={handleUploadFile} />
                         <ShowFileName>{file?.name || ''}</ShowFileName>
                       </div>
                     )}
                   </Field>
-                </Col>
-              </Row>
-
-              <Row style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Col>
-                  <FormFooter>
-                    <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
-                      <BackText>{t('back')}</BackText>
-                    </Button>
-                    <Button
-                      type="submit"
-                      isDisabled={isDisabled}
-                      style={
-                        isDisabled
-                          ? {
-                              ...BottomSubmitStyled,
-                              backgroundColor: '#D8D8D8',
-                              border: 'none',
-                            }
-                          : BottomSubmitStyled
-                      }
-                    >
-                      <SubmitText>{t('confirm')}</SubmitText>
-                    </Button>
-                  </FormFooter>
-                </Col>
-              </Row>
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '0 -.5rem', marginTop: '2rem' }}>
+                <FormFooter>
+                  <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
+                    <BackText>{t('back')}</BackText>
+                  </Button>
+                  <Button
+                    type="submit"
+                    isDisabled={isDisabled}
+                    style={
+                      isDisabled
+                        ? {
+                          ...BottomSubmitStyled,
+                          backgroundColor: '#D8D8D8',
+                          border: 'none',
+                        }
+                        : BottomSubmitStyled
+                    }
+                  >
+                    <SubmitText>{t('confirm')}</SubmitText>
+                  </Button>
+                </FormFooter>
+              </div>
             </form>
           )}
         </Form>

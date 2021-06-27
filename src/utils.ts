@@ -1,3 +1,5 @@
+import { useState, useLayoutEffect } from "react";
+
 export interface IQueryParams {
   [key: string]: string;
 }
@@ -14,4 +16,36 @@ export const searchToQueryParams = (search: string): IQueryParams | null => {
       [key]: value,
     };
   }, {});
+}
+
+export const useWindowSize = () => {
+  const isBrowser = typeof window !== 'undefined';
+  const [width, setWidth] = useState(isBrowser ? window.innerWidth : 0);
+  const [height, setHeight] = useState(isBrowser ? window.innerHeight : 0);
+  useLayoutEffect(() => {
+    if (!isBrowser) return false;
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight);
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    }
+  }, []);
+
+  return [width, height];
+}
+
+export const breakPoints = {
+  xs: 0,
+  is: 400,
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+  xxl: 1400,
+  xxxl: 1600,
 }

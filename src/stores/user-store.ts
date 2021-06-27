@@ -38,6 +38,7 @@ export const UserStore = types
       }),
     ),
     data_user: types.maybeNull(userManagement),
+    data_count: types.maybeNull(types.number),
     isFirstLoad: true,
   })
   .actions((self) => {
@@ -52,6 +53,7 @@ export const UserStore = types
           if (response && response.ok) {
             const { data, size, totalElements, totalPages }: GetUsersListResponse = response.data;
             self.loading = false;
+            self.data_count = totalElements;
             const currentPage = params?.page || 1;
             const content = data;
             const user: IUserManagementProps = {

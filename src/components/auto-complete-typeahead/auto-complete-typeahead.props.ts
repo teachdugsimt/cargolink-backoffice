@@ -1,3 +1,5 @@
+import { CSSProperties } from 'react';
+
 export interface AutoCompleteTypeaheadProps {
   data: Array<{
     type: 'district' | 'amphoe' | 'province' | 'zipcode';
@@ -20,4 +22,5 @@ export interface AutoCompleteTypeaheadProps {
   numberOfRow?: number; // number of result address
 
   handleValue: (value: any) => void;
+  fieldStyle?: CSSProperties;
 }

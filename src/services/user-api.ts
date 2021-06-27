@@ -50,9 +50,9 @@ export interface GetUploadLinkResponse {
 }
 
 export interface CreateUserPayload {
-  name: string;
+  fullName: string;
   phoneNumber: string;
-  email: string;
+  email?: string;
   userType: 0; //? fix 0 for now
   legalType: 'INDIVIDUAL' | 'JURISTIC';
 }

@@ -171,16 +171,15 @@ const MultipleRole: React.FC<Props> = observer(() => {
       </div>
 
 
-
-      <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
+      <span>{`${t('resultsFound')}: ${userStore.data_count || 0}`}</span>
       <DynamicTable
         //   caption={caption}
         head={head}
         rows={rowData}
         page={page}
+        emptyView={<p>{t('noData')}</p>}
         // sortKey={sortable.sortKey}
         // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
-        emptyView={<p>{t('noData')}</p>}
         rowsPerPage={rowLength}
         defaultPage={1}
         loadingSpinnerSize="large"
