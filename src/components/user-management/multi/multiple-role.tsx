@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next';
 import DynamicTable from '@atlaskit/dynamic-table';
 import { head, createRow, sortabled } from './dynamic-table/sample-data';
 import SearchForm from '../../search-form';
-import Spinner from '@atlaskit/spinner';
-import styled from 'styled-components';
 import { useMst } from '../../../stores/root-store';
 import { observer } from 'mobx-react-lite';
 import { defaultAlertSetting } from '../../simple-data';
@@ -17,13 +15,6 @@ import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import Button from '@atlaskit/button'
 import AddCircleIcon from '@atlaskit/icon/glyph/add-circle';
-
-
-const Wrapper = styled.div`
-  margin-top: 10px;
-  min-width: 600px;
-  background-color: '#5E6C84';
-`;
 
 interface Props { }
 
@@ -172,7 +163,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
 
 
 
-      <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
+      <span>{`${t('resultsFound')}: ${userStore.data_count || 0}`}</span>
       {userStore.loading ? (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Spinner size="large" />
