@@ -60,7 +60,7 @@ export const createHead = (withWidth: boolean) => {
       },
       {
         key: 'legalType',
-        content: 'Legal Type',
+        content: 'legalType',
         shouldTruncate: true,
         isSortable: true,
       },
@@ -75,7 +75,12 @@ export const createHead = (withWidth: boolean) => {
 
 export const head = createHead(true);
 
-export const createRow = (users: any, language: string, t: TFunction<string>, deleteUserFunction?: (userId: string) => any) => {
+export const createRow = (
+  users: any,
+  language: string,
+  t: TFunction<string>,
+  deleteUserFunction?: (userId: string) => any,
+) => {
   console.log('keys', users);
   const requestUploadToken = async (id: any) => {
     try {
@@ -123,8 +128,18 @@ export const createRow = (users: any, language: string, t: TFunction<string>, de
     });
   }
   const deleteUser = deleteUserFunction ? deleteUserFunction : (userId: string) => null;
-  
+
   return users.map((user: IUserDTO | IUserNull, index: number) => {
+    const translatedLegalType = ((legalType?: string | null) => {
+      switch (legalType) {
+        case 'INDIVIDUAL':
+          return t('individualShort');
+        case 'JURISTIC':
+          return t('company');
+        default:
+          return '-';
+      }
+    })(user.legalType);
     return {
       key: `row-${index}-${user.phoneNumber}`,
       cells: [
@@ -149,8 +164,8 @@ export const createRow = (users: any, language: string, t: TFunction<string>, de
           content: DateFormat(user.createdAt as string, language),
         },
         {
-          key: user.userId,
-          content: '-',
+          key: user.legalType,
+          content: translatedLegalType,
         },
         {
           key: user.id,

@@ -18,6 +18,7 @@ const userType = types.model({
   deviceToken: types.maybeNull(types.string),
   status: types.maybeNull(types.string),
   documentStatus: types.maybeNull(types.string),
+  legalType: types.maybeNull(types.string),
 });
 
 const userManagement = types.model({

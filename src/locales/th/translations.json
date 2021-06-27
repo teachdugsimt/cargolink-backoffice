@@ -117,6 +117,7 @@
   "editAccount": "แก้ไขข้อมูลผู้ใช้",
   "legalType": "ประเภทกฎหมาย",
   "individual": "รายบุคคล",
+  "individualShort": "บุคคล",
   "company": "บริษัท",
   "userType": "ประเภทผู้ใช้",
   "userInfo": "ข้อมูลส่วนตัว",

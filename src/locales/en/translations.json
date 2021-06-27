@@ -117,6 +117,7 @@
   "editAccount": "Edit account",
   "legalType": "Legal type",
   "individual": "Individual",
+  "individualShort": "Individual",
   "company": "Company",
   "userType": "User type",
   "userInfo": "User Information",
