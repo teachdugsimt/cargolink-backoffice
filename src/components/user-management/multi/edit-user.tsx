@@ -521,7 +521,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                 </Col>
                 <Col breakPoint={{ xs: 12, sm: 8, md: 5 }} style={SPACE_ROW}>
                   <div>
-                    <Name>{'Firstname Lastname'}</Name>
+                    <Name>{userData?.fullname || 'Unnamed user'}</Name>
                   </div>
 
                   <FormEdit
