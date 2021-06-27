@@ -182,7 +182,6 @@ export const createRow = (users: any, language: string, t: TFunction<string>, de
                 appearance="ghost"
                 status="Basic"
                 size="Small"
-<<<<<<< HEAD
                 onClick={() => {
                   const red = '#E03616';
                   const blue = '#3085D6';
@@ -202,16 +201,6 @@ export const createRow = (users: any, language: string, t: TFunction<string>, de
                     .then(({ isConfirmed }) => isConfirmed && deleteUser(user.userId))
                 }
                 }>
-=======
-                onClick={() =>
-                  navigate('/user-management/user', {
-                    state: {
-                      id: user.userId,
-                    },
-                  })
-                }
-              >
->>>>>>> develop
                 <Icon icon={ic_delete} />
               </Button>
             </div>

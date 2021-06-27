@@ -31,8 +31,6 @@ import { UserApi } from '../../../services';
 import { UploadFileResponse } from '../../../services/upload-api';
 import { EditUserPayload, EditUserResponse } from '../../../services/user-api';
 import { AxiosResponse } from 'axios';
-
-import { EditUserPayload } from '../../../services/user-api';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 interface Props {
