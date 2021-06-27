@@ -66,21 +66,24 @@ export const UserStore = types
               }),
               {},
             );
-            if (self.isFirstLoad) {
-              self.isFirstLoad = false;
-              user.content = [...content, ...Array(totalElements - content.length).fill(emptyContent)];
-            } else {
-              const pageBeforeCurrent = currentPage - 1;
-              const emptyContentBeforeFirstItem = pageBeforeCurrent * size;
-              const pagesAfterCurrent = totalPages - currentPage;
-              const emptyContentAfterLastItem = pagesAfterCurrent * size;
-              user.content = [
-                ...Array(emptyContentBeforeFirstItem).fill(emptyContent),
-                ...content,
-                ...Array(emptyContentAfterLastItem).fill(emptyContent),
-              ];
-              user.reRender = !!!self.data_user?.reRender;
-            }
+
+            if (!self.isFirstLoad) user.reRender = !!!self.data_user?.reRender;
+            if (content.length) {
+              if (self.isFirstLoad) {
+                self.isFirstLoad = false;
+                user.content = [...content, ...Array(totalElements - content.length).fill(emptyContent)];
+              } else {
+                const pageBeforeCurrent = currentPage - 1;
+                const emptyContentBeforeFirstItem = pageBeforeCurrent * size;
+                const pagesAfterCurrent = totalPages - currentPage;
+                const emptyContentAfterLastItem = pagesAfterCurrent * size;
+                user.content = [
+                  ...Array(emptyContentBeforeFirstItem).fill(emptyContent),
+                  ...content,
+                  ...Array(emptyContentAfterLastItem).fill(emptyContent),
+                ];
+              }
+            } else user.content = [];
             self.data_user = user;
           } else {
             self.loading = false;

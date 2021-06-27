@@ -157,5 +157,6 @@
   "invalidUsernameOrPassword": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
   "settings": "ตั้งค่า",
   "language": "ภาษา",
-  "fullNamePlaceholder": "unnamed user"
+  "fullNamePlaceholder": "unnamed user",
+  "noData": "ไม่พบข้อมูล"
 }

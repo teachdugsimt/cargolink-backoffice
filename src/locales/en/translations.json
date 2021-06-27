@@ -156,5 +156,6 @@
   "invalidUsernameOrPassword": "Invalid username or password",
   "settings": "Settings",
   "language": "Language",
-  "fullNamePlaceholder": "unnamed user"
+  "fullNamePlaceholder": "unnamed user",
+  "noData": "Empty result"
 }

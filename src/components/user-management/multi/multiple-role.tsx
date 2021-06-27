@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import DynamicTable from '@atlaskit/dynamic-table';
-import { RowType } from '@atlaskit/dynamic-table/types';
 import { head, createRow, sortabled } from './dynamic-table/sample-data';
-import { Icon } from 'react-icons-kit';
-import { ic_add } from 'react-icons-kit/md/ic_add';
 import SearchForm from '../../search-form';
-// import { Button } from '@paljs/ui/Button';
-import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
-import Row from '@paljs/ui/Row';
+import Spinner from '@atlaskit/spinner';
 import styled from 'styled-components';
 import { useMst } from '../../../stores/root-store';
 import { observer } from 'mobx-react-lite';
@@ -56,20 +51,9 @@ const MultipleRole: React.FC<Props> = observer(() => {
 
 
   useEffect(() => {
-    setSearchValue({ page: 0 });
-    userStore.getUsers({ page: 0 });
+    setSearchValue({ page: 1 });
+    userStore.getUsers({ page: 1 });
   }, []);
-
-  useEffect(() => {
-    const { loading } = userStore;
-    // setAlertSetting({
-    //   icon: '',
-    //   show: loading,
-    //   type: 'loading',
-    //   title: '',
-    //   content: t('LOADING'),
-    // });
-  }, [userStore.loading]);
 
   useEffect(() => {
     const { error_response } = userStore;
@@ -111,22 +95,36 @@ const MultipleRole: React.FC<Props> = observer(() => {
   const onSearch = (value: string) => {
     if (value) {
       const date = moment(value);
-      const search = {
+      interface SearchParams {
+        [x: string]: number | string;
+      }
+      let search: SearchParams = {
         type: 0,
-        page: 0,
+        page: 1,
         fullName: value,
         phoneNumber: value,
-        registerDate: date.isValid() ? moment(value).format('YYYY-MM-DD') : '',
-        jobCount: parseInt(value, 10),
-        truckCount: parseInt(value, 10),
+        email: value,
       };
+      if (!isNaN(+value)) {
+        search = {
+          ...search,
+          jobCount: parseInt(value, 10),
+          truckCount: parseInt(value, 10),
+        }
+      }
+      if (date.isValid()) {
+        search = {
+          ...search,
+          registerDate: moment(value).format('YYYY-MM-DD'),
+        }
+      }
       setPage(1);
       setSearchValue(search);
       userStore.getUsers(search);
     } else {
       setPage(1);
-      setSearchValue({ page: 0 });
-      userStore.getUsers({ page: 0 });
+      setSearchValue({ page: 1 });
+      userStore.getUsers({ page: 1 });
     }
   };
 
@@ -175,33 +173,44 @@ const MultipleRole: React.FC<Props> = observer(() => {
 
 
       <span>{`${t('resultsFound')}: ${rowData.length}`}</span>
-      <DynamicTable
-        //   caption={caption}
-        head={head}
-        rows={rowData}
-        page={page}
-        // sortKey={sortable.sortKey}
-        // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
-        rowsPerPage={rowLength}
-        defaultPage={1}
-        loadingSpinnerSize="large"
-        isLoading={userStore.loading}
-        defaultSortOrder="DESC"
-        onSort={(sort) => {
-          const descending = !sortable[sort.key];
-          const search = { ...searchValue, descending, sortBy: sort.key };
-          setSortable({ ...sortable, [sort.key]: descending });
-          setSearchValue(search);
-          userStore.getUsers(search);
-        }}
-        onSetPage={(pagination) => {
-          setPage(pagination);
-          let search = JSON.parse(JSON.stringify(searchValue));
-          search['page'] = pagination;
-          setSearchValue(search);
-          userStore.getUsers(search);
-        }}
-      />
+      {userStore.loading ? (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Spinner size="large" />
+        </div>
+      ) : rowData.length ? (
+        <DynamicTable
+          //   caption={caption}
+          head={head}
+          rows={rowData}
+          page={page}
+          // sortKey={sortable.sortKey}
+          // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
+          rowsPerPage={rowLength}
+          defaultPage={1}
+          loadingSpinnerSize="large"
+          isLoading={userStore.loading}
+          defaultSortOrder="DESC"
+          onSort={(sort) => {
+            const descending = !sortable[sort.key];
+            const search = { ...searchValue, descending, sortBy: sort.key };
+            setSortable({ ...sortable, [sort.key]: descending });
+            setSearchValue(search);
+            userStore.getUsers(search);
+          }}
+          onSetPage={(pagination) => {
+            setPage(pagination);
+            let search = JSON.parse(JSON.stringify(searchValue));
+            search['page'] = pagination;
+            setSearchValue(search);
+            userStore.getUsers(search);
+          }}
+        />
+      ) : (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <p>{t('noData')}</p>
+        </div>
+      )}
+
     </div >
   );
 });
