@@ -12,10 +12,12 @@ import Swal from 'sweetalert2';
 import { TFunction, useTranslation } from 'react-i18next';
 import { IUserDTO, IUserNull } from '../../../../stores/user-store';
 import { UserApi } from '../../../../services';
+import InlineMessage from '@atlaskit/inline-message';
+import ReactDOMServer from 'react-dom/server';
 
 export const sortabled: any = {
   phoneNumber: true, //! Note that: DESC = true, ASC = fasle
-  fullName: true,
+  fullname: true,
   registerDate: true,
   jobCount: true,
   truckCount: true,
@@ -44,7 +46,7 @@ export const createHead = (withWidth: boolean) => {
         isSortable: true,
       },
       {
-        key: 'fullName',
+        key: 'fullname',
         content: 'Full name',
         shouldTruncate: true,
         isSortable: true,
@@ -88,27 +90,40 @@ export const createRow = (users: any, language: string, t: TFunction<string>, de
       text: 'Error while get upload link',
     });
     return null;
-  }
-  const onCopyUploadLinkButtonClick = async (id: any) => {
-    const uploadLink = await requestUploadToken(id);
-    if (!uploadLink) return;
+  };
+  const onCopyUploadLinkButtonClick = (id: any) => {
+    let uploadLink = '';
+    const validationMessage = <InlineMessage type="confirmation" secondaryText={t('URLCopied')} />;
     Swal.fire({
-      titleText: t('uploadLink'),
-      text: uploadLink,
-      showCancelButton: true,
-      cancelButtonText: t('back'),
-      confirmButtonText: t('copy'),
-    }).then(({ isConfirmed }) => {
-      if (isConfirmed) {
-        navigator.clipboard.writeText(uploadLink);
-        Swal.fire({
-          icon: 'success',
-          text: t('URLCopied'),
+      didOpen: () => {
+        Swal.showLoading();
+        requestUploadToken(id).then((link) => {
+          if (link && link.length) {
+            Swal.hideLoading();
+            uploadLink = link;
+            Swal.update({
+              titleText: t('uploadLink'),
+              text: link,
+              showCancelButton: true,
+              cancelButtonText: t('back'),
+              confirmButtonText: t('copy'),
+            });
+          } else throw new Error('Upload link is empty');
         });
-      }
+      },
+      customClass: {
+        validationMessage: 'swal-validation-no-icon',
+      },
+      preConfirm: () => {
+        const hydrated = ReactDOMServer.renderToStaticMarkup(validationMessage)
+        Swal.showValidationMessage(hydrated);
+        navigator.clipboard.writeText(uploadLink);
+        return uploadLink;
+      },
     });
   }
   const deleteUser = deleteUserFunction ? deleteUserFunction : (userId: string) => null;
+  
   return users.map((user: IUserDTO | IUserNull, index: number) => {
     return {
       key: `row-${index}-${user.phoneNumber}`,
@@ -126,8 +141,8 @@ export const createRow = (users: any, language: string, t: TFunction<string>, de
           content: user.email || '-',
         },
         {
-          key: user.fullName,
-          content: user.fullName || '-',
+          key: user.fullname,
+          content: user.fullname || '-',
         },
         {
           key: moment(user.createdAt, 'DD-MM-YYYY HH:mm').format('YYYYMMDDHHmm'),
@@ -141,7 +156,12 @@ export const createRow = (users: any, language: string, t: TFunction<string>, de
           key: user.id,
           content: (
             <div style={{ textAlign: 'right' }}>
-              <Button appearance="ghost" status="Basic" size="Small" onClick={() => onCopyUploadLinkButtonClick(user.id)}>
+              <Button
+                appearance="ghost"
+                status="Basic"
+                size="Small"
+                onClick={() => onCopyUploadLinkButtonClick(user.id)}
+              >
                 <Icon icon={copy} />
               </Button>
               <Button
@@ -162,6 +182,7 @@ export const createRow = (users: any, language: string, t: TFunction<string>, de
                 appearance="ghost"
                 status="Basic"
                 size="Small"
+<<<<<<< HEAD
                 onClick={() => {
                   const red = '#E03616';
                   const blue = '#3085D6';
@@ -181,6 +202,16 @@ export const createRow = (users: any, language: string, t: TFunction<string>, de
                     .then(({ isConfirmed }) => isConfirmed && deleteUser(user.userId))
                 }
                 }>
+=======
+                onClick={() =>
+                  navigate('/user-management/user', {
+                    state: {
+                      id: user.userId,
+                    },
+                  })
+                }
+              >
+>>>>>>> develop
                 <Icon icon={ic_delete} />
               </Button>
             </div>

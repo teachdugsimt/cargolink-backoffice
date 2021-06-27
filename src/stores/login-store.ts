@@ -37,6 +37,10 @@ export const LoginStore = types
         localStorage.setItem('profileLanguage', param);
       }),
 
+      setErrorLogin(val: string) {
+        self.error_login = val
+      },
+
       requestLogin: flow(function* requestLogin(params: LoginPayload) {
         self.fetching_login = true;
         self.data_signin = {
@@ -70,6 +74,10 @@ export const LoginStore = types
             const { validMsgList } = response.data;
             if (validMsgList && validMsgList['']) self.error_login = validMsgList[''][0];
             else self.error_login = response.originalError.message;
+            if (response.data.error === 'NotAuthorizedException') {
+              //? invalid email or password
+              self.error_login = 'NotAuthorizedException';
+            }
           }
         } catch (error) {
           console.error('Failed to request login store :> ', error);

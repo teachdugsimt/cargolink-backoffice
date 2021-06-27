@@ -32,6 +32,9 @@ import { UploadFileResponse } from '../../../services/upload-api';
 import { EditUserPayload, EditUserResponse } from '../../../services/user-api';
 import { AxiosResponse } from 'axios';
 
+import { EditUserPayload } from '../../../services/user-api';
+import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
+import PageHeader from '@atlaskit/page-header';
 interface Props {
   id?: number;
 }
@@ -47,7 +50,7 @@ interface FileProps {
 
 interface InputData {
   confirmPassword: string;
-  fullName: string;
+  fullname: string;
   password: string;
   phoneNumber: string;
   uploadFile?: string;
@@ -194,6 +197,13 @@ const EditUser: React.FC<Props> = observer((props: any) => {
   // const onSubmit = data => console.log(data);
   const userId = props.id;
   type Fields = 'email' | 'legalType' | 'phoneNumber' | 'attachCode' | 'userType';
+
+  const breadcrumbs = (
+    <Breadcrumbs onExpand={() => { }}>
+      <BreadcrumbsItem onClick={() => navigate('/user-management')} text={t('userManagement')} key="user-management" />
+      <BreadcrumbsItem text={t('userInfo')} key="user-info" />
+    </Breadcrumbs>
+  );
 
   const getUser = async (userId: string) => {
     UserApi.getUser(userId)
@@ -478,12 +488,10 @@ const EditUser: React.FC<Props> = observer((props: any) => {
 
   return (
     <div>
-      <CardHeader>
-        <div className="block-data-header">
-          <span className="font-data-header">{t('userInfo')}</span>
-          {/* <h3>User info</h3> */}
-        </div>
-      </CardHeader>
+      <PageHeader breadcrumbs={breadcrumbs}>
+        {t('userInfo')}
+      </PageHeader>
+
       <CardBody>
         <Form onSubmit={handleSubmit}>
           {({ formProps }) => (

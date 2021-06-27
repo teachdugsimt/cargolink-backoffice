@@ -1,11 +1,11 @@
 import { types, flow } from 'mobx-state-tree';
 import userApi, { GetUsersListParams, GetUsersListResponse } from '../services/user-api';
 
-const user = types.model({
+const userType = types.model({
   id: types.maybeNull(types.string),
   avatar: types.maybeNull(types.string),
   enabled: types.maybeNull(types.boolean),
-  fullName: types.maybeNull(types.string),
+  fullname: types.maybeNull(types.string),
   phoneNumber: types.maybeNull(types.string),
   email: types.maybeNull(types.string),
   userType: types.maybeNull(types.number),
@@ -21,7 +21,7 @@ const user = types.model({
 });
 
 const userManagement = types.model({
-  content: types.maybeNull(types.array(user)),
+  content: types.maybeNull(types.array(userType)),
   reRender: types.boolean,
   lengthPerPage: types.maybeNull(types.number),
 });
@@ -113,7 +113,7 @@ export interface IUserDTO {
   id: string;
   avatar: string | null;
   enabled: boolean;
-  fullName: string | null;
+  fullname: string | null;
   phoneNumber: string | null;
   email: string;
   userType: number;
@@ -141,7 +141,7 @@ export interface IUserNull {
   id: null;
   avatar: null;
   enabled: null;
-  fullName: null;
+  fullname: null;
   phoneNumber: null;
   email: null;
   userType: null;

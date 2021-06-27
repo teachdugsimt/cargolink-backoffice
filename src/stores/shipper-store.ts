@@ -27,7 +27,7 @@ const AvatarObject = types.model({
 const OwnerObject = types.model({
   id: types.maybeNull(types.number),
   companyName: types.maybeNull(types.string),
-  fullName: types.maybeNull(types.string),
+  fullname: types.maybeNull(types.string),
   mobileNo: types.maybeNull(types.string),
   email: types.maybeNull(types.string),
   avatar: types.maybeNull(AvatarObject),
@@ -90,7 +90,7 @@ const Products = types.model({
 
 // const Quotations = types.model({
 //   id: types.maybeNull(types.string),
-//   fullName: types.maybeNull(types.string),
+//   fullname: types.maybeNull(types.string),
 //   bookingDatetime: types.maybeNull(types.string),
 //   avatar: types.maybeNull(types.string),
 // });

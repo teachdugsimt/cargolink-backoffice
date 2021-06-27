@@ -1,10 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { DefaultTheme, ThemeProvider } from 'styled-components';
-import themes from './themes';
 import { withTrans } from '../i18n/withTrans';
 import { Provider, rootStore } from '../stores/root-store';
-// import '../Layouts/css/style.css';
-import EmptyLayout from './empty-layout'
+import '../Layouts/css/style.css';
 import ParentLayout from './parent-layout';
 
 const getDefaultTheme = (): DefaultTheme['name'] => {
@@ -18,7 +16,7 @@ const getDefaultTheme = (): DefaultTheme['name'] => {
 };
 
 const LayoutPage: React.FC<{
-  location,
+  location: any,
   pageContext: { layout: string },
   custom404: any
 }> = ({ custom404, children, pageContext, location }) => {

@@ -24,9 +24,10 @@ import { OptionsPropType } from '@atlaskit/radio/types';
 import UploadButton from '../../UploadButton';
 import { CreateUserPayload } from '../../../services/user-api';
 import { UploadFileStore } from '../../../stores/upload-image-store';
+import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
+import PageHeader from '@atlaskit/page-header';
 
 interface Props { }
-
 interface FileProps {
   lastModified?: number;
   lastModifiedDate?: string;
@@ -38,7 +39,7 @@ interface FileProps {
 
 interface InputData {
   // confirmPassword: string;
-  fullName: string;
+  fullname: string;
   // password: string;
   phoneNumber: string;
   uploadFile?: string;
@@ -139,6 +140,13 @@ const AddUser: React.FC<Props> = observer(() => {
 
   // const onSubmit = data => console.log(data);
 
+  const breadcrumbs = (
+    <Breadcrumbs onExpand={() => { }}>
+      <BreadcrumbsItem onClick={() => navigate('/user-management')} text={t('userManagement')} key="user-management" />
+      <BreadcrumbsItem text={t('addNewAccount')} key="user-info" />
+    </Breadcrumbs>
+  );
+
   const userTypeOptions: OptionsPropType = [
     { name: 'userType', value: 'shipper', label: t('shipper') },
     { name: 'userType', value: 'Carrier', label: t('carrier') },
@@ -191,11 +199,9 @@ const AddUser: React.FC<Props> = observer(() => {
 
   return (
     <div>
-      <CardHeader>
-        <div className="block-data-header">
-          <span className="font-data-header">{t('addNewAccount')}</span>
-        </div>
-      </CardHeader>
+      <PageHeader breadcrumbs={breadcrumbs}>
+        {t('addNewAccount')}
+      </PageHeader>
       <CardBody>
         <Form onSubmit={handleSubmit}>
           {({ formProps }) => (
@@ -224,9 +230,9 @@ const AddUser: React.FC<Props> = observer(() => {
               <Row style={RowStyled}>
                 <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
                   <Field
-                    label={`${t('fullName')} / ${t('companyName')}`}
+                    label={`${t('fullname')} / ${t('companyName')}`}
                     isRequired
-                    name="fullName"
+                    name="fullname"
                     // validate={validate}
                     defaultValue=""
                   >
@@ -235,7 +241,7 @@ const AddUser: React.FC<Props> = observer(() => {
                         <Textfield
                           {...fieldProps}
                           elemBeforeInput={startAdornmentIcon('user')}
-                          placeholder={`${t('fullName')} / ${t('companyName')}`}
+                          placeholder={`${t('fullname')} / ${t('companyName')}`}
                         />
                         {error === 'INCORRECT_PHRASE' && (
                           <ErrorMessage>Incorrect, try &lsquo;open sesame&rsquo;</ErrorMessage>

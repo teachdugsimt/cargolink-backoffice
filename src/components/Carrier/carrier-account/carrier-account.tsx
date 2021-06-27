@@ -32,7 +32,7 @@ const CarrierAccount = observer((props: any) => {
       type: 2,
       page: 0,
     });
-    return () => {};
+    return () => { };
   }, []);
 
   useEffect(() => {
@@ -87,7 +87,7 @@ const CarrierAccount = observer((props: any) => {
       const search = {
         type: 2,
         page: 0,
-        fullName: value,
+        fullname: value,
         email: value,
         phoneNumber: value,
         registerDate: date.isValid() ? moment(value).format('YYYY-MM-DD') : '',
