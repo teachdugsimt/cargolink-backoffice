@@ -48,7 +48,7 @@ interface FileProps {
 
 interface InputData {
   confirmPassword: string;
-  fullname: string;
+  fullName: string;
   password: string;
   phoneNumber: string;
   uploadFile?: string;

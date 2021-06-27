@@ -90,7 +90,7 @@ const JobContainer = observer((props: any) => {
       const search = {
         type: 1,
         page: 0,
-        fullname: value,
+        fullName: value,
         email: value,
         phoneNumber: value,
         registerDate: date.isValid() ? moment(value).format('YYYY-MM-DD') : '',

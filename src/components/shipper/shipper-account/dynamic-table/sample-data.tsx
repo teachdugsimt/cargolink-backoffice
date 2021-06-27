@@ -9,7 +9,7 @@ import 'moment/locale/th';
 moment.locale('th');
 interface Shipper {
   id: number;
-  fullname: string;
+  fullName: string;
   phoneNumber: string;
   registerDate: string;
   email: string;
@@ -115,8 +115,8 @@ export const createRow = (shippers: any, language: string) => {
         content: shipper.phoneNumber || '-',
       },
       {
-        key: shipper.fullname,
-        content: shipper.fullname || '-',
+        key: shipper.fullName,
+        content: shipper.fullName || '-',
       },
       {
         key: shipper.email,

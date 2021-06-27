@@ -5,7 +5,7 @@ const userType = types.model({
   id: types.maybeNull(types.string),
   avatar: types.maybeNull(types.string),
   enabled: types.maybeNull(types.boolean),
-  fullname: types.maybeNull(types.string),
+  fullName: types.maybeNull(types.string),
   phoneNumber: types.maybeNull(types.string),
   email: types.maybeNull(types.string),
   userType: types.maybeNull(types.number),
@@ -113,7 +113,7 @@ export interface IUserDTO {
   id: string;
   avatar: string | null;
   enabled: boolean;
-  fullname: string | null;
+  fullName: string | null;
   phoneNumber: string | null;
   email: string;
   userType: number;
@@ -141,7 +141,7 @@ export interface IUserNull {
   id: null;
   avatar: null;
   enabled: null;
-  fullname: null;
+  fullName: null;
   phoneNumber: null;
   email: null;
   userType: null;

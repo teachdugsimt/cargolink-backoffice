@@ -69,8 +69,8 @@ export const createRow = (drivers: any, language: string) => {
           content: driver.phoneNumber,
         },
         {
-          key: driver.fullname,
-          content: driver.fullname,
+          key: driver.fullName,
+          content: driver.fullName,
         },
         {
           key: driver.driverLicenseNumber,
