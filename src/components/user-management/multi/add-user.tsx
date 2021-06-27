@@ -183,9 +183,11 @@ const AddUser: React.FC<Props> = observer(() => {
 
   const handleSubmit = (formState: InputData) => {
     const payload: CreateUserPayload = {
-      ...formState,
+      fullName: formState.fullName,
+      email: formState.email,
       userType: 0,
       phoneNumber: `+66${phoneNumber.substr(1)}`,
+      legalType,
     };
     userApi
       .createUser(payload)
