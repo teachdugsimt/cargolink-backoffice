@@ -1,31 +1,29 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
+import { CardBody } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
 import Col from '@paljs/ui/Col';
 import { useTranslation } from 'react-i18next';
-import { Input, Button as MaterialButton, InputAdornment, IconButton } from '@material-ui/core';
 // import { Button } from '@paljs/ui/Button';
 import Button from '@atlaskit/button/standard-button';
 import { navigate } from 'gatsby';
 import styled from 'styled-components';
 import { Icon } from 'react-icons-kit';
-import { upload } from 'react-icons-kit/ikons/upload';
 import { ic_person } from 'react-icons-kit/md/ic_person';
 import { ic_phone } from 'react-icons-kit/md/ic_phone';
 import { ic_lock } from 'react-icons-kit/md/ic_lock';
 import { ic_email } from 'react-icons-kit/md/ic_email';
-import { eye } from 'react-icons-kit/fa/eye';
-import { eyeSlash } from 'react-icons-kit/fa/eyeSlash';
-import Form, { ErrorMessage, Field, FormFooter, ValidMessage } from '@atlaskit/form';
+import Form, { ErrorMessage, Field, FormFooter } from '@atlaskit/form';
 import Textfield from '@atlaskit/textfield';
 import { RadioGroup } from '@atlaskit/radio';
 import { OptionsPropType } from '@atlaskit/radio/types';
 import UploadButton from '../../UploadButton';
-import { CreateUserPayload } from '../../../services/user-api';
-import { UploadFileStore } from '../../../stores/upload-image-store';
+import userApi, { CreateUserPayload, CreateUserResponse } from '../../../services/user-api';
+import { UploadFileStore } from '../../../stores/upload-file-store';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
+import { AxiosResponse } from 'axios';
+import Swal from 'sweetalert2';
 
 interface Props { }
 interface FileProps {
@@ -137,6 +135,9 @@ const AddUser: React.FC<Props> = observer(() => {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [file, setFile] = useState<FileProps>({});
   const [validatePassword, setValidatePassword] = useState<boolean>(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneError, setPhoneError] = useState(false);
+  const [legalType, setLegalType] = useState<'INDIVIDUAL' | 'JURISTIC'>('INDIVIDUAL');
 
   // const onSubmit = data => console.log(data);
 
@@ -147,15 +148,9 @@ const AddUser: React.FC<Props> = observer(() => {
     </Breadcrumbs>
   );
 
-  const userTypeOptions: OptionsPropType = [
-    { name: 'userType', value: 'shipper', label: t('shipper') },
-    { name: 'userType', value: 'Carrier', label: t('carrier') },
-    { name: 'userType', value: 'both', label: t('both') },
-  ];
-
   const legalTypeOptions: OptionsPropType = [
-    { name: 'legalType', value: 'individual', label: t('individual') },
-    { name: 'legalType', value: 'company', label: t('company') },
+    { name: 'legalType', value: 'INDIVIDUAL', label: t('individual') },
+    { name: 'legalType', value: 'JURISTIC', label: t('company') },
   ];
 
   useEffect(() => {
@@ -165,6 +160,8 @@ const AddUser: React.FC<Props> = observer(() => {
       setConfirmPassword('');
       setFile({});
       setValidatePassword(false);
+      setPhoneError(false);
+      setPhoneNumber('');
     };
   }, []);
 
@@ -185,11 +182,27 @@ const AddUser: React.FC<Props> = observer(() => {
   };
 
   const handleSubmit = (formState: InputData) => {
-    console.log('form state', formState);
     const payload: CreateUserPayload = {
       ...formState,
       userType: 0,
-    }
+      phoneNumber: `+66${phoneNumber.substr(1)}`,
+    };
+    userApi
+      .createUser(payload)
+      .then((response) => {
+        if (response && response.status < 300) {
+          const data = (response as AxiosResponse<CreateUserResponse>).data;
+          console.log('edit user response', data);
+          return navigate('/user-management');
+        } else console.error('Unexpected error while loading user', response);
+      })
+      .catch((error) => {
+        console.error('Error while create the user', error);
+        Swal.fire({
+          icon: 'error',
+          text: 'Error while create this user',
+        });
+      });
   };
 
   const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -197,30 +210,36 @@ const AddUser: React.FC<Props> = observer(() => {
     if (file) UploadFileStore.uploadFile();
   };
 
+  const validatePhoneNumber = (value?: string) => {
+    if (value && value.startsWith('0')) value = `+66${value.substr(1)}`;
+    const regex = /^\+?([0-9]{2})\)??([0-9]{9})$/;
+    return value ? (regex.test(value) ? undefined : 'INVALID_PHONE_NUMBER') : undefined;
+  };
+
+  const isDisabled = phoneError ? true : false;
+
+  useEffect(() => {
+    if (phoneNumber) {
+      const isInvalid = validatePhoneNumber(`+66${phoneNumber.substr(1)}`);
+      setPhoneError(isInvalid ? true : false);
+    }
+  }, [phoneNumber]);
   return (
     <div>
-      <PageHeader breadcrumbs={breadcrumbs}>
-        {t('addNewAccount')}
-      </PageHeader>
+      <PageHeader breadcrumbs={breadcrumbs}>{t('addNewAccount')}</PageHeader>
       <CardBody>
         <Form onSubmit={handleSubmit}>
           {({ formProps }) => (
             <form {...formProps} name="add-user" style={FormStyled}>
               <Row style={RowStyled}>
                 <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
-                  <Field
-                    label={t('legalType')}
-                    isRequired
-                    name="legalType"
-                    // validate={validate}
-                    defaultValue=""
-                  >
+                  <Field label={t('legalType')} isRequired name="legalType">
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div id="create-user-legal-type" style={{ display: 'flex', flexDirection: 'row' }}>
                         <RadioGroup
+                          value={legalType}
                           options={legalTypeOptions}
-                          // onChange={onChange}
-                          onChange={(event: any) => fieldProps.onChange(event)}
+                          onChange={(event: any) => setLegalType(event.target.value)}
                         />
                       </div>
                     )}
@@ -265,10 +284,10 @@ const AddUser: React.FC<Props> = observer(() => {
                           {...fieldProps}
                           elemBeforeInput={startAdornmentIcon('phone')}
                           placeholder={t('phoneNumber')}
+                          value={phoneNumber}
+                          onChange={(e: any) => setPhoneNumber(e.target.value)}
                         />
-                        {error === 'INCORRECT_PHRASE' && (
-                          <ErrorMessage>Incorrect, try &lsquo;open sesame&rsquo;</ErrorMessage>
-                        )}
+                        {phoneError && <ErrorMessage>{t('invalidPhoneNumber')}</ErrorMessage>}
                       </Fragment>
                     )}
                   </Field>
@@ -328,7 +347,19 @@ const AddUser: React.FC<Props> = observer(() => {
                     <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
                       <BackText>{t('back')}</BackText>
                     </Button>
-                    <Button type="submit" style={BottomSubmitStyled}>
+                    <Button
+                      type="submit"
+                      isDisabled={isDisabled}
+                      style={
+                        isDisabled
+                          ? {
+                              ...BottomSubmitStyled,
+                              backgroundColor: '#D8D8D8',
+                              border: 'none',
+                            }
+                          : BottomSubmitStyled
+                      }
+                    >
                       <SubmitText>{t('confirm')}</SubmitText>
                     </Button>
                   </FormFooter>
