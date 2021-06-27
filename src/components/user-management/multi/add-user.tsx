@@ -1,10 +1,7 @@
 import React, { useState, Fragment, useEffect, CSSProperties } from 'react';
 import { observer } from 'mobx-react-lite';
 import { CardBody } from '@paljs/ui/Card';
-import Row from '@paljs/ui/Row';
-import Col from '@paljs/ui/Col';
 import { useTranslation } from 'react-i18next';
-// import { Button } from '@paljs/ui/Button';
 import Button from '@atlaskit/button/standard-button';
 import { navigate } from 'gatsby';
 import styled from 'styled-components';
@@ -24,7 +21,7 @@ import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import { AxiosResponse } from 'axios';
 import Swal from 'sweetalert2';
-import { useWindowSize } from '../../../utils';
+import { useWindowSize, breakPoints } from '../../../utils';
 import { Property } from 'csstype';
 
 interface Props { }
@@ -47,32 +44,11 @@ interface InputData {
   // userType: string;
 }
 
-const ButtonStyled = styled.div`
-  display: flex;
-  justifycontent: flex-end;
-`;
-
-const UploadStyled = styled.span`
-  display: flex;
-  align-item: center;
-  justify-content: center;
-`;
-
-const TextUpload = styled.span`
-  padding-left: 6px;
-  padding-top: 2px;
-`;
-
 const ShowFileName = styled.p`
   padding-left: 8px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-`;
-
-const ValidatePassword = styled.p`
-  margin: 0;
-  color: red;
 `;
 
 const BackText = styled.span`
@@ -82,10 +58,6 @@ const BackText = styled.span`
 const SubmitText = styled.span`
   color: #000;
 `;
-
-const RowStyled = {
-  padding: '8px 8px 12px 8px',
-};
 
 const BottomStyled = {
   margin: '0 6px',
@@ -103,11 +75,6 @@ const BottomSubmitStyled = {
   backgroundColor: '#FBBC12',
 };
 
-const FormStyled = {
-  paddingLeft: 15,
-  paddingRight: 15,
-};
-
 const startAdornmentIcon = (iconName: 'user' | 'phone' | 'password' | 'email') => {
   let icon = '';
   if (iconName === 'user') {
@@ -120,13 +87,6 @@ const startAdornmentIcon = (iconName: 'user' | 'phone' | 'password' | 'email') =
     icon = ic_lock;
   }
   return <Icon icon={icon} style={{ paddingLeft: 6, color: 'gray' }} size={22} />;
-};
-
-const validate = (value: unknown) => {
-  if (value !== 'open sesame') {
-    return 'INCORRECT_PHRASE';
-  }
-  return undefined;
 };
 
 const AddUser: React.FC<Props> = observer(() => {
@@ -167,22 +127,6 @@ const AddUser: React.FC<Props> = observer(() => {
       setPhoneNumber('');
     };
   }, []);
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleMouseDownPassword = (event: any) => {
-    event.preventDefault();
-  };
-
-  const handleValidatePassword = () => {
-    if (password !== confirmPassword && password && confirmPassword) {
-      setValidatePassword(true);
-    } else {
-      setValidatePassword(false);
-    }
-  };
 
   const handleSubmit = (formState: InputData) => {
     const payload: CreateUserPayload = {
@@ -229,9 +173,6 @@ const AddUser: React.FC<Props> = observer(() => {
       setPhoneError(isInvalid ? true : false);
     }
   }, [phoneNumber]);
-  const breakPoints = {
-    md: 768,
-  };
   const windowMode = width > breakPoints.md ? 'lg' : 'sm';
   const fieldItemStyle = (size: 'full' | 'half'): CSSProperties => {
     let width: Property.Width = 'calc(100% - 1rem)';
@@ -247,7 +188,6 @@ const AddUser: React.FC<Props> = observer(() => {
   };
   const groupItemsStyle: CSSProperties = {
     display: 'flex',
-    flexDirection: 'row',
     flexWrap: 'wrap',
     margin: '0 -.5rem',
   };
