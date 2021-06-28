@@ -10,9 +10,10 @@ const ParentLayout = observer(({ pageContext, children, location }) => {
   const { loginStore } = useMst();
   const token = loginStore.data_signin.accessToken
 
+  console.log("PAGE CONTEXT", pageContext)
+
   if (token && token.length) {
     // IS LOGGED IN
-    console.info('IS LOGGED IN', pageContext.layout)
     if (pageContext.layout == 'auth') {
       if (typeof window !== `undefined`) {
         navigate('/dashboard')
@@ -25,7 +26,6 @@ const ParentLayout = observer(({ pageContext, children, location }) => {
     }
   } else {
     // IS NOT LOGGED IN
-    console.info('IS NOT LOGGED IN', pageContext.layout)
     if (!['auth', 'doc'].includes(pageContext.layout)) {
       if (typeof window !== `undefined`) {
         navigate('/auth/login')

@@ -157,5 +157,6 @@
   "settings": "Settings",
   "language": "Language",
   "fullNamePlaceholder": "unnamed user",
-  "noData": "Empty result"
+  "noData": "Empty result",
+  "clickToEnterValue": "Click to enter value"
 }

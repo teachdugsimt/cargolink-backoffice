@@ -14,7 +14,7 @@ exports.onCreatePage = ({ page, actions }) => {
 
   if (page.path.match(/auth/)) {
     page.context.layout = 'auth';
-  } else if (page.path.includes('user/upload')) {
+  } else if (page.path.match(/user\/upload/)) {
     page.context.layout = 'doc';
   } else {
     page.context.layout = 'primary';
@@ -23,6 +23,8 @@ exports.onCreatePage = ({ page, actions }) => {
   createPage(page);
   return;
 };
+
+
 
 // exports.onPostBuild = () => {
 //   console.log('Copying locales');

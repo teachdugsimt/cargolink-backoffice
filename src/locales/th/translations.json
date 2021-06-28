@@ -1,6 +1,6 @@
 {
   "loginSubtitle": "เข้าสู่ระบบด้วยอีเมลของคุณ",
-  "phoneNumber": "หมายเลขโทรศัพท์",
+  "phoneNumber": "เบอร์โทรศัพท์",
   "email": "อีเมล",
   "password": "รหัสผ่าน",
   "loginError1": "กรุณาใส่หมายเลขโทรศัพท์ที่ถูกต้อง",
@@ -115,7 +115,7 @@
   "passwordNotMatch": "รหัสผ่านไม่ตรงกัน",
   "upload": "อัปโหลด",
   "editAccount": "แก้ไขข้อมูลผู้ใช้",
-  "legalType": "ประเภทกฎหมาย",
+  "legalType": "ประเภทบุคคล",
   "individual": "รายบุคคล",
   "individualShort": "บุคคล",
   "company": "บริษัท",
@@ -158,5 +158,6 @@
   "settings": "ตั้งค่า",
   "language": "ภาษา",
   "fullNamePlaceholder": "ไม่ระบุชื่อ",
-  "noData": "ไม่พบข้อมูล"
+  "noData": "ไม่พบข้อมูล",
+  "clickToEnterValue": "คลิกเพื่อแก้ไข"
 }

@@ -10,9 +10,9 @@ export const defaultAlertSetting = {
 };
 export const DateFormat = (date: string, language: string) => {
   moment.locale(language);
-  const d = moment(date, 'DD-MM-YYYY HH:mm');
+  const d = moment(date);
   if (language === 'th') {
-    const d = moment(date, 'DD-MM-YYYY HH:mm');
+    const d = moment(date);
     return d.isValid() ? d.add(543, 'year').format('ll') : '';
   } else {
     return d.isValid() ? d.format('ll') : '';

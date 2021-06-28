@@ -17,9 +17,8 @@ import { FormEdit } from '../../form-edit/form-edit';
 import { ListFile } from '../../list-file/list-file';
 import AutoCompleteTypeahead from '../../auto-complete-typeahead/auto-complete-typeahead';
 import { save } from 'react-icons-kit/fa/save';
-import Textfield from '@atlaskit/textfield';
 import { camera } from 'react-icons-kit/fa/camera';
-import { Checkbox } from '@atlaskit/checkbox';
+
 import { close } from 'react-icons-kit/fa/close';
 import { pencil } from 'react-icons-kit/fa/pencil';
 import UploadButton from '../../UploadButton';
@@ -31,10 +30,17 @@ import { UserApi } from '../../../services';
 import { UploadFileResponse } from '../../../services/upload-api';
 import { EditUserPayload, EditUserResponse } from '../../../services/user-api';
 import { AxiosResponse } from 'axios';
-import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
-import PageHeader from '@atlaskit/page-header';
 import { breakPoints, useWindowSize } from '../../../utils';
 import { Property } from 'csstype';
+
+import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
+import PageHeader from '@atlaskit/page-header';
+import { Checkbox } from '@atlaskit/checkbox';
+import Textfield from '@atlaskit/textfield';
+import { fontSize, gridSize } from '@atlaskit/theme/constants';
+import InlineEdit from '@atlaskit/inline-edit';
+import Page, { Grid, GridColumn } from '@atlaskit/page';
+import Select, { ValueType } from '@atlaskit/select';
 
 interface Props {
   id?: number;
@@ -95,7 +101,7 @@ interface FullNameProps {
 }
 const Name = styled.p<FullNameProps>`
   color: ${({ isNoData }) => (isNoData ? '#AAA' : 'inherit')};
-  margin: 0;
+  margin: 0 0 10px 0;
   font-size: 1.125rem;
   font-weight: 700;
 
@@ -116,6 +122,40 @@ const BackText = styled.span`
 const SubmitText = styled.span`
   color: #000;
 `;
+
+const FieldWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  // padding: ${gridSize()}px ${gridSize()}px ${gridSize() * 6}px;
+`;
+
+const ReadViewContainer = styled.div`
+  display: flex;
+  // font-size: ${fontSize()}px;
+  // line-height: ${(gridSize() * 2.5) / fontSize()};
+  max-width: 100%;
+  // min-height: ${(gridSize() * 2.5) / fontSize()}em;
+  padding: 5px ${gridSize() - 2}px;
+  word-break: break-word;
+`;
+
+const EditViewContainer = styled.div`
+  z-index: 300;
+  position: relative;
+  width: 200px;
+`;
+
+const DetailLabel = styled.div`
+  margin-top: 8px;
+  color: #AAA;
+`;
+
+interface OptionType {
+  label: string;
+  value: string;
+}
+
 
 const FormStyled: CSSProperties = {
   paddingLeft: 15,
@@ -501,19 +541,238 @@ const EditUser: React.FC<Props> = observer((props: any) => {
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('userInfo')}</PageHeader>
+      <Page>
+        <Grid>
+          <GridColumn medium={2}>
+            <ImageFram
+              style={{
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'center',
+              }}
+            >
+              <ImagePreview>
+                {previewImage ? (
+                  <img src={previewImage} alt="" style={IMAGE_PROFILE} />
+                ) : (
+                  <Icon icon={ic_person} size={50} />
+                )}
+              </ImagePreview>
+              <Field label="" name="imageProfile" defaultValue="">
+                {({ fieldProps, error, meta: { valid } }: any) => (
+                  <MaterialButton
+                    variant="contained"
+                    component="label"
+                    style={CAMERA}
+                    onChange={(event: any) => handleChaneImage(event)}
+                  >
+                    <input type={'file'} accept={'image/*'} />
+                    <Icon icon={camera} size={25} />
+                  </MaterialButton>
+                )}
+              </Field>
+            </ImageFram>
+          </GridColumn>
 
-      <CardBody style={{ overflow: 'hidden' }}>
-        <Form onSubmit={handleSubmit}>
-          {({ formProps }) => (
-            <form {...formProps} name="add-user" style={FormStyled}>
-              <div style={groupItemsStyle}>
-                <div
-                  style={{
-                    ...fieldItemStyle('half'),
-                    flexDirection: 'row',
-                  }}
-                >
-                  <div>
+          <GridColumn medium={6}>
+            <Name isNoData={!userData?.fullName}>{userData?.fullName || fullNamePlaceholder}</Name>
+            <FieldWrapper>
+              <DetailLabel>
+                {t('memberSince')} :
+              </DetailLabel>
+              <div style={{ marginTop: 8, marginLeft: 5 }}>
+                {DateFormat(userData.createdAt as string, loginStore.language)}
+              </div>
+            </FieldWrapper>
+
+            <FieldWrapper>
+              <DetailLabel>
+                {t('legalType')} :
+              </DetailLabel>
+              <InlineEdit<ValueType<OptionType, true>>
+                defaultValue={userData?.legalType === 'INDIVIDUAL' ? t('individual') : t('company')}
+                editView={(fieldProps) => (
+                  <EditViewContainer>
+                    <Select
+                      {...fieldProps}
+                      options={legalTypeOptions}
+                      autoFocus
+                      openMenuOnFocus
+                    />
+                  </EditViewContainer>
+                )}
+                readView={() => (
+                  <ReadViewContainer data-testid="legalTypeField">
+                    {userData?.legalType === 'INDIVIDUAL' ? t('individual') : t('company')}
+                  </ReadViewContainer>
+                )}
+                onConfirm={(value) => {
+                  console.log('LEGAL VALUE', value)
+                  return handleSave('legalType', value.value)
+                }}
+              />
+            </FieldWrapper>
+
+            <FieldWrapper>
+              <DetailLabel>
+                {t('phoneNumber')} :
+              </DetailLabel>
+              <InlineEdit
+                defaultValue={userData.phoneNumber}
+                editView={({ errorMessage, ...fieldProps }) => (
+                  <Textfield {...fieldProps} css={{ width: '100%' }} autoFocus />
+                )}
+                readView={() => (
+                  <ReadViewContainer data-testid="phoneNumberField">
+                    {userData.phoneNumber || <div style={{ color: '#aaa' }}>{t('clickToEnterValue')}</div>}
+                  </ReadViewContainer>
+                )}
+                onConfirm={(value) => {
+                  if (!value) return;
+                  if (value.startsWith('0')) value = `+66${value.substr(1)}`;
+                  return handleSave('phoneNumber', value)
+                }}
+              />
+            </FieldWrapper>
+
+            <FieldWrapper>
+              <DetailLabel>
+                {t('email')} :
+              </DetailLabel>
+              <InlineEdit
+                defaultValue={userData.email}
+                // label={t('email')}
+                editView={({ errorMessage, ...fieldProps }) => (
+                  <Textfield {...fieldProps} autoFocus />
+                )}
+                readView={() => (
+                  <ReadViewContainer data-testid="emailField">
+                    {userData.email || <div style={{ color: '#aaa' }}>{t('clickToEnterValue')}</div>}
+                  </ReadViewContainer>
+                )}
+                onConfirm={(value) => handleSave('email', value)}
+              />
+            </FieldWrapper>
+          </GridColumn>
+
+
+          <GridColumn medium={4}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'baseline',
+              }}
+            >
+              <Name>{t('userDoc')}</Name>
+              <Field label="" name="uploadFile" defaultValue="">
+                {({ fieldProps, error, meta: { valid } }: any) => (
+                  <UploadButton accept=".pdf" onChange={handleUploadFile} />
+                )}
+              </Field>
+            </div>
+            {files.length ? (
+              files.map((file: UploadFileResponse) => {
+                return (
+                  <div key={file.attachCode}>
+                    <ListFile
+                      fileName={file.fileName}
+                      date={file.uploadedDate}
+                      handleDelete={() => {
+                        const red = '#E03616';
+                        const blue = '#3085D6';
+                        Swal.mixin({
+                          iconColor: red,
+                          confirmButtonColor: red,
+                          cancelButtonColor: blue,
+                          confirmButtonText: t('delete'),
+                          cancelButtonText: t('cancel'),
+                        })
+                          .fire({
+                            title: t('deleteConfirmAlertTitle'),
+                            titleText: t('deleteConfirmAlertText'),
+                            icon: 'warning',
+                            showCancelButton: true,
+                          })
+                          .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file.attachCode));
+                      }}
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <span>{t('noDocuments')}</span>
+            )}
+            {/* <div style={{ marginTop: '1rem' }}> */}
+
+            <FieldWrapper>
+              <DetailLabel>
+                {t('status')} :
+              </DetailLabel>
+              <InlineEdit
+                defaultValue={userData.documentStatus}
+                editView={({ errorMessage, ...fieldProps }) => (
+                  <EditViewContainer>
+                    <Select
+                      {...fieldProps}
+                      options={statusOptions}
+                      autoFocus
+                      openMenuOnFocus
+                    />
+                  </EditViewContainer>
+                )}
+                readView={() => (
+                  <ReadViewContainer data-testid="docStatusField">
+                    {statusOptions.filter(e => e.value == userData.documentStatus)[0].label}
+                  </ReadViewContainer>
+                )}
+                onConfirm={(value) => {
+                  try {
+                    const status = value as DocumentStatus;
+                    handleChangeDocStatus(status.value);
+                  } catch (error) {
+                    console.error('Error casting document status change (maybe invalid status)', error);
+                  }
+                }}
+              />
+            </FieldWrapper>
+
+            {/* <FormEdit
+                label={`${t('status')} :`}
+                value={userData?.documentStatus || t('docStatus:waitForVerify')}
+                valueStyle={{ color: 'orangered' }}
+                type={'dropdown'}
+                dropDownOption={statusOptions.map((option) => ({
+                  ...option,
+                  isSelected: option.value === userData?.documentStatus,
+                }))}
+                handleSave={(value) => {
+                  try {
+                    const status = value as DocumentStatus;
+                    handleChangeDocStatus(status);
+                  } catch (error) {
+                    console.error('Error casting document status change (maybe invalid status)', error);
+                  }
+                }}
+              /> */}
+            {/* </div> */}
+          </GridColumn>
+        </Grid>
+      </Page>
+
+
+      <div style={{ borderTop: '1px solid #ddd', margin: '30px 0' }} />
+      <Form onSubmit={handleSubmit}>
+        {({ formProps }) => (
+          <form {...formProps} name="add-user" style={FormStyled}>
+            <div style={groupItemsStyle}>
+              <div
+                style={{
+                  ...fieldItemStyle('half'),
+                  flexDirection: 'row',
+                }}
+              >
+                {/* <div>
                     <ImageFram
                       style={{
                         display: 'flex',
@@ -587,146 +846,84 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                       validateMessage={t('invalidEmail')}
                       messageForCheck={'INVALID_EMAIL'}
                     />
-                  </div>
-                </div>
-                <div
-                  style={{
-                    ...fieldItemStyle('half'),
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'baseline',
+
+
+                  </div> */}
+              </div>
+              <div
+                style={{
+                  ...fieldItemStyle('half'),
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}
+              >
+
+
+              </div>
+            </div>
+            <div style={groupItemsStyle}>
+              <div style={fieldItemStyle('full')}>
+                <Name style={{ marginBottom: 12 }}>{t('generalAddr')}</Name>
+                <div style={AddressStyled}>
+                  <Address>
+                    {'91/1 Songphol Soi 9, Tambon Lam Phaya, Mueang Nakhon Pathom District, Nakhon Pathom 73000'}
+                  </Address>
+                  <button
+                    style={BUTTON}
+                    onClick={() => {
+                      setIsOpenGeneralAddress((currentValue) => !currentValue);
+                      setIsOpenDocumentAddress(false);
                     }}
                   >
-                    <Name>{t('userDoc')}</Name>
-                    <Field label="" name="uploadFile" defaultValue="">
-                      {({ fieldProps, error, meta: { valid } }: any) => (
-                        <UploadButton accept=".pdf" onChange={handleUploadFile} />
-                      )}
-                    </Field>
-                  </div>
-                  {files.length ? (
-                    files.map((file: UploadFileResponse) => {
-                      return (
-                        <div key={file.attachCode}>
-                          <ListFile
-                            fileName={file.fileName}
-                            date={file.uploadedDate}
-                            handleDelete={() => {
-                              const red = '#E03616';
-                              const blue = '#3085D6';
-                              Swal.mixin({
-                                iconColor: red,
-                                confirmButtonColor: red,
-                                cancelButtonColor: blue,
-                                confirmButtonText: t('delete'),
-                                cancelButtonText: t('cancel'),
-                              })
-                                .fire({
-                                  title: t('deleteConfirmAlertTitle'),
-                                  titleText: t('deleteConfirmAlertText'),
-                                  icon: 'warning',
-                                  showCancelButton: true,
-                                })
-                                .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file.attachCode));
-                            }}
-                          />
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <span>{t('noDocuments')}</span>
-                  )}
-                  <div style={{ marginTop: '1rem' }}>
-                    <FormEdit
-                      label={`${t('status')} :`}
-                      value={userData?.documentStatus || t('docStatus:waitForVerify')}
-                      valueStyle={{ color: 'orangered' }}
-                      type={'dropdown'}
-                      dropDownOption={statusOptions.map((option) => ({
-                        ...option,
-                        isSelected: option.value === userData?.documentStatus,
-                      }))}
-                      handleSave={(value) => {
-                        try {
-                          const status = value as DocumentStatus;
-                          handleChangeDocStatus(status);
-                        } catch (error) {
-                          console.error('error casting document status change (maybe invalid status)', error);
-                        }
-                      }}
-                    />
-                  </div>
+                    <Icon icon={isOpenGeneralAddress ? close : pencil} style={ICON_STYLED} size={22} />
+                  </button>
                 </div>
+                {isOpenGeneralAddress && <AddressForm onDismiss={() => setIsOpenGeneralAddress(false)} />}
               </div>
-              <div style={groupItemsStyle}>
-                <div style={fieldItemStyle('full')}>
-                  <Name style={{ marginBottom: 12 }}>{t('generalAddr')}</Name>
-                  <div style={AddressStyled}>
+            </div>
+            <div style={{
+              ...groupItemsStyle,
+              marginTop: '1rem',
+            }}>
+              <div style={fieldItemStyle('full')}>
+                <Name style={{ marginBottom: 12 }}>{t('documentDeliverAddr')}</Name>
+                <Checkbox
+                  value={1}
+                  isChecked={isChecked}
+                  isDisabled={isOpenDocumentAddress || isOpenGeneralAddress}
+                  label={t('sameGeneralAddress').toString()}
+                  onChange={handleCheckBox}
+                  name="checkbox-default"
+                  testId="same-general-address"
+                  size={'large'}
+                />
+                {!isChecked && (
+                  <div style={{
+                    ...AddressStyled,
+                    marginTop: '1rem',
+                  }}>
                     <Address>
                       {'91/1 Songphol Soi 9, Tambon Lam Phaya, Mueang Nakhon Pathom District, Nakhon Pathom 73000'}
                     </Address>
                     <button
                       style={BUTTON}
                       onClick={() => {
-                        setIsOpenGeneralAddress((currentValue) => !currentValue);
-                        setIsOpenDocumentAddress(false);
+                        setIsOpenDocumentAddress((currentValue) => !currentValue);
+                        setIsOpenGeneralAddress(false);
                       }}
                     >
-                      <Icon icon={isOpenGeneralAddress ? close : pencil} style={ICON_STYLED} size={22} />
+                      <Icon icon={isOpenDocumentAddress ? close : pencil} style={ICON_STYLED} size={22} />
                     </button>
                   </div>
-                  {isOpenGeneralAddress && <AddressForm onDismiss={() => setIsOpenGeneralAddress(false)} />}
-                </div>
+                )}
+                {isOpenDocumentAddress && <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} />}
               </div>
-              <div style={{
-                ...groupItemsStyle,
-                marginTop: '1rem',
-              }}>
-                <div style={fieldItemStyle('full')}>
-                  <Name style={{ marginBottom: 12 }}>{t('documentDeliverAddr')}</Name>
-                  <Checkbox
-                    value={1}
-                    isChecked={isChecked}
-                    isDisabled={isOpenDocumentAddress || isOpenGeneralAddress}
-                    label={t('sameGeneralAddress').toString()}
-                    onChange={handleCheckBox}
-                    name="checkbox-default"
-                    testId="same-general-address"
-                    size={'large'}
-                  />
-                  {!isChecked && (
-                    <div style={{
-                      ...AddressStyled,
-                      marginTop: '1rem',
-                    }}>
-                      <Address>
-                        {'91/1 Songphol Soi 9, Tambon Lam Phaya, Mueang Nakhon Pathom District, Nakhon Pathom 73000'}
-                      </Address>
-                      <button
-                        style={BUTTON}
-                        onClick={() => {
-                          setIsOpenDocumentAddress((currentValue) => !currentValue);
-                          setIsOpenGeneralAddress(false);
-                        }}
-                      >
-                        <Icon icon={isOpenDocumentAddress ? close : pencil} style={ICON_STYLED} size={22} />
-                      </button>
-                    </div>
-                  )}
-                  {isOpenDocumentAddress && <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} />}
-                </div>
-              </div>
-            </form>
-          )}
-        </Form>
-      </CardBody>
-    </div>
+            </div>
+          </form>
+        )}
+      </Form>
+
+    </div >
   );
 });
 
