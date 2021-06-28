@@ -10,8 +10,8 @@ class UserApi {
     const response = await ExcuteApi('/api/v1/users/' + userId, null, 'get', 6e5, true, true);
     return response;
   }
-  getUploadLink = async (id: string): Promise<AxiosResponse<GetUploadLinkResponse>> => {
-    const response = await ExcuteApi(`/api/v1/users/${id}/gen-doc-upload-link`, {}, 'post', 6e5, true, true);
+  getUploadLink = async (userId: string): Promise<AxiosResponse<GetUploadLinkResponse>> => {
+    const response = await ExcuteApi(`/api/v1/users/${userId}/gen-doc-upload-link`, {}, 'post', 6e5, true, true);
     return response;
   };
   createUser = async (payload: CreateUserPayload): Promise<AxiosResponse<CreateUserResponse>> => {
