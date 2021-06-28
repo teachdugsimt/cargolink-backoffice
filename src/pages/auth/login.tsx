@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { LoadingButton } from '@atlaskit/button';
+import Button, { LoadingButton } from '@atlaskit/button';
 import { InputGroup } from '@paljs/ui/Input';
 import { Checkbox } from '@paljs/ui/Checkbox';
 import { observer } from 'mobx-react-lite';
@@ -123,7 +123,7 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
             >
               {({ fieldProps, error, valid }) => (
                 <>
-                  <TextField {...fieldProps} />
+                  <TextField {...fieldProps} testId="emailField" />
                   {error === 'TOO_SHORT' && (
                     <ErrorMessage>
                       Invalid username, needs to be more than 4 characters
@@ -143,11 +143,12 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
               label={t('password')}
               defaultValue=""
               isRequired
+
             // validate={undefined}
             >
               {({ fieldProps, error, valid }) => (
                 <>
-                  <TextField {...fieldProps} type="password" />
+                  <TextField {...fieldProps} type="password" testId="passwordField" />
                   {error === 'TOO_SHORT' && (
                     <ErrorMessage>
                       Invalid username, needs to be more than 4 characters
@@ -165,15 +166,30 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
             {/* <Checkbox checked={loginStore.rememberProfile} onChange={(value) => onChangeCheckbox(value, 1)}>
                 {t('rememberMe')}
               </Checkbox> */}
-            <Link id="forgotPassword" to="/auth/request-password" style={{ textDecoration: 'none' }}>
-              {t('forgotPassword')}
-            </Link>
+
             {/* </Group> */}
 
             <FormFooter>
-              <LoadingButton appearance="warning" isLoading={loginStore.fetching_login} type="submit">
-                {t('login')}
-              </LoadingButton>
+              <div style={{
+                display: 'flex', flex: 1, flexDirection: 'row',
+                justifyContent: 'space-between', alignItems: 'center'
+              }}>
+                <Button
+                  spacing="none" appearance="subtle-link"
+                  onClick={() => navigate('/auth/request-password')}
+                  testId="forgotPasswordButton"
+                >
+                  {t('forgotPassword')}
+                </Button>
+                <LoadingButton
+                  appearance="warning"
+                  isLoading={loginStore.fetching_login}
+                  type="submit"
+                  testId="submitButton"
+                >
+                  {t('login')}
+                </LoadingButton>
+              </div>
             </FormFooter>
           </form>
         )}
