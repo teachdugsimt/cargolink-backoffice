@@ -77,8 +77,8 @@ const TextUpload = styled.span`
 `;
 
 const ImageFram = styled.div`
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,8 +86,8 @@ const ImageFram = styled.div`
 `;
 
 const ImagePreview = styled.div`
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   background-color: lightgray;
   display: flex;
   align-items: center;
@@ -671,13 +671,42 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                 )}
               </Field>
             </div>
-            {files.length ? (
-              files.map((file: UploadFileResponse) => {
-                return (
-                  <div key={file.attachCode}>
+            {userData?.files?.length ? (
+              userData.files.map((file: any) => {
+                console.log(file)
+
+                if (typeof file != 'string') {
+                  return (
+                    <div key={file.attachCode}>
+                      <ListFile
+                        fileName={file.fileName}
+                        date={file.uploadedDate}
+                        handleDelete={() => {
+                          const red = '#E03616';
+                          const blue = '#3085D6';
+                          Swal.mixin({
+                            iconColor: red,
+                            confirmButtonColor: red,
+                            cancelButtonColor: blue,
+                            confirmButtonText: t('delete'),
+                            cancelButtonText: t('cancel'),
+                          })
+                            .fire({
+                              title: t('deleteConfirmAlertTitle'),
+                              titleText: t('deleteConfirmAlertText'),
+                              icon: 'warning',
+                              showCancelButton: true,
+                            })
+                            .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file.attachCode));
+                        }}
+                      />
+                    </div>
+                  );
+                } else {
+                  return <div key={file}>
                     <ListFile
-                      fileName={file.fileName}
-                      date={file.uploadedDate}
+                      fileName={file}
+                      // date={''}
                       handleDelete={() => {
                         const red = '#E03616';
                         const blue = '#3085D6';
@@ -694,11 +723,11 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                             icon: 'warning',
                             showCancelButton: true,
                           })
-                          .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file.attachCode));
+                          .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file));
                       }}
                     />
                   </div>
-                );
+                }
               })
             ) : (
               <span>{t('noDocuments')}</span>
