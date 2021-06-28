@@ -12,6 +12,7 @@ const ParentLayout = observer(({ pageContext, children, location }) => {
 
   if (token && token.length) {
     // IS LOGGED IN
+    console.info('IS LOGGED IN', pageContext.layout)
     if (pageContext.layout == 'auth') {
       if (typeof window !== `undefined`) {
         navigate('/dashboard')
