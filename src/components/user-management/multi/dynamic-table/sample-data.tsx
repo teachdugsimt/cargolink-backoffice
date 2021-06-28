@@ -82,9 +82,9 @@ export const createRow = (
   deleteUserFunction?: (userId: string) => any,
 ) => {
   console.log('keys', users);
-  const requestUploadToken = async (id: any) => {
+  const requestUploadToken = async (userId: string) => {
     try {
-      const response = await UserApi.getUploadLink(id);
+      const response = await UserApi.getUploadLink(userId);
       if (response && response.status === 200) return response.data.url;
       console.error('get upload link error', response.status, response.data);
     } catch (error) {
@@ -96,13 +96,13 @@ export const createRow = (
     });
     return null;
   };
-  const onCopyUploadLinkButtonClick = (id: any) => {
+  const onCopyUploadLinkButtonClick = (userId: string) => {
     let uploadLink = '';
     const validationMessage = <InlineMessage type="confirmation" secondaryText={t('URLCopied')} />;
     Swal.fire({
       didOpen: () => {
         Swal.showLoading();
-        requestUploadToken(id).then((link) => {
+        requestUploadToken(userId).then((link) => {
           if (link && link.length) {
             Swal.hideLoading();
             uploadLink = link;
@@ -175,7 +175,7 @@ export const createRow = (
                 appearance="ghost"
                 status="Basic"
                 size="Small"
-                onClick={() => onCopyUploadLinkButtonClick(user.id)}
+                onClick={() => user?.userId && onCopyUploadLinkButtonClick(user.userId)}
               >
                 <Icon icon={copy} />
               </Button>
