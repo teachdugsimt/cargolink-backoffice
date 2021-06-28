@@ -1,4 +1,5 @@
 import { useState, useLayoutEffect } from "react";
+import jwt_decode from 'jwt-decode';
 
 export interface IQueryParams {
   [key: string]: string;
@@ -48,4 +49,11 @@ export const breakPoints = {
   xl: 1200,
   xxl: 1400,
   xxxl: 1600,
+}
+
+interface TokenData {
+  [x: string]: string;
+}
+export const extractJwtToken = (token: string) => {
+  return jwt_decode<TokenData>(token);
 }
