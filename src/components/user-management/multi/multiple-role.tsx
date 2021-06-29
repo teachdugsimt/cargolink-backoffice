@@ -29,6 +29,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
   const [rowLength, setRowLength] = useState(10);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
   const [page, setPage] = useState(1);
+  const [isDesc, setIsDesc] = useState(true);
   const [searchValue, setSearchValue] = useState({});
   const [sortable, setSortable] = useState(sortabled);
 
@@ -64,10 +65,14 @@ const MultipleRole: React.FC<Props> = observer(() => {
     </Breadcrumbs>
   );
 
+  const setInitialSortingAndPage = () => {
+    const options = {page:1, descending: true};
+    setSearchValue(options);
+    userStore.getUsers(options);
+  }
 
   useEffect(() => {
-    setSearchValue({ page: 1 });
-    userStore.getUsers({ page: 1, descending: true });
+    setInitialSortingAndPage();
   }, []);
 
   useEffect(() => {
@@ -119,6 +124,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
         fullName: value,
         phoneNumber: value,
         email: value,
+        descending: true,
       };
       if (!isNaN(+value)) {
         search = {
@@ -138,8 +144,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
       userStore.getUsers(search);
     } else {
       setPage(1);
-      setSearchValue({ page: 1 });
-      userStore.getUsers({ page: 1 });
+      setInitialSortingAndPage();
     }
   };
 
