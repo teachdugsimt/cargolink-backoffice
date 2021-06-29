@@ -1,7 +1,5 @@
 import React from 'react';
-import moment from 'moment';
 import styled from 'styled-components';
-import { DateFormat } from '../../../simple-data';
 import { navigate } from 'gatsby';
 import Swal from 'sweetalert2';
 import { TFunction } from 'react-i18next';

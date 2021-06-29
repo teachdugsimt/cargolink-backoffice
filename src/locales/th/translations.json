@@ -160,5 +160,6 @@
   "language": "ภาษา",
   "fullNamePlaceholder": "ไม่ระบุชื่อ",
   "noData": "ไม่พบผลลัพธ์",
-  "clickToEnterValue": "คลิกเพื่อแก้ไข"
+  "clickToEnterValue": "คลิกเพื่อแก้ไข",
+  "deleteUserSuccess": "ลบผู้ใช้แล้ว"
 }
