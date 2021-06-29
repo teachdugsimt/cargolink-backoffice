@@ -135,7 +135,7 @@ export const createRow = (
         case 'INDIVIDUAL':
           return t('individualShort');
         case 'JURISTIC':
-          return t('company');
+          return t('juristic');
         default:
           return '-';
       }

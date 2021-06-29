@@ -118,6 +118,7 @@
   "legalType": "ประเภทบุคคล",
   "individual": "รายบุคคล",
   "individualShort": "บุคคล",
+  "juristic": "นิติบุคคล",
   "company": "บริษัท",
   "userType": "ประเภทผู้ใช้",
   "userInfo": "ข้อมูลส่วนตัว",
