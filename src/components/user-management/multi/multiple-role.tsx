@@ -12,18 +12,13 @@ import Alert from '../../alert';
 import moment from 'moment';
 import { navigate } from 'gatsby';
 import { IUserDTO, IUserNull } from '../../../stores/user-store';
+import { UserApi } from '../../../services';
+import Swal from 'sweetalert2';
 
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import Button from '@atlaskit/button'
 import AddCircleIcon from '@atlaskit/icon/glyph/add-circle';
-
-
-const Wrapper = styled.div`
-  margin-top: 10px;
-  min-width: 600px;
-  background-color: '#5E6C84';
-`;
 
 interface Props { }
 
@@ -32,15 +27,36 @@ const MultipleRole: React.FC<Props> = observer(() => {
   const { userStore, loginStore } = useMst();
   const [rowData, setRowData] = useState<(IUserDTO | IUserNull)[]>([]);
   const [rowLength, setRowLength] = useState(10);
-  const [submit, setSubmit] = useState(false);
   const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
   const [page, setPage] = useState(1);
+  const [isDesc, setIsDesc] = useState(true);
   const [searchValue, setSearchValue] = useState({});
   const [sortable, setSortable] = useState(sortabled);
 
   const deleteUser = (userId: string) => {
     console.log('attempt to delete :>', userId);
-    //TODO bind api delete user here
+    Swal.fire({
+      didOpen: () => {
+        Swal.showLoading();
+        UserApi.deleteUser(userId)
+          .then((response) => {
+            if (response && response.ok) {
+              Swal.hideLoading();
+              Swal.update({
+                icon: 'success',
+                titleText: '',
+                text: t('deleteUserSuccess'),
+                showConfirmButton: true,
+              });
+              userStore.getUsers({ page });
+              return console.log('response delete user', response.data);
+            } else throw new Error(JSON.stringify(response));
+          })
+          .catch((error) => {
+            console.log('delete user error', error);
+          });
+      },
+    });
   }
 
   const breadcrumbs = (
@@ -49,10 +65,14 @@ const MultipleRole: React.FC<Props> = observer(() => {
     </Breadcrumbs>
   );
 
+  const setInitialSortingAndPage = () => {
+    const options = {page:1, descending: true};
+    setSearchValue(options);
+    userStore.getUsers(options);
+  }
 
   useEffect(() => {
-    setSearchValue({ page: 1 });
-    userStore.getUsers({ page: 1 });
+    setInitialSortingAndPage();
   }, []);
 
   useEffect(() => {
@@ -104,6 +124,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
         fullName: value,
         phoneNumber: value,
         email: value,
+        descending: true,
       };
       if (!isNaN(+value)) {
         search = {
@@ -123,8 +144,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
       userStore.getUsers(search);
     } else {
       setPage(1);
-      setSearchValue({ page: 1 });
-      userStore.getUsers({ page: 1 });
+      setInitialSortingAndPage();
     }
   };
 

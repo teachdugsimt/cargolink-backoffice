@@ -118,6 +118,7 @@
   "legalType": "Legal type",
   "individual": "Individual",
   "individualShort": "Individual",
+  "juristic": "Juristic",
   "company": "Company",
   "userType": "User type",
   "userInfo": "User Information",
@@ -158,5 +159,6 @@
   "language": "Language",
   "fullNamePlaceholder": "unnamed user",
   "noData": "Empty result",
-  "clickToEnterValue": "Click to enter value"
+  "clickToEnterValue": "Click to enter value",
+  "deleteUserSuccess": "The user has been deleted"
 }

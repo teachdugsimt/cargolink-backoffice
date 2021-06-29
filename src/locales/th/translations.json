@@ -118,6 +118,7 @@
   "legalType": "ประเภทบุคคล",
   "individual": "รายบุคคล",
   "individualShort": "บุคคล",
+  "juristic": "นิติบุคคล",
   "company": "บริษัท",
   "userType": "ประเภทผู้ใช้",
   "userInfo": "ข้อมูลส่วนตัว",
@@ -158,6 +159,7 @@
   "settings": "ตั้งค่า",
   "language": "ภาษา",
   "fullNamePlaceholder": "ไม่ระบุชื่อ",
-  "noData": "ไม่พบข้อมูล",
-  "clickToEnterValue": "คลิกเพื่อแก้ไข"
+  "noData": "ไม่พบผลลัพธ์",
+  "clickToEnterValue": "คลิกเพื่อแก้ไข",
+  "deleteUserSuccess": "ลบผู้ใช้แล้ว"
 }

@@ -25,7 +25,11 @@ class UserApi {
   changeDocStatus = async (userId: string, payload: ChangeDocStatusPayload) => {
     const response = await ExcuteApi(`/api/v1/users/${userId}/doc-status`, payload, 'patch', 6e5, true, true);
     return response;
-  }
+  };
+  deleteUser = async (userId: string) => { 
+    const response = await ExcuteApi(`/api/v1/users/${userId}`, {}, 'delete', 6e5, true, true);
+    return response;
+  };
 }
 export default new UserApi();
 
