@@ -60,8 +60,8 @@ export const createHead = (withWidth: boolean) => {
         // width: withWidth ? 10 : undefined,
       },
       {
-        key: 'createdAt',
-        content: 'Register Date',
+        key: 'status',
+        content: 'status',
         shouldTruncate: true,
         isSortable: true,
       },
@@ -147,6 +147,16 @@ export const createRow = (
           return '-';
       }
     })(user.legalType);
+    const translatedStatus = ((status?: 'ACTIVE' | 'INACTIVE' | null) => { 
+      switch (status) {
+        case 'ACTIVE':
+          return t('userStatus:active');
+        case 'INACTIVE':
+          return t('userStatus:inactive');
+        default:
+          return '-';
+      }
+    })(user.status)
     return {
       key: `row-${index}-${user.phoneNumber}`,
       cells: [
@@ -167,8 +177,8 @@ export const createRow = (
           content: user.fullName || '-',
         },
         {
-          key: moment(user.createdAt, 'DD-MM-YYYY HH:mm').format('YYYYMMDDHHmm'),
-          content: DateFormat(user.createdAt as string, language),
+          key: user.status,
+          content: translatedStatus,
         },
         {
           key: user.legalType,
@@ -208,7 +218,7 @@ export const createRow = (
                       icon: 'warning',
                       showCancelButton: true,
                     })
-                    .then(({ isConfirmed }) => isConfirmed && deleteUser(user.userId))
+                    .then(({ isConfirmed }) => isConfirmed && user.userId && deleteUser(user.userId))
                 }}>
                 <TrashIcon label="delete" size="medium" />
               </IconWrapper>
