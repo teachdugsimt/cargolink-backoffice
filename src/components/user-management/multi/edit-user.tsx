@@ -322,6 +322,13 @@ const EditUser: React.FC<Props> = observer((props: any) => {
       });
   };
 
+  useEffect(() => {
+    console.log(uploadFileStore.loading)
+    return () => {
+
+    }
+  }, [uploadFileStore.loading])
+
   const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
     file && uploadFileStore.uploadFile('USER_DOC', file);
@@ -667,7 +674,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
               <Name>{t('userDoc')}</Name>
               <Field label="" name="uploadFile" defaultValue="">
                 {({ fieldProps, error, meta: { valid } }: any) => (
-                  <UploadButton accept=".pdf" onChange={handleUploadFile} />
+                  <UploadButton isLoading={uploadFileStore.loading} accept=".pdf" onChange={handleUploadFile} />
                 )}
               </Field>
             </div>
