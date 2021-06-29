@@ -10,6 +10,10 @@ class UploadApi {
 
     const response = await ExcuteApi('/api/v1/media/upload', formData, 'post', 6e5, true, true);
     return response;
+  };
+  uploadByUser = async (userId: string, payload: UserUploadPayload) => {
+    const response = await ExcuteApi(`/api/v1/users/${userId}/update-user-profile`, payload, 'post', 6e5, true, true);
+    return response;
   }
 }
 
@@ -35,4 +39,9 @@ export interface UploadFileResponse {
   fileUrl: string;
   fileType: string;
   uploadedDate: string;
+}
+
+export interface UserUploadPayload {
+  url: string[];
+  token: string;
 }

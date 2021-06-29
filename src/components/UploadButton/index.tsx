@@ -7,6 +7,7 @@ interface IProps {
   accept?: string;
   isLoading?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => any;
+  disabled?: boolean;
 }
 const UploadButton = (props: IProps) => {
   const { accept, isLoading, onChange } = props;
