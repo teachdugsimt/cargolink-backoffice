@@ -1,19 +1,17 @@
 import React from 'react';
-import { Button, ButtonLink } from '@paljs/ui/Button';
 import moment from 'moment';
-
-import { Icon } from 'react-icons-kit';
-import { ic_delete } from 'react-icons-kit/md/ic_delete';
-import { edit } from 'react-icons-kit/fa/edit';
-import { copy } from 'react-icons-kit/fa/copy';
+import styled from 'styled-components';
 import { DateFormat } from '../../../simple-data';
 import { navigate } from 'gatsby';
 import Swal from 'sweetalert2';
-import { TFunction, useTranslation } from 'react-i18next';
+import { TFunction } from 'react-i18next';
 import { IUserDTO, IUserNull } from '../../../../stores/user-store';
 import { UserApi } from '../../../../services';
 import InlineMessage from '@atlaskit/inline-message';
 import ReactDOMServer from 'react-dom/server';
+import CopyIcon from '@atlaskit/icon/glyph/copy';
+import EditIcon from '@atlaskit/icon/glyph/edit';
+import TrashIcon from '@atlaskit/icon/glyph/trash';
 
 export const sortabled: any = {
   phoneNumber: true, //! Note that: DESC = true, ASC = fasle
@@ -22,6 +20,15 @@ export const sortabled: any = {
   jobCount: true,
   truckCount: true,
 };
+
+const IconWrapper = styled.div`
+  margin: 0 2px;
+  display: flex;
+  justify-content: center;
+  span {
+    cursor: pointer;
+  }
+`;
 
 export const createHead = (withWidth: boolean) => {
   return {
@@ -120,13 +127,13 @@ export const createRow = (
         validationMessage: 'swal-validation-no-icon',
       },
       preConfirm: () => {
-        const hydrated = ReactDOMServer.renderToStaticMarkup(validationMessage)
+        const hydrated = ReactDOMServer.renderToStaticMarkup(validationMessage);
         Swal.showValidationMessage(hydrated);
         navigator.clipboard.writeText(uploadLink);
         return uploadLink;
       },
     });
-  }
+  };
   const deleteUser = deleteUserFunction ? deleteUserFunction : (userId: string) => null;
 
   return users.map((user: IUserDTO | IUserNull, index: number) => {
@@ -170,33 +177,21 @@ export const createRow = (
         {
           key: user.id,
           content: (
-            <div style={{ textAlign: 'right' }}>
-              <Button
-                appearance="ghost"
-                status="Basic"
-                size="Small"
-                onClick={() => user?.userId && onCopyUploadLinkButtonClick(user.userId)}
-              >
-                <Icon icon={copy} />
-              </Button>
-              <Button
-                appearance="ghost"
-                status="Basic"
-                size="Small"
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <IconWrapper onClick={() => user?.userId && onCopyUploadLinkButtonClick(user.userId)}>
+                <CopyIcon label="copy" size="medium" />
+              </IconWrapper>
+              <IconWrapper
                 onClick={() =>
                   navigate('/user-management/user', {
                     state: {
                       id: user.userId,
                     },
                   })
-                }
-              >
-                <Icon icon={edit} />
-              </Button>
-              <Button
-                appearance="ghost"
-                status="Basic"
-                size="Small"
+                }>
+                <EditIcon label="edit" size="medium" />
+              </IconWrapper>
+              <IconWrapper
                 onClick={() => {
                   const red = '#E03616';
                   const blue = '#3085D6';
@@ -214,10 +209,9 @@ export const createRow = (
                       showCancelButton: true,
                     })
                     .then(({ isConfirmed }) => isConfirmed && deleteUser(user.userId))
-                }
-                }>
-                <Icon icon={ic_delete} />
-              </Button>
+                }}>
+                <TrashIcon label="delete" size="medium" />
+              </IconWrapper>
             </div>
           ),
         },
