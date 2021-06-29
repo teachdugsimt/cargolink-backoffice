@@ -159,6 +159,6 @@
   "settings": "ตั้งค่า",
   "language": "ภาษา",
   "fullNamePlaceholder": "ไม่ระบุชื่อ",
-  "noData": "ไม่พบข้อมูล",
+  "noData": "ไม่พบผลลัพธ์",
   "clickToEnterValue": "คลิกเพื่อแก้ไข"
 }
