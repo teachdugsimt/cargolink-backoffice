@@ -898,11 +898,12 @@ const EditUser: React.FC<Props> = observer((props: any) => {
               </div>
             </div>
             <div style={groupItemsStyle}>
+              {'Under development'} <br /><br />
               <div style={fieldItemStyle('full')}>
                 <Name style={{ marginBottom: 12 }}>{t('generalAddr')}</Name>
                 <div style={AddressStyled}>
                   <Address>
-                    {'91/1 Songphol Soi 9, Tambon Lam Phaya, Mueang Nakhon Pathom District, Nakhon Pathom 73000'}
+                    {'-'}
                   </Address>
                   <button
                     style={BUTTON}
@@ -939,7 +940,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                     marginTop: '1rem',
                   }}>
                     <Address>
-                      {'91/1 Songphol Soi 9, Tambon Lam Phaya, Mueang Nakhon Pathom District, Nakhon Pathom 73000'}
+                      {'-'}
                     </Address>
                     <button
                       style={BUTTON}
