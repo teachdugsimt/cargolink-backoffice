@@ -52,7 +52,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
 
   useEffect(() => {
     setSearchValue({ page: 1 });
-    userStore.getUsers({ page: 1 });
+    userStore.getUsers({ page: 1, descending: true });
   }, []);
 
   useEffect(() => {
