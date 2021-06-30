@@ -10,7 +10,7 @@ import { ic_check_circle } from 'react-icons-kit/md/ic_check_circle';
 import { defaultIcons } from '../../../Layouts/Sidebar/Icon/defaultIcons';
 import Icon from 'react-icons-kit';
 
-const TrucksDetail: React.FC<{}> = observer(({}) => {
+const TrucksDetail: React.FC<{}> = observer(({ }) => {
   const { carrierStore, masterTypeStore } = useMst();
   const { t } = useTranslation();
   const [truckTypeOptions, setTruckTypeOptions] = useState({ groupId: null, id: null, image: null, name: null });
@@ -78,18 +78,18 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
   };
 
   const getImageApi = async (api: string, token: string, imageId: string) => {
-    const response = await fetch(api, {
-      method: 'GET',
-      headers: {
-        adminAuth: token,
-      },
-    });
-    await response.arrayBuffer().then((buffer) => {
-      const base64Flag = 'data:image/jpeg;base64,';
-      const imageStr = arrayBufferToBase64(buffer);
-      // return base64Flag + imageStr;
-      document.getElementById(imageId).src = base64Flag + imageStr;
-    });
+    // const response = await fetch(api, {
+    //   method: 'GET',
+    //   headers: {
+    //     adminAuth: token,
+    //   },
+    // });
+    // await response.arrayBuffer().then((buffer) => {
+    //   const base64Flag = 'data:image/jpeg;base64,';
+    //   const imageStr = arrayBufferToBase64(buffer);
+    //   // return base64Flag + imageStr;
+    //   document.getElementById(imageId).src = base64Flag + imageStr;
+    // });
   };
 
   const imageResponse = (photoObject: any) => {

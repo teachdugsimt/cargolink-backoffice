@@ -72,7 +72,7 @@ const DB = new JQL(preprocess(require('./data.json')));
 const resolveResultbyField = (type: string, searchStr: string) => {
   let possibles = [];
   try {
-    possibles = DB.select('*').where(type).match(`^${searchStr}`).orderBy(type).fetch();
+    possibles = DB.select('*').where(type).match(`^${searchStr}`).orderBy(type).afetch();
   } catch (e) {
     return [];
   }

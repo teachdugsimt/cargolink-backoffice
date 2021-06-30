@@ -26,7 +26,7 @@ interface Coordinate {
   name: string;
 }
 
-const TrucksDetail: React.FC<{}> = observer(({}) => {
+const TrucksDetail: React.FC<{}> = observer(({ }) => {
   const { t } = useTranslation();
   const { shipperStore, carrierStore } = useMst();
   const [truckTypeOptions, setTruckTypeOptions] = useState({ groupId: null, id: null, image: null, name: null });
@@ -87,13 +87,14 @@ const TrucksDetail: React.FC<{}> = observer(({}) => {
       if (index + 1 < coordinates.length) {
         const startLoc = `${coordinates[index].lat},${coordinates[index].lng}`;
         const destinationLoc = `${coordinates[index + 1].lat},${coordinates[index + 1].lng}`;
-        const response = await fetch(
-          `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&result_type=country&key=AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw`,
-          {
-            method: 'GET',
-          },
-        );
-        const responseJson = await response.json();
+        // const response = await fetch(
+        //   `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&result_type=country&key=AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw`,
+        //   {
+        //     method: 'GET',
+        //   },
+        // );
+        // const responseJson = await response.json();
+        const responseJson: any = {}
         if (responseJson.status === 'OK') {
           const mapData = responseJson.routes[0];
           const distanceValue = mapData?.legs[0]?.distance?.value || 0;

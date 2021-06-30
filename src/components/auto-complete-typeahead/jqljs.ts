@@ -32,7 +32,7 @@ class JQL {
     }
   }
 
-  fetch() {
+  afetch() {
     if (typeof this.options === 'object') {
       let obj: any = {};
       for (var i in this.buffer) {
