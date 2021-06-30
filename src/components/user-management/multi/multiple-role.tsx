@@ -48,7 +48,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
                 text: t('deleteUserSuccess'),
                 showConfirmButton: true,
               });
-              userStore.getUsers({ page });
+              userStore.getUsers({ page, descending: true });
               return console.log('response delete user', response.data);
             } else throw new Error(JSON.stringify(response));
           })
