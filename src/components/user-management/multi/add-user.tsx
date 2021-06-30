@@ -150,7 +150,7 @@ const AddUser: React.FC<Props> = observer(() => {
                 text: t('createUserSuccess'),
                 showConfirmButton: false,
               });
-              return setInterval(() => {
+              return setTimeout(() => {
                 Swal.close();
                 navigate('/user-management');
               }, MODAL_TIMEOUT);
