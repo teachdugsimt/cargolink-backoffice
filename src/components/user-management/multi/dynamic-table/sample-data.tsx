@@ -28,6 +28,11 @@ const IconWrapper = styled.div`
   }
 `;
 
+const StatusText = styled.span<{ isActive: boolean }>`
+  color: ${({ isActive }) => (isActive ? '#00B132' : '#E03616')};
+  text-transform: capitalize;
+`;
+
 export const createHead = (withWidth: boolean) => {
   return {
     cells: [
@@ -145,12 +150,12 @@ export const createRow = (
           return '-';
       }
     })(user.legalType);
-    const translatedStatus = ((status?: 'ACTIVE' | 'INACTIVE' | null) => { 
+    const translatedStatus = ((status?: 'ACTIVE' | 'INACTIVE' | null) => {
       switch (status) {
         case 'ACTIVE':
-          return t('userStatus:active');
+          return <StatusText isActive={true}>{t('userStatus:active')}</StatusText>;
         case 'INACTIVE':
-          return t('userStatus:inactive');
+          return <StatusText isActive={false}>{t('userStatus:inactive')}</StatusText>;
         default:
           return '-';
       }
