@@ -161,5 +161,7 @@
   "fullNamePlaceholder": "ไม่ระบุชื่อ",
   "noData": "ไม่พบผลลัพธ์",
   "clickToEnterValue": "คลิกเพื่อแก้ไข",
-  "deleteUserSuccess": "ลบผู้ใช้แล้ว"
+  "deleteUserSuccess": "ลบผู้ใช้แล้ว",
+  "createUserSuccess": "สร้างผู้ใช้แล้ว",
+  "createUserErrorByUser": "ข้อมูลไม่ถูกต้อง โปรดตรวจสอบข้อมูลใหม่"
 }

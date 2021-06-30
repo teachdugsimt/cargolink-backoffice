@@ -133,22 +133,44 @@ const AddUser: React.FC<Props> = observer(() => {
       legalType,
       url: attachCodes,
     };
-    userApi
-      .createUser(payload)
-      .then((response) => {
-        if (response && response.status < 300) {
-          const data = (response as AxiosResponse<CreateUserResponse>).data;
-          console.log('edit user response', data);
-          return navigate('/user-management');
-        } else throw new Error(JSON.stringify(response));
-      })
-      .catch((error) => {
-        console.error('Error while create the user', error);
-        Swal.fire({
-          icon: 'error',
-          text: 'Error while create this user',
-        });
-      });
+    const MODAL_TIMEOUT = 1000;
+    Swal.fire({
+      didOpen: () => {
+        Swal.showLoading();
+        userApi
+          .createUser(payload)
+          .then((response) => {
+            if (response && response.status < 300) {
+              Swal.hideLoading();
+              const data = (response as AxiosResponse<CreateUserResponse>).data;
+              console.log('edit user response', data);
+              Swal.update({
+                icon: 'success',
+                titleText: '',
+                text: t('createUserSuccess'),
+                showConfirmButton: false,
+              });
+              return setInterval(() => {
+                Swal.close();
+                navigate('/user-management');
+              }, MODAL_TIMEOUT);
+            } else {
+              Swal.fire({
+                icon: 'error',
+                text: t('createUserErrorByUser'),
+              });
+              console.error('create user: user error', response);
+            }
+          })
+          .catch((error) => {
+            console.error('Error while create the user', error);
+            Swal.fire({
+              icon: 'error',
+              text: 'Error while create this user',
+            });
+          });
+      }
+    });
   };
 
   const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,7 +199,7 @@ const AddUser: React.FC<Props> = observer(() => {
   useEffect(() => {
     const newFile = JSON.parse(JSON.stringify(uploadFileStore.file));
     const isNoFile = newFile == null || Object.keys(newFile).every((key) => newFile[key] == null);
-    if (!isNoFile) { 
+    if (!isNoFile) {
       setAttachCodes([...attachCodes, newFile.attachCode]);
       setIsUploading(false);
       uploadFileStore.clear();

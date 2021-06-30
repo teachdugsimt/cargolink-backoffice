@@ -59,6 +59,7 @@ export interface CreateUserPayload {
   email?: string;
   userType: 0; //? fix 0 for now
   legalType: 'INDIVIDUAL' | 'JURISTIC';
+  url?: string[];
 }
 
 export interface CreateUserResponse extends CreateUserPayload {
