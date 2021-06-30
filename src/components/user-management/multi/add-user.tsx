@@ -16,13 +16,14 @@ import { RadioGroup } from '@atlaskit/radio';
 import { OptionsPropType } from '@atlaskit/radio/types';
 import UploadButton from '../../UploadButton';
 import userApi, { CreateUserPayload, CreateUserResponse } from '../../../services/user-api';
-import { UploadFileStore } from '../../../stores/upload-file-store';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import { AxiosResponse } from 'axios';
 import Swal from 'sweetalert2';
 import { useWindowSize, breakPoints } from '../../../utils';
 import { Property } from 'csstype';
+import { useMst } from '../../../stores/root-store';
+import { UploadFilePath } from '../../../services/upload-api';
 
 interface Props { }
 interface FileProps {
@@ -90,16 +91,15 @@ const startAdornmentIcon = (iconName: 'user' | 'phone' | 'password' | 'email') =
 };
 
 const AddUser: React.FC<Props> = observer(() => {
+  const { uploadFileStore } = useMst();
   const { t } = useTranslation();
-  // const { control, handleSubmit } = useForm();
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [file, setFile] = useState<FileProps>({});
-  const [validatePassword, setValidatePassword] = useState<boolean>(false);
+
+  const [file, setFile] = useState<File>();
+  const [isUploading, setIsUploading] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneError, setPhoneError] = useState(false);
   const [legalType, setLegalType] = useState<'INDIVIDUAL' | 'JURISTIC'>('INDIVIDUAL');
+  const [attachCodes, setAttachCodes] = useState<string[]>([]);
   const [width] = useWindowSize();
 
   // const onSubmit = data => console.log(data);
@@ -117,12 +117,8 @@ const AddUser: React.FC<Props> = observer(() => {
   ];
 
   useEffect(() => {
+    uploadFileStore.clear();
     return () => {
-      setShowPassword(false);
-      setPassword('');
-      setConfirmPassword('');
-      setFile({});
-      setValidatePassword(false);
       setPhoneError(false);
       setPhoneNumber('');
     };
@@ -135,6 +131,7 @@ const AddUser: React.FC<Props> = observer(() => {
       userType: 0,
       phoneNumber: `+66${phoneNumber.substr(1)}`,
       legalType,
+      url: attachCodes,
     };
     userApi
       .createUser(payload)
@@ -143,7 +140,7 @@ const AddUser: React.FC<Props> = observer(() => {
           const data = (response as AxiosResponse<CreateUserResponse>).data;
           console.log('edit user response', data);
           return navigate('/user-management');
-        } else console.error('Unexpected error while loading user', response);
+        } else throw new Error(JSON.stringify(response));
       })
       .catch((error) => {
         console.error('Error while create the user', error);
@@ -156,7 +153,11 @@ const AddUser: React.FC<Props> = observer(() => {
 
   const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
-    if (file) UploadFileStore.uploadFile();
+    if (file) {
+      setFile(file);
+      setIsUploading(true);
+      uploadFileStore.uploadFile(UploadFilePath.USER_DOC, file);
+    }
   };
 
   const validatePhoneNumber = (value?: string) => {
@@ -165,7 +166,7 @@ const AddUser: React.FC<Props> = observer(() => {
     return value ? (regex.test(value) ? undefined : 'INVALID_PHONE_NUMBER') : undefined;
   };
 
-  const isDisabled = phoneError || !phoneNumber.length ? true : false;
+  const isDisabled = phoneError || !phoneNumber.length ? true : false || isUploading;
 
   useEffect(() => {
     if (phoneNumber) {
@@ -173,6 +174,15 @@ const AddUser: React.FC<Props> = observer(() => {
       setPhoneError(isInvalid ? true : false);
     }
   }, [phoneNumber]);
+  useEffect(() => {
+    const newFile = JSON.parse(JSON.stringify(uploadFileStore.file));
+    const isNoFile = newFile == null || Object.keys(newFile).every((key) => newFile[key] == null);
+    if (!isNoFile) { 
+      setAttachCodes([...attachCodes, newFile.attachCode]);
+      setIsUploading(false);
+      uploadFileStore.clear();
+    }
+  }, [uploadFileStore.file]);
   const windowMode = width > breakPoints.md ? 'lg' : 'sm';
   const fieldItemStyle = (size: 'full' | 'half'): CSSProperties => {
     let width: Property.Width = 'calc(100% - 1rem)';
@@ -275,7 +285,8 @@ const AddUser: React.FC<Props> = observer(() => {
                   ...groupItemsStyle,
                   marginTop: '1rem',
                   borderTop: '1px solid #D8D8D8',
-                }}>
+                }}
+              >
                 <div style={fieldItemStyle('half')}>
                   <Field
                     label={`${t('citizenId')} / ${t('companyCertificate')}`}
@@ -285,8 +296,8 @@ const AddUser: React.FC<Props> = observer(() => {
                   >
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <UploadButton accept=".pdf" onChange={handleUploadFile} />
-                        <ShowFileName>{file?.name || ''}</ShowFileName>
+                        <UploadButton accept=".pdf" onChange={handleUploadFile} isLoading={isUploading} />
+                        <ShowFileName>{(!isUploading && file?.name) || ''}</ShowFileName>
                       </div>
                     )}
                   </Field>
