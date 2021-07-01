@@ -10,6 +10,8 @@ const ParentLayout = observer(({ pageContext, children, location }) => {
   const { loginStore } = useMst();
   const token = loginStore.data_signin.accessToken
 
+  console.log('PAGE CONTEXT', pageContext)
+
   if (token && token.length) {
     // IS LOGGED IN
     if (pageContext.layout == 'auth') {
