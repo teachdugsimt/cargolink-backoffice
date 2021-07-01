@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import TruckForApproval from '../../components/Carrier/Trucks/truck-for-approval';
+import TrucksListComponent from '../../components/truck/list';
 
 const Trucks = () => {
   const { t } = useTranslation();
   return (
     <div>
-      <TruckForApproval />
+      <TrucksListComponent />
     </div>
   );
 };

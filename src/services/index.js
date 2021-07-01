@@ -5,5 +5,5 @@ import UploadFileApi from './upload-file-api';
 import MasterTypeApi from './master-type-api';
 import UserApi from './user-api';
 import JobApi from './job-api';
-
-export { LoginApi, CarrierApi, ShipperApi, UploadFileApi, MasterTypeApi, UserApi, JobApi };
+import TruckApi from './truck-api';
+export { LoginApi, CarrierApi, ShipperApi, UploadFileApi, MasterTypeApi, UserApi, JobApi, TruckApi };

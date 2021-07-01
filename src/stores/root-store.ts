@@ -10,6 +10,7 @@ import { PasswordResetStore } from './password-reset-store';
 import { PasswordChangeStore } from './password-change-store';
 import { UploadFileStore } from './upload-file-store';
 import { JobStore } from './job-store';
+import { TruckStore } from './truck-store';
 
 const RootModel = types.model({
   loginStore: LoginStore,
@@ -21,6 +22,7 @@ const RootModel = types.model({
   passwordChangeStore: PasswordChangeStore,
   uploadFileStore: UploadFileStore,
   jobStore: JobStore,
+  truckStore: TruckStore
 });
 
 let initialState = RootModel.create({
@@ -65,6 +67,10 @@ let initialState = RootModel.create({
     error_response: null,
   },
   jobStore: {
+    loading: false,
+    error_response: null,
+  },
+  truckStore: {
     loading: false,
     error_response: null,
   },
