@@ -22,7 +22,7 @@ import {
 } from '@atlaskit/side-navigation';
 import Avatar, { AvatarItem } from '@atlaskit/avatar';
 import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdown-menu';
-import LanguageMenu from '../components/language-menu';
+// import LanguageMenu from '../components/language-menu';
 
 const PrimaryLayout = observer(({ children, location }) => {
   const { loginStore } = useMst()

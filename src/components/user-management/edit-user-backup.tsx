@@ -11,28 +11,28 @@ import { Icon } from 'react-icons-kit';
 import { ic_person } from 'react-icons-kit/md/ic_person';
 import Form, { Field, FormFooter } from '@atlaskit/form';
 // import { FormEdit } from '../../form-edit/form-edit';
-import { ListFile } from '../../list-file/list-file';
-import AutoCompleteTypeahead from '../../auto-complete-typeahead/auto-complete-typeahead';
+import { ListFile } from '../list-file/list-file';
+import AutoCompleteTypeahead from '../auto-complete-typeahead/auto-complete-typeahead';
 import { save } from 'react-icons-kit/fa/save';
 import { camera } from 'react-icons-kit/fa/camera';
 
-import { close } from 'react-icons-kit/fa/close';
-import { pencil } from 'react-icons-kit/fa/pencil';
-import UploadButton from '../../UploadButton';
+// import { close } from 'react-icons-kit/fa/close';
+// import { pencil } from 'react-icons-kit/fa/pencil';
+import UploadButton from '../UploadButton';
 import Swal from 'sweetalert2';
-import { IUserDTO, DocumentStatus } from '../../../stores/user-store';
-import { useMst } from '../../../stores/root-store';
-import { DateFormat } from '../../simple-data';
-import { UserApi } from '../../../services';
-import { UploadFileResponse } from '../../../services/upload-api';
-import { EditUserPayload, EditUserResponse } from '../../../services/user-api';
+import { IUserDTO, DocumentStatus } from '../../stores/user-store';
+import { useMst } from '../../stores/root-store';
+import { DateFormat } from '../simple-data';
+import { UserApi } from '../../services';
+import { UploadFileResponse } from '../../services/upload-api';
+import { EditUserPayload, EditUserResponse } from '../../services/user-api';
 import { AxiosResponse } from 'axios';
-import { breakPoints, useWindowSize } from '../../../utils';
+import { breakPoints, useWindowSize } from '../../utils';
 import { Property } from 'csstype';
 
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
-import { Checkbox } from '@atlaskit/checkbox';
+// import { Checkbox } from '@atlaskit/checkbox';
 import Textfield from '@atlaskit/textfield';
 import { fontSize, gridSize } from '@atlaskit/theme/constants';
 import InlineEdit from '@atlaskit/inline-edit';
@@ -742,7 +742,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
               <DetailLabel>
                 {t('status')} :
               </DetailLabel>
-              <InlineEdit
+              {/* <InlineEdit
                 defaultValue={userData.documentStatus}
                 editView={({ errorMessage, ...fieldProps }) => (
                   <EditViewContainer>
@@ -767,7 +767,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                     console.error('Error casting document status change (maybe invalid status)', error);
                   }
                 }}
-              />
+              /> */}
             </FieldWrapper>
 
             {/* <FormEdit
@@ -795,7 +795,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
 
 
       <div style={{ borderTop: '1px solid #ddd', margin: '30px 0' }} />
-      <Form onSubmit={handleSubmit}>
+      {/* <Form onSubmit={handleSubmit}>
         {({ formProps }) => (
           <form {...formProps} name="add-user" style={FormStyled}>
             <div style={groupItemsStyle}>
@@ -805,83 +805,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                   flexDirection: 'row',
                 }}
               >
-                {/* <div>
-                    <ImageFram
-                      style={{
-                        display: 'flex',
-                        flex: 1,
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <ImagePreview>
-                        {previewImage ? (
-                          <img src={previewImage} alt="" style={IMAGE_PROFILE} />
-                        ) : (
-                          <Icon icon={ic_person} size={50} />
-                        )}
-                      </ImagePreview>
-                      <Field label="" name="imageProfile" defaultValue="">
-                        {({ fieldProps, error, meta: { valid } }: any) => (
-                          <MaterialButton
-                            variant="contained"
-                            component="label"
-                            style={CAMERA}
-                            onChange={(event: any) => handleChaneImage(event)}
-                          >
-                            <input type={'file'} accept={'image/*'} />
-                            <Icon icon={camera} size={25} />
-                          </MaterialButton>
-                        )}
-                      </Field>
-                    </ImageFram>
-                  </div>
-                  <div
-                    style={{
-                      flex: 4,
-                      display: 'flex',
-                      justifyContent: 'flex-start',
-                      flexDirection: 'column',
-                      margin: '0 1rem',
-                    }}
-                  >
-                    <Name isNoData={!userData?.fullName}>{userData?.fullname || fullNamePlaceholder}</Name>
-                    <FormEdit
-                      label={`${t('memberSince')} :`}
-                      value={DateFormat(userData.createdAt as string, loginStore.language)}
-                      showEditIcon={false}
-                      containerStyle={{ marginBottom: 12 }}
-                      valueStyle={{ fontWeight: 0 }}
-                    />
-                    <FormEdit
-                      label={`${t('legalType')} :`}
-                      value={userData?.legalType === 'INDIVIDUAL' ? t('individual') : t('company')}
-                      type={'dropdown'}
-                      dropDownOption={legalTypeOptions}
-                      handleSave={(value) => handleSave('legalType', value)}
-                    />
-                    <FormEdit
-                      label={`${t('phoneNumber')} :`}
-                      value={userData.phoneNumber || '-'}
-                      validateMessage={t('invalidPhoneNumber')}
-                      validateForm={validatePhoneNumber}
-                      messageForCheck={'INVALID_PHONE_NUMBER'}
-                      handleSave={(value) => {
-                        if (!value) return;
-                        if (value.startsWith('0')) value = `+66${value.substr(1)}`;
-                        handleSave('phoneNumber', value);
-                      }}
-                    />
-                    <FormEdit
-                      label={`${t('email')} :`}
-                      value={userData.email}
-                      handleSave={(value) => handleSave('email', value)}
-                      validateForm={validateEmail}
-                      validateMessage={t('invalidEmail')}
-                      messageForCheck={'INVALID_EMAIL'}
-                    />
 
-
-                  </div> */}
               </div>
               <div
                 style={{
@@ -955,7 +879,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
             </div>
           </form>
         )}
-      </Form>
+      </Form> */}
 
     </div >
   );
