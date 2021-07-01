@@ -4,6 +4,6 @@ import ShipperApi from './shipper-api';
 import UploadFileApi from './upload-file-api';
 import MasterTypeApi from './master-type-api';
 import UserApi from './user-api';
-import PasswordApi from './password-api';
+import JobApi from './job-api';
 
-export { LoginApi, CarrierApi, ShipperApi, UploadFileApi, MasterTypeApi, UserApi };
+export { LoginApi, CarrierApi, ShipperApi, UploadFileApi, MasterTypeApi, UserApi, JobApi };
