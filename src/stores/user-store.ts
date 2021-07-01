@@ -48,6 +48,7 @@ export const UserStore = types
         self.data_user = null;
         self.error_response = null;
         try {
+          // if (!params.rowsPerPage) params.rowsPerPage = 15;
           const response = yield userApi.getUsersList(params);
           console.log('getUsers response :> ', response);
           if (response && response.ok) {

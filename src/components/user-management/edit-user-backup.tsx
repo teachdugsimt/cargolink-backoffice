@@ -743,7 +743,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
               <DetailLabel>
                 {t('status')} :
               </DetailLabel>
-              {/* <InlineEdit
+              <InlineEdit
                 defaultValue={userData.documentStatus}
                 editView={({ errorMessage, ...fieldProps }) => (
                   <EditViewContainer>
@@ -768,27 +768,27 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                     console.error('Error casting document status change (maybe invalid status)', error);
                   }
                 }}
-              /> */}
+              />
             </FieldWrapper>
 
-            {/* <FormEdit
-                label={`${t('status')} :`}
-                value={userData?.documentStatus || t('docStatus:waitForVerify')}
-                valueStyle={{ color: 'orangered' }}
-                type={'dropdown'}
-                dropDownOption={statusOptions.map((option) => ({
-                  ...option,
-                  isSelected: option.value === userData?.documentStatus,
-                }))}
-                handleSave={(value) => {
-                  try {
-                    const status = value as DocumentStatus;
-                    handleChangeDocStatus(status);
-                  } catch (error) {
-                    console.error('Error casting document status change (maybe invalid status)', error);
-                  }
-                }}
-              /> */}
+            <FormEdit
+              label={`${t('status')} :`}
+              value={userData?.documentStatus || t('docStatus:waitForVerify')}
+              valueStyle={{ color: 'orangered' }}
+              type={'dropdown'}
+              dropDownOption={statusOptions.map((option) => ({
+                ...option,
+                isSelected: option.value === userData?.documentStatus,
+              }))}
+              handleSave={(value) => {
+                try {
+                  const status = value as DocumentStatus;
+                  handleChangeDocStatus(status);
+                } catch (error) {
+                  console.error('Error casting document status change (maybe invalid status)', error);
+                }
+              }}
+            />
             {/* </div> */}
           </GridColumn>
         </Grid>

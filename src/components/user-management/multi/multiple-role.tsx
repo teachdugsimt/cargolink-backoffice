@@ -66,7 +66,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
   );
 
   const setInitialSortingAndPage = () => {
-    const options = {page:1, descending: true};
+    const options = { page: 1, descending: true };
     setSearchValue(options);
     userStore.getUsers(options);
   }

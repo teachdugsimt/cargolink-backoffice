@@ -26,7 +26,7 @@ class UserApi {
     const response = await ExcuteApi(`/api/v1/users/${userId}/doc-status`, payload, 'patch', 6e5, true, true);
     return response;
   };
-  deleteUser = async (userId: string) => { 
+  deleteUser = async (userId: string) => {
     const response = await ExcuteApi(`/api/v1/users/${userId}`, {}, 'delete', 6e5, true, true);
     return response;
   };
@@ -35,6 +35,7 @@ export default new UserApi();
 
 export interface GetUsersListParams {
   page?: number; //? 0 is first
+  rowsPerPage?: number;
   descending?: boolean;
   sortBy?: string; //? key to sort
 }
