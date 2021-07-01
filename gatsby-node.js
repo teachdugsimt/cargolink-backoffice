@@ -20,8 +20,8 @@ exports.onCreatePage = ({ page, actions }) => {
     page.context.layout = 'primary';
   }
 
-  createPage(page);
-  // return;
+  // createPage(page);
+  return;
 };
 
 
