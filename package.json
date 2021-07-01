@@ -102,7 +102,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "gatsby build",
+    "build": "gatsby build --verbose",
     "dev": "gatsby develop",
     "start": "npm run dev",
     "serve": "gatsby serve",
