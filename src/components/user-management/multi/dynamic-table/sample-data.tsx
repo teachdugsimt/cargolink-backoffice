@@ -196,7 +196,7 @@ export const createRow = (
               </IconWrapper>
               <IconWrapper
                 onClick={() =>
-                  navigate('/user-management/user', {
+                  navigate('/users/' + user.userId, {
                     state: {
                       id: user.userId,
                     },

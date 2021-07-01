@@ -42,7 +42,7 @@ const items: MenuItemType[] = [
     title_th: 'ผู้ใช้งาน',
     title_en: 'Users',
     icon: 'delivery-man',
-    link: { to: '/user-management' },
+    link: { to: '/users' },
   },
   {
     title_th: 'ตั้งค่า',

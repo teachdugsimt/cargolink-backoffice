@@ -240,7 +240,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
 
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => { }}>
-      <BreadcrumbsItem onClick={() => navigate('/user-management')} text={t('userManagement')} key="user-management" />
+      <BreadcrumbsItem onClick={() => navigate('/users')} text={t('userManagement')} key="users" />
       <BreadcrumbsItem text={t('userInfo')} key="user-info" />
     </Breadcrumbs>
   );
@@ -268,8 +268,9 @@ const EditUser: React.FC<Props> = observer((props: any) => {
   };
 
   useEffect(() => {
-    if (!userId) navigate('/user-management');
-    else getUser(userId);
+    // if (!userId) navigate('/users');
+    // else
+    getUser(userId);
     uploadFileStore.clear();
 
     return () => {
