@@ -50,6 +50,7 @@ export interface ITruck {
   id: string;
   approveStatus: string;
   loadingWeight: number;
+  truckType: number;
   registrationNumber: string[];
   stallHeight: 'LOW' | 'MEDIUM' | 'HIGH' | null;
   tipper: boolean;

@@ -24,6 +24,7 @@ const TruckType = types.model({
   id: types.maybeNull(types.string),
   approveStatus: types.maybeNull(types.string),
   loadingWeight: types.maybeNull(types.number),
+  truckType: types.maybeNull(types.number),
   registrationNumber: types.maybeNull(types.array(types.string)),
   stallHeight: types.maybeNull(types.string),
   tipper: types.maybeNull(types.boolean),
