@@ -1,19 +1,16 @@
-import React, { useState, Fragment, useEffect, CSSProperties, useCallback, ChangeEvent } from 'react';
+import React, { useState, useEffect, CSSProperties, useCallback, ChangeEvent } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
-import Row from '@paljs/ui/Row';
-import Col from '@paljs/ui/Col';
 import { useTranslation } from 'react-i18next';
-import { Input, Button as MaterialButton, InputAdornment, IconButton } from '@material-ui/core';
+import { Button as MaterialButton } from '@material-ui/core';
 // import { Button } from '@paljs/ui/Button';
 import Button from '@atlaskit/button/standard-button';
 import { navigate } from 'gatsby';
 import styled from 'styled-components';
 import { Icon } from 'react-icons-kit';
-import { upload } from 'react-icons-kit/ikons/upload';
+// import { upload } from 'react-icons-kit/ikons/upload';
 import { ic_person } from 'react-icons-kit/md/ic_person';
-import Form, { ErrorMessage, Field, FormFooter, ValidMessage } from '@atlaskit/form';
-import { FormEdit } from '../../form-edit/form-edit';
+import Form, { Field, FormFooter } from '@atlaskit/form';
+// import { FormEdit } from '../../form-edit/form-edit';
 import { ListFile } from '../../list-file/list-file';
 import AutoCompleteTypeahead from '../../auto-complete-typeahead/auto-complete-typeahead';
 import { save } from 'react-icons-kit/fa/save';
@@ -248,8 +245,8 @@ const EditUser: React.FC<Props> = observer((props: any) => {
     </Breadcrumbs>
   );
 
-  const getUser = async (userId: string) => {
-    UserApi.getUser(userId)
+  const getUser = async (uId: string) => {
+    UserApi.getUser(uId)
       .then((response) => {
         if (response && response.ok) {
           const user: IUserDTO = {
@@ -526,15 +523,15 @@ const EditUser: React.FC<Props> = observer((props: any) => {
   const fullNamePlaceholder = t('fullNamePlaceholder');
   const windowMode = width > breakPoints.md ? 'lg' : 'sm';
   const fieldItemStyle = (size: 'full' | 'half' | 'quart'): CSSProperties => {
-    let width: Property.Width = 'calc(100% - 1rem)';
+    let wid: Property.Width = 'calc(100% - 1rem)';
     if (windowMode === 'lg') {
-      if (size === 'half') width = 'calc(50% - 1rem)';
-      else if (size === 'quart') width = 'calc(25% - 1rem)';
+      if (size === 'half') wid = 'calc(50% - 1rem)';
+      else if (size === 'quart') wid = 'calc(25% - 1rem)';
     }
     return {
       display: 'flex',
       justifyContent: 'flex-start',
-      width,
+      wid,
       margin: '0 .5rem',
       flexDirection: 'column',
     };
@@ -764,7 +761,7 @@ const EditUser: React.FC<Props> = observer((props: any) => {
                 )}
                 onConfirm={(value) => {
                   try {
-                    const status = value as DocumentStatus;
+                    const status = value;
                     handleChangeDocStatus(status.value);
                   } catch (error) {
                     console.error('Error casting document status change (maybe invalid status)', error);
