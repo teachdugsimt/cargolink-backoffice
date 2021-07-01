@@ -23,7 +23,10 @@ export interface TrucksListParams {
   sortBy?: string[];
   rowsPerPage?: number;
   truckTypes?: string;
-  workingZones?: string;
+  workingZones?: string[];
+  registrationNumber?: string;
+  stallHeight?: string;
+  loadingWeight?: number;
 }
 
 export interface TrucksListResponse {
@@ -52,7 +55,7 @@ export interface ITruck {
   loadingWeight: number;
   truckType: number;
   registrationNumber: string[];
-  stallHeight: 'LOW' | 'MEDIUM' | 'HIGH' | null;
+  stallHeight: 'LOW' | 'MEDIUM' | 'HEIGHT' | null;
   tipper: boolean;
   createdAt: string;
   updatedAt: string;
