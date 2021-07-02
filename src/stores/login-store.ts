@@ -77,7 +77,7 @@ export const LoginStore = types
             else self.error_login = response.originalError.message;
             if (response.data.error === 'NotAuthorizedException') {
               //? invalid email or password
-              self.error_login = 'NotAuthorizedException';
+              self.error_login = response.data.message;
             }
           }
         } catch (error) {
