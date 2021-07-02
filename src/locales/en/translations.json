@@ -162,5 +162,6 @@
   "clickToEnterValue": "Click to enter value",
   "deleteUserSuccess": "The user has been deleted",
   "createUserSuccess": "Created user successfully",
-  "createUserErrorByUser": "Some on your data is invalid, please recheck and try again"
+  "createUserErrorByUser": "Some on your data is invalid, please recheck and try again",
+  "typeUserToFind": "Type a keyword to find users to select"
 }
