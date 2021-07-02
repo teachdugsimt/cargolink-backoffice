@@ -58,7 +58,7 @@ export default class UserSelector extends React.Component<IUserSelectorProps, IS
 
     const promiseOptions = (inputValue: string) =>
       new Promise((resolve) => {
-        setTimeout(() => resolve(filterUsers(inputValue)), 6e3);
+        return resolve(filterUsers(inputValue))
       });
 
     return (
