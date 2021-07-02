@@ -14,16 +14,16 @@ import Form, { ErrorMessage, Field, FormFooter } from '@atlaskit/form';
 import Textfield from '@atlaskit/textfield';
 import { RadioGroup } from '@atlaskit/radio';
 import { OptionsPropType } from '@atlaskit/radio/types';
-import UploadButton from '../../UploadButton';
-import userApi, { CreateUserPayload, CreateUserResponse } from '../../../services/user-api';
+import UploadButton from '../../components/UploadButton';
+import userApi, { CreateUserPayload, CreateUserResponse } from '../../services/user-api';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import { AxiosResponse } from 'axios';
 import Swal from 'sweetalert2';
-import { useWindowSize, breakPoints } from '../../../utils';
+import { useWindowSize, breakPoints } from '../../utils';
 import { Property } from 'csstype';
-import { useMst } from '../../../stores/root-store';
-import { UploadFilePath } from '../../../services/upload-api';
+import { useMst } from '../../stores/root-store';
+import { UploadFilePath } from '../../services/upload-api';
 
 interface Props { }
 interface FileProps {
@@ -112,8 +112,8 @@ const AddUser: React.FC<Props> = observer(() => {
   );
 
   const legalTypeOptions: OptionsPropType = [
-    { name: 'legalType', value: 'INDIVIDUAL', label: t('individual') },
-    { name: 'legalType', value: 'JURISTIC', label: t('company') },
+    { name: 'legalType', value: 'INDIVIDUAL', label: t('individualShort') },
+    { name: 'legalType', value: 'JURISTIC', label: t('juristic') },
   ];
 
   useEffect(() => {
@@ -282,13 +282,14 @@ const AddUser: React.FC<Props> = observer(() => {
                           placeholder={t('phoneNumber')}
                           value={phoneNumber}
                           onChange={(e: any) => setPhoneNumber(e.target.value)}
+                          style={{ width: '100%' }}
                         />
                         {phoneError && <ErrorMessage>{t('invalidPhoneNumber')}</ErrorMessage>}
                       </Fragment>
                     )}
                   </Field>
                 </div>
-                <div style={fieldItemStyle('half')}>
+                <div style={fieldItemStyle('full')}>
                   <Field label={t('email')} name="email">
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div style={{ display: 'flex' }}>
@@ -309,7 +310,7 @@ const AddUser: React.FC<Props> = observer(() => {
                   borderTop: '1px solid #D8D8D8',
                 }}
               >
-                <div style={fieldItemStyle('half')}>
+                <div style={fieldItemStyle('full')}>
                   <Field
                     label={`${t('citizenId')} / ${t('companyCertificate')}`}
                     name="uploadFile"

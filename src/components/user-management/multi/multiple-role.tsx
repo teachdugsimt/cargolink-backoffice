@@ -180,7 +180,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
 
         <Button
           iconBefore={<AddCircleIcon label="" />}
-          onClick={() => navigate('/user-management/user')}
+          onClick={() => navigate('/users/add')}
           appearance="warning">
           {t('addNewAccount')}
         </Button>
