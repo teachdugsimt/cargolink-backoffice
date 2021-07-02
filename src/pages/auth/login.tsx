@@ -49,16 +49,12 @@ const Login: React.FC<{ pageContext: { layout: string } }> = observer(({ pageCon
     const { fetching_login, error_login, data_signin } = loginStore;
     if (!fetching_login) {
       if (error_login && !data_signin.idToken) {
-
-        let content = error_login;
-        if (error_login === 'NotAuthorizedException') content = t('invalidUsernameOrPassword');
-
         setAlertSetting({
           icon: 'error',
           show: true,
           type: 'general',
           title: '',
-          content,
+          content: loginStore.error_login,
         });
       } else if (loginStore.data_signin.idToken && !loginStore.error_login) {
         navigate('/dashboard');
