@@ -346,7 +346,7 @@ const AddUser: React.FC<Props> = observer(() => {
               <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '0 -.5rem', marginTop: '2rem' }}>
               </div>
               <FormFooter>
-                <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
+                <Button type="button" style={BottomBackStyled} onClick={() => navigate('/users')}>
                   <BackText>{t('back')}</BackText>
                 </Button>
                 <Button
