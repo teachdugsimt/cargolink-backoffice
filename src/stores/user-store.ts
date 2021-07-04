@@ -1,4 +1,6 @@
+import { AxiosResponse } from 'axios';
 import { types, flow } from 'mobx-state-tree';
+import uploadApi, { UserUploadPayload } from '../services/upload-api';
 import userApi, { GetUsersListParams, GetUsersListResponse } from '../services/user-api';
 
 const userType = types.model({
@@ -31,6 +33,7 @@ export const UserStore = types
   .model('UserStore', {
     loading: false,
     success_response: false,
+    response_message: types.maybeNull(types.string),
     error_response: types.maybeNull(
       types.model({
         title: types.maybeNull(types.string),
@@ -106,7 +109,33 @@ export const UserStore = types
           };
         }
       }),
+      submitUploadFile: flow(function* submitUploadFile(userId: string, payload: UserUploadPayload) {
+        self.loading = true
+
+        try {
+          const response = yield uploadApi.uploadByUser(userId, payload)
+          console.log("Upload Response", response)
+          if (response.ok) {
+            self.success_response = true
+            self.response_message = response.data.message
+          } else {
+            self.success_response = false
+            self.error_response = response.data
+          }
+          self.loading = false
+        } catch (error) {
+          console.error(error)
+          self.loading = false
+          self.data_user = null
+          self.error_response = {
+            title: '',
+            content: ''
+          }
+        }
+
+      })
     };
+
   });
 
 interface IUserManagementProps {

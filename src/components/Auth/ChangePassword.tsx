@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { useMst } from '../../stores/root-store';
 import { ChangePasswordPayload, IChangePasswordDTO } from '../../services/password-api';
 import Swal from 'sweetalert2';
-import { LoadingButton } from '@atlaskit/button';
+import Button, { LoadingButton } from '@atlaskit/button';
 import { useTranslation } from 'react-i18next';
 
 import Auth, { Group } from '.';
@@ -113,7 +113,7 @@ const ChangePasswordComponent = ({ token }: Props) => {
             >
               {({ fieldProps, error, valid }) => (
                 <>
-                  <TextField {...fieldProps} type="password" />
+                  <TextField testId="passwordField" {...fieldProps} type="password" />
                 </>
               )}
             </Field>
@@ -126,7 +126,7 @@ const ChangePasswordComponent = ({ token }: Props) => {
             >
               {({ fieldProps, error, valid }) => (
                 <>
-                  <TextField {...fieldProps} type="password" />
+                  <TextField testId="confirmPasswordField" {...fieldProps} type="password" />
                 </>
               )}
             </Field>
@@ -136,8 +136,15 @@ const ChangePasswordComponent = ({ token }: Props) => {
                 display: 'flex', flex: 1, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center'
               }}>
-                <Link to="/auth/login">{generalT('backToLogin')}</Link>
-                <LoadingButton appearance="warning" isLoading={passwordChangeStore.fetching} type="submit">
+                {/* <Link to="/auth/login">{generalT('backToLogin')}</Link> */}
+                <Button
+                  spacing="none" appearance="subtle-link"
+                  onClick={() => navigate('/auth/login')}
+                  testId="backToLoginLink"
+                >
+                  {generalT('backToLogin')}
+                </Button>
+                <LoadingButton testId="submitButton" appearance="warning" isLoading={passwordChangeStore.fetching} type="submit">
                   {t('changePassword')}
                 </LoadingButton>
               </div>

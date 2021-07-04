@@ -24,6 +24,13 @@ import Avatar, { AvatarItem } from '@atlaskit/avatar';
 import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdown-menu';
 // import LanguageMenu from '../components/language-menu';
 
+function camelize(str) {
+  return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match: any, index: any) {
+    if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+    return index === 0 ? match.toLowerCase() : match.toUpperCase();
+  });
+}
+
 const PrimaryLayout = observer(({ children, location }) => {
   const { loginStore } = useMst()
 
@@ -38,7 +45,8 @@ const PrimaryLayout = observer(({ children, location }) => {
               </HeadingItem>
               <div style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <AvatarItem
-                  primaryText={loginStore.data_profile?.fullName}
+                  testId="avatar"
+                  primaryText={<div data-testid="profileName">{loginStore.data_profile?.fullName}</div>}
                   secondaryText={'Administrator'}
                   avatar={
                     <Avatar
@@ -51,6 +59,7 @@ const PrimaryLayout = observer(({ children, location }) => {
                     />
                   } />
                 <DropdownMenu
+                  testId="profileDropdown"
                   trigger="" triggerType="button"
                   position="bottom right"
                 >
@@ -59,9 +68,10 @@ const PrimaryLayout = observer(({ children, location }) => {
                     }} description="View and edit your profile.">
                       Profile
                     </DropdownItem>
-                    <DropdownItem onMouseDown={(e) => {
-                      loginStore.requestLogout()
-                    }}>Logout</DropdownItem>
+                    <DropdownItem
+                      onMouseDown={(e) => {
+                        loginStore.requestLogout()
+                      }}>Logout</DropdownItem>
                   </DropdownItemGroup>
                 </DropdownMenu>
               </div>
@@ -72,6 +82,7 @@ const PrimaryLayout = observer(({ children, location }) => {
                 {
                   menuItems.map((e: any, i: number) => {
                     return <ButtonItem key={i}
+                      testId={camelize(e.title_en) + 'Menu'}
                       isSelected={location.pathname.match(e.link.to)}
                       iconBefore={<img src={require('../images/icons/' + e.icon + '.png')} style={{ width: 20 }} />}
                       onClick={() => { navigate(e.link.to) }}

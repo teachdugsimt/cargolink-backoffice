@@ -181,7 +181,9 @@ const MultipleRole: React.FC<Props> = observer(() => {
         <Button
           iconBefore={<AddCircleIcon label="" />}
           onClick={() => navigate('/users/add')}
-          appearance="warning">
+          appearance="warning"
+          testId="addButton"
+        >
           {t('addNewAccount')}
         </Button>
 
