@@ -116,6 +116,10 @@ const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageP
   };
 
   useEffect(() => {
+    console.log('LOADING', userStore.loading)
+  }, [userStore.loading])
+
+  useEffect(() => {
     const newFile = JSON.parse(JSON.stringify(uploadFileStore.file));
     const isNoFile = newFile == null || Object.keys(newFile).every((key) => newFile[key] == null);
     if (!isNoFile) {

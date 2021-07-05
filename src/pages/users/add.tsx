@@ -114,8 +114,8 @@ const AddUser: React.FC<Props> = observer(() => {
   );
 
   const legalTypeOptions: OptionsPropType = [
-    { name: 'legalType', value: 'INDIVIDUAL', label: t('individualShort') },
-    { name: 'legalType', value: 'JURISTIC', label: t('juristic') },
+    { name: 'legalType', value: 'INDIVIDUAL', label: t('individualShort'), testId: 'individualItem' },
+    { name: 'legalType', value: 'JURISTIC', label: t('juristic'), testId: 'juristicItem' },
   ];
 
   useEffect(() => {
@@ -266,6 +266,7 @@ const AddUser: React.FC<Props> = observer(() => {
                           {...fieldProps}
                           elemBeforeInput={startAdornmentIcon('user')}
                           placeholder={`${t('fullName')} / ${t('companyName')}`}
+                          testId="nameField"
                         />
                         {error === 'INCORRECT_PHRASE' && (
                           <ErrorMessage>Incorrect, try &lsquo;open sesame&rsquo;</ErrorMessage>
@@ -293,6 +294,7 @@ const AddUser: React.FC<Props> = observer(() => {
                           value={phoneNumber}
                           onChange={(e: any) => setPhoneNumber(e.target.value)}
                           style={{ width: '100%' }}
+                          testId="phoneNumberField"
                         />
                         {phoneError && <ErrorMessage>{t('invalidPhoneNumber')}</ErrorMessage>}
                       </Fragment>
@@ -311,6 +313,7 @@ const AddUser: React.FC<Props> = observer(() => {
                           {...fieldProps}
                           elemBeforeInput={startAdornmentIcon('email')}
                           placeholder={t('email')}
+                          testId="emailField"
                         />
                       </div>
                     )}
@@ -336,7 +339,7 @@ const AddUser: React.FC<Props> = observer(() => {
                 >
                   {({ fieldProps, error, meta: { valid } }: any) => (
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <UploadButton accept=".pdf" onChange={handleUploadFile} isLoading={isUploading} />
+                      <UploadButton accept=".pdf" onChange={handleUploadFile} isLoading={uploadFileStore.loading} />
                       <ShowFileName>{(!isUploading && file?.name) || ''}</ShowFileName>
                     </div>
                   )}
@@ -346,7 +349,10 @@ const AddUser: React.FC<Props> = observer(() => {
               <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '0 -.5rem', marginTop: '2rem' }}>
               </div>
               <FormFooter>
-                <Button type="button" style={BottomBackStyled} onClick={() => navigate('/users')}>
+                <Button type="button" style={BottomBackStyled}
+                  onClick={() => navigate('/users')}
+                  testId="backButton"
+                >
                   <BackText>{t('back')}</BackText>
                 </Button>
                 <Button
@@ -361,6 +367,7 @@ const AddUser: React.FC<Props> = observer(() => {
                       }
                       : BottomSubmitStyled
                   }
+                  testId="submitButton"
                 >
                   <SubmitText>{t('confirm')}</SubmitText>
                 </Button>

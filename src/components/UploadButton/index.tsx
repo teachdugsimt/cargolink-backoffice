@@ -22,7 +22,7 @@ const UploadButton = (props: IProps) => {
 
   return (
     <>
-      <LoadingButton isLoading={isLoading} appearance="primary" onClick={() => uploadInputRef.current?.click()}>
+      <LoadingButton testId="uploadButton" isLoading={isLoading} appearance="primary" onClick={() => uploadInputRef.current?.click()}>
         {t('upload')}
       </LoadingButton>
       <input type="file" accept={accept} onChange={onChange} ref={uploadInputRef} style={{ display: 'none' }} />
