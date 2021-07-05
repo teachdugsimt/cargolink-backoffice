@@ -10,6 +10,7 @@ import { Button as MaterialButton } from '@material-ui/core';
 import { Icon } from 'react-icons-kit';
 import { ic_person } from 'react-icons-kit/md/ic_person';
 import { camera } from 'react-icons-kit/fa/camera';
+import FilePreviewer from 'react-file-previewer';
 
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
@@ -19,6 +20,7 @@ import { fontSize, gridSize } from '@atlaskit/theme/constants';
 import InlineEdit from '@atlaskit/inline-edit';
 import Page, { Grid, GridColumn } from '@atlaskit/page';
 import Select, { ValueType } from '@atlaskit/select';
+import ModalDialog, { ModalTransition } from '@atlaskit/modal-dialog';
 // import { Checkbox } from '@atlaskit/checkbox';
 
 import { useMst } from '../../stores/root-store';
@@ -124,6 +126,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
   const [userData, setUserData] = useState<IUserDTO | null>(null);
   const { userStore, loginStore, uploadFileStore } = useMst();
   const [files, setFiles] = useState<UploadFileResponse[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   const userId = props.userId;
   type Fields = 'email' | 'legalType' | 'phoneNumber' | 'attachCode' | 'userType';
@@ -147,6 +150,12 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
       uploadFileStore.clear();
     };
   }, []);
+
+  useEffect(() => {
+    console.log("LOADING", uploadFileStore.loading)
+    return () => {
+    }
+  }, [uploadFileStore.loading])
 
 
   const getUser = async (uId: string) => {
@@ -202,6 +211,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
 
   const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
+    console.log('FILE', file)
     file && uploadFileStore.uploadFile('USER_DOC', file);
   };
 
@@ -394,6 +404,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                 if (typeof file != 'string') {
                   return (
                     <div key={file.attachCode}>
+
                       <ListFile
                         fileName={file.fileName}
                         date={file.uploadedDate}
@@ -420,9 +431,17 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                   );
                 } else {
                   return <div key={file}>
+
+                    {/* "https://d3c8ovmhhst6ne.cloudfront.net/api/v1/media/file-stream-three?attachCode=04957a62bff4edfc356e8ad85c9ff92e2ee64a868676bd5f66c80d4795d229760fd20705ba0be98c925c75ebbeec8be0233b08f1b22ca579b23654ebf9775f48" */}
+
+
                     <ListFile
                       fileName={file}
                       // date={''}
+                      handlePreview={(attachCode) => {
+                        // console.log(attachCode)
+                        setIsOpen(true)
+                      }}
                       handleDelete={() => {
                         const red = '#E03616';
                         const blue = '#3085D6';
@@ -449,6 +468,24 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
               <span>{t('noDocuments')}</span>
             )}
             {/* <div style={{ marginTop: '1rem' }}> */}
+            <ModalTransition>
+              {isOpen && (
+                <ModalDialog
+                  actions={[
+                    { text: 'Get started', onClick: close },
+                    { text: 'Skip' },
+                  ]}
+                  onClose={() => { setIsOpen(false) }}
+                  heading="Easily set up your own projects"
+                  width={'x-large'}
+                >
+                  <FilePreviewer file={{
+                    url: "https://cargolink-documents.s3.ap-southeast-1.amazonaws.com/USER_DOC/ACTIVE/USER_DOC-1625477727808.pdf"
+                  }}
+                  />
+                </ModalDialog>
+              )}
+            </ModalTransition>
 
             <FieldWrapper>
               <DetailLabel>
