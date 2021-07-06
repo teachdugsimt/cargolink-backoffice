@@ -582,7 +582,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                   width={'x-large'}
                 >
                   <FilePreviewer file={{
-                    url: "http://www.africau.edu/images/default/sample.pdf"
+                    url: "https://cargolink-documents.s3.ap-southeast-1.amazonaws.com/USER_DOC/ACTIVE/USER_DOC-1625477727808.pdf"
                   }}
                   />
                 </ModalDialog>
