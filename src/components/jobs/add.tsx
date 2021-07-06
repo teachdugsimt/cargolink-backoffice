@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Swal from 'sweetalert2';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
@@ -19,13 +19,16 @@ import { navigate } from 'gatsby';
 
 import { Accordion, AccordionItem } from '@paljs/ui/Accordion';
 import { GoogleMapWithSearch } from '../google-map-with-search/old-google-map-with-search';
-import { Button } from '@paljs/ui/Button';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import { Box } from 'theme-ui';
 import { Text } from '../text-span/text';
 import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import { EvaIcon } from '@paljs/ui/Icon';
 import { FormFooter } from '@atlaskit/form';
+import DateTimePicker from './datetimePicker';
+import Button from '@atlaskit/button';
+import AddIcon from '@atlaskit/icon/glyph/add';
+import EditorDividerIcon from '@atlaskit/icon/glyph/editor/divider';
 
 import th from 'date-fns/locale/th';
 import PageHeader from '@atlaskit/page-header';
@@ -41,7 +44,13 @@ interface IForm {
   truckAmount: number | null;
   truckType: number | null;
   weight: number | null;
-  items: any[];
+  items: {
+    contactMobileNo: string | null;
+    contactName: string | null;
+    exDate: string | null;
+    name: string | null;
+    region: string | null;
+  }[];
   userId: string | null;
 }
 const AddJobContainer: React.FC = observer(() => {
@@ -62,7 +71,7 @@ const AddJobContainer: React.FC = observer(() => {
       truckAmount: null,
       truckType: null,
       weight: null,
-      items: [],
+      items: [{ contactMobileNo: null, contactName: null, exdate: null, name: null, region: null }],
     } as IForm,
   });
 
@@ -247,7 +256,8 @@ const AddJobContainer: React.FC = observer(() => {
           </ItemLong>
         </Grid>
         <Divider />
-        {/* <Row> Google Maps Broken CSS
+        <Grid>
+          {/* <Row> Google Maps Broken CSS
             <Col breakPoint={{ xs: 12, sm: 12, md: 12 }}>
               <p>
                 {t('deliveryLocation')} {Required}
@@ -277,48 +287,33 @@ const AddJobContainer: React.FC = observer(() => {
               {errors.contactName && <Error message={t('fieldDeliveryLocation')} />}
             </Col>
           </Row> */}
-        {/* <Row>
-            <Col breakPoint={{ xs: 12, sm: 12, md: 4 }}>
-              <p>
-                {t('dateStart')} {Required}
-              </p>
-              <Box sx={{ maxWidth: 400 }} as="form">
-                <Controller
-                  as={
-                    <ReactDatePicker
-                      className={errors.start ? 'errors-input-component' : 'new-input-component'}
-                      locale={loginStore.language}
-                      dateFormat="d MMM yyyy HH:mm"
-                      selected={startDate ? new Date(startDate) : null}
-                      showTimeSelect
-                      dropdownMode="select"
-                      isClearable
-                      placeholderText={t('clickTime')}
-                      timeFormat="HH:mm"
-                      timeIntervals={1}
-                      shouldCloseOnSelect
-                    />
-                  }
-                  control={control}
-                  register={register({ required: true })}
-                  rules={{ required: 'Start from cannot be null.' }}
-                  name="start"
-                  aria-invalid={errors.start ? 'true' : 'false'}
-                  onChange={([selected]: any) => {
-                    return { value: selected };
-                  }}
-                />
-                {errors.start && <Error message={t('fieldDateStart')} />}
-              </Box>
-            </Col>
-            <Col breakPoint={{ xs: 12, sm: 12, md: 4 }}>
-              <div style={{ display: 'flex' }}>
-                <BoldLabel style={{ marginRight: 5 }}>{t('deliveryPointInformation')}: </BoldLabel>
-                <p>
-                  {t('shipperName')} {Required}
-                </p>
-              </div>
-              <input
+          <ItemHorizontalLong>
+            <Label>
+              {t('dateStart')} {Required}
+            </Label>
+            <DateTimePickerGroup>
+              <Controller
+                control={control}
+                register={register({ required: true })}
+                rules={{ required: 'Start from cannot be null.' }}
+                name="start"
+                aria-invalid={errors.start ? 'true' : 'false'}
+                render={({ value, onChange }) => (
+                  <DateTimePicker value={value} onChange={onChange} locale={loginStore.language} />
+                )}
+              />
+              {errors.start && <Error message={t('fieldDateStart')} />}
+            </DateTimePickerGroup>
+          </ItemHorizontalLong>
+          <ItemLong>
+            <BoldLabel>{t('deliveryPointInformation')}: </BoldLabel>
+          </ItemLong>
+          <Item>
+            <Label>
+              {t('shipperName')} {Required}
+            </Label>
+            <InputGroup>
+              <Input
                 className="new-input-component"
                 type="text"
                 name="name"
@@ -328,12 +323,14 @@ const AddJobContainer: React.FC = observer(() => {
                 aria-invalid={errors.name ? 'true' : 'false'}
               />
               {errors.name && <Error message={t('fieldShipperName')} />}
-            </Col>
-            <Col breakPoint={{ xs: 12, sm: 12, md: 4 }}>
-              <p>
-                {t('contactNumber')} {Required}
-              </p>
-              <input
+            </InputGroup>
+          </Item>
+          <Item>
+            <Label>
+              {t('contactNumber')} {Required}
+            </Label>
+            <InputGroup>
+              <Input
                 className="new-input-component"
                 type="text"
                 name="contactMobileNo"
@@ -343,116 +340,99 @@ const AddJobContainer: React.FC = observer(() => {
                 aria-invalid={errors.contactMobileNo ? 'true' : 'false'}
               />
               {errors.contactMobileNo && <Error message={t('fieldContactNumber')} />}
-            </Col>
-          </Row> */}
-        {/* <Divider />
-          <GroupTitle>{t('deliveryPoint')}</GroupTitle>
-          {fields.map(({ id, contactName, name, contactMobileNo, exdate }, index) => {
-            const toDate = watch(`items[${index}].exDate`);
-            return (
-              <Row key={id}>
-                <Col breakPoint={{ xs: 12, sm: 12, md: 12 }}>
-                  <div style={{ display: 'flex' }}>
-                    <BoldLabel style={{ marginRight: 5 }}>
-                      {t('pickUpAt')} {index + 1}:{' '}
-                    </BoldLabel>
-                    <p>
-                      {t('pickupLocation')} {Required}
-                    </p>
-                  </div>
-                  <Controller
-                    name={`items[${index}].region`}
-                    control={control}
-                    defaultValue=""
-                    render={({ onChange, value }) => <></>}
-                  />
-                  <Controller
-                    name={`items[${index}].contactName`}
-                    control={control}
-                    defaultValue=""
-                    render={({ onChange, value }) => (
-                      <Accordion>
-                        <AccordionItem uniqueKey={1} title={<Text tx={'selectLocation'} preset="content" />}>
-                          <GoogleMapWithSearch
-                            center={{ lat: 13.736717, lng: 100.523186 }}
-                            height="500px"
-                            zoom={15}
-                            onAddressChange={(addr, region) => onSubmitLocation2(addr, region, index)}
-                          />
-                        </AccordionItem>
-                      </Accordion>
-                    )}
-                    register={register({ required: true })}
-                    rules={{ required: 'Address can not null' }}
-                  />
-                  {errors.items && errors.items[index]?.contactName && <Error message={t('pickupLocation')} />}
-                </Col>
-                <Col breakPoint={{ xs: 12, sm: 12, md: 4 }}>
-                  <p>
-                    {t('endDate')} {Required}
-                  </p>
-                  <Box sx={{ maxWidth: '400px' }} as="form">
-                    <Controller
-                      as={
-                        <ReactDatePicker
-                          className={
-                            errors.items && errors.items[index]?.exdate
-                              ? 'errors-input-component'
-                              : 'new-input-component'
-                          }
-                          locale={loginStore.language}
-                          dateFormat="d MMM yyyy HH:mm"
-                          selected={toDate ? new Date(toDate) : null}
-                          showTimeSelect
-                          // todayButton="Today"
-                          dropdownMode="select"
-                          isClearable
-                          placeholderText={t('clickTime')}
-                          timeFormat="HH:mm"
-                          timeIntervals={1}
-                          shouldCloseOnSelect
+            </InputGroup>
+          </Item>
+        </Grid>
+        <Divider />
+        <GroupTitle>{t('deliveryPoint')}</GroupTitle>
+        {fields.map(({ id, contactName, name, contactMobileNo, exdate }, index) => {
+          const toDate = watch(`items[${index}].exDate`);
+          return (
+            <Grid key={id}>
+              <BoldLabel style={{ marginRight: 5 }}>
+                {t('pickUpAt')} {index + 1}:{' '}
+              </BoldLabel>
+              <ItemHorizontalLong>
+                <div style={{ display: 'flex' }}>
+                  <Label>
+                    {t('pickupLocation')} {Required}
+                  </Label>
+                </div>
+                <Controller
+                  name={`items[${index}].region`}
+                  control={control}
+                  defaultValue=""
+                  render={({ onChange, value }) => <></>}
+                />
+                {/* <Controller //? hide for now due to broken css
+                  name={`items[${index}].contactName`}
+                  control={control}
+                  defaultValue=""
+                  render={({ onChange, value }) => (
+                    <Accordion>
+                      <AccordionItem uniqueKey={1} title={<Text tx={'selectLocation'} preset="content" />}>
+                        <GoogleMapWithSearch
+                          center={{ lat: 13.736717, lng: 100.523186 }}
+                          height="500px"
+                          zoom={15}
+                          onAddressChange={(addr, region) => onSubmitLocation2(addr, region, index)}
                         />
-                      }
-                      control={control}
-                      name={`items[${index}].exdate`}
-                      rules={{ required: 'Department cannot be null.' }}
-                      ref={register({ required: true })}
-                      aria-invalid={errors.items && errors.items[index]?.exdate ? 'true' : 'false'}
-                      defaultValue={toDate}
-                      onChange={([selected]: any) => {
-                        return { value: selected };
-                      }}
-                    />
-                  </Box>
+                      </AccordionItem>
+                    </Accordion>
+                  )}
+                  register={register({ required: true })}
+                  rules={{ required: 'Address can not null' }}
+                />
+                {errors.items && errors.items[index]?.contactName && <Error message={t('pickupLocation')} />} */}
+              </ItemHorizontalLong>
+              <ItemHorizontalLong>
+                <Label>
+                  {t('endDate')} {Required}
+                </Label>
+                <DateTimePickerGroup>
+                  <Controller
+                    control={control}
+                    name={`items[${index}].exdate`}
+                    register={register({ required: true })}
+                    rules={{ required: 'Department cannot be null.' }}
+                    ref={register({ required: true })}
+                    aria-invalid={errors.items && errors.items[index]?.exdate ? 'true' : 'false'}
+                    defaultValue={toDate}
+                    render={({ value, onChange }) => (
+                      <DateTimePicker value={value} onChange={onChange} locale={loginStore.language} />
+                    )}
+                  />
                   {errors.items && errors.items[index]?.exdate && <Error message={t('fieldDateStart')} />}
-                </Col>
-                <Col breakPoint={{ xs: 12, sm: 6, md: 4 }}>
-                  <div style={{ display: 'flex' }}>
-                    <div style={{ display: 'flex' }}>
-                      <BoldLabel style={{ marginRight: 5 }}>{t('pickUpPointInformation')}: </BoldLabel>
-                      <p>
-                        {t('consigneeName')} {Required}
-                      </p>
-                    </div>
-                    <input
-                      className="new-input-component"
-                      type="text"
-                      name={`items[${index}].name`}
-                      style={{
-                        borderColor: errors.items && errors.items[index]?.name ? '#ff3d71' : '',
-                      }}
-                      ref={register({ required: true })}
-                      aria-invalid={errors.items && errors.items[index]?.name ? 'true' : 'false'}
-                      defaultValue={name}
-                    />
-                    {errors.items && errors.items[index]?.name && <Error message={t('fieldConsigneeName')} />}
-                  </div>
-                </Col>
-                <Col breakPoint={{ xs: 12, sm: 12, md: 4 }}>
-                  <p>
-                    {t('contactNumber')} {Required}
-                  </p>
-                  <input
+                </DateTimePickerGroup>
+              </ItemHorizontalLong>
+              <ItemLong>
+                <BoldLabel>{t('pickUpPointInformation')}: </BoldLabel>
+              </ItemLong>
+              <Item>
+                <Label>
+                  {t('consigneeName')} {Required}
+                </Label>
+                <InputGroup>
+                  <Input
+                    className="new-input-component"
+                    type="text"
+                    name={`items[${index}].name`}
+                    style={{
+                      borderColor: errors.items && errors.items[index]?.name ? '#ff3d71' : '',
+                    }}
+                    ref={register({ required: true })}
+                    aria-invalid={errors.items && errors.items[index]?.name ? 'true' : 'false'}
+                    defaultValue={name}
+                  />
+                  {errors.items && errors.items[index]?.name && <Error message={t('fieldConsigneeName')} />}
+                </InputGroup>
+              </Item>
+              <Item>
+                <Label>
+                  {t('contactNumber')} {Required}
+                </Label>
+                <InputGroup>
+                  <Input
                     className="new-input-component"
                     type="text"
                     name={`items[${index}].contactMobileNo`}
@@ -465,57 +445,39 @@ const AddJobContainer: React.FC = observer(() => {
                     aria-invalid={errors.items && errors.items[index]?.contactMobileNo ? 'true' : 'false'}
                   />
                   {errors.items && errors.items[index]?.contactMobileNo && <Error message={t('fieldContactNumber')} />}
-                </Col>
-                {index > 0 ? (
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.125rem' }}>
-                    <Button
-                      type="button"
-                      size="Small"
-                      shape="SemiRound"
-                      style={{ backgroundColor: '#E03616', borderColor: '#E03616' }}
-                      onClick={() => remove(index)}
-                    >
-                      <EvaIcon name="minus-outline" />
-                    </Button>
-                  </div>
-                ) : ''}
+                </InputGroup>
+              </Item>
+              {index > 0 ? (
+                <ItemLongEnd style={{ marginTop: '1.125rem' }}>
+                  <MinusButton appearance="danger" onClick={() => remove(index)}>
+                    <EditorDividerIcon label="remove" size="Small" />
+                  </MinusButton>
+                </ItemLongEnd>
+              ) : ''}
+              <ItemLong>
                 <Divider />
-              </Row>
-            );
-          })}
-          <Button
-            type="button"
-            size="Small"
-            shape="SemiRound"
-            style={{ backgroundColor: '#253858', borderColor: '#253858' }}
-            onClick={() => append({})}
-          >
-            <EvaIcon name="plus-outline" />
-          </Button>
+              </ItemLong>
+            </Grid>
+          );
+        })}
+        <Grid>
+          <ItemLongEnd style={{ marginTop: '1.125rem' }}>
+            <PlusButton onClick={() => append({})}>
+              <AddIcon label="add" primaryColor="white" />
+            </PlusButton>
+          </ItemLongEnd>
           <br />
-          <br />
-          <Row style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Col>
-              <FormFooter>
-                <Button type="button" style={{
-                  margin: '0 6px',
-                  border: '1px solid #FBBC12',
-                  backgroundColor: 'transparent',
-                  color: '#fbbc12',
-                }} onClick={() => navigate('/jobs')}>
-                  <span>{t('back')}</span>
-                </Button>
-                <Button type="submit" style={{
-                  margin: '0 6px',
-                  border: '1px solid #FBBC12',
-                  backgroundColor: '#FBBC12',
-                  color: '#000',
-                }}>
-                  <span>{t('confirm')}</span>
-                </Button>
-              </FormFooter>
-            </Col>
-          </Row> */}
+          <ItemLongEnd>
+            <FormFooter>
+              <BackButton type="button" onClick={() => navigate('/jobs')}>
+                <span>{t('back')}</span>
+              </BackButton>
+              <SubmitButton type="submit">
+                <span>{t('confirm')}</span>
+              </SubmitButton>
+            </FormFooter>
+          </ItemLongEnd>
+        </Grid>
       </Form>
     </Wrapper>
   );
@@ -543,6 +505,7 @@ const Form = styled.form`
   flex-direction: column;
   align-items: stretch;
   padding: 0 !important;
+  margin-bottom: 4rem;
 `;
 
 const Grid = styled.div`
@@ -561,8 +524,21 @@ const Item = styled.div`
   }
 `;
 
+const ItemHorizontal = styled(Item)`
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+`;
+
+const ItemHorizontalLong = styled(ItemHorizontal)`
+  grid-column: span 2;
+`;
+
 const ItemLong = styled(Item)`
   grid-column: span 2;
+`;
+const ItemLongEnd = styled(ItemLong)`
+  justify-content: flex-end;
 `;
 
 const PriceFields = styled.div`
@@ -571,6 +547,13 @@ const PriceFields = styled.div`
   justify-content: space-evenly;
   margin-left: 10px;
   margin-right: auto;
+`;
+
+const DateTimePickerGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 1;
 `;
 
 const InputGroup = styled.div`
@@ -600,6 +583,7 @@ const FlexBoxCenter = styled.div`
 
 const Divider = styled.hr`
   margin: 1.125rem 0;
+  flex: 1;
 `;
 
 const GroupTitle = styled.p`
@@ -616,4 +600,35 @@ const Label = styled.p`
 
 const BoldLabel = styled(Label)`
   font-weight: bold;
+`;
+
+const MinusButton = styled(Button)`
+  padding-top: 5px;
+`;
+
+const PlusButton = styled(Button)`
+  padding-top: 5px;
+  background-color: #253858;
+  border-color: #253858;
+
+  &:hover {
+    svg {
+      color: #252858 !important;
+      fill: #252858 !important;
+    }
+  }
+`;
+
+const BackButton = styled(Button)`
+  background-color: transparent;
+  border: 1px solid #FBBC12;
+  color: #FBBC12;
+  margin: 0 6px;
+`;
+
+const SubmitButton = styled(Button)`
+  margin: 0 6px;
+  border: 1px solid #FBBC12;
+  background-color: #FBBC12;
+  color: black;
 `;
