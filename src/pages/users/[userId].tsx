@@ -31,6 +31,7 @@ import { UserApi } from '../../services';
 import { UploadFileResponse } from '../../services/upload-api';
 import UploadButton from '../../components/UploadButton/index';
 import { ListFile } from '../../components/list-file/list-file';
+import AutoCompleteTypeahead from '../../components/auto-complete-typeahead/auto-complete-typeahead';
 
 interface Props {
   userId?: number;
@@ -119,6 +120,13 @@ const ReadViewContainer = styled.div`
   word-break: break-word;
 `;
 
+interface AddressProps {
+  district?: string;
+  amphoe?: string;
+  province?: string;
+  zipcode?: number;
+}
+
 const UserDetail: React.FC<Props> = observer((props: any) => {
 
   const { t } = useTranslation();
@@ -127,6 +135,8 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
   const { userStore, loginStore, uploadFileStore } = useMst();
   const [files, setFiles] = useState<UploadFileResponse[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [address, setAddress] = useState<AddressProps>({});
+  const [isOpenDocumentAddress, setIsOpenDocumentAddress] = useState<boolean>(false);
 
   const userId = props.userId;
   type Fields = 'email' | 'legalType' | 'phoneNumber' | 'attachCode' | 'userType';
@@ -260,6 +270,98 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
       value: DocumentStatus.REJECTED,
     },
   ];
+
+
+  const AddressForm = ({ onDismiss }: { onDismiss: () => any }) => {
+    return (
+      <>
+        <div
+          style={{
+            ...groupItemsStyle,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{}}>
+            <Field label={t('addressNo')} name={'addressNo'} defaultValue=''>
+              {({ fieldProps, error, valid }: any) => <Textfield {...fieldProps} />}
+            </Field>
+          </div>
+          <div style={{}}>
+            <Field label={t('alley')} name={'alley'} defaultValue={() => ''}>
+              {({ fieldProps, error, valid }: any) => <Textfield {...fieldProps} />}
+            </Field>
+          </div>
+          <div style={{}}>
+            <Field label={t('street')} name={'street'} defaultValue={''}>
+              {({ fieldProps, error, valid }: any) => <Textfield {...fieldProps} />}
+            </Field>
+          </div>
+          <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} fieldStyle={{}} />
+        </div>
+      </>
+    );
+  };
+
+  const groupItemsStyle: CSSProperties = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    margin: '0 -.5rem',
+  };
+  const addressOptions: any = [
+    {
+      type: 'DISTRICT',
+      label: t('subDistrict'),
+      isRequired: true,
+      breakPoint: {
+        xs: 12,
+        sm: 12,
+        md: 6,
+        lg: 6,
+      },
+    },
+    {
+      type: 'AMPHOE',
+      label: t('district'),
+      isRequired: true,
+      breakPoint: {
+        xs: 12,
+        sm: 12,
+        md: 6,
+        lg: 6,
+      },
+    },
+    {
+      type: 'PROVINCE',
+      label: t('province'),
+      isRequired: true,
+      breakPoint: {
+        xs: 12,
+        sm: 12,
+        md: 6,
+        lg: 6,
+      },
+    },
+    {
+      type: 'ZIPCODE',
+      label: t('postcode'),
+      isRequired: true,
+      breakPoint: {
+        xs: 12,
+        sm: 12,
+        md: 6,
+        lg: 6,
+      },
+    },
+  ];
+  const handleAddressValue = ({ district, amphoe, province, zipcode }: any) => {
+    setAddress({
+      district,
+      amphoe,
+      province,
+      zipcode,
+    });
+  };
 
 
   if (!userData) return <></>;
@@ -480,7 +582,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                   width={'x-large'}
                 >
                   <FilePreviewer file={{
-                    url: "https://cargolink-documents.s3.ap-southeast-1.amazonaws.com/USER_DOC/ACTIVE/USER_DOC-1625477727808.pdf"
+                    url: "http://www.africau.edu/images/default/sample.pdf"
                   }}
                   />
                 </ModalDialog>
@@ -525,6 +627,9 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
 
         </Grid>
         <div style={{ borderTop: '1px solid #ddd', margin: '30px 0' }} />
+        {/* <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} /> */}
+        {/* <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} fieldStyle={{}} /> */}
+
         {/* <Form onSubmit={handleSubmit}>
         {({ formProps }) => (
           <form {...formProps} name="add-user" style={FormStyled}>
