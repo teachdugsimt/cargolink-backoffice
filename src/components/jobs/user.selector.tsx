@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import { AsyncSelect, OptionsType, OptionType, ValueType } from '@atlaskit/select';
 import { IUserDTO } from '../../stores/user-store';
 import { UserApi } from '../../services';
@@ -62,7 +63,7 @@ export default class UserSelector extends React.Component<IUserSelectorProps, IS
       });
 
     return (
-      <AsyncSelect
+      <Select
         cacheOptions
         defaultOptions
         loadOptions={promiseOptions}
@@ -73,3 +74,7 @@ export default class UserSelector extends React.Component<IUserSelectorProps, IS
     );
   }
 }
+
+const Select = styled(AsyncSelect)`
+  min-width: 300px;
+`;

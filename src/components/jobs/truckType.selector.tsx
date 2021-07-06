@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import { AsyncSelect, OptionsType, OptionType, ValueType } from '@atlaskit/select';
 import { TruckTypeApi } from '../../services';
 import { ITruckType } from '../../services/truck-type-api';
@@ -54,7 +55,7 @@ export default class TruckTypeSelector extends React.Component<IProps, IState> {
     const promiseOptions = (inputValue: string) => new Promise((resolve) => resolve(filterTypes(inputValue)));
 
     return (
-      <AsyncSelect
+      <Select
         defaultOptions
         loadOptions={promiseOptions}
         placeholder={placeholder}
@@ -64,3 +65,7 @@ export default class TruckTypeSelector extends React.Component<IProps, IState> {
     );
   }
 }
+
+const Select = styled(AsyncSelect)`
+  min-width: 300px;
+`;
