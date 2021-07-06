@@ -4,12 +4,12 @@ import { Link, navigate } from 'gatsby';
 import { observer } from 'mobx-react-lite';
 import { useMst } from '../../stores/root-store';
 import Swal from 'sweetalert2';
-import { LoadingButton } from '@atlaskit/button';
 import { useTranslation } from 'react-i18next';
 
 import SEO from '../../components/SEO';
 import Auth, { Group } from '../../components/Auth';
 import TextField from '@atlaskit/textfield';
+import Button, { LoadingButton } from '@atlaskit/button';
 import Form, {
   ErrorMessage,
   Field,
@@ -99,16 +99,28 @@ const RequestPassword = () => {
             >
               {({ fieldProps, error, valid }) => (
                 <>
-                  <TextField {...fieldProps} />
+                  <TextField {...fieldProps} testId="emailField" />
                 </>
               )}
             </Field>
 
 
             <FormFooter>
-              <LoadingButton appearance="warning" isLoading={passwordResetStore.fetching} type="submit">
-                {t('requestPassword')}
-              </LoadingButton>
+              <div style={{
+                display: 'flex', flex: 1, flexDirection: 'row',
+                justifyContent: 'space-between', alignItems: 'center'
+              }}>
+                <Button
+                  spacing="none" appearance="subtle-link"
+                  onClick={() => navigate('/auth/login')}
+                  testId="backToLoginLink"
+                >
+                  {generalT('backToLogin')}
+                </Button>
+                <LoadingButton testId="submitButton" appearance="warning" isLoading={passwordResetStore.fetching} type="submit">
+                  {t('requestPassword')}
+                </LoadingButton>
+              </div>
             </FormFooter>
           </form>
         )}
@@ -131,10 +143,6 @@ const RequestPassword = () => {
         </div>
         <button style={{ display: 'none' }} ref={submitRef} type="submit" disabled={passwordResetStore.fetching} />
       </form> */}
-      <Group>
-        <Link to="/auth/login">{generalT('backToLogin')}</Link>
-        <Link to="/auth/register">{generalT('register')}</Link>
-      </Group>
     </Auth>
   );
 }

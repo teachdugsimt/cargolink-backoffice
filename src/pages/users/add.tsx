@@ -13,17 +13,19 @@ import { ic_email } from 'react-icons-kit/md/ic_email';
 import Form, { ErrorMessage, Field, FormFooter } from '@atlaskit/form';
 import Textfield from '@atlaskit/textfield';
 import { RadioGroup } from '@atlaskit/radio';
+import Page, { Grid, GridColumn } from '@atlaskit/page';
 import { OptionsPropType } from '@atlaskit/radio/types';
-import UploadButton from '../../UploadButton';
-import userApi, { CreateUserPayload, CreateUserResponse } from '../../../services/user-api';
+
+import UploadButton from '../../components/UploadButton';
+import userApi, { CreateUserPayload, CreateUserResponse } from '../../services/user-api';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import { AxiosResponse } from 'axios';
 import Swal from 'sweetalert2';
-import { useWindowSize, breakPoints } from '../../../utils';
+import { useWindowSize, breakPoints } from '../../utils';
 import { Property } from 'csstype';
-import { useMst } from '../../../stores/root-store';
-import { UploadFilePath } from '../../../services/upload-api';
+import { useMst } from '../../stores/root-store';
+import { UploadFilePath } from '../../services/upload-api';
 
 interface Props { }
 interface FileProps {
@@ -112,8 +114,8 @@ const AddUser: React.FC<Props> = observer(() => {
   );
 
   const legalTypeOptions: OptionsPropType = [
-    { name: 'legalType', value: 'INDIVIDUAL', label: t('individual') },
-    { name: 'legalType', value: 'JURISTIC', label: t('company') },
+    { name: 'legalType', value: 'INDIVIDUAL', label: t('individualShort'), testId: 'individualItem' },
+    { name: 'legalType', value: 'JURISTIC', label: t('juristic'), testId: 'juristicItem' },
   ];
 
   useEffect(() => {
@@ -220,31 +222,37 @@ const AddUser: React.FC<Props> = observer(() => {
   };
   const groupItemsStyle: CSSProperties = {
     display: 'flex',
-    flexWrap: 'wrap',
-    margin: '0 -.5rem',
+    flexDirection: 'column',
+    // flexWrap: 'wrap',
+    // margin: '0 -.5rem',
   };
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('addNewAccount')}</PageHeader>
-      <CardBody>
-        <Form onSubmit={handleSubmit}>
-          {({ formProps }) => (
-            <form {...formProps} name="add-user" style={{ overflow: 'hidden' }}>
-              <div style={groupItemsStyle}>
-                <div style={fieldItemStyle('full')}>
-                  <Field label={t('legalType')} isRequired name="legalType">
-                    {({ fieldProps, error, meta: { valid } }: any) => (
-                      <div id="create-user-legal-type" style={{ display: 'flex', flexDirection: 'row' }}>
-                        <RadioGroup
-                          value={legalType}
-                          options={legalTypeOptions}
-                          onChange={(event: any) => setLegalType(event.target.value)}
-                        />
-                      </div>
-                    )}
-                  </Field>
-                </div>
-                <div style={fieldItemStyle('half')}>
+
+      <Form onSubmit={handleSubmit}>
+        {({ formProps }) => (
+          <form {...formProps} name="add-user" style={{ overflow: 'hidden' }}>
+            <div style={groupItemsStyle}>
+
+              <div>
+                <Field label={t('legalType')} isRequired name="legalType">
+                  {({ fieldProps, error, meta: { valid } }: any) => (
+                    <div id="create-user-legal-type" style={{ display: 'flex', flexDirection: 'row' }}>
+                      <RadioGroup
+                        value={legalType}
+                        options={legalTypeOptions}
+                        onChange={(event: any) => setLegalType(event.target.value)}
+                      />
+                    </div>
+                  )}
+                </Field>
+              </div>
+
+
+
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ flex: 1, marginRight: 10 }}>
                   <Field
                     label={`${t('fullName')} / ${t('companyName')}`}
                     isRequired
@@ -258,6 +266,7 @@ const AddUser: React.FC<Props> = observer(() => {
                           {...fieldProps}
                           elemBeforeInput={startAdornmentIcon('user')}
                           placeholder={`${t('fullName')} / ${t('companyName')}`}
+                          testId="nameField"
                         />
                         {error === 'INCORRECT_PHRASE' && (
                           <ErrorMessage>Incorrect, try &lsquo;open sesame&rsquo;</ErrorMessage>
@@ -265,8 +274,10 @@ const AddUser: React.FC<Props> = observer(() => {
                       </Fragment>
                     )}
                   </Field>
+
                 </div>
-                <div style={fieldItemStyle('half')}>
+                <div style={{ flex: 1, marginLeft: 10 }}>
+
                   <Field
                     label={t('phoneNumber')}
                     isRequired
@@ -282,13 +293,19 @@ const AddUser: React.FC<Props> = observer(() => {
                           placeholder={t('phoneNumber')}
                           value={phoneNumber}
                           onChange={(e: any) => setPhoneNumber(e.target.value)}
+                          style={{ width: '100%' }}
+                          testId="phoneNumberField"
                         />
                         {phoneError && <ErrorMessage>{t('invalidPhoneNumber')}</ErrorMessage>}
                       </Fragment>
                     )}
                   </Field>
+
+
                 </div>
-                <div style={fieldItemStyle('half')}>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ flex: 1, marginRight: 10 }}>
                   <Field label={t('email')} name="email">
                     {({ fieldProps, error, meta: { valid } }: any) => (
                       <div style={{ display: 'flex' }}>
@@ -296,61 +313,70 @@ const AddUser: React.FC<Props> = observer(() => {
                           {...fieldProps}
                           elemBeforeInput={startAdornmentIcon('email')}
                           placeholder={t('email')}
+                          testId="emailField"
                         />
                       </div>
                     )}
                   </Field>
                 </div>
+                <div style={{ flex: 1, marginLeft: 10 }}></div>
               </div>
+              {/* </div> */}
+
               <div
                 style={{
-                  ...groupItemsStyle,
-                  marginTop: '1rem',
-                  borderTop: '1px solid #D8D8D8',
+                  marginTop: 20,
+
+                  // borderTop: '1px solid #D8D8D8',
                 }}
               >
-                <div style={fieldItemStyle('half')}>
-                  <Field
-                    label={`${t('citizenId')} / ${t('companyCertificate')}`}
-                    name="uploadFile"
-                    // validate={validate}
-                    defaultValue=""
-                  >
-                    {({ fieldProps, error, meta: { valid } }: any) => (
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <UploadButton accept=".pdf" onChange={handleUploadFile} isLoading={isUploading} />
-                        <ShowFileName>{(!isUploading && file?.name) || ''}</ShowFileName>
-                      </div>
-                    )}
-                  </Field>
-                </div>
+
+                <Field
+                  label={`${t('citizenId')} / ${t('companyCertificate')}`}
+                  name="uploadFile"
+                  // validate={validate}
+                  defaultValue=""
+                >
+                  {({ fieldProps, error, meta: { valid } }: any) => (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <UploadButton accept=".pdf" onChange={handleUploadFile} isLoading={uploadFileStore.loading} />
+                      <ShowFileName>{(!isUploading && file?.name) || ''}</ShowFileName>
+                    </div>
+                  )}
+                </Field>
+
               </div>
               <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '0 -.5rem', marginTop: '2rem' }}>
-                <FormFooter>
-                  <Button type="button" style={BottomBackStyled} onClick={() => navigate('/user-management')}>
-                    <BackText>{t('back')}</BackText>
-                  </Button>
-                  <Button
-                    type="submit"
-                    isDisabled={isDisabled}
-                    style={
-                      isDisabled
-                        ? {
-                          ...BottomSubmitStyled,
-                          backgroundColor: '#D8D8D8',
-                          border: 'none',
-                        }
-                        : BottomSubmitStyled
-                    }
-                  >
-                    <SubmitText>{t('confirm')}</SubmitText>
-                  </Button>
-                </FormFooter>
               </div>
-            </form>
-          )}
-        </Form>
-      </CardBody>
+              <FormFooter>
+                <Button type="button" style={BottomBackStyled}
+                  onClick={() => navigate('/users')}
+                  testId="backButton"
+                >
+                  <BackText>{t('back')}</BackText>
+                </Button>
+                <Button
+                  type="submit"
+                  isDisabled={isDisabled}
+                  style={
+                    isDisabled
+                      ? {
+                        ...BottomSubmitStyled,
+                        backgroundColor: '#D8D8D8',
+                        border: 'none',
+                      }
+                      : BottomSubmitStyled
+                  }
+                  testId="submitButton"
+                >
+                  <SubmitText>{t('confirm')}</SubmitText>
+                </Button>
+              </FormFooter>
+            </div>
+          </form>
+        )}
+      </Form>
+
     </div>
   );
 });

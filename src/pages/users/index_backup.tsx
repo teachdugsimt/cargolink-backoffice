@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import AddUser from '../../components/user-management/multi/add-user';
+import AddUser from './add';
 // import EditUser from '../../components/user-management/edit-user';
 
 const User = (props: any) => {

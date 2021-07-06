@@ -5,7 +5,7 @@ import Col from '@paljs/ui/Col';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import Form, { Field, FormFooter } from '@atlaskit/form';
-import Button from '@atlaskit/button';
+import Button, { LoadingButton } from '@atlaskit/button';
 import { observer } from 'mobx-react-lite';
 import { useMst } from '../../stores/root-store';
 import uploadApi, { UploadFilePath } from '../../services/upload-api';
@@ -45,7 +45,7 @@ interface IUploadPageProps {
 const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageProps) => {
   if (!token) return <h1>Forbidden</h1>;
   const { t } = useTranslation();
-  const { uploadFileStore } = useMst();
+  const { uploadFileStore, userStore } = useMst();
 
   const [citizenIdFile, setCitizenIdFile] = useState<File>();
   const [isCitizenIdLoading, setIsCitizenIdLoading] = useState(false);
@@ -61,18 +61,19 @@ const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageP
       token,
     };
     console.log('prepping to upload', userId, payload);
-    uploadApi
-      .uploadByUser(userId, payload)
-      .then((response: AxiosResponse<{ message: string }>) => {
-        console.log('upload file(s) completed', response);
-      })
-      .catch((error) => {
-        console.error('upload by user error', error);
-        Swal.fire({
-          icon: 'error',
-          text: 'Error while upload user file(s).',
-        });
-      });
+    userStore.submitUploadFile(userId, payload);
+    // uploadApi
+    //   .uploadByUser(userId, payload)
+    //   .then((response: AxiosResponse<{ message: string }>) => {
+    //     console.log('upload file(s) completed', response);
+    //   })
+    //   .catch((error) => {
+    //     console.error('upload by user error', error);
+    //     Swal.fire({
+    //       icon: 'error',
+    //       text: 'Error while upload user file(s).',
+    //     });
+    //   });
   };
 
   const extractTokenData = () => {
@@ -115,6 +116,10 @@ const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageP
   };
 
   useEffect(() => {
+    console.log('LOADING', userStore.loading)
+  }, [userStore.loading])
+
+  useEffect(() => {
     const newFile = JSON.parse(JSON.stringify(uploadFileStore.file));
     const isNoFile = newFile == null || Object.keys(newFile).every((key) => newFile[key] == null);
     if (!isNoFile) {
@@ -139,7 +144,7 @@ const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageP
             <form {...formProps} name="user upload">
               <Row>
                 <Col breakPoint={{ xs: 12, sm: 12, md: 12 }}>
-                  <Field label={t('citizenId')} name="citizenIdCard" defaultValue="">
+                  <Field label={`${t('citizenId')} / ${t('companyCertificate')}`} name="citizenIdCard" defaultValue="">
                     {({ fieldProps, error, meta: { valid } }) => (
                       <div style={{ display: 'flex', alignItems: 'center' }}>
                         <UploadButton
@@ -156,7 +161,7 @@ const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageP
                   </Field>
                 </Col>
                 <Col breakPoint={{ xs: 12, sm: 12, md: 12 }}>
-                  <Field label={t('companyCertificate')} name="companyCertificate" defaultValue="">
+                  {/* <Field label={t('companyCertificate')} name="companyCertificate" defaultValue="">
                     {({ fieldProps, error, meta: { valid } }) => (
                       <div style={{ display: 'flex', alignItems: 'center' }}>
                         <UploadButton
@@ -172,13 +177,14 @@ const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageP
                         </FileNameSpan>
                       </div>
                     )}
-                  </Field>
+                  </Field> */}
                 </Col>
               </Row>
               <Row style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Col breakPoint={{ xs: 12, sm: 12, md: 12 }}>
                   <FormFooter>
-                    <Button
+                    <LoadingButton
+                      isLoading={userStore.loading}
                       type="submit"
                       style={{
                         border: `1px solid ${attachCodes.length ? '#FBBC12' : '#D8D8D8'}`,
@@ -188,7 +194,7 @@ const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageP
                       isDisabled={!attachCodes.length}
                     >
                       <span style={{ color: '#000' }}>{t('confirm')}</span>
-                    </Button>
+                    </LoadingButton>
                   </FormFooter>
                 </Col>
               </Row>

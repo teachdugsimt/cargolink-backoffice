@@ -74,6 +74,9 @@ const AutoCompleteTypeahead = function AutoCompleteTypeahead(props: AutoComplete
   const onChangeValue = (e: any, key: any) => {
     const value = e.target.value;
     const id = e.target.id;
+    console.log({
+      [fieldsEnum[key]]: value,
+    })
     setSearchStr({
       [fieldsEnum[key]]: value,
     });
@@ -81,6 +84,7 @@ const AutoCompleteTypeahead = function AutoCompleteTypeahead(props: AutoComplete
     // console.log('result :>> ', result);
     setAddressObj(result);
   };
+
 
   return (
     <div style={{ width: '100%', margin: 0, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
