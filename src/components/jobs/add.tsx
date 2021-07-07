@@ -199,7 +199,7 @@ const AddJobContainer: React.FC = observer(() => {
             </InputGroup>
           </Item>
         </Grid>
-        <Grid style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
+        <Grid style={{ gridTemplateColumns: '400px 1fr' }}>
           <Item>
             <Label>
               {t('amountWeight')} {Required}
@@ -221,7 +221,7 @@ const AddJobContainer: React.FC = observer(() => {
               {errors.weight && errors.weight.type === 'min' && <Error message={t('minWeight')} />}
             </InputGroup>
           </Item>
-          <ItemLong style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Item style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <BoldLabel>
               {t('deliveryPrice')} {Required}
             </BoldLabel>
@@ -251,7 +251,7 @@ const AddJobContainer: React.FC = observer(() => {
                 )}
               />
             </PriceFields>
-          </ItemLong>
+          </Item>
         </Grid>
         <Divider />
         <GroupTitle>{t('priceData')}</GroupTitle>
@@ -287,7 +287,7 @@ const AddJobContainer: React.FC = observer(() => {
               {errors.contactName && <Error message={t('fieldDeliveryLocation')} />}
             </Col>
           </Row> */}
-          <ItemHorizontalLong>
+          <Item>
             <Label>
               {t('dateStart')} {Required}
             </Label>
@@ -304,7 +304,7 @@ const AddJobContainer: React.FC = observer(() => {
               />
               {errors.start && <Error message={t('fieldDateStart')} />}
             </DateTimePickerGroup>
-          </ItemHorizontalLong>
+          </Item>
           <Item>
             <Label>
               {t('shipperName')} {Required}
@@ -382,7 +382,7 @@ const AddJobContainer: React.FC = observer(() => {
                 />
                 {errors.items && errors.items[index]?.contactName && <Error message={t('pickupLocation')} />} */}
               </ItemHorizontalLong>
-              <ItemHorizontalLong>
+              <Item>
                 <Label>
                   {t('endDate')} {Required}
                 </Label>
@@ -401,7 +401,7 @@ const AddJobContainer: React.FC = observer(() => {
                   />
                   {errors.items && errors.items[index]?.exdate && <Error message={t('fieldDateStart')} />}
                 </DateTimePickerGroup>
-              </ItemHorizontalLong>
+              </Item>
               <ItemLong>
                 <BoldLabel>{t('pickUpPointInformation')}: </BoldLabel>
               </ItemLong>
@@ -540,6 +540,7 @@ const ItemLongEnd = styled(ItemLong)`
 
 const PriceFields = styled.div`
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: space-evenly;
   margin-left: 10px;
@@ -548,8 +549,12 @@ const PriceFields = styled.div`
 const DateTimePickerGroup = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  flex: 1;
+  margin-left: 10px;
+
+  & > div {
+    min-width: 190px;
+    max-width: 360px;
+  }
 `;
 
 const InputGroup = styled.div`
