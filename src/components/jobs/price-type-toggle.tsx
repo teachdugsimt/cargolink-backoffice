@@ -27,6 +27,8 @@ const PriceTypeToggleComponent = (props: PriceTypeToggleProps) => {
 
   const select = priceType != null ? priceType : selecting;
 
+  console.log('state', selecting)
+
   return (
     <PriceTypeToggle selecting={select} className="price-type-toggle" onClick={onClick}>
       <span className="trip">{t('perTrip')}</span>
@@ -42,9 +44,9 @@ export default PriceTypeToggleComponent;
 const DEFAULT_WIDTH = '150px';
 const DEFAULT_HEIGHT = '35px';
 const TEXT_COLOR = '#FFF';
-const TEXT_COLOR_OFF = '#DDD';
-const BACKGROUND_COLOR = '#FBBC12';
-const SWITCH_COLOR = '#FFF';
+const TEXT_COLOR_OFF = '#AAA';
+const BACKGROUND_COLOR = '#E8E8E8';
+const SWITCH_COLOR = '#FBBC12';
 const SWITCH_BORDER_COLOR = '#D8D8D8';
 
 const animation = css`
@@ -53,10 +55,10 @@ const animation = css`
 const radius = css`
   border-radius: 5px;
 `;
-const switchTripPosition = css`
+const switchTonPosition = css`
   right: 0;
 `;
-const switchTonPosition = css`
+const switchTripPosition = css`
   left: 0;
 `;
 
@@ -72,6 +74,7 @@ const PriceTypeToggle = styled.div<PriceTypeProps>`
   height: ${({ height = DEFAULT_HEIGHT }) => height};
   background-color: ${BACKGROUND_COLOR};
   user-select: none;
+  border: solid 1px ${SWITCH_BORDER_COLOR};
   ${radius}
   ${animation}
 
