@@ -198,6 +198,8 @@ const AddJobContainer: React.FC = observer(() => {
               {errors.productName ? <Error message={t('fieldproductName')} /> : <ErrorInput>&nbsp;</ErrorInput>}
             </InputGroup>
           </Item>
+        </Grid>
+        <Grid style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
           <Item>
             <Label>
               {t('amountWeight')} {Required}
@@ -219,11 +221,7 @@ const AddJobContainer: React.FC = observer(() => {
               {errors.weight && errors.weight.type === 'min' && <Error message={t('minWeight')} />}
             </InputGroup>
           </Item>
-        </Grid>
-        <Divider />
-        <GroupTitle>{t('priceData')}</GroupTitle>
-        <Grid>
-          <ItemLong>
+          <ItemLong style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <BoldLabel>
               {t('deliveryPrice')} {Required}
             </BoldLabel>
@@ -255,6 +253,8 @@ const AddJobContainer: React.FC = observer(() => {
             </PriceFields>
           </ItemLong>
         </Grid>
+        <Divider />
+        <GroupTitle>{t('priceData')}</GroupTitle>
         <Divider />
         <Grid>
           {/* <Row> Google Maps Broken CSS
@@ -543,7 +543,6 @@ const PriceFields = styled.div`
   align-items: center;
   justify-content: space-evenly;
   margin-left: 10px;
-  margin-right: auto;
 `;
 
 const DateTimePickerGroup = styled.div`
