@@ -305,9 +305,6 @@ const AddJobContainer: React.FC = observer(() => {
               {errors.start && <Error message={t('fieldDateStart')} />}
             </DateTimePickerGroup>
           </ItemHorizontalLong>
-          <ItemLong>
-            <BoldLabel>{t('deliveryPointInformation')}: </BoldLabel>
-          </ItemLong>
           <Item>
             <Label>
               {t('shipperName')} {Required}
