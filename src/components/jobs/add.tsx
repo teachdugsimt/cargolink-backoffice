@@ -405,9 +405,6 @@ const AddJobContainer: React.FC = observer(() => {
                   {errors.items && errors.items[index]?.exdate && <Error message={t('fieldDateStart')} />}
                 </DateTimePickerGroup>
               </Item>
-              <ItemLong>
-                <BoldLabel>{t('pickUpPointInformation')}: </BoldLabel>
-              </ItemLong>
               <Item>
                 <Label>
                   {t('consigneeName')} {Required}
