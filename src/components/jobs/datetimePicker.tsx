@@ -27,7 +27,7 @@ class DateTimePicker extends React.Component<DateTimePickerProps, DateTimePicker
   }
 
   componentDidMount() {
-    const value = this.props.initialValue || new Date().toISOString().replace(/(Z|z)/, '+07:00');
+    const value = this.props.initialValue || new Date().toISOString().replace(/(Z|z)/, '+00:00');
     if (!this.props.initialValue && this.props.onChange) this.props.onChange(value);
     this.setState({
       value,
