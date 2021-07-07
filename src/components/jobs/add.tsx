@@ -199,7 +199,7 @@ const AddJobContainer: React.FC = observer(() => {
             </InputGroup>
           </Item>
         </Grid>
-        <Grid style={{ gridTemplateColumns: '400px 1fr' }}>
+        <Grid>
           <Item>
             <Label>
               {t('amountWeight')} {Required}
@@ -221,7 +221,9 @@ const AddJobContainer: React.FC = observer(() => {
               {errors.weight && errors.weight.type === 'min' && <Error message={t('minWeight')} />}
             </InputGroup>
           </Item>
-          <Item style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        </Grid>
+        <Grid>
+          <ItemLong style={{ display: 'flex', maxWidth: 'none', justifyContent: 'flex-start' }}>
             <BoldLabel>
               {t('deliveryPrice')} {Required}
             </BoldLabel>
@@ -251,8 +253,9 @@ const AddJobContainer: React.FC = observer(() => {
                 )}
               />
             </PriceFields>
-          </Item>
+          </ItemLong>
         </Grid>
+
         <Divider />
         <GroupTitle>{t('priceData')}</GroupTitle>
         <Divider />
@@ -515,6 +518,7 @@ const Item = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  max-width: 550px;
 
   p {
     width: fit-content;
@@ -533,6 +537,7 @@ const ItemHorizontalLong = styled(ItemHorizontal)`
 
 const ItemLong = styled(Item)`
   grid-column: span 2;
+  max-width: none;
 `;
 const ItemLongEnd = styled(ItemLong)`
   justify-content: flex-end;
@@ -544,6 +549,7 @@ const PriceFields = styled.div`
   align-items: center;
   justify-content: space-evenly;
   margin-left: 10px;
+  max-width: 600px;
 `;
 
 const DateTimePickerGroup = styled.div`
