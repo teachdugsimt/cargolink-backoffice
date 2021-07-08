@@ -30,7 +30,7 @@ const TruckType = types.model({
   tipper: types.maybeNull(types.boolean),
   createdAt: types.maybeNull(types.string),
   updatedAt: types.maybeNull(types.string),
-  quotationNumber: types.null,
+  quotationNumber: types.maybeNull(types.number),
   workingZones: types.maybeNull(types.array(ZoneType)),
   owner: types.maybeNull(OwnerType),
 });
@@ -82,6 +82,26 @@ export const TruckStore = types
             };
             if (!self.isFirstLoad) trucks.reRender = !!!self.data_trucks?.reRender;
             if (data.length) {
+              const parsedData: ITruck[] = data.map((truck) => {
+                const { loadingWeight, quotationNumber, truckType } = truck;
+                const toNumber = (x: any) => {
+                  if (x == null) return x;
+                  if (isNaN(+x)) throw new Error('this should not be NaN: ' + x);
+                  return +x;
+                }
+                const owner = {
+                  ...truck.owner,
+                  id: toNumber(truck.owner.id),
+                }
+                const result: ITruck = {
+                  ...truck,
+                  loadingWeight: toNumber(loadingWeight),
+                  quotationNumber: toNumber(quotationNumber),
+                  truckType: toNumber(truckType),
+                  owner,
+                };
+                return result;
+              });
               const emptyContent: ITruckNull = Object.keys(data[0]).reduce(
                 (object: ITruckNull, curr: string) => ({
                   ...object,
@@ -96,7 +116,7 @@ export const TruckStore = types
               const emptyContentsAfterLastItem = pagesAfterContent * size;
               trucks.content = [
                 ...Array(emptyContentsBeforeFirstItem).fill(emptyContent),
-                ...data,
+                ...parsedData,
                 ...Array(emptyContentsAfterLastItem).fill(emptyContent),
               ];
             } else trucks.content = [];

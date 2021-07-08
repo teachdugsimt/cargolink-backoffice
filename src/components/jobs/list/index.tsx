@@ -15,7 +15,7 @@ import AddJobButton from '../../buttons/add';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import ProductTypeSelector from '../productType.selector';
-import ProvincesSelector from '../../dropdowns/province';
+import ProvincesSelector from './province.selector';
 
 import { CardBody } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';

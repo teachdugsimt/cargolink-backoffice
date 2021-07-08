@@ -10,7 +10,7 @@ import { IProductType } from '../../../services/product-type-api';
 import Spinner from '@atlaskit/spinner';
 import { parseMobXToObject } from '../../../utils';
 import UserSelector from './user.selector';
-import TruckTypesSelector from './truckType.selector';
+import TruckTypesSelector from '../../dropdowns/truckType.selector';
 import ProductTypesSelector from '../productType.selector';
 import PriceTypeToggle, { PriceTypeEnum } from './price-type-toggle';
 import { breakPoints } from '../../../utils';
@@ -142,13 +142,7 @@ const AddJobContainer: React.FC = observer(() => {
             <Controller
               name="truckType"
               control={control}
-              render={({ onChange }) => (
-                <TruckTypesSelector
-                  onSelect={onChange}
-                  placeholder={t('pleaseselect')}
-                  language={loginStore.language}
-                />
-              )}
+              render={({ onChange }) => <TruckTypesSelector onSelect={onChange} placeholder={t('pleaseselect')} />}
             />
           </Item>
           <Item>

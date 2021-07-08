@@ -1,21 +1,21 @@
-import React, { useState, useEffect, CSSProperties } from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
-import { useMst } from '../../stores/root-store';
-import { TrucksListParams } from '../../services/truck-api';
-import { ITrucksManagement } from '../../stores/truck-store';
-import { createTableRows, tableHeader, Sortable } from './table.mapper';
+import { useMst } from '../../../stores/root-store';
+import { TrucksListParams } from '../../../services/truck-api';
+import { ITrucksManagement } from '../../../stores/truck-store';
+import { createTableRows, tableHeader, Sortable } from '../table.mapper';
 import Swal from 'sweetalert2';
 import styled from 'styled-components';
-import SearchForm from '../search-form';
+import SearchForm from '../../search-form';
 import DynamicTable from '@atlaskit/dynamic-table';
 import { navigate } from 'gatsby';
-
-import { Icon } from 'react-icons-kit';
-import { ic_add } from 'react-icons-kit/md/ic_add';
-import { Button } from '@paljs/ui/Button';
-import { CardBody, CardHeader } from '@paljs/ui/Card';
-import Row from '@paljs/ui/Row';
+import AddTruckButton from '../../buttons/add';
+import TruckStatusFilter, { TruckStatus } from './status.filter';
+import TruckTypesSelector from '../../dropdowns/truckType.selector';
+import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
+import PageHeader from '@atlaskit/page-header';
+import ProvincesSelector from '../../dropdowns/province';
 
 const DEFAULT_API_PARAMS: TrucksListParams = {
   page: 1,
@@ -33,19 +33,11 @@ const TrucksListComponent: React.FC = observer(() => {
   const [rowData, setRowData] = useState<any[]>([]);
   const [page, setPage] = useState(DEFAULT_API_PARAMS.page);
   const [submit, setSubmit] = useState(false);
-  const [filterState, setFilterState] = useState(TruckFilterState.ALL);
 
   const [searchValue, setSearchValue] = useState<TrucksListParams>(DEFAULT_API_PARAMS);
 
   const onDetail = (id: string) => {
     //TODO implement detail here
-  };
-
-  const onFilterChange = (newState: TruckFilterState) => {
-    setFilterState(newState);
-    let searchParams = { ...DEFAULT_API_PARAMS, page };
-    if (newState !== TruckFilterState.ALL) searchParams = { ...searchParams, approveStatus: newState };
-    truckStore.getTrucksList(searchParams);
   };
 
   const onSearch = (value: string) => {
@@ -54,9 +46,9 @@ const TrucksListComponent: React.FC = observer(() => {
       const regions = []; //? No regions API to joint yet.
       const zoneIds: string[] = regions
         ? regions.reduce((ids: string[], region: any) => {
-            region.name.includes(value.trim()) && ids.push(region.id);
-            return ids + '';
-          }, [])
+          region.name.includes(value.trim()) && ids.push(region.id);
+          return ids + '';
+        }, [])
         : [];
       const getStallsValue = (value: string) => {
         if (value.includes('ต่ำ')) return 'LOW';
@@ -73,11 +65,36 @@ const TrucksListComponent: React.FC = observer(() => {
       };
       if (!isNaN(+value)) searchParams = { ...searchParams, loadingWeight: +value };
     }
-    console.log('wtf', searchParams);
+    fireSearch(searchParams);
+  };
+
+  const onTruckStatusChange = (status: TruckStatus) => {
+    fireSearch({
+      ...searchValue,
+      status: status === TruckStatus.ALL ? undefined : status,
+    })
+  }
+
+  const onTruckTypeFilterChange = (truckTypeId: string) => {
+    const value = isNaN(+truckTypeId) ? undefined : JSON.stringify([truckTypeId]);
+    fireSearch({
+      ...searchValue,
+      truckTypes: value,
+    })
+  }
+
+  const onProvinceFilterChange = (provinceId: string) => {
+    fireSearch({
+      ...searchValue,
+      workingZones: isNaN(+provinceId) ? undefined : JSON.stringify([+provinceId]),
+    })
+  }
+
+  const fireSearch = (searchParams: TrucksListParams) => {
     setPage(searchParams.page);
     setSearchValue(searchParams);
     truckStore.getTrucksList(searchParams);
-  };
+  }
 
   const onSort = (sort: any) => {
     const descending = !Sortable[sort.key];
@@ -122,65 +139,43 @@ const TrucksListComponent: React.FC = observer(() => {
       setRowData(rows);
     }
   }, [truckStore.data_trucks, truckStore.data_trucks?.reRender, truckStore.data_trucks?.content?.length]);
-  const selectedFilterButtonStyle: CSSProperties = {
-    backgroundColor: '#FFBC12',
-    color: 'white',
-  };
-  const submittedNewTruckButtonStyle: CSSProperties = {
-    backgroundColor: '#00B132',
-    color: 'white',
-  };
+
+  const breadcrumbs = (
+    <Breadcrumbs>
+      <BreadcrumbsItem text={t('trucksManagement')} key="trucks-management" />
+    </Breadcrumbs>
+  );
   return (
     <div>
-      <CardHeader>
-        <div className="block-data-header">
-          <span className="font-data-header">{t('trucks')}</span>
-          <div style={{ display: 'flex' }}>
-            <SearchForm onSearch={onSearch} />
-          </div>
-        </div>
-      </CardHeader>
-      <CardBody>
+      <HeaderGroup>
+        <PageHeader breadcrumbs={breadcrumbs}>{t('trucks')}</PageHeader>
+        <SearchForm onSearch={onSearch} />
+      </HeaderGroup>
+      <div>
         <FilterRow>
-          <div>
-            <FilterButton
-              id="all"
-              size="Small"
-              onClick={() => onFilterChange(TruckFilterState.ALL)}
-              style={filterState === TruckFilterState.ALL ? selectedFilterButtonStyle : undefined}
-            >
-              {t('all')}
-            </FilterButton>
-            <FilterButton
-              id="pending"
-              status="Warning"
-              size="Small"
-              onClick={() => onFilterChange(TruckFilterState.PENDING)}
-              style={filterState === TruckFilterState.PENDING ? selectedFilterButtonStyle : undefined}
-            >
-              {t('pending')}
-            </FilterButton>
-            <FilterButton
-              id="approved"
-              size="Small"
-              onClick={() => onFilterChange(TruckFilterState.APPROVED)}
-              style={filterState === TruckFilterState.APPROVED ? selectedFilterButtonStyle : undefined}
-            >
-              {t('approved')}
-            </FilterButton>
-          </div>
-          <NewTruckButton
-            id="addNewTrack"
-            status="Success"
-            size="Small"
+          <FilterGroup>
+            <TruckStatusFilter t={t} onChange={(option) => onTruckStatusChange(option?.value as number)} />
+            <TruckTypesSelector
+              placeholder={t('truckstype')}
+              includeNone={true}
+              maxWidth="200px"
+              onSelect={onTruckTypeFilterChange}
+            />
+            <ProvincesSelector
+              maxWidth="200px"
+              includeNone
+              placeholder={t('province')}
+              onSelect={(value) => onProvinceFilterChange(value)}
+            />
+          </FilterGroup>
+          <AddTruckButton
             onClick={() => {
               setSubmit(true);
               navigate('/vehicles/add');
             }}
-            style={submit ? submittedNewTruckButtonStyle : undefined}
           >
-            <Icon icon={ic_add} style={{ color: submit ? 'white' : '#00B132' }} />
-          </NewTruckButton>
+            {t('addNewTruck')}
+          </AddTruckButton>
         </FilterRow>
         <span>{`${t('resultsFound')}: ${truckStore.data_count || 0}`}</span>
         <TableWrapper>
@@ -197,7 +192,7 @@ const TrucksListComponent: React.FC = observer(() => {
             onSetPage={onPageChange}
           />
         </TableWrapper>
-      </CardBody>
+      </div>
     </div>
   );
 });
@@ -209,25 +204,26 @@ const TableWrapper = styled.div`
   min-width: 600px;
 `;
 
-const FilterRow = styled(Row)`
-  padding: 10px;
+const FilterRow = styled.div`
+  padding: 10px 0;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
-  min-width: 676px;
+  min-width: 719px;
 `;
 
-const FilterButton = styled(Button)`
-  margin-right: 10px;
-  border-color: #fbbc12;
-  background-color: white;
-  color: black;
+const FilterGroup = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  gap: 10px;
 `;
 
-const NewTruckButton = styled(Button)`
+const HeaderGroup = styled.div`
   display: flex;
-  align-items: center;
-  border-color: #00b132;
-  background-color: white;
-  color: #00b132;
+  justify-content: space-between;
+  align-items: flex-start;
+  & > :last-child {
+    max-width: 250px;
+    margin-top: 53px;
+  }
 `;

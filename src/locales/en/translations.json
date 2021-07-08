@@ -17,6 +17,7 @@
   "drivers": "Drivers",
   "userManagement": "User Management",
   "jobsManagement": "Jobs Management",
+  "trucksManagement": "Trucks Management",
   "truckstype": "Trucks Type",
   "truckRegion": "Trucks types in each region",
   "JobsRegion": "Jobs in each region",

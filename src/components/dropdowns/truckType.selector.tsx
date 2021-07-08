@@ -1,12 +1,12 @@
-import AbstractAsyncSelector from '../../dropdowns/async.abstract';
-import { TruckTypeApi } from '../../../services';
-import { ITruckType } from '../../../services/truck-type-api';
+import AbstractAsyncSelector from './async.abstract';
+import { TruckTypeApi } from '../../services';
+import { ITruckType } from '../../services/truck-type-api';
 
 export default class TruckTypesSelector extends AbstractAsyncSelector {
 
   fetch = async () => {
     try {
-      const response = await TruckTypeApi.getTruckTypes(this.props.language);
+      const response = await TruckTypeApi.getTruckTypes();
       if (response && response.ok) {
         const types: ITruckType[] = response.data;
         const options = types.map((type) => ({

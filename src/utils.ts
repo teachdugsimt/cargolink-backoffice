@@ -59,3 +59,10 @@ export const extractJwtToken = (token: string) => {
 };
 
 export const parseMobXToObject = (mobxState: any) => JSON.parse(JSON.stringify(mobxState));
+
+export const toFirstLetterUpperCase = (str: string) => {
+  if (!str.length) return str;
+  if (str.length === 1) return str.toUpperCase();
+  const [firstChar] = str.split('');
+  return `${firstChar.toUpperCase()}${str.substr(1)}`;
+}

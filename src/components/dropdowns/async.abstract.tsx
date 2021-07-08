@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AsyncSelect, OptionsType, OptionType, ValueType } from '@atlaskit/select';
-
+import { toFirstLetterUpperCase } from '../../utils';
 
 interface SelectorProps {
   placeholder?: string;
@@ -37,11 +37,20 @@ export default abstract class AsyncSelector extends React.Component<SelectorProp
     return inputValue;
   };
 
+  insertPlaceholderIfRequired = () => {
+    const { options } = this.state;
+    if (this.props.includeNone)
+      this.setState({
+        options: [{ label: toFirstLetterUpperCase(this.props.placeholder || 'Select'), value: 0 }, ...options],
+      });
+  };
+
   render() {
     const { placeholder } = this.props;
 
     const filterTypes = async (inputValue: string) => {
       await this.fetch(inputValue);
+      this.insertPlaceholderIfRequired();
       return this.state.options.filter(({ label }) => label.toLowerCase().includes(inputValue.toLowerCase()));
     };
 
@@ -52,18 +61,17 @@ export default abstract class AsyncSelector extends React.Component<SelectorProp
         maxWidth={this.props.maxWidth}
         defaultOptions
         loadOptions={promiseOptions}
-        placeholder={placeholder}
+        placeholder={placeholder ? toFirstLetterUpperCase(placeholder) : undefined}
         onChange={this.onSelected}
         noOptionsMessage={() => this.props.noResultsMessage || 'no results'}
       />
     );
   }
-
 }
 
 interface SelectStyleProps {
   maxWidth?: string;
 }
-const Select = styled(AsyncSelect)<SelectStyleProps>`
+const Select = styled(AsyncSelect) <SelectStyleProps>`
   min-width: ${({ maxWidth }) => (maxWidth ? maxWidth : '300px')};
 `;

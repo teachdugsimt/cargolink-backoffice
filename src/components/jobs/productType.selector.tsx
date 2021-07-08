@@ -9,13 +9,10 @@ export default class ProductTypeSelector extends AbstractAsyncSelector {
       const response = await ProductTypeApi.getProductTypes();
       if (response && response.ok) {
         const types: IProductType[] = response.data;
-        let options = types.map((type) => ({
+        const options = types.map((type) => ({
           label: type.name,
           value: type.id,
         }));
-        if (this.props.includeNone) {
-          options = [{ label: this.props.placeholder || 'Select', value: 0 }, ...options];
-        }
         this.setState({ options, items: types });
       } else console.error('search product types not ok', response);
     } catch (error) {

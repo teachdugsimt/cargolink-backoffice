@@ -1,6 +1,6 @@
-import AbstractAsyncSelector from './async.abstract';
-import { RegionApi } from '../../services/';
-import { ProvincesListResponse } from '../../services/region-api';
+import AbstractAsyncSelector from '../../dropdowns/async.abstract';
+import { RegionApi } from '../../../services/';
+import { ProvincesListResponse } from '../../../services/region-api';
 
 export default class ProvincesSelector extends AbstractAsyncSelector {
 
@@ -9,9 +9,9 @@ export default class ProvincesSelector extends AbstractAsyncSelector {
       const response = await RegionApi.getProvincesList();
       if (response && response.ok) {
         const provinces: ProvincesListResponse = response.data;
-        const options = provinces.map(({ id, name }) => ({
+        const options = provinces.map(({ name }) => ({
           label: name,
-          value: id,
+          value: name,
         }));
         this.setState({ options, items: provinces });
       } else console.error('search provinces not ok', response);
