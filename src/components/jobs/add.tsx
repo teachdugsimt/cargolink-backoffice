@@ -22,7 +22,6 @@ import { GoogleMapWithSearch } from '../google-map-with-search/old-google-map-wi
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import { Box } from 'theme-ui';
 import { Text } from '../text-span/text';
-import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import { EvaIcon } from '@paljs/ui/Icon';
 import { FormFooter } from '@atlaskit/form';
 import DateTimePicker from './datetimePicker';
@@ -32,7 +31,7 @@ import EditorDividerIcon from '@atlaskit/icon/glyph/editor/divider';
 
 import th from 'date-fns/locale/th';
 import PageHeader from '@atlaskit/page-header';
-registerLocale('th', th);
+// registerLocale('th', th);
 
 interface IForm {
   contactMobileNo: string | null;
@@ -119,10 +118,12 @@ const AddJobContainer: React.FC = observer(() => {
     </Breadcrumbs>
   );
   return (
-    <Wrapper className="add-job-wrapper">
+    <>
+      {/* <Wrapper className="add-job-wrapper"> */}
       <PageHeader breadcrumbs={breadcrumbs}>{t('addNewJob')}</PageHeader>
       <Form onSubmit={handleSubmit(onSubmit)} className="form-add-data">
-        <Grid>
+
+        <Row>
           <Item>
             <Label>
               {t('user')} {Required}
@@ -138,10 +139,13 @@ const AddJobContainer: React.FC = observer(() => {
                 />
               )}
             />
+
           </Item>
+        </Row>
+        <Row>
           <Item>
-            <Label style={{ marginRight: 'auto' }}>
-              {t('typeCar')} {Required}
+            <Label>
+              {t('typeCar')}
             </Label>
             <Controller
               name="truckType"
@@ -149,9 +153,10 @@ const AddJobContainer: React.FC = observer(() => {
               render={({ onChange }) => <TruckTypesSelector onSelect={onChange} placeholder={t('pleaseselect')} />}
             />
           </Item>
+
           <Item>
             <Label>
-              {t('truckAmount')} {Required}
+              {t('truckAmount')}
             </Label>
             <InputGroup>
               <Input
@@ -163,12 +168,14 @@ const AddJobContainer: React.FC = observer(() => {
                 ref={register({ required: true })}
                 aria-invalid={errors.truckAmount ? 'true' : 'false'}
               />
-              {errors.truckAmount ? <Error message={t('fieldTruckAmount')} /> : <ErrorInput>&nbsp;</ErrorInput>}
+              {/* {errors.truckAmount ? <Error message={t('fieldTruckAmount')} /> : <ErrorInput>&nbsp;</ErrorInput>} */}
             </InputGroup>
           </Item>
-        </Grid>
+        </Row>
+
         <Divider />
-        <Grid>
+
+        <Row>
           <Item>
             <Label>
               {t('productType')} {Required}
@@ -195,14 +202,14 @@ const AddJobContainer: React.FC = observer(() => {
                 }}
                 aria-invalid={errors.productName ? 'true' : 'false'}
               />
-              {errors.productName ? <Error message={t('fieldproductName')} /> : <ErrorInput>&nbsp;</ErrorInput>}
+              {/* {errors.productName ? <Error message={t('fieldproductName')} /> : <ErrorInput>&nbsp;</ErrorInput>} */}
             </InputGroup>
           </Item>
-        </Grid>
-        <Grid>
+        </Row>
+        <Row>
           <Item>
             <Label>
-              {t('amountWeight')} {Required}
+              {t('amountWeight')}
             </Label>
             <InputGroup>
               <Input
@@ -221,46 +228,64 @@ const AddJobContainer: React.FC = observer(() => {
               {errors.weight && errors.weight.type === 'min' && <Error message={t('minWeight')} />}
             </InputGroup>
           </Item>
-        </Grid>
-        <Grid>
-          <ItemLong style={{ display: 'flex', maxWidth: 'none', justifyContent: 'flex-start' }}>
-            <BoldLabel>
-              {t('deliveryPrice')} {Required}
-            </BoldLabel>
-            <PriceFields>
-              <BoldLabel style={{ marginRight: 5 }}>{t('price')}</BoldLabel>
-              <Controller
-                name="price"
-                control={control}
-                defaultValue={0}
-                render={({ onChange, value }) => (
-                  <Input
-                    className="new-input-component"
-                    type="number"
-                    value={value}
-                    style={{ width: 'clamp(200px, 200px, 100%)' }}
-                    onChange={(e) => onChange(e.target.value)}
-                  />
-                )}
-              />
-              <p style={{ fontWeight: 'bold', marginRight: 20, marginLeft: 5 }}>{t('baht')}</p>
-              <Controller
-                name="priceType"
-                control={control}
-                defaultValue={PriceTypeEnum.PER_TRIP}
-                render={({ onChange, value }) => (
-                  <PriceTypeToggle priceType={value} onChange={(changeTo) => onChange(changeTo)} />
-                )}
-              />
-            </PriceFields>
-          </ItemLong>
-        </Grid>
+          <Item>
+            <Label>
+              {t('deliveryPrice')}
+            </Label>
+            <Controller
+              name="price"
+              control={control}
+              defaultValue={0}
+              render={({ onChange, value }) => (
+                <Input
+                  className="new-input-component"
+                  type="number"
+                  value={value}
+                  style={{ width: 'clamp(200px, 200px, 100%)' }}
+                  onChange={(e) => onChange(e.target.value)}
+                />
+              )}
+            />
+          </Item>
 
-        <Divider />
+        </Row>
+
+        <ItemLong style={{ display: 'flex', maxWidth: 'none', justifyContent: 'flex-start' }}>
+          <BoldLabel>
+            {t('deliveryPrice')} {Required}
+          </BoldLabel>
+          <PriceFields>
+            <BoldLabel style={{ marginRight: 5 }}>{t('price')}</BoldLabel>
+            <Controller
+              name="price"
+              control={control}
+              defaultValue={0}
+              render={({ onChange, value }) => (
+                <Input
+                  className="new-input-component"
+                  type="number"
+                  value={value}
+                  style={{ width: 'clamp(200px, 200px, 100%)' }}
+                  onChange={(e) => onChange(e.target.value)}
+                />
+              )}
+            />
+            <p style={{ fontWeight: 'bold', marginRight: 20, marginLeft: 5 }}>{t('baht')}</p>
+            <Controller
+              name="priceType"
+              control={control}
+              defaultValue={PriceTypeEnum.PER_TRIP}
+              render={({ onChange, value }) => (
+                <PriceTypeToggle priceType={value} onChange={(changeTo) => onChange(changeTo)} />
+              )}
+            />
+          </PriceFields>
+        </ItemLong>
+
         <GroupTitle>{t('priceData')}</GroupTitle>
-        <Divider />
-        <Grid>
-          {/* <Row> Google Maps Broken CSS
+
+
+        {/* <Row> Google Maps Broken CSS
             <Col breakPoint={{ xs: 12, sm: 12, md: 12 }}>
               <p>
                 {t('deliveryLocation')} {Required}
@@ -290,59 +315,59 @@ const AddJobContainer: React.FC = observer(() => {
               {errors.contactName && <Error message={t('fieldDeliveryLocation')} />}
             </Col>
           </Row> */}
-          <Item>
-            <Label>
-              {t('dateStart')} {Required}
-            </Label>
-            <DateTimePickerGroup>
-              <Controller
-                control={control}
-                register={register({ required: true })}
-                rules={{ required: 'Start from cannot be null.' }}
-                name="start"
-                aria-invalid={errors.start ? 'true' : 'false'}
-                render={({ value, onChange }) => (
-                  <DateTimePicker value={value} onChange={onChange} locale={loginStore.language} />
-                )}
-              />
-              {errors.start && <Error message={t('fieldDateStart')} />}
-            </DateTimePickerGroup>
-          </Item>
-          <Item>
-            <Label>
-              {t('shipperName')} {Required}
-            </Label>
-            <InputGroup>
-              <Input
-                className="new-input-component"
-                type="text"
-                name="name"
-                id="name"
-                style={{ borderColor: errors.name ? '#FF3D71' : '' }}
-                ref={register({ required: true })}
-                aria-invalid={errors.name ? 'true' : 'false'}
-              />
-              {errors.name && <Error message={t('fieldShipperName')} />}
-            </InputGroup>
-          </Item>
-          <Item>
-            <Label>
-              {t('contactNumber')} {Required}
-            </Label>
-            <InputGroup>
-              <Input
-                className="new-input-component"
-                type="text"
-                name="contactMobileNo"
-                maxLength={10}
-                style={{ borderColor: errors.contactMobileNo ? '#FF3D71' : '' }}
-                ref={register({ required: true })}
-                aria-invalid={errors.contactMobileNo ? 'true' : 'false'}
-              />
-              {errors.contactMobileNo && <Error message={t('fieldContactNumber')} />}
-            </InputGroup>
-          </Item>
-        </Grid>
+        <Item>
+          <Label>
+            {t('dateStart')} {Required}
+          </Label>
+          <DateTimePickerGroup>
+            <Controller
+              control={control}
+              register={register({ required: true })}
+              rules={{ required: 'Start from cannot be null.' }}
+              name="start"
+              aria-invalid={errors.start ? 'true' : 'false'}
+              render={({ value, onChange }) => (
+                <DateTimePicker value={value} onChange={onChange} locale={loginStore.language} />
+              )}
+            />
+            {errors.start && <Error message={t('fieldDateStart')} />}
+          </DateTimePickerGroup>
+        </Item>
+        <Item>
+          <Label>
+            {t('shipperName')} {Required}
+          </Label>
+          <InputGroup>
+            <Input
+              className="new-input-component"
+              type="text"
+              name="name"
+              id="name"
+              style={{ borderColor: errors.name ? '#FF3D71' : '' }}
+              ref={register({ required: true })}
+              aria-invalid={errors.name ? 'true' : 'false'}
+            />
+            {errors.name && <Error message={t('fieldShipperName')} />}
+          </InputGroup>
+        </Item>
+        <Item>
+          <Label>
+            {t('contactNumber')} {Required}
+          </Label>
+          <InputGroup>
+            <Input
+              className="new-input-component"
+              type="text"
+              name="contactMobileNo"
+              maxLength={10}
+              style={{ borderColor: errors.contactMobileNo ? '#FF3D71' : '' }}
+              ref={register({ required: true })}
+              aria-invalid={errors.contactMobileNo ? 'true' : 'false'}
+            />
+            {errors.contactMobileNo && <Error message={t('fieldContactNumber')} />}
+          </InputGroup>
+        </Item>
+
         <Divider />
         <GroupTitle>{t('deliveryPoint')}</GroupTitle>
         {fields.map(({ id, contactName, name, contactMobileNo, exdate }, index) => {
@@ -457,26 +482,28 @@ const AddJobContainer: React.FC = observer(() => {
             </Grid>
           );
         })}
-        <Grid>
-          <ItemLongEnd style={{ marginTop: '1.125rem' }}>
-            <PlusButton onClick={() => append({})}>
-              <AddIcon label="add" primaryColor="white" />
-            </PlusButton>
-          </ItemLongEnd>
-          <br />
-          <ItemLongEnd>
-            <FormFooter>
-              <BackButton type="button" onClick={() => navigate('/jobs')}>
-                <span>{t('back')}</span>
-              </BackButton>
-              <SubmitButton type="submit">
-                <span>{t('confirm')}</span>
-              </SubmitButton>
-            </FormFooter>
-          </ItemLongEnd>
-        </Grid>
+
+        <ItemLongEnd style={{ marginTop: '1.125rem' }}>
+          <PlusButton onClick={() => append({})}>
+            <AddIcon label="add" primaryColor="white" />
+          </PlusButton>
+        </ItemLongEnd>
+        <br />
+        <ItemLongEnd>
+          <FormFooter>
+            <BackButton type="button" onClick={() => navigate('/jobs')}>
+              <span>{t('back')}</span>
+            </BackButton>
+            <SubmitButton type="submit">
+              <span>{t('confirm')}</span>
+            </SubmitButton>
+          </FormFooter>
+        </ItemLongEnd>
+
+
       </Form>
-    </Wrapper>
+      {/* </Wrapper> */}
+    </>
   );
 });
 
@@ -497,6 +524,12 @@ const Title = styled.h1`
   outline: none;
 `;
 
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: 10px 10px 10px 0;
+`;
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -513,9 +546,10 @@ const Grid = styled.div`
 
 const Item = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex: 1;
+  // justify-content: space-between;
   align-items: baseline;
-  max-width: 550px;
+  // max-width: 550px;
 
   p {
     width: fit-content;
@@ -585,9 +619,10 @@ const FlexBoxCenter = styled.div`
   display: flex;
 `;
 
-const Divider = styled.hr`
-  margin: 1.125rem 0;
+const Divider = styled.div`
+  border-top: 1px solid #eee;
   flex: 1;
+  margin: 20px 0;
 `;
 
 const GroupTitle = styled.p`
@@ -597,9 +632,9 @@ const GroupTitle = styled.p`
   color: white;
 `;
 
-const Label = styled.p`
+const Label = styled.span`
   margin-right: 5px;
-  min-width: fit-content;
+  width: 150px;
 `;
 
 const BoldLabel = styled(Label)`
