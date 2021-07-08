@@ -1,4 +1,4 @@
-import React, { useState, useEffect, CSSProperties } from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +15,7 @@ import AddJobButton from '../../buttons/add';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import ProductTypeSelector from '../productType.selector';
+import ProvincesSelector from '../../dropdowns/province';
 
 import { CardBody } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
@@ -72,6 +73,14 @@ const JobContainer: React.FC = observer(() => {
       productType: value,
     });
   };
+
+  const onProvinceSearch = (province: string) => {
+    const value = province === 'none' ? undefined : province;
+    fireSearch({
+      ...searchValue,
+      from: value,
+    });
+  }
 
   const fireSearch = (searchParams: JobListParams) => {
     setPage(searchParams.page);
@@ -138,9 +147,13 @@ const JobContainer: React.FC = observer(() => {
               maxWidth="200px"
               includeNone={true}
               placeholder={t('productType')}
-              language={loginStore.language}
               onSelect={onProductTypeSearch}
             />
+            <ProvincesSelector
+              maxWidth="200px"
+              includeNone={true}
+              placeholder={t('province')}
+              onSelect={onProvinceSearch} />
           </FiltersGroup>
           <AddJobButton
             onClick={() => {
