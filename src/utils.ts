@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from "react";
+import { useState, useLayoutEffect } from 'react';
 import jwt_decode from 'jwt-decode';
 
 export interface IQueryParams {
@@ -17,7 +17,7 @@ export const searchToQueryParams = (search: string): IQueryParams | null => {
       [key]: value,
     };
   }, {});
-}
+};
 
 export const useWindowSize = () => {
   const isBrowser = typeof window !== 'undefined';
@@ -28,17 +28,17 @@ export const useWindowSize = () => {
     const handleResize = () => {
       setWidth(window.innerWidth);
       setHeight(window.innerHeight);
-    }
+    };
     window.addEventListener('resize', handleResize);
     handleResize();
 
     return () => {
       window.removeEventListener('resize', handleResize);
-    }
+    };
   }, []);
 
   return [width, height];
-}
+};
 
 export const breakPoints = {
   xs: 0,
@@ -49,11 +49,13 @@ export const breakPoints = {
   xl: 1200,
   xxl: 1400,
   xxxl: 1600,
-}
+};
 
 interface TokenData {
   [x: string]: string;
 }
 export const extractJwtToken = (token: string) => {
   return jwt_decode<TokenData>(token);
-}
+};
+
+export const parseMobXToObject = (mobxState: any) => JSON.parse(JSON.stringify(mobxState));
