@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
-import Select, { OptionsType, OptionType, ValueType } from '@atlaskit/select';
+import { OptionsType, OptionType, ValueType } from '@atlaskit/select';
 import { TFunction } from 'i18next';
+import Dropdown from '../../generic.dropdown';
 
 export enum JobStatus {
   ALL = 0,
@@ -32,21 +32,7 @@ const JobStatusFilter = ({ t, onChange }: JobStatusFilterProps) => {
       value: JobStatus.COMPLETED,
     },
   ];
-  return (
-    <Wrapper style={{ display: 'flex', minWidth: 200, alignItems: 'stretch' }}>
-      <Select options={statusOptions} onChange={onChange} placeholder={t('status')} />
-    </Wrapper>
-  );
+  return <Dropdown options={statusOptions} placeholder={t('status')} minWidth="200px" onChange={onChange} />;
 };
-
-const Wrapper = styled.div`
-  display: flex;
-  min-width: 200px;
-  align-items: stretch;
-  
-  & > div {
-    width: 100%;
-  }
-`;
 
 export default JobStatusFilter;

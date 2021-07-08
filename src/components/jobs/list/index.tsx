@@ -11,7 +11,7 @@ import SearchForm from '../../search-form';
 import { navigate } from 'gatsby';
 import DynamicTable from '@atlaskit/dynamic-table';
 import JobStatusFilter, { JobStatus } from './status.filter';
-import AddJobButton from './addJob.button';
+import AddJobButton from '../../buttons/add';
 
 import { CardBody, CardHeader } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';

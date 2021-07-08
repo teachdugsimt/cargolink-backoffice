@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import B from '@atlaskit/button';
 import AddIcon from '@atlaskit/icon/glyph/add';
 
-interface AddJobProps {
+interface AddButtonProps {
   onClick: () => any;
   children: any;
 }
-const AddButton = (props: AddJobProps) => {
+const AddButton = (props: AddButtonProps) => {
   const { onClick, children } = props;
   return (
-    <Button onClick={onClick} iconBefore={<AddIcon label="add-job" size="small" />}>
+    <Button onClick={onClick} iconBefore={<AddIcon label="add" size="small" />}>
       {children}
     </Button>
   );
