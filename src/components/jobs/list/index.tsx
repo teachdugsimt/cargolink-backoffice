@@ -1,29 +1,28 @@
-import React, { useState, useEffect, CSSProperties } from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { useMst } from '../../stores/root-store';
+import { useMst } from '../../../stores/root-store';
 import { sortable as Sortable, tableHeaders, createTableRows } from './table.mapper';
 import Swal from 'sweetalert2';
-import { IJobsManagement } from '../../stores/job-store';
-import { JobListParams } from '../../services/job-api';
-import SearchForm from '../search-form';
+import { IJobsManagement } from '../../../stores/job-store';
+import { JobListParams } from '../../../services/job-api';
+import SearchForm from '../../search-form';
 import { navigate } from 'gatsby';
 import DynamicTable from '@atlaskit/dynamic-table';
+import JobStatusFilter, { JobStatus } from './status.filter';
+import AddJobButton from '../../buttons/add';
+import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
+import PageHeader from '@atlaskit/page-header';
+import ProductTypeSelector from '../productType.selector';
+import ProvincesSelector from '../../dropdowns/province';
 
-import { CardBody, CardHeader } from '@paljs/ui/Card';
-import { Button } from '@paljs/ui/Button';
+import { CardBody } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
-import { Icon } from 'react-icons-kit';
-import { ic_add } from 'react-icons-kit/md/ic_add';
 
 const INITIAL_API_PARAMS = {
   page: 1,
   descending: true,
-};
-
-const INITIAL_BTN_STATUS = {
-  0: true,
 };
 
 const JobContainer: React.FC = observer(() => {
@@ -35,16 +34,13 @@ const JobContainer: React.FC = observer(() => {
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState<JobListParams>(INITIAL_API_PARAMS);
   const [sortable, setSortable] = useState(Sortable);
-  const [btnStatus, setBtnStatus] = useState<any>(INITIAL_BTN_STATUS);
 
   const onDetail = (id: string) => {
     //TODO implement details navigate here
   };
 
-  const onStatusButtonClick = (jobStatus: number) => {
-    setBtnStatus({
-      [jobStatus]: true,
-    });
+  const onStatusButtonClick = (jobStatus: JobStatus | null) => {
+    if (jobStatus == null) return;
     const params = jobStatus == 0 ? INITIAL_API_PARAMS : { ...INITIAL_API_PARAMS, status: jobStatus };
     setSearchValue(params);
     jobStore.getJobsList(params);
@@ -53,17 +49,10 @@ const JobContainer: React.FC = observer(() => {
   const onSearch = (value: string) => {
     let searchParams: JobListParams = INITIAL_API_PARAMS;
     if (value) {
-      let productIds: number[] = productTypes
-        ? productTypes.reduce((result, type) => {
-          const thereIs = type.name.includes(value.trim());
-          thereIs ? [...result, type.id] : result;
-        }, [])
-        : [];
       searchParams = {
         ...searchParams,
         productName: value,
         owner: value,
-        productType: productIds,
         from: value,
         to: value,
       };
@@ -74,6 +63,26 @@ const JobContainer: React.FC = observer(() => {
         };
       }
     }
+    fireSearch(searchParams);
+  };
+
+  const onProductTypeSearch = (productTypeId: string) => {
+    const value = isNaN(+productTypeId) ? undefined : JSON.stringify([productTypeId])
+    fireSearch({
+      ...searchValue,
+      productType: value,
+    });
+  };
+
+  const onProvinceSearch = (province: string) => {
+    const value = province === 'none' ? undefined : province;
+    fireSearch({
+      ...searchValue,
+      from: value,
+    });
+  }
+
+  const fireSearch = (searchParams: JobListParams) => {
     setPage(searchParams.page);
     setSearchValue(searchParams);
     jobStore.getJobsList(searchParams);
@@ -85,21 +94,18 @@ const JobContainer: React.FC = observer(() => {
     setSortable({ ...sortable, [sort.key]: descending });
     setSearchValue(searchParams);
     jobStore.getJobsList(searchParams);
-  }
+  };
 
   const onPageChange = (destinationPage: number) => {
     setPage(destinationPage);
     const searchParams = { ...searchValue, page: destinationPage };
     setSearchValue(searchParams);
     jobStore.getJobsList(searchParams);
-  }
+  };
 
   useEffect(() => {
     jobStore.getJobsList(INITIAL_API_PARAMS);
     setSearchValue(INITIAL_API_PARAMS);
-    return () => {
-      setBtnStatus(INITIAL_BTN_STATUS);
-    };
   }, []);
 
   useEffect(() => {
@@ -121,70 +127,42 @@ const JobContainer: React.FC = observer(() => {
     }
   }, [jobStore.data_jobs, jobStore.data_jobs?.reRender, jobStore.data_jobs?.content?.length, productTypes]);
 
-  const statusButtonActive: CSSProperties = {
-    color: '#FBBC12',
-    backgroundColor: 'white',
-  }
+  const breadcrumbs = (
+    <Breadcrumbs>
+      <BreadcrumbsItem text={t('jobsManagement')} key="jobs-management" />
+    </Breadcrumbs>
+  );
 
   return (
     <div>
-      <CardHeader>
-        <div className="block-data-header">
-          <span className="font-data-header">{t('jobs')}</span>
-          <div style={{ display: 'flex' }}>
-            <SearchForm onSearch={(value) => onSearch(value)} />
-          </div>
-        </div>
-      </CardHeader>
+      <HeaderGroup>
+        <PageHeader breadcrumbs={breadcrumbs}>{t('jobs')}</PageHeader>
+        <SearchForm onSearch={(value) => onSearch(value)} />
+      </HeaderGroup>
       <CardBody>
         <StatusButtonsRow>
-          <div>
-            <StatusButton
-              size="Small"
-              status="Warning"
-              style={btnStatus[0] ? statusButtonActive : undefined}
-              onClick={() => onStatusButtonClick(0)}>
-              {t('all')}
-            </StatusButton>
-            <StatusButton
-              size="Small"
-              status="Warning"
-              style={btnStatus[1] ? statusButtonActive : undefined}
-              onClick={() => onStatusButtonClick(1)}>
-              {t('OPEN')}
-            </StatusButton>
-            <StatusButton
-              size="Small"
-              status="Warning"
-              style={btnStatus[3] ? statusButtonActive : undefined}
-              onClick={() => onStatusButtonClick(3)}>
-              {t('IN-PROGRESS')}
-            </StatusButton>
-            <StatusButton
-              size="Small"
-              status="Warning"
-              style={btnStatus[7] ? statusButtonActive : undefined}
-              onClick={() => onStatusButtonClick(7)}>
-              {t('COMPLETED')}
-            </StatusButton>
-          </div>
-          <Button
-            appearance="outline"
-            status="Success"
-            size="Small"
+          <FiltersGroup>
+            <JobStatusFilter t={t} onChange={(option) => onStatusButtonClick(option?.value as JobStatus | null)} />
+            <ProductTypeSelector
+              maxWidth="200px"
+              includeNone={true}
+              placeholder={t('productType')}
+              onSelect={onProductTypeSearch}
+            />
+            <ProvincesSelector
+              maxWidth="200px"
+              includeNone={true}
+              placeholder={t('province')}
+              onSelect={onProvinceSearch} />
+          </FiltersGroup>
+          <AddJobButton
             onClick={() => {
               setSubmit(true);
               navigate('/jobs/add');
             }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              borderColor: '#00B132',
-              backgroundColor: submit ? '#00B132' : 'white',
-              color: submit ? 'white' : '#00B132',
-            }}>
-            <Icon icon={ic_add} /> {t('addNewJob')}
-          </Button>
+          >
+            {t('addNewJob')}
+          </AddJobButton>
         </StatusButtonsRow>
         <span>{`${t('resultsFound')}: ${jobStore.data_count || 0}`}</span>
         <TableWrapper>
@@ -198,7 +176,8 @@ const JobContainer: React.FC = observer(() => {
             loadingSpinnerSize="large"
             isLoading={jobStore.loading}
             onSort={onSort}
-            onSetPage={onPageChange} />
+            onSetPage={onPageChange}
+          />
         </TableWrapper>
       </CardBody>
     </div>
@@ -214,16 +193,25 @@ const TableWrapper = styled.div`
 `;
 
 const StatusButtonsRow = styled(Row)`
-  padding: 10px;
+  padding: 10px 13px;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   min-width: 719px;
 `;
 
-const StatusButton = styled(Button)`
-  margin-right: 10px;
-  border-color: #FBBC12;
-  background-color: white;
-  color: black;
+const HeaderGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  & > :last-child {
+    max-width: 250px;
+    margin-top: 53px;
+  }
+`;
+
+const FiltersGroup = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  gap: 10px;
 `;

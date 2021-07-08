@@ -3,25 +3,25 @@ import styled, { css } from 'styled-components';
 import Swal from 'sweetalert2';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
-import { useMst } from '../../stores/root-store';
+import { useMst } from '../../../stores/root-store';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
-import { ITruckType } from '../../services/truck-type-api';
-import { IProductType } from '../../services/product-type-api';
+import { ITruckType } from '../../../services/truck-type-api';
+import { IProductType } from '../../../services/product-type-api';
 import Spinner from '@atlaskit/spinner';
-import { parseMobXToObject } from '../../utils';
+import { parseMobXToObject } from '../../../utils';
 import UserSelector from './user.selector';
 import TruckTypesSelector from './truckType.selector';
-import ProductTypesSelector from './productType.selector';
+import ProductTypesSelector from '../productType.selector';
 import PriceTypeToggle, { PriceTypeEnum } from './price-type-toggle';
-import { breakPoints } from '../../utils';
+import { breakPoints } from '../../../utils';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import { navigate } from 'gatsby';
 
 import { Accordion, AccordionItem } from '@paljs/ui/Accordion';
-import { GoogleMapWithSearch } from '../google-map-with-search/old-google-map-with-search';
+import { GoogleMapWithSearch } from '../../google-map-with-search/old-google-map-with-search';
 import { Card, CardBody, CardHeader } from '@paljs/ui/Card';
 import { Box } from 'theme-ui';
-import { Text } from '../text-span/text';
+import { Text } from '../../text-span/text';
 import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import { EvaIcon } from '@paljs/ui/Icon';
 import { FormFooter } from '@atlaskit/form';
@@ -113,7 +113,7 @@ const AddJobContainer: React.FC = observer(() => {
     </ErrorInput>
   );
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => { }}>
+    <Breadcrumbs onExpand={() => {}}>
       <BreadcrumbsItem onClick={() => navigate('/jobs')} text={t('jobsManagement')} key="jobs-management" />
       <BreadcrumbsItem text={t('addNewJob')} key="job-info" />
     </Breadcrumbs>
@@ -131,11 +131,7 @@ const AddJobContainer: React.FC = observer(() => {
               name="userId"
               control={control}
               render={({ onChange }) => (
-                <UserSelector
-                  onUserSelect={onChange}
-                  placeholder={t('typeUserToFind')}
-                  noResultsMessage={t('noData')}
-                />
+                <UserSelector onSelect={onChange} placeholder={t('typeUserToFind')} noResultsMessage={t('noData')} />
               )}
             />
           </Item>
@@ -462,7 +458,9 @@ const AddJobContainer: React.FC = observer(() => {
                     <EditorDividerIcon label="remove" size="Small" />
                   </MinusButton>
                 </ItemLongEnd>
-              ) : ''}
+              ) : (
+                ''
+              )}
               <ItemLong>
                 <Divider />
               </ItemLong>
@@ -637,14 +635,14 @@ const PlusButton = styled(Button)`
 
 const BackButton = styled(Button)`
   background-color: transparent;
-  border: 1px solid #FBBC12;
-  color: #FBBC12;
+  border: 1px solid #fbbc12;
+  color: #fbbc12;
   margin: 0 6px;
 `;
 
 const SubmitButton = styled(Button)`
   margin: 0 6px;
-  border: 1px solid #FBBC12;
-  background-color: #FBBC12;
+  border: 1px solid #fbbc12;
+  background-color: #fbbc12;
   color: black;
 `;
