@@ -11,6 +11,8 @@ import { PasswordChangeStore } from './password-change-store';
 import { UploadFileStore } from './upload-file-store';
 import { JobStore } from './job-store';
 import { TruckStore } from './truck-store';
+import { TruckTypeStore } from './truck-type-store';
+import { ProductTypeStore } from './product-type-store';
 
 const RootModel = types.model({
   loginStore: LoginStore,
@@ -22,7 +24,9 @@ const RootModel = types.model({
   passwordChangeStore: PasswordChangeStore,
   uploadFileStore: UploadFileStore,
   jobStore: JobStore,
-  truckStore: TruckStore
+  truckStore: TruckStore,
+  truckTypesStore: TruckTypeStore,
+  productTypesStore: ProductTypeStore,
 });
 
 let initialState = RootModel.create({
@@ -71,6 +75,14 @@ let initialState = RootModel.create({
     error_response: null,
   },
   truckStore: {
+    loading: false,
+    error_response: null,
+  },
+  truckTypesStore: {
+    loading: false,
+    error_response: null,
+  },
+  productTypesStore: {
     loading: false,
     error_response: null,
   },
