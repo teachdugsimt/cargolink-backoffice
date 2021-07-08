@@ -42,10 +42,8 @@ const JobContainer: React.FC = observer(() => {
     //TODO implement details navigate here
   };
 
-  const onStatusButtonClick = (jobStatus: number) => {
-    setBtnStatus({
-      [jobStatus]: true,
-    });
+  const onStatusButtonClick = (jobStatus: JobStatus | null) => {
+    if (jobStatus == null) return;
     const params = jobStatus == 0 ? INITIAL_API_PARAMS : { ...INITIAL_API_PARAMS, status: jobStatus };
     setSearchValue(params);
     jobStore.getJobsList(params);
@@ -54,11 +52,11 @@ const JobContainer: React.FC = observer(() => {
   const onSearch = (value: string) => {
     let searchParams: JobListParams = INITIAL_API_PARAMS;
     if (value) {
-      let productIds: number[] = productTypes
+      const productIds: number[] = productTypes
         ? productTypes.reduce((result, type) => {
-          const thereIs = type.name.includes(value.trim());
-          thereIs ? [...result, type.id] : result;
-        }, [])
+            const thereIs = type.name.includes(value.trim());
+            thereIs ? [...result, type.id] : result;
+          }, [])
         : [];
       searchParams = {
         ...searchParams,
@@ -86,21 +84,18 @@ const JobContainer: React.FC = observer(() => {
     setSortable({ ...sortable, [sort.key]: descending });
     setSearchValue(searchParams);
     jobStore.getJobsList(searchParams);
-  }
+  };
 
   const onPageChange = (destinationPage: number) => {
     setPage(destinationPage);
     const searchParams = { ...searchValue, page: destinationPage };
     setSearchValue(searchParams);
     jobStore.getJobsList(searchParams);
-  }
+  };
 
   useEffect(() => {
     jobStore.getJobsList(INITIAL_API_PARAMS);
     setSearchValue(INITIAL_API_PARAMS);
-    return () => {
-      setBtnStatus(INITIAL_BTN_STATUS);
-    };
   }, []);
 
   useEffect(() => {
@@ -140,7 +135,7 @@ const JobContainer: React.FC = observer(() => {
       <CardBody>
         <StatusButtonsRow>
           <div>
-            <JobStatusFilter t={t} onChange={(option) => console.log('changed', option)} />
+            <JobStatusFilter t={t} onChange={(option) => onStatusButtonClick(option?.value as JobStatus | null)} />
           </div>
           <Button
             appearance="outline"
