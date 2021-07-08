@@ -10,21 +10,15 @@ import { JobListParams } from '../../../services/job-api';
 import SearchForm from '../../search-form';
 import { navigate } from 'gatsby';
 import DynamicTable from '@atlaskit/dynamic-table';
-import JobStatusFilter from './status.filter';
+import JobStatusFilter, { JobStatus } from './status.filter';
+import AddJobButton from './addJob.button';
 
 import { CardBody, CardHeader } from '@paljs/ui/Card';
-import { Button } from '@paljs/ui/Button';
 import Row from '@paljs/ui/Row';
-import { Icon } from 'react-icons-kit';
-import { ic_add } from 'react-icons-kit/md/ic_add';
 
 const INITIAL_API_PARAMS = {
   page: 1,
   descending: true,
-};
-
-const INITIAL_BTN_STATUS = {
-  0: true,
 };
 
 const JobContainer: React.FC = observer(() => {
@@ -36,7 +30,6 @@ const JobContainer: React.FC = observer(() => {
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState<JobListParams>(INITIAL_API_PARAMS);
   const [sortable, setSortable] = useState(Sortable);
-  const [btnStatus, setBtnStatus] = useState<any>(INITIAL_BTN_STATUS);
 
   const onDetail = (id: string) => {
     //TODO implement details navigate here
@@ -117,11 +110,6 @@ const JobContainer: React.FC = observer(() => {
     }
   }, [jobStore.data_jobs, jobStore.data_jobs?.reRender, jobStore.data_jobs?.content?.length, productTypes]);
 
-  const statusButtonActive: CSSProperties = {
-    color: '#FBBC12',
-    backgroundColor: 'white',
-  }
-
   return (
     <div>
       <CardHeader>
@@ -137,23 +125,14 @@ const JobContainer: React.FC = observer(() => {
           <div>
             <JobStatusFilter t={t} onChange={(option) => onStatusButtonClick(option?.value as JobStatus | null)} />
           </div>
-          <Button
-            appearance="outline"
-            status="Success"
-            size="Small"
+          <AddJobButton
             onClick={() => {
               setSubmit(true);
               navigate('/jobs/add');
             }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              borderColor: '#00B132',
-              backgroundColor: submit ? '#00B132' : 'white',
-              color: submit ? 'white' : '#00B132',
-            }}>
-            <Icon icon={ic_add} /> {t('addNewJob')}
-          </Button>
+          >
+            {t('addNewJob')}
+          </AddJobButton>
         </StatusButtonsRow>
         <span>{`${t('resultsFound')}: ${jobStore.data_count || 0}`}</span>
         <TableWrapper>
@@ -167,7 +146,8 @@ const JobContainer: React.FC = observer(() => {
             loadingSpinnerSize="large"
             isLoading={jobStore.loading}
             onSort={onSort}
-            onSetPage={onPageChange} />
+            onSetPage={onPageChange}
+          />
         </TableWrapper>
       </CardBody>
     </div>
@@ -183,16 +163,9 @@ const TableWrapper = styled.div`
 `;
 
 const StatusButtonsRow = styled(Row)`
-  padding: 10px;
+  padding: 10px 13px;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   min-width: 719px;
-`;
-
-const StatusButton = styled(Button)`
-  margin-right: 10px;
-  border-color: #FBBC12;
-  background-color: white;
-  color: black;
 `;
