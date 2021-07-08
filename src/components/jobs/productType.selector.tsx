@@ -6,7 +6,7 @@ export default class ProductTypeSelector extends AbstractAsyncSelector {
 
   fetch = async () => {
     try {
-      const response = await ProductTypeApi.getProductTypes(this.props.language);
+      const response = await ProductTypeApi.getProductTypes();
       if (response && response.ok) {
         const types: IProductType[] = response.data;
         let options = types.map((type) => ({
