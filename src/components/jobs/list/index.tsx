@@ -14,6 +14,7 @@ import JobStatusFilter, { JobStatus } from './status.filter';
 import AddJobButton from '../../buttons/add';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
+import ProductTypeSelector from '../productType.selector';
 
 import { CardBody } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
@@ -47,17 +48,10 @@ const JobContainer: React.FC = observer(() => {
   const onSearch = (value: string) => {
     let searchParams: JobListParams = INITIAL_API_PARAMS;
     if (value) {
-      const productIds: number[] = productTypes
-        ? productTypes.reduce((result, type) => {
-          const thereIs = type.name.includes(value.trim());
-          thereIs ? [...result, type.id] : result;
-        }, [])
-        : [];
       searchParams = {
         ...searchParams,
         productName: value,
         owner: value,
-        productType: productIds,
         from: value,
         to: value,
       };
@@ -68,6 +62,18 @@ const JobContainer: React.FC = observer(() => {
         };
       }
     }
+    fireSearch(searchParams);
+  };
+
+  const onProductTypeSearch = (productTypeId: string) => {
+    const value = isNaN(+productTypeId) ? undefined : JSON.stringify([productTypeId])
+    fireSearch({
+      ...searchValue,
+      productType: value,
+    });
+  };
+
+  const fireSearch = (searchParams: JobListParams) => {
     setPage(searchParams.page);
     setSearchValue(searchParams);
     jobStore.getJobsList(searchParams);
@@ -121,16 +127,21 @@ const JobContainer: React.FC = observer(() => {
   return (
     <div>
       <HeaderGroup>
-        <PageHeader breadcrumbs={breadcrumbs}>
-          {t('jobs')}
-        </PageHeader>
+        <PageHeader breadcrumbs={breadcrumbs}>{t('jobs')}</PageHeader>
         <SearchForm onSearch={(value) => onSearch(value)} />
       </HeaderGroup>
       <CardBody>
         <StatusButtonsRow>
-          <div>
+          <FiltersGroup>
             <JobStatusFilter t={t} onChange={(option) => onStatusButtonClick(option?.value as JobStatus | null)} />
-          </div>
+            <ProductTypeSelector
+              maxWidth="200px"
+              includeNone={true}
+              placeholder={t('productType')}
+              language={loginStore.language}
+              onSelect={onProductTypeSearch}
+            />
+          </FiltersGroup>
           <AddJobButton
             onClick={() => {
               setSubmit(true);
@@ -184,4 +195,10 @@ const HeaderGroup = styled.div`
     max-width: 250px;
     margin-top: 53px;
   }
+`;
+
+const FiltersGroup = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  gap: 10px;
 `;
