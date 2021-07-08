@@ -113,7 +113,7 @@ const AddJobContainer: React.FC = observer(() => {
     </ErrorInput>
   );
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => { }}>
+    <Breadcrumbs onExpand={() => {}}>
       <BreadcrumbsItem onClick={() => navigate('/jobs')} text={t('jobsManagement')} key="jobs-management" />
       <BreadcrumbsItem text={t('addNewJob')} key="job-info" />
     </Breadcrumbs>
@@ -131,11 +131,7 @@ const AddJobContainer: React.FC = observer(() => {
               name="userId"
               control={control}
               render={({ onChange }) => (
-                <UserSelector
-                  onUserSelect={onChange}
-                  placeholder={t('typeUserToFind')}
-                  noResultsMessage={t('noData')}
-                />
+                <UserSelector onSelect={onChange} placeholder={t('typeUserToFind')} noResultsMessage={t('noData')} />
               )}
             />
           </Item>
@@ -462,7 +458,9 @@ const AddJobContainer: React.FC = observer(() => {
                     <EditorDividerIcon label="remove" size="Small" />
                   </MinusButton>
                 </ItemLongEnd>
-              ) : ''}
+              ) : (
+                ''
+              )}
               <ItemLong>
                 <Divider />
               </ItemLong>
@@ -637,14 +635,14 @@ const PlusButton = styled(Button)`
 
 const BackButton = styled(Button)`
   background-color: transparent;
-  border: 1px solid #FBBC12;
-  color: #FBBC12;
+  border: 1px solid #fbbc12;
+  color: #fbbc12;
   margin: 0 6px;
 `;
 
 const SubmitButton = styled(Button)`
   margin: 0 6px;
-  border: 1px solid #FBBC12;
-  background-color: #FBBC12;
+  border: 1px solid #fbbc12;
+  background-color: #fbbc12;
   color: black;
 `;
