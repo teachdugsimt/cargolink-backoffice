@@ -1,11 +1,11 @@
 import React from 'react';
 import { Icon } from 'react-icons-kit';
 import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
-import images from '../Themes/images';
-import { momentFormatDateTime } from '../simple-data';
+import images from '../../Themes/images';
+import { momentFormatDateTime } from '../../simple-data';
 import { Button } from '@paljs/ui/Button';
-import { IJobNull } from '../../stores/job-store';
-import { IJob } from '../../services/job-api';
+import { IJobNull } from '../../../stores/job-store';
+import { IJob } from '../../../services/job-api';
 import { TFunction } from 'i18next';
 
 export const sortable: any = {
