@@ -8,6 +8,8 @@ interface IProps {
   placeholder?: string;
   onSelect: (productTypeId: string) => any;
   language?: string;
+  maxWidth?: string;
+  includeNone?: boolean;
 }
 
 interface IState {
@@ -28,14 +30,17 @@ export default class ProductTypeSelector extends React.Component<IProps, IState>
       const response = await ProductTypeApi.getProductTypes(this.props.language);
       if (response && response.ok) {
         const types = response.data;
-        const typesOptions = types.map((type) => ({
+        let typesOptions = types.map((type) => ({
           label: type.name,
           value: type.id,
         }));
+        if (this.props.includeNone) {
+          typesOptions = [{ label: this.props.placeholder || 'Select', value: 0 }, ...typesOptions];
+        }
         this.setState({ typesOptions, typesList: types });
-      } else console.error('search truck types not ok', response);
+      } else console.error('search product types not ok', response);
     } catch (error) {
-      console.error('error when search truck types', error);
+      console.error('error when search product types', error);
     }
   };
 
@@ -57,16 +62,29 @@ export default class ProductTypeSelector extends React.Component<IProps, IState>
 
     return (
       <Select
+        maxWidth={this.props.maxWidth}
         defaultOptions
         loadOptions={promiseOptions}
         placeholder={placeholder}
-        onChange={(selectingOption) => this.onSelected(selectingOption)}
+        onChange={(selectingOption: ValueType<OptionType, false>) => {
+          if (
+            this.props.includeNone &&
+            this.state.typesOptions.findIndex((option) => option.label === selectingOption?.label) === 0
+          ) {
+            console.log('fire none')
+            return this.onSelected('none');
+          }
+          return this.onSelected(selectingOption);
+        }}
         noOptionsMessage={() => 'Error'}
       />
     );
   }
 }
 
-const Select = styled(AsyncSelect)`
-  min-width: 300px;
+interface SelectStyleProps {
+  maxWidth?: string;
+}
+const Select = styled(AsyncSelect)<SelectStyleProps>`
+  min-width: ${({ maxWidth }) => (maxWidth ? maxWidth : '300px')};
 `;
