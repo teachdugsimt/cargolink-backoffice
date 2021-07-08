@@ -6,7 +6,7 @@ import { IProductType } from '../../services/product-type-api';
 
 interface IProps {
   placeholder?: string;
-  onSelect: (truckId: string) => any;
+  onSelect: (productTypeId: string) => any;
   language?: string;
 }
 
