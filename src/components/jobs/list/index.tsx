@@ -12,8 +12,10 @@ import { navigate } from 'gatsby';
 import DynamicTable from '@atlaskit/dynamic-table';
 import JobStatusFilter, { JobStatus } from './status.filter';
 import AddJobButton from '../../buttons/add';
+import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
+import PageHeader from '@atlaskit/page-header';
 
-import { CardBody, CardHeader } from '@paljs/ui/Card';
+import { CardBody } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
 
 const INITIAL_API_PARAMS = {
@@ -47,9 +49,9 @@ const JobContainer: React.FC = observer(() => {
     if (value) {
       const productIds: number[] = productTypes
         ? productTypes.reduce((result, type) => {
-            const thereIs = type.name.includes(value.trim());
-            thereIs ? [...result, type.id] : result;
-          }, [])
+          const thereIs = type.name.includes(value.trim());
+          thereIs ? [...result, type.id] : result;
+        }, [])
         : [];
       searchParams = {
         ...searchParams,
@@ -110,16 +112,20 @@ const JobContainer: React.FC = observer(() => {
     }
   }, [jobStore.data_jobs, jobStore.data_jobs?.reRender, jobStore.data_jobs?.content?.length, productTypes]);
 
+  const breadcrumbs = (
+    <Breadcrumbs>
+      <BreadcrumbsItem text={t('jobsManagement')} key="jobs-management" />
+    </Breadcrumbs>
+  );
+
   return (
     <div>
-      <CardHeader>
-        <div className="block-data-header">
-          <span className="font-data-header">{t('jobs')}</span>
-          <div style={{ display: 'flex' }}>
-            <SearchForm onSearch={(value) => onSearch(value)} />
-          </div>
-        </div>
-      </CardHeader>
+      <HeaderGroup>
+        <PageHeader breadcrumbs={breadcrumbs}>
+          {t('jobs')}
+        </PageHeader>
+        <SearchForm onSearch={(value) => onSearch(value)} />
+      </HeaderGroup>
       <CardBody>
         <StatusButtonsRow>
           <div>
@@ -168,4 +174,14 @@ const StatusButtonsRow = styled(Row)`
   display: flex;
   justify-content: space-between;
   min-width: 719px;
+`;
+
+const HeaderGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  & > :last-child {
+    max-width: 250px;
+    margin-top: 53px;
+  }
 `;
