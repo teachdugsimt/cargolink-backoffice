@@ -2,7 +2,7 @@ import ExcuteApi from './api-integrations/excute-api';
 import { DocumentStatus, IUserDTO } from '../stores/user-store';
 import { AxiosResponse } from 'axios';
 class UserApi {
-  getUsersList = async (params: GetUsersListParams) => {
+  getUsersList = async (params: GetUsersListParams): Promise<AxiosResponse<GetUsersListResponse>> => {
     const response = await ExcuteApi('/api/v1/users', params, 'get', 600000, true, true);
     return response;
   };
@@ -38,6 +38,9 @@ export interface GetUsersListParams {
   rowsPerPage?: number;
   descending?: boolean;
   sortBy?: string; //? key to sort
+  fullName?: string;
+  phoneNumber?: string;
+  email?: string;
 }
 
 export interface GetUsersListResponse {

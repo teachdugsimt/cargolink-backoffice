@@ -16,6 +16,7 @@
   "trucks": "Trucks",
   "drivers": "Drivers",
   "userManagement": "User Management",
+  "jobsManagement": "Jobs Management",
   "truckstype": "Trucks Type",
   "truckRegion": "Trucks types in each region",
   "JobsRegion": "Jobs in each region",
@@ -162,5 +163,6 @@
   "clickToEnterValue": "Click to enter value",
   "deleteUserSuccess": "The user has been deleted",
   "createUserSuccess": "Created user successfully",
-  "createUserErrorByUser": "Some on your data is invalid, please recheck and try again"
+  "createUserErrorByUser": "Some on your data is invalid, please recheck and try again",
+  "typeUserToFind": "Type a keyword to find users to select"
 }

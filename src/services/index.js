@@ -6,4 +6,7 @@ import MasterTypeApi from './master-type-api';
 import UserApi from './user-api';
 import JobApi from './job-api';
 import TruckApi from './truck-api';
-export { LoginApi, CarrierApi, ShipperApi, UploadFileApi, MasterTypeApi, UserApi, JobApi, TruckApi };
+import TruckTypeApi from './truck-type-api';
+import ProductTypeApi from './product-type-api';
+
+export { LoginApi, CarrierApi, ShipperApi, UploadFileApi, MasterTypeApi, UserApi, JobApi, TruckApi, TruckTypeApi, ProductTypeApi };
