@@ -1,7 +1,7 @@
 import React from 'react';
 import { OptionsType, OptionType, ValueType } from '@atlaskit/select';
 import { TFunction } from 'i18next';
-import Dropdown from '../../generic.dropdown';
+import Dropdown from '../../dropdowns/generic';
 
 export enum JobStatus {
   ALL = 0,
