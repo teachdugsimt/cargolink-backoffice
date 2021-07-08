@@ -8,38 +8,13 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
+import ChartTrip from '../components/dashboard/chart-trip/chart-trip'
 
-const Summary = styled.div`
-  height: 100px;
-  width: 220px;
-  border-radius: 10px;
-  background: linear-gradient(128deg,
-    ${props => props.orange ? '#fad961' :
-    props.purple ? '#c56cd6' :
-      props.blue ? '#15f5fd' :
-        props.pink ? '#f36265' : 'white'} 0%,
-    ${props => props.orange ? '#f76b1c' :
-    props.purple ? '#3425af' :
-      props.blue ? '#036cda' :
-        props.pink ? '#961276' : 'white'} 100%);
-  margin-right: 20px;
-  margin-bottom: 20px;
-  padding: 5px 10px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-`;
 
 const Home = () => {
   const { t } = useTranslation();
 
-  // useEffect(() => {
-  //   const data = localStorage.getItem('rootState');
-  //   console.log('data : >>', data);
-  // }, [])
+
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => { }}>
       <BreadcrumbsItem text={t('dashboard')} key="user-info" />
@@ -49,11 +24,28 @@ const Home = () => {
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('dashboard')}</PageHeader>
+      <ChartTrip />
       <Row>
-        <Summary pink>รถใหม่</Summary>
-        <Summary purple></Summary>
-        <Summary blue></Summary>
-        <Summary orange></Summary>
+        <Summary pink>
+          <span>รถใหม่</span>
+          <Value>0</Value>
+          <RangeLabel>วันนี้</RangeLabel>
+        </Summary>
+        <Summary purple>
+          <span>งานใหม่</span>
+          <Value>0</Value>
+          <RangeLabel>วันนี้</RangeLabel>
+        </Summary>
+        <Summary blue>
+          <span>สมาชิกใหม่</span>
+          <Value>0</Value>
+          <RangeLabel>วันนี้</RangeLabel>
+        </Summary>
+        <Summary orange>
+          <span>วิ่งงาน</span>
+          <Value>0</Value>
+          <RangeLabel>วันนี้</RangeLabel>
+        </Summary>
       </Row>
       {/* <Card> */}
       {/* <CardHeader>
@@ -72,3 +64,48 @@ const Home = () => {
   );
 };
 export default Home;
+
+const Summary = styled.div<{
+  orange?: boolean | undefined;
+  purple?: boolean | undefined;
+  blue?: boolean | undefined;
+  pink?: boolean | undefined;
+}>`
+  height: 100px;
+  width: 220px;
+  border-radius: 10px;
+  background: linear-gradient(128deg,
+    ${props => props.orange ? '#fad961' :
+    props.purple ? '#c56cd6' :
+      props.blue ? '#13d6dd' :
+        props.pink ? '#f36265' : 'white'} 0%,
+    ${props => props.orange ? '#f76b1c' :
+    props.purple ? '#3425af' :
+      props.blue ? '#036cda' :
+        props.pink ? '#961276' : 'white'} 100%);
+  margin-right: 20px;
+  margin-bottom: 20px;
+  padding: 5px 10px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+
+const Value = styled.span`
+  font-size: 50px;
+  line-height: 50px;
+  text-align: right;
+  margin-right: 10px;
+`;
+
+const RangeLabel = styled.span`
+  font-size: 10px;
+  text-align: right;
+  margin-right: 12px;
+`;
