@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AsyncSelect, OptionsType, OptionType, ValueType } from '@atlaskit/select';
-import { TruckTypeApi } from '../../services';
-import { ITruckType } from '../../services/truck-type-api';
+import { TruckTypeApi } from '../../../services';
+import { ITruckType } from '../../../services/truck-type-api';
 
 interface IProps {
   placeholder?: string;

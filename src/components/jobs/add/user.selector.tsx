@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AsyncSelect, OptionsType, OptionType, ValueType } from '@atlaskit/select';
-import { IUserDTO } from '../../stores/user-store';
-import { UserApi } from '../../services';
+import { IUserDTO } from '../../../stores/user-store';
+import { UserApi } from '../../../services';
 
 interface IUserSelectorProps {
   placeholder?: string;
