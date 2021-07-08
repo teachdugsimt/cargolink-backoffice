@@ -10,6 +10,7 @@ import { JobListParams } from '../../services/job-api';
 import SearchForm from '../search-form';
 import { navigate } from 'gatsby';
 import DynamicTable from '@atlaskit/dynamic-table';
+import JobStatusFilter from './status.filter';
 
 import { CardBody, CardHeader } from '@paljs/ui/Card';
 import { Button } from '@paljs/ui/Button';
@@ -139,34 +140,7 @@ const JobContainer: React.FC = observer(() => {
       <CardBody>
         <StatusButtonsRow>
           <div>
-            <StatusButton
-              size="Small"
-              status="Warning"
-              style={btnStatus[0] ? statusButtonActive : undefined}
-              onClick={() => onStatusButtonClick(0)}>
-              {t('all')}
-            </StatusButton>
-            <StatusButton
-              size="Small"
-              status="Warning"
-              style={btnStatus[1] ? statusButtonActive : undefined}
-              onClick={() => onStatusButtonClick(1)}>
-              {t('OPEN')}
-            </StatusButton>
-            <StatusButton
-              size="Small"
-              status="Warning"
-              style={btnStatus[3] ? statusButtonActive : undefined}
-              onClick={() => onStatusButtonClick(3)}>
-              {t('IN-PROGRESS')}
-            </StatusButton>
-            <StatusButton
-              size="Small"
-              status="Warning"
-              style={btnStatus[7] ? statusButtonActive : undefined}
-              onClick={() => onStatusButtonClick(7)}>
-              {t('COMPLETED')}
-            </StatusButton>
+            <JobStatusFilter t={t} onChange={(option) => console.log('changed', option)} />
           </div>
           <Button
             appearance="outline"
