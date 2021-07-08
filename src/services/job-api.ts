@@ -15,9 +15,9 @@ export interface JobListParams {
   descending: boolean;
   productName?: string;
   owner?: string;
-  productType?: string | number[];
-  from?: string;
-  to?: string;
+  productType?: string;
+  from?: string; //? name in Thai
+  to?: string; //? name in Thai
   weight?: number;
   minWeight?: number;
   maxWeight?: number;

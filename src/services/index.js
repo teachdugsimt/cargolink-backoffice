@@ -8,5 +8,18 @@ import JobApi from './job-api';
 import TruckApi from './truck-api';
 import TruckTypeApi from './truck-type-api';
 import ProductTypeApi from './product-type-api';
+import RegionApi from './region-api';
 
-export { LoginApi, CarrierApi, ShipperApi, UploadFileApi, MasterTypeApi, UserApi, JobApi, TruckApi, TruckTypeApi, ProductTypeApi };
+export {
+  LoginApi,
+  CarrierApi,
+  ShipperApi,
+  UploadFileApi,
+  MasterTypeApi,
+  UserApi,
+  JobApi,
+  TruckApi,
+  TruckTypeApi,
+  ProductTypeApi,
+  RegionApi,
+};
