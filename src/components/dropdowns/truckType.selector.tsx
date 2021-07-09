@@ -8,7 +8,7 @@ export default class TruckTypesSelector extends AbstractAsyncSelector {
     try {
       const response = await TruckTypeApi.getTruckTypes();
       if (response && response.ok) {
-        const types: ITruckType[] = response.data;
+        const types: ITruckType[] = response.data.sort((a, b) => a.id - b.id);
         const options = types.map((type) => ({
           label: type.name,
           value: type.id,
