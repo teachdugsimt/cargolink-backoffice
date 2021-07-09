@@ -171,16 +171,12 @@ const MultipleRole: React.FC<Props> = observer(() => {
 
   return (
     <div>
-      <PageHeader breadcrumbs={breadcrumbs}>
-        {t('userManagement')}
-      </PageHeader>
-      {alertSetting.show && <Alert setting={alertSetting} />}
-
-      <div style={{ display: 'flex', flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
-
-        <SearchForm onSearch={(value: any) => onSearch(value)} />
-
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <PageHeader breadcrumbs={breadcrumbs}>
+          {t('userManagement')}
+        </PageHeader>
+        {/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}> */}
+        <div style={{ marginTop: 38 }}>
           <Button
             iconBefore={<AddCircleIcon label="" />}
             onClick={() => navigate('/users/add')}
@@ -190,8 +186,14 @@ const MultipleRole: React.FC<Props> = observer(() => {
             {t('addNewAccount')}
           </Button>
         </div>
-
+        {/* </div> */}
       </div>
+      {alertSetting.show && <Alert setting={alertSetting} />}
+
+      {/* <div style={{ display: 'flex', flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}> */}
+
+      <SearchForm onSearch={(value: any) => onSearch(value)} />
+      {/* </div> */}
 
 
       <span>{`${t('resultsFound')}: ${userStore.data_count || 0}`}</span>

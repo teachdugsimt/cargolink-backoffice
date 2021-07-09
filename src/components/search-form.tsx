@@ -48,7 +48,7 @@ const SearchForm: React.FC<SearchProps> = observer((props) => {
   }, [keyboard]);
 
   return (
-    <div style={{ width: 250 }}>
+    <div style={{ width: 250, marginBottom: 20 }}>
       {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
       {/* <input
         id="inputSearch"

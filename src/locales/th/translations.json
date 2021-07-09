@@ -166,5 +166,8 @@
   "deleteUserSuccess": "ลบผู้ใช้แล้ว",
   "createUserSuccess": "สร้างผู้ใช้แล้ว",
   "createUserErrorByUser": "ข้อมูลไม่ถูกต้อง โปรดตรวจสอบข้อมูลใหม่",
-  "typeUserToFind": "พิมพ์คีย์เวิร์ดเพื่อค้นหาผู้ใช้"
+  "typeUserToFind": "พิมพ์คีย์เวิร์ดเพื่อค้นหาผู้ใช้",
+  "trips": {
+    "management": "จัดการการขนส่ง"
+  }
 }

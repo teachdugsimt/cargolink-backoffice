@@ -18,7 +18,7 @@ const items: MenuItemType[] = [
     title_th: 'การขนส่ง',
     title_en: 'Transportation',
     icon: 'check-list',
-    link: { to: '/job-status' },
+    link: { to: '/trips' },
   },
   {
     title_th: 'จัดการรถ',
