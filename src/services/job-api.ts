@@ -23,7 +23,7 @@ export interface JobListParams {
   maxWeight?: number;
   sortBy?: string;
   rowsPerPage?: number;
-  status?: number;
+  status?: string;
   truckAmountMin?: number;
   truckAmountMax?: number;
   truckType?: string;

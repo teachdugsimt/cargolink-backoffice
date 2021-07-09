@@ -166,5 +166,7 @@
   "createUserSuccess": "Created user successfully",
   "createUserErrorByUser": "Some on your data is invalid, please recheck and try again",
   "typeUserToFind": "Type a keyword to find users to select",
-  "allTrucks": "All Trucks"
+  "allTrucks": "All Trucks",
+  "allTypes": "All",
+  "allProvinces": "All Provinces"
 }

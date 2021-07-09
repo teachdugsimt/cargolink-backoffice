@@ -33,7 +33,7 @@ const JobType = types.model({
   from: types.maybeNull(DestinationType),
   to: types.maybeNull(types.array(DestinationType)),
   owner: types.maybeNull(OwnerType),
-  status: types.maybeNull(types.number),
+  status: types.maybeNull(types.string),
   quotations: types.maybeNull(types.array(types.string)),
   price: types.maybeNull(types.number),
   priceType: types.maybeNull(types.string),
@@ -87,6 +87,7 @@ export const JobStore = types
             };
             if (!self.isFirstLoad) jobs.reRender = !!!self.data_jobs?.reRender;
             if (data.length) {
+              const dataaa = [data[0]];
               const emptyContent: any = Object.keys(data[0]).reduce(
                 (object: any, curr: string) => ({
                   ...object,
@@ -101,7 +102,7 @@ export const JobStore = types
               const emptyContentsAfterLastItem = pagesAfterContent * size;
               jobs.content = [
                 ...Array(emptyContentsBeforeFirstItem).fill(emptyContent),
-                ...data,
+                ...dataaa,
                 ...Array(emptyContentsAfterLastItem).fill(emptyContent),
               ];
             } else jobs.content = [];

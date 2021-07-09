@@ -7,6 +7,7 @@ import { Button } from '@paljs/ui/Button';
 import { IJobNull } from '../../../stores/job-store';
 import { IJob } from '../../../services/job-api';
 import { TFunction } from 'i18next';
+import { IProductType } from '../../../services/product-type-api';
 
 export const sortable: any = {
   id: true, //! Note that: DESC = true, ASC = fasle
@@ -27,20 +28,26 @@ export const createTableHeader = () => ({
       isSortable: true,
     },
     {
+      key: 'productType',
+      content: 'Product Type',
+      shouldTruncate: true,
+      isSortable: true,
+    },
+    {
       key: 'productName',
       content: 'Product Name',
       shouldTruncate: true,
       isSortable: true,
     },
     {
-      key: 'companyName',
-      content: 'Name of  shipper',
+      key: 'price',
+      content: 'Price',
       shouldTruncate: true,
       isSortable: true,
     },
     {
-      key: 'productTypeId',
-      content: 'Type of goods',
+      key: 'priceType',
+      content: 'Price Type',
       shouldTruncate: true,
       isSortable: true,
     },
@@ -50,8 +57,8 @@ export const createTableHeader = () => ({
       shouldTruncate: true,
     },
     {
-      key: 'weight',
-      content: 'Weight',
+      key: 'owner',
+      content: 'Owner',
       shouldTruncate: true,
       isSortable: true,
     },
@@ -80,16 +87,26 @@ export const tableHeaders = createTableHeader();
 
 export const createTableRows = (
   jobs: (IJob | IJobNull)[],
-  products: any,
+  products: IProductType[],
   language: string,
   t: TFunction,
   onDetail: (id: string) => any,
 ) => {
   return jobs.map((job, index) => {
-    const productType = products?.length && products.find((prod: any) => prod.id === job.productTypeId);
+    const productType = products.length && products.find((prod) => prod.id === job.productTypeId);
     const typeName = productType ? productType.name : '';
     let status = jobStatus[`jobStatus${job.status}`];
     if (!status) status = job.status;
+    const priceType = ((priceType: 'PER_TRIP' | 'PER_TON' | null) => {
+      switch (priceType) {
+        case 'PER_TRIP':
+          return t('perTrip');
+        case 'PER_TON':
+          return t('perTon');
+        default:
+          return null;
+      }
+    })(job.priceType);
     return {
       key: `row-${index}-${job.id}`,
       cells: [
@@ -102,16 +119,20 @@ export const createTableRows = (
           ),
         },
         {
+          key: job.productTypeId,
+          content: typeName || '-',
+        },
+        {
           key: job.productName,
           content: job.productName || '-',
         },
         {
-          key: job.owner?.fullName,
-          content: job.owner?.fullName || '-',
+          key: job.price,
+          content: job.price || '-',
         },
         {
-          key: typeName,
-          content: typeName || '-',
+          key: job.priceType,
+          content: priceType || '-',
         },
         {
           key: job.from?.name,
@@ -152,8 +173,8 @@ export const createTableRows = (
           ),
         },
         {
-          key: job.weight,
-          content: job.weight,
+          key: job.owner?.fullName,
+          content: job.owner?.fullName || '-',
         },
         {
           key: t(status),
