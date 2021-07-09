@@ -168,13 +168,13 @@ const JobContainer: React.FC = observer(() => {
           <ProductTypeSelector
             maxWidth="200px"
             includeNone={true}
-            placeholder={t('productType')}
+            placeholder={t('allTypes')}
             onSelect={onProductTypeSearch}
           />
           <ProvincesSelector
             maxWidth="200px"
             includeNone={true}
-            placeholder={t('province')}
+            placeholder={t('allProvinces')}
             onSelect={onProvinceSearch} />
         </FiltersGroup>
         <span>{`${t('resultsFound')}: ${jobStore.data_count || 0}`}</span>
