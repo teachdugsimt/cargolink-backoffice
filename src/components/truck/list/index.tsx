@@ -46,9 +46,9 @@ const TrucksListComponent: React.FC = observer(() => {
       const regions = []; //? No regions API to joint yet.
       const zoneIds: string[] = regions
         ? regions.reduce((ids: string[], region: any) => {
-          region.name.includes(value.trim()) && ids.push(region.id);
-          return ids + '';
-        }, [])
+            region.name.includes(value.trim()) && ids.push(region.id);
+            return ids + '';
+          }, [])
         : [];
       const getStallsValue = (value: string) => {
         if (value.includes('ต่ำ')) return 'LOW';
@@ -72,29 +72,29 @@ const TrucksListComponent: React.FC = observer(() => {
     fireSearch({
       ...searchValue,
       status: status === TruckStatus.ALL ? undefined : status,
-    })
-  }
+    });
+  };
 
   const onTruckTypeFilterChange = (truckTypeId: string) => {
-    const value = isNaN(+truckTypeId) ? undefined : JSON.stringify([truckTypeId]);
+    const value = isNaN(+truckTypeId) ? undefined : JSON.stringify([+truckTypeId]);
     fireSearch({
       ...searchValue,
       truckTypes: value,
-    })
-  }
+    });
+  };
 
   const onProvinceFilterChange = (provinceId: string) => {
     fireSearch({
       ...searchValue,
       workingZones: isNaN(+provinceId) ? undefined : JSON.stringify([+provinceId]),
-    })
-  }
+    });
+  };
 
   const fireSearch = (searchParams: TrucksListParams) => {
     setPage(searchParams.page);
     setSearchValue(searchParams);
     truckStore.getTrucksList(searchParams);
-  }
+  };
 
   const onSort = (sort: any) => {
     const descending = !Sortable[sort.key];
