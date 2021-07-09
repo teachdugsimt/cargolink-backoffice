@@ -48,7 +48,7 @@ const SearchForm: React.FC<SearchProps> = observer((props) => {
   }, [keyboard]);
 
   return (
-    <>
+    <div style={{ width: 250 }}>
       {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
       {/* <input
         id="inputSearch"
@@ -75,7 +75,7 @@ const SearchForm: React.FC<SearchProps> = observer((props) => {
         <Icon size={18} icon={search} />
       </Button> */}
       {/* </div> */}
-    </>
+    </div>
   );
 });
 export default SearchForm;

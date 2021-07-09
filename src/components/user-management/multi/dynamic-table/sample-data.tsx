@@ -191,10 +191,13 @@ export const createRow = (
           key: user.id,
           content: (
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <IconWrapper onClick={() => user?.userId && onCopyUploadLinkButtonClick(user.userId)}>
+              <IconWrapper
+                data-testid={"genlink-button"}
+                onClick={() => user?.userId && onCopyUploadLinkButtonClick(user.userId)}>
                 <CopyIcon label="copy" size="medium" />
               </IconWrapper>
               <IconWrapper
+                data-testid={"edit-user-button"}
                 onClick={() =>
                   navigate('/users/' + user.userId, {
                     state: {
@@ -205,6 +208,7 @@ export const createRow = (
                 <EditIcon label="edit" size="medium" />
               </IconWrapper>
               <IconWrapper
+                data-testid={"delete-button"}
                 onClick={() => {
                   const red = '#E03616';
                   const blue = '#3085D6';

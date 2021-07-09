@@ -178,18 +178,19 @@ const MultipleRole: React.FC<Props> = observer(() => {
 
       <div style={{ display: 'flex', flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
 
-        <Button
-          iconBefore={<AddCircleIcon label="" />}
-          onClick={() => navigate('/users/add')}
-          appearance="warning"
-          testId="addButton"
-        >
-          {t('addNewAccount')}
-        </Button>
+        <SearchForm onSearch={(value: any) => onSearch(value)} />
 
-        <div style={{ width: 250 }}>
-          <SearchForm onSearch={(value: any) => onSearch(value)} />
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Button
+            iconBefore={<AddCircleIcon label="" />}
+            onClick={() => navigate('/users/add')}
+            appearance="warning"
+            testId="addButton"
+          >
+            {t('addNewAccount')}
+          </Button>
         </div>
+
       </div>
 
 
@@ -200,6 +201,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
         rows={rowData}
         page={page}
         emptyView={<p>{t('noData')}</p>}
+        testId="userTable"
         // sortKey={sortable.sortKey}
         // sortOrder={sortable.sortOrder === 'DESC' ? 'DESC' : 'ASC'}
         rowsPerPage={rowLength}
