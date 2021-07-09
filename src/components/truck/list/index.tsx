@@ -156,7 +156,7 @@ const TrucksListComponent: React.FC = observer(() => {
           <FilterGroup>
             <TruckStatusFilter t={t} onChange={(option) => onTruckStatusChange(option?.value as number)} />
             <TruckTypesSelector
-              placeholder={t('truckstype')}
+              placeholder={t('allTrucks')}
               includeNone={true}
               maxWidth="200px"
               onSelect={onTruckTypeFilterChange}
@@ -164,7 +164,7 @@ const TrucksListComponent: React.FC = observer(() => {
             <ProvincesSelector
               maxWidth="200px"
               includeNone
-              placeholder={t('province')}
+              placeholder={t('allProvinces')}
               onSelect={(value) => onProvinceFilterChange(value)}
             />
           </FilterGroup>
