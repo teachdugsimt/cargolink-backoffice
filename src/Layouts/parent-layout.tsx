@@ -4,13 +4,25 @@ import WhiteLayout from './white-layout';
 import { observer } from 'mobx-react-lite';
 import { useMst } from '../stores/root-store';
 import { navigate } from 'gatsby';
+import { useTranslation } from 'react-i18next/';
 
 const ParentLayout = observer(({ pageContext, children, location }) => {
 
   const { loginStore } = useMst();
+  const { i18n } = useTranslation();
   const token = loginStore.data_signin.accessToken
 
   console.log('PAGE CONTEXT', pageContext)
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('profileLanguage');
+    if (savedLanguage) loginStore.setLanguage(savedLanguage);
+  }, []);
+
+  useEffect(() => {
+    const currentLanguage: string | undefined = i18n.language;
+    if (currentLanguage != loginStore.language) i18n.changeLanguage(loginStore.language);
+  }, [loginStore.language]);
 
   if (token && token.length) {
     // IS LOGGED IN
