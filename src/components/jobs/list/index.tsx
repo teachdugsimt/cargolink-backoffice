@@ -137,33 +137,31 @@ const JobContainer: React.FC = observer(() => {
     <div>
       <HeaderGroup>
         <PageHeader breadcrumbs={breadcrumbs}>{t('jobs')}</PageHeader>
-        <SearchForm onSearch={(value) => onSearch(value)} />
+        <AddJobButton
+          onClick={() => {
+            setSubmit(true);
+            navigate('/jobs/add');
+          }}
+        >
+          {t('addNewJob')}
+        </AddJobButton>
       </HeaderGroup>
       <CardBody>
-        <StatusButtonsRow>
-          <FiltersGroup>
-            <JobStatusFilter t={t} onChange={(option) => onStatusButtonClick(option?.value as JobStatus | null)} />
-            <ProductTypeSelector
-              maxWidth="200px"
-              includeNone={true}
-              placeholder={t('productType')}
-              onSelect={onProductTypeSearch}
-            />
-            <ProvincesSelector
-              maxWidth="200px"
-              includeNone={true}
-              placeholder={t('province')}
-              onSelect={onProvinceSearch} />
-          </FiltersGroup>
-          <AddJobButton
-            onClick={() => {
-              setSubmit(true);
-              navigate('/jobs/add');
-            }}
-          >
-            {t('addNewJob')}
-          </AddJobButton>
-        </StatusButtonsRow>
+        <FiltersGroup>
+          <SearchForm onSearch={(value) => onSearch(value)} style={{ width: 200 }} />
+          <JobStatusFilter t={t} onChange={(option) => onStatusButtonClick(option?.value as JobStatus | null)} />
+          <ProductTypeSelector
+            maxWidth="200px"
+            includeNone={true}
+            placeholder={t('productType')}
+            onSelect={onProductTypeSearch}
+          />
+          <ProvincesSelector
+            maxWidth="200px"
+            includeNone={true}
+            placeholder={t('province')}
+            onSelect={onProvinceSearch} />
+        </FiltersGroup>
         <span>{`${t('resultsFound')}: ${jobStore.data_count || 0}`}</span>
         <TableWrapper>
           <DynamicTable
@@ -212,6 +210,6 @@ const HeaderGroup = styled.div`
 
 const FiltersGroup = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 200px);
+  grid-template-columns: repeat(auto-fill, 200px);
   gap: 10px;
 `;

@@ -8,6 +8,7 @@ import Textfield from '@atlaskit/textfield';
 import SearchIcon from '@atlaskit/icon/glyph/search';
 interface SearchProps {
   // data: any;
+  style: React.CSSProperties;
   onSearch: (value: string) => void;
 }
 
@@ -48,7 +49,7 @@ const SearchForm: React.FC<SearchProps> = observer((props) => {
   }, [keyboard]);
 
   return (
-    <div style={{ width: 250, marginBottom: 20 }}>
+    <div style={{ width: 250, marginBottom: 20, ...props.style }}>
       {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
       {/* <input
         id="inputSearch"
