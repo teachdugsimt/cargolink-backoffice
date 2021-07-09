@@ -43,13 +43,6 @@ const TrucksListComponent: React.FC = observer(() => {
   const onSearch = (value: string) => {
     let searchParams = searchValue;
     if (value) {
-      const regions = []; //? No regions API to joint yet.
-      const zoneIds: string[] = regions
-        ? regions.reduce((ids: string[], region: any) => {
-          region.name.includes(value.trim()) && ids.push(region.id);
-          return ids + '';
-        }, [])
-        : [];
       const getStallsValue = (value: string) => {
         if (value.includes('ต่ำ')) return 'LOW';
         else if (value.includes('กลาง')) return 'MEDIUM';
@@ -59,7 +52,6 @@ const TrucksListComponent: React.FC = observer(() => {
       const stallHeight = getStallsValue(value);
       searchParams = {
         ...searchParams,
-        workingZones: zoneIds,
         registrationNumber: value,
         stallHeight,
       };

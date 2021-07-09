@@ -30,6 +30,19 @@ export const createTableHeader = (withWidth: boolean) => {
         isSortable: true,
       },
       {
+        key: 'truckType',
+        content: 'Truck type',
+        shouldTruncate: true,
+        isSortable: false,
+        width: withWidth ? 15 : undefined,
+      },
+      {
+        key: 'stallHeight',
+        content: 'Stall height',
+        shouldTruncate: true,
+        isSortable: true,
+      },
+      {
         key: 'workingZones',
         content: 'Working Zones',
         shouldTruncate: true,
@@ -42,27 +55,8 @@ export const createTableHeader = (withWidth: boolean) => {
         isSortable: true,
       },
       {
-        key: 'truckType',
-        content: 'Truck type',
-        shouldTruncate: true,
-        isSortable: false,
-        width: withWidth ? 15 : undefined,
-      },
-      {
-        key: 'loadingWeight',
-        content: 'Weight capacity',
-        shouldTruncate: true,
-        isSortable: true,
-      },
-      {
-        key: 'stallHeight',
-        content: 'Stall height',
-        shouldTruncate: true,
-        isSortable: true,
-      },
-      {
-        key: 'approveStatus',
-        content: 'Status',
+        owner: 'owner',
+        content: 'Owner',
         shouldTruncate: true,
         isSortable: true,
       },
@@ -94,6 +88,18 @@ export const createTableRows = (
         return '';
       });
     const truckType = (truck as ITruck)?.truckType ? (truck as ITruck).truckType : null;
+    const stallHeight = ((stallHeight: string | null) => {
+      switch (stallHeight) {
+        case 'HEIGHT':
+          return t('HIGH');
+        case 'MEDIUM':
+          return t('MEDIUM');
+        case 'LOW':
+          return t('LOW');
+        default:
+          return '-';
+      }
+    })(truck.stallHeight);
     return {
       key: `row-${index}-${truck.id}`,
       cells: [
@@ -104,14 +110,6 @@ export const createTableRows = (
               <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{truck.id}</span>
             </Button>
           ),
-        },
-        {
-          key: zones ? zones.join('') : '',
-          content: zones ? zones.join(', ') : '-',
-        },
-        {
-          key: truck.registrationNumber ? truck.registrationNumber.join('') : '',
-          content: truck.registrationNumber ? truck.registrationNumber.join(', ') : '',
         },
         {
           key: truckType,
@@ -196,20 +194,20 @@ export const createTableRows = (
           ),
         },
         {
-          key: truck.loadingWeight,
-          content: truck.loadingWeight,
-        },
-        {
           key: truck.stallHeight ? truck.stallHeight : '',
-          content: truck.stallHeight ? (
-            <span>{truck.stallHeight === 'HEIGHT' ? t('HIGH') : t(`${truck.stallHeight}`)}</span>
-          ) : (
-            '-'
-          ),
+          content: stallHeight,
         },
         {
-          key: truck.approveStatus,
-          content: truck.approveStatus,
+          key: zones ? zones.join('') : '',
+          content: zones ? zones.join(', ') : '-',
+        },
+        {
+          key: truck.registrationNumber ? truck.registrationNumber.join('') : '',
+          content: truck.registrationNumber ? truck.registrationNumber.join(', ') : '',
+        },
+        {
+          key: truck.owner?.fullName,
+          content: truck.owner?.fullName || '-',
         },
         {
           key: truck.createdAt ? momentFormat(truck.createdAt, loginStore.language) : '',
