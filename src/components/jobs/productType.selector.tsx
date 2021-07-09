@@ -8,7 +8,7 @@ export default class ProductTypeSelector extends AbstractAsyncSelector {
     try {
       const response = await ProductTypeApi.getProductTypes();
       if (response && response.ok) {
-        const types: IProductType[] = response.data;
+        const types: IProductType[] = response.data.sort((a, b) => a.name.localeCompare(b.name));
         const options = types.map((type) => ({
           label: type.name,
           value: type.id,
