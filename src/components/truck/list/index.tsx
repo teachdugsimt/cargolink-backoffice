@@ -148,7 +148,7 @@ const TrucksListComponent: React.FC = observer(() => {
   return (
     <div>
       <HeaderGroup>
-        <PageHeader breadcrumbs={breadcrumbs}>{t('trucks')}</PageHeader>
+        <PageHeader breadcrumbs={breadcrumbs}>{t('trucksManagement')}</PageHeader>
         <SearchForm onSearch={onSearch} />
       </HeaderGroup>
       <div>
