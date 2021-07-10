@@ -8,6 +8,7 @@ import { IJobNull } from '../../../stores/job-store';
 import { IJob } from '../../../services/job-api';
 import { TFunction } from 'i18next';
 import { IProductType } from '../../../services/product-type-api';
+import { findProvince } from '../../../utils';
 
 export const sortable: any = {
   id: true, //! Note that: DESC = true, ASC = fasle
@@ -142,7 +143,7 @@ export const createTableRows = (
                 <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
                   <img src={images.pinDrop2} style={{ width: 18 }} />
                   <span style={{ fontWeight: 'bold', margin: '0 5px' }}>From:</span>
-                  {`${job.from?.name || '-'}`}
+                  {`${findProvince(job.from?.name) || '-'}`}
                 </span>
                 <span style={{ padding: '2px 0', display: 'flex' }}>
                   <div style={{ border: '1px dashed black', margin: '0 13px 0 10px' }} />
@@ -159,7 +160,7 @@ export const createTableRows = (
                         <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
                           {i === 0 ? <img src={images.pinDrop} style={{ width: 18 }} /> : <div style={{ width: 18 }} />}
                           <span style={{ fontWeight: 'bold', margin: '0 5px' }}>To:</span>
-                          {`${e?.name || '-'}`}
+                          {`${findProvince(e?.name) || '-'}`}
                         </span>
                         <span style={{ padding: 2, marginLeft: 23 }}>
                           <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />

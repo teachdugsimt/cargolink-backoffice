@@ -1,5 +1,6 @@
 import { useState, useLayoutEffect } from 'react';
 import jwt_decode from 'jwt-decode';
+import { provinceListEn, provinceListTh } from './constants/provinces';
 
 export interface IQueryParams {
   [key: string]: string;
@@ -65,4 +66,11 @@ export const toFirstLetterUpperCase = (str: string) => {
   if (str.length === 1) return str.toUpperCase();
   const [firstChar] = str.split('');
   return `${firstChar.toUpperCase()}${str.substr(1)}`;
-}
+};
+
+export const findProvince = (address?: string | null, locale = 'th') => {
+  if (!address) return null;
+  const list = locale == 'th' ? provinceListTh : provinceListEn;
+  const province = list.find((l) => address.includes(l.label));
+  return province?.label || null;
+};
