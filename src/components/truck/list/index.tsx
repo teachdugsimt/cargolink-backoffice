@@ -127,8 +127,7 @@ const TrucksListComponent: React.FC = observer(() => {
   useEffect(() => {
     const trucks: ITrucksManagement = JSON.parse(JSON.stringify(truckStore.data_trucks));
     if (trucks?.content) {
-      const rows = createTableRows(trucks.content, [], t, loginStore, onDetail);
-      setRowData(rows);
+      createTableRows(trucks.content, [], t, loginStore, onDetail).then((rows) => setRowData(rows));
     }
   }, [truckStore.data_trucks, truckStore.data_trucks?.reRender, truckStore.data_trucks?.content?.length]);
 

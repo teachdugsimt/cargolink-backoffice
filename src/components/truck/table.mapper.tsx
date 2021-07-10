@@ -9,6 +9,8 @@ moment.locale('th');
 import { Button } from '@paljs/ui/Button';
 import { momentFormat } from '../simple-data';
 import { TFunction } from 'i18next';
+import { ITruckType } from '../../services/truck-type-api';
+import { TruckTypeApi } from '../../services';
 
 export const Sortable = {
   id: true, //! Note that: DESC = true, ASC = false
@@ -72,7 +74,7 @@ export const createTableHeader = (withWidth: boolean) => {
 
 export const tableHeader = createTableHeader(true);
 
-export const createTableRows = (
+export const createTableRows = async (
   trucks: (ITruck | ITruckNull)[],
   regions: any[],
   t: TFunction,
@@ -112,9 +114,9 @@ export const createTableRows = (
         {
           key: truck.id,
           content: (
-            <Button status="Control" onClick={() => onDetail(truck.id || '')}>
-              <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{truck.id}</span>
-            </Button>
+            <span onClick={() => onDetail(truck.id || '')} style={{ cursor: 'pointer', fontWeight: 'bold' }}>
+              {truck.id}
+            </span>
           ),
         },
         {
