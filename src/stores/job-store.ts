@@ -87,7 +87,6 @@ export const JobStore = types
             };
             if (!self.isFirstLoad) jobs.reRender = !!!self.data_jobs?.reRender;
             if (data.length) {
-              const dataaa = [data[0]];
               const emptyContent: any = Object.keys(data[0]).reduce(
                 (object: any, curr: string) => ({
                   ...object,
@@ -102,7 +101,7 @@ export const JobStore = types
               const emptyContentsAfterLastItem = pagesAfterContent * size;
               jobs.content = [
                 ...Array(emptyContentsBeforeFirstItem).fill(emptyContent),
-                ...dataaa,
+                ...data,
                 ...Array(emptyContentsAfterLastItem).fill(emptyContent),
               ];
             } else jobs.content = [];
