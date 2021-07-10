@@ -79,6 +79,12 @@ export const createTableRows = (
   loginStore: any,
   onDetail: (id: string) => any,
 ) => {
+  let truckTypes: ITruckType[] = [];
+  try {
+    truckTypes = (await TruckTypeApi.getTruckTypes()).data;
+  } catch (error) {
+    console.error('get truck types error', error);
+  }
   const rows = trucks.map((truck, index) => {
     const zones =
       truck.workingZones &&
@@ -87,7 +93,7 @@ export const createTableRows = (
         if (zoneFromRegion) return zoneFromRegion.name;
         return '';
       });
-    const truckType = (truck as ITruck)?.truckType ? (truck as ITruck).truckType : null;
+    const truckType = truckTypes.find((type) => type.id == (truck as ITruck)?.truckType);
     const stallHeight = ((stallHeight: string | null) => {
       switch (stallHeight) {
         case 'HEIGHT':
@@ -112,86 +118,8 @@ export const createTableRows = (
           ),
         },
         {
-          key: truckType,
-          content: (
-            <div>
-              {truckType == 1 ? (
-                <img style={{ height: 30 }} src={images.Truck1} />
-              ) : truckType == 2 ? (
-                <img style={{ height: 30 }} src={images.Truck2} />
-              ) : truckType == 3 ? (
-                <img style={{ height: 30 }} src={images.Truck3} />
-              ) : truckType == 4 ? (
-                <img style={{ height: 30 }} src={images.Truck4} />
-              ) : truckType == 5 ? (
-                <img style={{ height: 30 }} src={images.Truck5} />
-              ) : truckType == 6 ? (
-                <img style={{ height: 30 }} src={images.Truck6} />
-              ) : truckType == 7 ? (
-                <img style={{ height: 30 }} src={images.Truck7} />
-              ) : truckType == 8 ? (
-                <img style={{ height: 30 }} src={images.Truck8} />
-              ) : truckType == 9 ? (
-                <img style={{ height: 30 }} src={images.Truck9} />
-              ) : truckType == 10 ? (
-                <img style={{ height: 30 }} src={images.Truck10} />
-              ) : truckType == 11 ? (
-                <img style={{ height: 30 }} src={images.Truck11} />
-              ) : truckType == 12 ? (
-                <img style={{ height: 30 }} src={images.Truck12} />
-              ) : truckType == 13 ? (
-                <img style={{ height: 30 }} src={images.Truck13} />
-              ) : truckType == 14 ? (
-                <img style={{ height: 30 }} src={images.Truck14} />
-              ) : truckType == 15 ? (
-                <img style={{ height: 30 }} src={images.Truck15} />
-              ) : truckType == 16 ? (
-                <img style={{ height: 30 }} src={images.Truck16} />
-              ) : truckType == 17 ? (
-                <img style={{ height: 30 }} src={images.Truck17} />
-              ) : truckType == 18 ? (
-                <img style={{ height: 30 }} src={images.Truck18} />
-              ) : truckType == 19 ? (
-                <img style={{ height: 30 }} src={images.Truck19} />
-              ) : truckType == 20 ? (
-                <img style={{ height: 30 }} src={images.Truck20} />
-              ) : truckType == 21 ? (
-                <img style={{ height: 30 }} src={images.Truck21} />
-              ) : truckType == 22 ? (
-                <img style={{ height: 30 }} src={images.Truck22} />
-              ) : truckType == 23 ? (
-                <img style={{ height: 30 }} src={images.Truck23} />
-              ) : truckType == 24 ? (
-                <img style={{ height: 30 }} src={images.Truck24} />
-              ) : truckType == 25 ? (
-                <img style={{ height: 30 }} src={images.Truck25} />
-              ) : truckType == 26 ? (
-                <img style={{ height: 30 }} src={images.Truck26} />
-              ) : truckType == 27 ? (
-                <img style={{ height: 30 }} src={images.Truck27} />
-              ) : truckType == 28 ? (
-                <img style={{ height: 30 }} src={images.Truck28} />
-              ) : truckType == 29 ? (
-                <img style={{ height: 30 }} src={images.Truck29} />
-              ) : truckType == 30 ? (
-                <img style={{ height: 30 }} src={images.Truck30} />
-              ) : truckType == 31 ? (
-                <img style={{ height: 30 }} src={images.Truck31} />
-              ) : truckType == 32 ? (
-                <img style={{ height: 30 }} src={images.Truck32} />
-              ) : truckType == 33 ? (
-                <img style={{ height: 30 }} src={images.Truck33} />
-              ) : truckType == 34 ? (
-                <img style={{ height: 30 }} src={images.Truck34} />
-              ) : truckType == 35 ? (
-                <img style={{ height: 30 }} src={images.Truck35} />
-              ) : truckType == 36 ? (
-                <img style={{ height: 30 }} src={images.Truck36} />
-              ) : (
-                <></>
-              )}
-            </div>
-          ),
+          key: truckType?.id || '-',
+          content: truckType?.name || '-',
         },
         {
           key: truck.stallHeight ? truck.stallHeight : '',
@@ -214,7 +142,7 @@ export const createTableRows = (
           content: truck.createdAt ? momentFormat(truck.createdAt, loginStore.language) : '',
         },
       ],
-    }
+    };
   });
   return rows;
 };
