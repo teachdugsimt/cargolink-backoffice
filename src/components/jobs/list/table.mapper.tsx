@@ -113,9 +113,9 @@ export const createTableRows = (
         {
           key: job.id,
           content: (
-            <Button status="Control" onClick={() => onDetail(job.id || '')}>
-              <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{job.id}</span>
-            </Button>
+            <span onClick={() => onDetail(job.id || '')} style={{ cursor: 'pointer', fontWeight: 'bold' }}>
+              {job.id}
+            </span>
           ),
         },
         {
