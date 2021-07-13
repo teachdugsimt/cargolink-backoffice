@@ -136,9 +136,13 @@ export const createTableRows = (
           key: job.from?.name,
           content: (
             <Address>
-              <span className="from">{findProvince(job.from?.name, language) || '<No Address>'}</span>
+              <span className="from">{findProvince(job.from?.name) || '<No Address>'}</span>
               <span className="arrow">{'=>'}</span>
-              {job.to?.length ? <span className="to">{job.to[0]?.name}</span> : '<No Address>'}
+              {job.to?.length ? (
+                <span className="to">{findProvince(job.to[0]?.name) || '<No Address>'}</span>
+              ) : (
+                '<No Address>'
+              )}
               <span className="dot">{job?.to?.length > 1 ? '...' : ''}</span>
               <span className="fTime">{`${
                 job.from?.dateTime ? momentFormatDateTime(job.from?.dateTime, language) : '-'
