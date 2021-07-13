@@ -126,7 +126,7 @@ export const createTableRows = (
         },
         {
           key: job.price,
-          content: job.price || '-',
+          content: (<div style={{ textAlign: 'right' }}>{job?.price?.toLocaleString() || '-'}</div>),
         },
         {
           key: job.priceType,
@@ -175,21 +175,21 @@ const Address = styled.div`
 
   .from {
     grid-area: from;
-    text-align: center;
+    text-align: right;
   }
   .to {
     grid-area: to;
-    text-align: center;
+    text-align: left;
   }
   .fTime {
     grid-area: fTime;
     color: #ccc;
-    text-align: center;
+    text-align: right;
   }
   .tTime {
     grid-area: tTime;
     color: #ccc;
-    text-align: center;
+    text-align: left;
   }
   .arrow {
     grid-area: arrow;
