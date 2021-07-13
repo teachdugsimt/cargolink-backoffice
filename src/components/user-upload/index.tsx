@@ -12,6 +12,7 @@ import uploadApi, { UploadFilePath } from '../../services/upload-api';
 import { breakPoints, extractJwtToken } from '../../utils';
 import Swal from 'sweetalert2';
 import { AxiosResponse } from 'axios';
+import InlineMessage from '@atlaskit/inline-message';
 
 const Wrapper = styled.div`
   display: flex;
@@ -182,7 +183,12 @@ const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageP
               </Row>
               <Row style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Col breakPoint={{ xs: 12, sm: 12, md: 12 }}>
+
                   <FormFooter>
+                    {
+                      userStore.success_response &&
+                      <InlineMessage type="confirmation" secondaryText="Success upload file." />
+                    }
                     <LoadingButton
                       isLoading={userStore.loading}
                       type="submit"
@@ -191,7 +197,7 @@ const UploadPageComponent: React.FC<IUploadPageProps> = ({ token }: IUploadPageP
                         backgroundColor: `${attachCodes.length ? '#FBBC12' : '#D8D8D8'}`,
                         margin: '0 6px',
                       }}
-                      isDisabled={!attachCodes.length}
+                      isDisabled={!attachCodes.length || userStore.success_response}
                     >
                       <span style={{ color: '#000' }}>{t('confirm')}</span>
                     </LoadingButton>
