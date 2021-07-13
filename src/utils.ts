@@ -68,9 +68,9 @@ export const toFirstLetterUpperCase = (str: string) => {
   return `${firstChar.toUpperCase()}${str.substr(1)}`;
 };
 
-export const findProvince = (address?: string | null, locale = 'th') => {
+export const findProvince = (address?: string | null) => {
   if (!address) return null;
-  const list = locale == 'th' ? provinceListTh : provinceListEn;
+  const list = [...provinceListTh, ...provinceListEn];
   const province = list.find((l) => address.includes(l.label));
   return province?.label || null;
 };
