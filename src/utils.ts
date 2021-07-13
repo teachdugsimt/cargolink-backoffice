@@ -72,5 +72,5 @@ export const findProvince = (address?: string | null) => {
   if (!address) return null;
   const list = [...provinceListTh, ...provinceListEn];
   const province = list.find((l) => address.includes(l.label));
-  return province?.label || null;
+  return province?.label || address;
 };

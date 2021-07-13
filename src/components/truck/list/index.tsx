@@ -133,13 +133,13 @@ const TrucksListComponent: React.FC = observer(() => {
 
   const breadcrumbs = (
     <Breadcrumbs>
-      <BreadcrumbsItem text={t('trucksManagement')} key="trucks-management" />
+      <BreadcrumbsItem text={t('vehicle.management')} key="trucks-management" />
     </Breadcrumbs>
   );
   return (
     <div>
       <HeaderGroup>
-        <PageHeader breadcrumbs={breadcrumbs}>{t('trucksManagement')}</PageHeader>
+        <PageHeader breadcrumbs={breadcrumbs}>{t('vehicle.management')}</PageHeader>
         <AddTruckButton
           onClick={() => {
             setSubmit(true);

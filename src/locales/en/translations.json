@@ -166,6 +166,13 @@
   "createUserSuccess": "Created user successfully",
   "createUserErrorByUser": "Some on your data is invalid, please recheck and try again",
   "typeUserToFind": "Type a keyword to find users to select",
+  "vehicle": {
+    "management": "Trucks Management",
+    "add": "Add Vehicle"
+  },
+  "trip": {
+    "management": "Trips Management"
+  },
   "allTrucks": "All Trucks",
   "allTypes": "All",
   "allProvinces": "All Provinces"

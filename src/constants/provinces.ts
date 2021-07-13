@@ -80,7 +80,9 @@ export const provinceListTh = [
 
 export const provinceListEn = [
   { label: 'Bangkok', value: 1, region: 1 },
+  { label: 'Krung Thep Maha Nakhon', value: 1, region: 1 },
   { label: 'Samut Prakarn', value: 57, region: 4 },
+  { label: 'Samut Prakan', value: 57, region: 4 },
   { label: 'Nonthaburi', value: 36, region: 1 },
   { label: 'Pathum Thani', value: 37, region: 1 },
   { label: 'Phra Nakhon Si Ayutthaya', value: 46, region: 1 },

@@ -144,9 +144,8 @@ export const createTableRows = (
                 '<No Address>'
               )}
               <span className="dot">{job?.to?.length > 1 ? '...' : ''}</span>
-              <span className="fTime">{`${
-                job.from?.dateTime ? momentFormatDateTime(job.from?.dateTime, language) : '-'
-              }`}</span>
+              <span className="fTime">{`${job.from?.dateTime ? momentFormatDateTime(job.from?.dateTime, language) : '-'
+                }`}</span>
               <span className="tTime">
                 {job.to?.length ? momentFormatDateTime(job.to[0]?.dateTime, language) : '-'}
               </span>
@@ -168,7 +167,7 @@ export const createTableRows = (
 
 const Address = styled.div`
   display: grid;
-  grid-template-columns: 1fr 20px 1fr 10px;
+  grid-template-columns: 1fr 40px 1fr 40px;
   grid-template-areas:
     'from arrow to dot'
     'fTime arrow tTime dot';
@@ -176,15 +175,21 @@ const Address = styled.div`
 
   .from {
     grid-area: from;
+    text-align: center;
   }
   .to {
     grid-area: to;
+    text-align: center;
   }
-  .fromTime {
+  .fTime {
     grid-area: fTime;
+    color: #ccc;
+    text-align: center;
   }
-  .toTime {
+  .tTime {
     grid-area: tTime;
+    color: #ccc;
+    text-align: center;
   }
   .arrow {
     grid-area: arrow;

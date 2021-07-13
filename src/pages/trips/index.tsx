@@ -8,12 +8,12 @@ function Trip() {
 
   const breadcrumbs = (
     <Breadcrumbs>
-      <BreadcrumbsItem text={t('trips.management')} key="trips-management" />
+      <BreadcrumbsItem text={t('trip.management')} key="trips-management" />
     </Breadcrumbs>
   );
   return (
     <div>
-      <PageHeader breadcrumbs={breadcrumbs}>{t('trips.management')}</PageHeader>
+      <PageHeader breadcrumbs={breadcrumbs}>{t('trip.management')}</PageHeader>
     </div>
   )
 }

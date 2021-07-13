@@ -30,7 +30,6 @@
   "addNewTruck": "เพิ่มรถบรรทุกใหม่",
   "addNewAccount": "เพิ่มบัญชีใหม่",
   "addNewJob": "เพิ่มงานใหม่",
-  "addDataCar": "เพิ่มข้อมูลรถ",
   "typeCar": "ประเภทรถที่ต้องการ",
   "pleaseselect": "โปรดเลือก",
   "fieldTruckType": "ต้องระบุประเภทรถบรรทุกในฟิลด์นี้",
@@ -167,7 +166,11 @@
   "createUserSuccess": "สร้างผู้ใช้แล้ว",
   "createUserErrorByUser": "ข้อมูลไม่ถูกต้อง โปรดตรวจสอบข้อมูลใหม่",
   "typeUserToFind": "พิมพ์คีย์เวิร์ดเพื่อค้นหาผู้ใช้",
-  "trips": {
+  "vehicle": {
+    "management": "จัดการรถบรรทุก",
+    "add": "เพิ่มข้อมูลรถ"
+  },
+  "trip": {
     "management": "จัดการการขนส่ง"
   },
   "allTrucks": "รถทุกประเภท",
