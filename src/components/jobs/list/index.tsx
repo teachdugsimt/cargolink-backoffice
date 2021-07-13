@@ -16,6 +16,7 @@ import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import ProductTypeSelector from '../productType.selector';
 import ProvincesSelector from './province.selector';
+import { IProductType } from '../../../services/product-type-api';
 
 import { CardBody } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
@@ -27,9 +28,9 @@ const INITIAL_API_PARAMS = {
 
 const JobContainer: React.FC = observer(() => {
   const { t } = useTranslation();
-  const { jobStore, loginStore } = useMst();
+  const { jobStore, loginStore, masterTypeStore } = useMst();
   const [rows, setRows] = useState<any[]>([]);
-  const [productTypes, setProductTypes] = useState<any[]>([]);
+  const [productTypes, setProductTypes] = useState<IProductType[]>([]);
   const [submit, setSubmit] = useState(false);
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState<JobListParams>(INITIAL_API_PARAMS);
@@ -103,29 +104,43 @@ const JobContainer: React.FC = observer(() => {
     jobStore.getJobsList(searchParams);
   };
 
+  const fireError = (title: string | null, content: string | null) => {
+    Swal.fire({
+      icon: 'error',
+      title: title || '',
+      text: content || '',
+    })
+  }
+
   useEffect(() => {
     jobStore.getJobsList(INITIAL_API_PARAMS);
+    masterTypeStore.getProductTypes();
     setSearchValue(INITIAL_API_PARAMS);
   }, []);
 
   useEffect(() => {
     if (jobStore.error_response) {
       const { title, content } = jobStore.error_response;
-      Swal.fire({
-        icon: 'error',
-        title: title || '',
-        text: content || '',
-      });
+      fireError(title, content);
     }
-  }, [jobStore.error_response]);
+    if (masterTypeStore.error_response) {
+      const { title, content } = masterTypeStore.error_response;
+      fireError(title, content);
+    }
+  }, [jobStore.error_response, masterTypeStore.error_response]);
 
   useEffect(() => {
     const jobsData: IJobsManagement | null = JSON.parse(JSON.stringify(jobStore.data_jobs));
-    if (jobsData?.content) {
+    if (jobsData?.content && productTypes.length) {
       const rows = createTableRows(jobsData.content, productTypes, loginStore.language, t, onDetail);
       setRows(rows);
     }
   }, [jobStore.data_jobs, jobStore.data_jobs?.reRender, jobStore.data_jobs?.content?.length, productTypes]);
+
+  useEffect(() => {
+    const { loading, productTypes } = masterTypeStore;
+    if (!loading && productTypes?.length != null) setProductTypes(productTypes as IProductType[]);
+  }, [masterTypeStore.productTypes]);
 
   const breadcrumbs = (
     <Breadcrumbs>
@@ -137,33 +152,31 @@ const JobContainer: React.FC = observer(() => {
     <div>
       <HeaderGroup>
         <PageHeader breadcrumbs={breadcrumbs}>{t('jobs')}</PageHeader>
-        <SearchForm onSearch={(value) => onSearch(value)} />
+        <AddJobButton
+          onClick={() => {
+            setSubmit(true);
+            navigate('/jobs/add');
+          }}
+        >
+          {t('addNewJob')}
+        </AddJobButton>
       </HeaderGroup>
       <CardBody>
-        <StatusButtonsRow>
-          <FiltersGroup>
-            <JobStatusFilter t={t} onChange={(option) => onStatusButtonClick(option?.value as JobStatus | null)} />
-            <ProductTypeSelector
-              maxWidth="200px"
-              includeNone={true}
-              placeholder={t('productType')}
-              onSelect={onProductTypeSearch}
-            />
-            <ProvincesSelector
-              maxWidth="200px"
-              includeNone={true}
-              placeholder={t('province')}
-              onSelect={onProvinceSearch} />
-          </FiltersGroup>
-          <AddJobButton
-            onClick={() => {
-              setSubmit(true);
-              navigate('/jobs/add');
-            }}
-          >
-            {t('addNewJob')}
-          </AddJobButton>
-        </StatusButtonsRow>
+        <FiltersGroup>
+          <SearchForm onSearch={(value) => onSearch(value)} style={{ width: 200 }} />
+          <JobStatusFilter t={t} onChange={(option) => onStatusButtonClick(option?.value as JobStatus | null)} />
+          <ProductTypeSelector
+            maxWidth="200px"
+            includeNone={true}
+            placeholder={t('allTypes')}
+            onSelect={onProductTypeSearch}
+          />
+          <ProvincesSelector
+            maxWidth="200px"
+            includeNone={true}
+            placeholder={t('allProvinces')}
+            onSelect={onProvinceSearch} />
+        </FiltersGroup>
         <span>{`${t('resultsFound')}: ${jobStore.data_count || 0}`}</span>
         <TableWrapper>
           <DynamicTable
@@ -212,6 +225,6 @@ const HeaderGroup = styled.div`
 
 const FiltersGroup = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 200px);
+  grid-template-columns: repeat(auto-fill, 200px);
   gap: 10px;
 `;

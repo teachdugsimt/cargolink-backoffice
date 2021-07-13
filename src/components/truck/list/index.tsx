@@ -43,13 +43,6 @@ const TrucksListComponent: React.FC = observer(() => {
   const onSearch = (value: string) => {
     let searchParams = searchValue;
     if (value) {
-      const regions = []; //? No regions API to joint yet.
-      const zoneIds: string[] = regions
-        ? regions.reduce((ids: string[], region: any) => {
-          region.name.includes(value.trim()) && ids.push(region.id);
-          return ids + '';
-        }, [])
-        : [];
       const getStallsValue = (value: string) => {
         if (value.includes('ต่ำ')) return 'LOW';
         else if (value.includes('กลาง')) return 'MEDIUM';
@@ -59,7 +52,6 @@ const TrucksListComponent: React.FC = observer(() => {
       const stallHeight = getStallsValue(value);
       searchParams = {
         ...searchParams,
-        workingZones: zoneIds,
         registrationNumber: value,
         stallHeight,
       };
@@ -72,29 +64,29 @@ const TrucksListComponent: React.FC = observer(() => {
     fireSearch({
       ...searchValue,
       status: status === TruckStatus.ALL ? undefined : status,
-    })
-  }
+    });
+  };
 
   const onTruckTypeFilterChange = (truckTypeId: string) => {
-    const value = isNaN(+truckTypeId) ? undefined : JSON.stringify([truckTypeId]);
+    const value = isNaN(+truckTypeId) ? undefined : JSON.stringify([+truckTypeId]);
     fireSearch({
       ...searchValue,
       truckTypes: value,
-    })
-  }
+    });
+  };
 
   const onProvinceFilterChange = (provinceId: string) => {
     fireSearch({
       ...searchValue,
       workingZones: isNaN(+provinceId) ? undefined : JSON.stringify([+provinceId]),
-    })
-  }
+    });
+  };
 
   const fireSearch = (searchParams: TrucksListParams) => {
     setPage(searchParams.page);
     setSearchValue(searchParams);
     truckStore.getTrucksList(searchParams);
-  }
+  };
 
   const onSort = (sort: any) => {
     const descending = !Sortable[sort.key];
@@ -135,8 +127,7 @@ const TrucksListComponent: React.FC = observer(() => {
   useEffect(() => {
     const trucks: ITrucksManagement = JSON.parse(JSON.stringify(truckStore.data_trucks));
     if (trucks?.content) {
-      const rows = createTableRows(trucks.content, [], t, loginStore, onDetail);
-      setRowData(rows);
+      createTableRows(trucks.content, [], t, loginStore, onDetail).then((rows) => setRowData(rows));
     }
   }, [truckStore.data_trucks, truckStore.data_trucks?.reRender, truckStore.data_trucks?.content?.length]);
 
@@ -148,35 +139,34 @@ const TrucksListComponent: React.FC = observer(() => {
   return (
     <div>
       <HeaderGroup>
-        <PageHeader breadcrumbs={breadcrumbs}>{t('trucks')}</PageHeader>
-        <SearchForm onSearch={onSearch} />
+        <PageHeader breadcrumbs={breadcrumbs}>{t('trucksManagement')}</PageHeader>
+        <AddTruckButton
+          onClick={() => {
+            setSubmit(true);
+            navigate('/vehicles/add');
+          }}
+        >
+          {t('addNewTruck')}
+        </AddTruckButton>
       </HeaderGroup>
       <div>
-        <FilterRow>
-          <FilterGroup>
-            <TruckStatusFilter t={t} onChange={(option) => onTruckStatusChange(option?.value as number)} />
-            <TruckTypesSelector
-              placeholder={t('truckstype')}
-              includeNone={true}
-              maxWidth="200px"
-              onSelect={onTruckTypeFilterChange}
-            />
-            <ProvincesSelector
-              maxWidth="200px"
-              includeNone
-              placeholder={t('province')}
-              onSelect={(value) => onProvinceFilterChange(value)}
-            />
-          </FilterGroup>
-          <AddTruckButton
-            onClick={() => {
-              setSubmit(true);
-              navigate('/vehicles/add');
-            }}
-          >
-            {t('addNewTruck')}
-          </AddTruckButton>
-        </FilterRow>
+        <FilterGroup>
+          <SearchForm onSearch={onSearch} style={{ width: 200 }} />
+          <TruckStatusFilter t={t} onChange={(option) => onTruckStatusChange(option?.value as number)} />
+          <TruckTypesSelector
+            placeholder={t('allTrucks')}
+            includeNone={true}
+            maxWidth="200px"
+            onSelect={onTruckTypeFilterChange}
+          />
+          <ProvincesSelector
+            maxWidth="200px"
+            includeNone
+            placeholder={t('allProvinces')}
+            onSelect={(value) => onProvinceFilterChange(value)}
+          />
+        </FilterGroup>
+
         <span>{`${t('resultsFound')}: ${truckStore.data_count || 0}`}</span>
         <TableWrapper>
           <DynamicTable
@@ -204,17 +194,9 @@ const TableWrapper = styled.div`
   min-width: 600px;
 `;
 
-const FilterRow = styled.div`
-  padding: 10px 0;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  min-width: 719px;
-`;
-
 const FilterGroup = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 200px);
+  grid-template-columns: repeat(auto-fill, 200px);
   gap: 10px;
 `;
 

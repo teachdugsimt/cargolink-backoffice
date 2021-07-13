@@ -8,7 +8,7 @@ export default class ProvincesSelector extends AbstractAsyncSelector {
     try {
       const response = await RegionApi.getProvincesList();
       if (response && response.ok) {
-        const provinces: ProvincesListResponse = response.data;
+        const provinces: ProvincesListResponse = response.data.sort((a, b) => a.name.localeCompare(b.name));
         const options = provinces.map(({ id, name }) => ({
           label: name,
           value: id,

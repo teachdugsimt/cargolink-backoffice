@@ -32,7 +32,7 @@ const JobStatusFilter = ({ t, onChange }: JobStatusFilterProps) => {
       value: JobStatus.COMPLETED,
     },
   ];
-  return <Dropdown options={statusOptions} placeholder={t('status')} minWidth="200px" onChange={onChange} />;
+  return <Dropdown options={statusOptions} placeholder={t('status')} minWidth="150px" onChange={onChange} />;
 };
 
 export default JobStatusFilter;

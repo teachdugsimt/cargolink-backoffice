@@ -12,7 +12,7 @@
   "register": "สมัครสมาชิก",
   "loginDescription": "ยังไม่มีบัญชี?",
   "profile": "โปรไฟล์",
-  "jobs": "รับงาน",
+  "jobs": "จัดการงาน",
   "trucks": "รถบรรทุก",
   "drivers": "คนขับ",
   "userManagement": "ผู้ใช้งาน",
@@ -169,5 +169,8 @@
   "typeUserToFind": "พิมพ์คีย์เวิร์ดเพื่อค้นหาผู้ใช้",
   "trips": {
     "management": "จัดการการขนส่ง"
-  }
+  },
+  "allTrucks": "รถทุกประเภท",
+  "allTypes": "ทุกประเภท",
+  "allProvinces": "ทุกจังหวัด"
 }

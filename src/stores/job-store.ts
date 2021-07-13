@@ -33,7 +33,7 @@ const JobType = types.model({
   from: types.maybeNull(DestinationType),
   to: types.maybeNull(types.array(DestinationType)),
   owner: types.maybeNull(OwnerType),
-  status: types.maybeNull(types.number),
+  status: types.maybeNull(types.string),
   quotations: types.maybeNull(types.array(types.string)),
   price: types.maybeNull(types.number),
   priceType: types.maybeNull(types.string),

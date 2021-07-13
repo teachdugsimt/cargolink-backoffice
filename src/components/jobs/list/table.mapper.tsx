@@ -1,12 +1,11 @@
 import React from 'react';
-import { Icon } from 'react-icons-kit';
-import { ic_access_time } from 'react-icons-kit/md/ic_access_time';
-import images from '../../Themes/images';
+import styled from 'styled-components';
 import { momentFormatDateTime } from '../../simple-data';
-import { Button } from '@paljs/ui/Button';
 import { IJobNull } from '../../../stores/job-store';
 import { IJob } from '../../../services/job-api';
 import { TFunction } from 'i18next';
+import { IProductType } from '../../../services/product-type-api';
+import { findProvince } from '../../../utils';
 
 export const sortable: any = {
   id: true, //! Note that: DESC = true, ASC = fasle
@@ -27,20 +26,26 @@ export const createTableHeader = () => ({
       isSortable: true,
     },
     {
+      key: 'productType',
+      content: 'Product Type',
+      shouldTruncate: true,
+      isSortable: true,
+    },
+    {
       key: 'productName',
       content: 'Product Name',
       shouldTruncate: true,
       isSortable: true,
     },
     {
-      key: 'companyName',
-      content: 'Name of  shipper',
+      key: 'price',
+      content: 'Price',
       shouldTruncate: true,
       isSortable: true,
     },
     {
-      key: 'productTypeId',
-      content: 'Type of goods',
+      key: 'priceType',
+      content: 'Price Type',
       shouldTruncate: true,
       isSortable: true,
     },
@@ -50,8 +55,8 @@ export const createTableHeader = () => ({
       shouldTruncate: true,
     },
     {
-      key: 'weight',
-      content: 'Weight',
+      key: 'owner',
+      content: 'Owner',
       shouldTruncate: true,
       isSortable: true,
     },
@@ -80,86 +85,114 @@ export const tableHeaders = createTableHeader();
 
 export const createTableRows = (
   jobs: (IJob | IJobNull)[],
-  products: any,
+  products: IProductType[],
   language: string,
   t: TFunction,
   onDetail: (id: string) => any,
 ) => {
   return jobs.map((job, index) => {
-    const productType = products?.length && products.find((prod: any) => prod.id === job.productTypeId);
+    const productType = products.length && products.find((prod) => prod.id === job.productTypeId);
     const typeName = productType ? productType.name : '';
     let status = jobStatus[`jobStatus${job.status}`];
     if (!status) status = job.status;
+    const priceType = ((priceType: 'PER_TRIP' | 'PER_TON' | null) => {
+      switch (priceType) {
+        case 'PER_TRIP':
+          return t('perTrip');
+        case 'PER_TON':
+          return t('perTon');
+        default:
+          return null;
+      }
+    })(job.priceType);
     return {
       key: `row-${index}-${job.id}`,
       cells: [
         {
           key: job.id,
           content: (
-            <Button status="Control" onClick={() => onDetail(job.id || '')}>
-              <span style={{ padding: '10px 0px', color: '#FBBC12', fontWeight: 'bold' }}>{job.id}</span>
-            </Button>
+            <span onClick={() => onDetail(job.id || '')} style={{ cursor: 'pointer', fontWeight: 'bold' }}>
+              {job.id}
+            </span>
           ),
+        },
+        {
+          key: job.productTypeId,
+          content: typeName || '-',
         },
         {
           key: job.productName,
           content: job.productName || '-',
         },
         {
-          key: job.owner?.fullName,
-          content: job.owner?.fullName || '-',
+          key: job.price,
+          content: job.price || '-',
         },
         {
-          key: typeName,
-          content: typeName || '-',
+          key: job.priceType,
+          content: priceType || '-',
         },
         {
           key: job.from?.name,
           content: (
-            <div style={{ borderBottom: '2px solid #253858' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
-                <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
-                  <img src={images.pinDrop2} style={{ width: 18 }} />
-                  <span style={{ fontWeight: 'bold', margin: '0 5px' }}>From:</span>
-                  {`${job.from?.name || '-'}`}
-                </span>
-                <span style={{ padding: '2px 0', display: 'flex' }}>
-                  <div style={{ border: '1px dashed black', margin: '0 13px 0 10px' }} />
-                  <Icon style={{ color: '#FBBC12', marginRight: 5 }} icon={ic_access_time} />
-                  {` ${job.from?.dateTime ? momentFormatDateTime(job.from?.dateTime, language) : '-'}`}
-                </span>
-              </div>
-              <div style={{ marginBottom: 5 }}>
-                {job &&
-                  job.to &&
-                  job.to.map((e: any, i: number) => {
-                    return (
-                      <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 5 }} key={i}>
-                        <span style={{ padding: 2, display: 'flex', alignItems: 'center' }}>
-                          {i === 0 ? <img src={images.pinDrop} style={{ width: 18 }} /> : <div style={{ width: 18 }} />}
-                          <span style={{ fontWeight: 'bold', margin: '0 5px' }}>To:</span>
-                          {`${e?.name || '-'}`}
-                        </span>
-                        <span style={{ padding: 2, marginLeft: 23 }}>
-                          <Icon style={{ color: '#FBBC12' }} icon={ic_access_time} />
-                          {` ${e?.dateTime ? momentFormatDateTime(e?.dateTime, language) : '-'}`}
-                        </span>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
+            <Address>
+              <span className="from">{findProvince(job.from?.name, language) || '<No Address>'}</span>
+              <span className="arrow">{'=>'}</span>
+              {job.to?.length ? <span className="to">{job.to[0]?.name}</span> : '<No Address>'}
+              <span className="dot">{job?.to?.length > 1 ? '...' : ''}</span>
+              <span className="fTime">{`${
+                job.from?.dateTime ? momentFormatDateTime(job.from?.dateTime, language) : '-'
+              }`}</span>
+              <span className="tTime">
+                {job.to?.length ? momentFormatDateTime(job.to[0]?.dateTime, language) : '-'}
+              </span>
+            </Address>
           ),
         },
         {
-          key: job.weight,
-          content: job.weight,
+          key: job.owner?.fullName,
+          content: job.owner?.fullName || '-',
         },
         {
           key: t(status),
           content: t(status),
         },
       ],
-    }
+    };
   });
-}
+};
+
+const Address = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 20px 1fr 10px;
+  grid-template-areas:
+    'from arrow to dot'
+    'fTime arrow tTime dot';
+  gap: 2;
+
+  .from {
+    grid-area: from;
+  }
+  .to {
+    grid-area: to;
+  }
+  .fromTime {
+    grid-area: fTime;
+  }
+  .toTime {
+    grid-area: tTime;
+  }
+  .arrow {
+    grid-area: arrow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .dot {
+    grid-area: dot;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+  }
+`;

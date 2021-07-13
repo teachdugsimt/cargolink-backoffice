@@ -1,5 +1,5 @@
 import { types, flow } from 'mobx-state-tree';
-import { MasterTypeApi } from '../services';
+import { MasterTypeApi, ProductTypeApi } from '../services';
 
 const Regions = types.model({
   id: types.maybeNull(types.number),
@@ -14,11 +14,18 @@ const Provinces = types.model({
   groupId: types.maybeNull(types.number),
 });
 
+const ProductTypes = types.model({
+  id: types.maybeNull(types.number),
+  name: types.maybeNull(types.string),
+  image: types.maybeNull(types.string),
+})
+
 export const MasterTypeStore = types
   .model('MasterTypeStore', {
     loading: false,
     regions: types.maybeNull(types.array(Regions)),
     provinces: types.maybeNull(types.array(Provinces)),
+    productTypes: types.maybeNull(types.array(ProductTypes)),
     error_response: types.maybeNull(
       types.model({
         title: types.maybeNull(types.string),
@@ -83,5 +90,32 @@ export const MasterTypeStore = types
           };
         }
       }),
+      getProductTypes: flow(function* getProductTypes() {
+        self.loading = true;
+        self.productTypes = null;
+        self.error_response = null;
+        try {
+          const response = yield ProductTypeApi.getProductTypes();
+          console.log('getProductTypes response :> ', response);
+
+          if (response && response.ok) {
+            self.loading = false;
+            self.productTypes = response.data;
+          } else {
+            self.loading = false;
+            self.error_response = {
+              title: response.problem,
+              content: 'GET product types : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to getProductTypes :> ', error);
+          self.loading = false;
+          self.error_response = {
+            title: '',
+            content: 'Failed to get product types',
+          };
+        }
+      })
     };
   });
