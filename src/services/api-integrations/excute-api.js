@@ -1,3 +1,4 @@
+import Reactotron from 'reactotron-react-js'
 import { create } from 'apisauce';
 import Header from './header';
 
@@ -14,6 +15,8 @@ const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = t
         requiredToken,
       ),
     );
+
+    api.addMonitor(Reactotron.apisauce)
 
     let response;
     if (method == 'get' || method == 'GET') {

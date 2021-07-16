@@ -110,10 +110,10 @@ export const createTableRows = (
       cells: [
         {
           key: job.id,
-          content: (
-            <span onClick={() => onDetail(job.id || '')} style={{ cursor: 'pointer', fontWeight: 'bold' }}>
-              {job.id}
-            </span>
+          content: (job.id
+            // <span onClick={() => onDetail(job.id || '')} style={{ cursor: 'pointer', fontWeight: 'bold' }}>
+            // {job.id}
+            // </span>
           ),
         },
         {

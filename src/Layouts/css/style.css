@@ -183,3 +183,43 @@ input[type='file'] {
     padding: 10px 5rem;
   }
 }
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  flex: 1
+}
+
+hr {
+  border: 0px solid;
+  height: 1px;
+  background-color: #ddd;
+  margin: 20px 0px 10px 0px;
+}
+
+.vertical-timeline::before {
+  background: #eee !important;
+}
+
+.vertical-timeline-element-icon {
+  border: 4px solid #eee;
+  box-shadow: none !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vertical-timeline-element-content {
+  padding: 10px !important;
+}
+
+.vertical-timeline-element-date {
+  padding: 0px 0px !important;
+}
+
+.vertical-timeline-element {
+  margin: 2em 0 !important;
+}
