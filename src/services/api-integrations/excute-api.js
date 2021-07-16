@@ -16,7 +16,7 @@ const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = t
       ),
     );
 
-    api.addMonitor(Reactotron.apisauce)
+    __DEV__ && api.addMonitor(Reactotron.apisauce)
 
     let response;
     if (method == 'get' || method == 'GET') {
