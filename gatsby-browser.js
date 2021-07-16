@@ -6,7 +6,7 @@
 
 // You can delete this file if you're not using it
 // import 'normalize.css';
-import './src/config/ReactotronConfig'
+// import './src/config/ReactotronConfig'
 
 export const onInitialClientRender = () => {
   // setTimeout(function () {

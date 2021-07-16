@@ -1,4 +1,4 @@
-import Reactotron from 'reactotron-react-js'
+// import Reactotron from 'reactotron-react-js'
 import { create } from 'apisauce';
 import Header from './header';
 
@@ -16,7 +16,7 @@ const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = t
       ),
     );
 
-    process.env.MODE == 'development' && api.addMonitor(Reactotron.apisauce)
+    // process.env.MODE == 'development' && api.addMonitor(Reactotron.apisauce)
 
     let response;
     if (method == 'get' || method == 'GET') {
