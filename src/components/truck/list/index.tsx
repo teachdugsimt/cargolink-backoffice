@@ -27,6 +27,17 @@ enum TruckFilterState {
   ALL = -1,
 }
 
+const extendRows = (
+  rows: Array<RowType>,
+  onClick: (e: React.MouseEvent, rowIndex: number) => void,
+) => {
+  return rows.map((row, index) => ({
+    ...row,
+    onClick: (e: React.MouseEvent) => onClick(e, index),
+  }));
+};
+
+
 const TrucksListComponent: React.FC = observer(() => {
   const { t } = useTranslation();
   const { loginStore, truckStore } = useMst();
@@ -136,6 +147,11 @@ const TrucksListComponent: React.FC = observer(() => {
       <BreadcrumbsItem text={t('vehicle.management')} key="trucks-management" />
     </Breadcrumbs>
   );
+
+  const onRowClick = (e: React.MouseEvent, rowIndex: number) => {
+    navigate('/vehicles/' + rowData[rowIndex].cells[0].content)
+  }
+
   return (
     <div>
       <HeaderGroup>
@@ -171,7 +187,7 @@ const TrucksListComponent: React.FC = observer(() => {
         <TableWrapper>
           <DynamicTable
             head={tableHeader}
-            rows={rowData}
+            rows={extendRows(rowData, onRowClick)}
             page={page}
             rowsPerPage={truckStore.data_trucks?.lengthPerPage || 10}
             defaultPage={1}

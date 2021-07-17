@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { Icon } from 'react-icons-kit'
 import { ic_dashboard } from 'react-icons-kit/md/ic_dashboard'
 import images from '../../Themes/images'
+import ProductTypeWidget from './product-type'
 
 interface ProductWidgetProps {
   productType: number | null | undefined
@@ -15,6 +16,7 @@ interface ProductWidgetProps {
 
 function ProductWidget(props: ProductWidgetProps) {
   const { productType, productName, price, priceType, weight } = props
+
   return (
     <>
       <Row>
@@ -25,7 +27,10 @@ function ProductWidget(props: ProductWidgetProps) {
       <Row>
         <Col flex={1}>
           <Label>ประเภทสินค้า</Label>
-          <Value>{productType || '-'}</Value>
+          <Value>
+            <ProductTypeWidget productTypeId={productType || ''} />
+          </Value>
+          {/* <Value>{productType || '-'}</Value> */}
         </Col>
         <Col flex={1}>
           <Label>ชื่อสินค้า</Label>

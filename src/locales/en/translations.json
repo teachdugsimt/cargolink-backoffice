@@ -85,8 +85,10 @@
   "HIGH": "High",
   "OPEN": "OPEN",
   "IN-PROGRESS": "IN-PROGRESS",
+  "INPROGRESS": "IN-PROGRESS",
   "COMPLETED": "COMPLETED",
   "LOADING": "Loading",
+  "EXPIRED": "EXPIRED",
   "user": "User",
   "to": "To",
   "from": "From",
@@ -168,10 +170,15 @@
   "typeUserToFind": "Type a keyword to find users to select",
   "vehicle": {
     "management": "Trucks Management",
-    "add": "Add Vehicle"
+    "add": "Add Vehicle",
+    "info": "Vehicle Info"
   },
   "trip": {
     "management": "Trips Management"
+  },
+  "job": {
+    "management": "Jobs Management",
+    "info": "Job Info"
   },
   "allTrucks": "All Trucks",
   "allTypes": "All",

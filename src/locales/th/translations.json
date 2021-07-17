@@ -82,10 +82,12 @@
   "LOW": "ต่ำ",
   "MEDIUM": "กลาง",
   "HIGH": "สูง",
-  "OPEN": "OPEN",
+  "OPEN": "งานใหม่",
   "IN-PROGRESS": "IN-PROGRESS",
-  "COMPLETED": "COMPLETED",
+  "INPROGRESS": "กำลังขนส่ง",
+  "COMPLETED": "เสร็จสิ้น",
   "LOADING": "กำลังโหลด",
+  "EXPIRED": "หมดอายุ",
   "user": "ผู้ใช้งาน",
   "to": "ถึง",
   "from": "จาก",
@@ -168,7 +170,8 @@
   "typeUserToFind": "พิมพ์คีย์เวิร์ดเพื่อค้นหาผู้ใช้",
   "vehicle": {
     "management": "จัดการรถบรรทุก",
-    "add": "เพิ่มข้อมูลรถ"
+    "add": "เพิ่มข้อมูลรถ",
+    "info": "ข้อมูลรถ"
   },
   "trip": {
     "management": "จัดการการขนส่ง"

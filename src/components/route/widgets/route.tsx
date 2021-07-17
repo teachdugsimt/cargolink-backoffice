@@ -3,10 +3,12 @@ import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeli
 import 'react-vertical-timeline-component/style.min.css';
 import styled from 'styled-components'
 import images from '../../Themes/images';
+import { useTranslation } from 'react-i18next';
 
 import { Icon } from 'react-icons-kit'
 import { userCircleO } from 'react-icons-kit/fa/userCircleO'
 import { phone } from 'react-icons-kit/fa/phone'
+
 import moment from 'moment';
 
 interface DeliverPoint {
@@ -19,25 +21,34 @@ interface DeliverPoint {
 interface RouteWidgetProps {
   from: DeliverPoint | null | undefined
   to: Array<DeliverPoint> | null | undefined
+  status: string | null | undefined
 }
 
 function RouteWidget(props: RouteWidgetProps) {
-  const { from, to } = props;
+  const { from, to, status } = props;
+  const { t } = useTranslation();
+
   return (
     <>
       <Row>
         <img src={images.compass} style={{ width: 34, height: 34 }} />
         <h2 style={{ margin: 0, marginLeft: 10 }}>การขนส่ง</h2>
+        <div style={{
+          display: 'flex', flex: 1, marginLeft: 10,
+          justifyContent: 'flex-start', alignItems: 'center'
+        }}>
+          <span style={{ color: 'orange' }}>{'[' + t(status || '-') + ']'}</span>
+        </div>
       </Row>
       <Row>
         <Col flex={1}>
           <VerticalTimeline animate={true} layout={"1-column-left"}>
             <VerticalTimelineElement
               className="vertical-timeline-element--work"
-              contentStyle={{ background: '#018ECE', color: '#fff' }}
-              contentArrowStyle={{ borderRight: '7px solid #018ECE' }}
+              contentStyle={{ background: '#018ECE88', color: '#000' }}
+              contentArrowStyle={{ borderRight: '7px solid #018ECE88' }}
               date={moment(from?.dateTime, 'DD-MM-YYYY HH:mm').format('lll')}
-              iconStyle={{ background: '#018ECE', color: '#fff' }}
+              iconStyle={{ background: '#018ECE88', color: '#000' }}
               icon={<span>ขึ้น</span>}
             >
               <Row>
@@ -62,10 +73,10 @@ function RouteWidget(props: RouteWidgetProps) {
               to?.map(e => {
                 return <VerticalTimelineElement
                   className="vertical-timeline-element--work"
-                  contentStyle={{ background: '#FC544C', color: '#fff' }}
-                  contentArrowStyle={{ borderRight: '7px solid #FC544C' }}
+                  contentStyle={{ background: '#FC544C88', color: '#000' }}
+                  contentArrowStyle={{ borderRight: '7px solid #FC544C88' }}
                   date={moment(e.dateTime, 'DD-MM-YYYY HH:mm').format('lll')}
-                  iconStyle={{ background: '#FC544C', color: '#fff' }}
+                  iconStyle={{ background: '#FC544C88', color: '#000' }}
                   icon={<span>ลง</span>}
                 >
                   <Row>
@@ -110,7 +121,7 @@ const Col = styled.div<{ flex: number }>`
 `;
 
 const Address = styled.div`
-  color: #fff;
+  color: #000;
   font-size: 15px;
 `;
 

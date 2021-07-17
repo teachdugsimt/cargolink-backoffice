@@ -67,7 +67,9 @@ const JobItem = observer((props: any) => {
 
           <RouteWidget
             from={currentJob?.from}
-            to={currentJob?.to} />
+            to={currentJob?.to}
+            status={currentJob?.status}
+          />
 
         </GridColumn>
       </Grid>

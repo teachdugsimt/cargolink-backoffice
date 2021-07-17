@@ -1,4 +1,5 @@
 import React from 'react'
+import pkg from '../../package.json'
 import images from '../components/Themes/images';
 import menuItems from './menu-item'
 import { navigate } from 'gatsby';
@@ -100,7 +101,8 @@ const PrimaryLayout = observer(({ children, location }) => {
 
             </NestableNavigationContent>
             <NavigationFooter>
-              <Footer>CargoLink Backoffice</Footer>
+              <Footer>CargoLink Backoffice<br />{pkg.version + ' ' + process.env.MODE}</Footer>
+
             </NavigationFooter>
           </SideNavigation>
         </LeftSidebar>

@@ -1,6 +1,7 @@
-import { types, flow, protect } from 'mobx-state-tree';
+import { types, flow } from 'mobx-state-tree';
 import { ProductTypeApi } from '../services';
 import { IProductType } from '../services/product-type-api';
+
 
 const ProductTypeType = types.model({
   id: types.number,
@@ -29,9 +30,9 @@ export const ProductTypeStore = types
         self.error_response = null;
         try {
           const response = yield ProductTypeApi.getProductTypes();
-          console.log('getProductTypes response :>', response);
+          console.info('getProductTypes response :>', response);
           if (response && response.ok) {
-            const productTypesList: IProductType[] = response.data;
+            const productTypesList = response.data;
             self.data = productTypesList;
             self.count = productTypesList.length;
             self.error_response = null;
@@ -54,4 +55,13 @@ export const ProductTypeStore = types
         self.loading = false;
       }),
     };
-  });
+  })
+  .views(self => ({
+    productTypeNameById(productTypeId: number | string) {
+      let ptype = self.data?.filter(e => e.id == productTypeId)
+      if (!ptype?.length) {
+        // self.getProductTypes()
+      }
+      return ptype?.length ? ptype[0] : null
+    }
+  }));

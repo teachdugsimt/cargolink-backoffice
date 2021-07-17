@@ -113,11 +113,7 @@ export const createTableRows = async (
       cells: [
         {
           key: truck.id,
-          content: (
-            <span onClick={() => onDetail(truck.id || '')} style={{ cursor: 'pointer', fontWeight: 'bold' }}>
-              {truck.id}
-            </span>
-          ),
+          content: (truck.id),
         },
         {
           key: truckType?.id || '-',
