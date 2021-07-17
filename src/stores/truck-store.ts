@@ -153,6 +153,7 @@ export const TruckStore = types
         try {
           self.loading = true
           const response = yield truckApi.getTruckById(params)
+          console.log(response)
           if (response.ok) {
             self.currentTruck = response.data.data
           } else {

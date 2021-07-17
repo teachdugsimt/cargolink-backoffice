@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { observer } from 'mobx-react-lite';
 import { Icon } from 'react-icons-kit'
 import { truck } from 'react-icons-kit/fa/truck'
 
@@ -17,7 +17,7 @@ interface TruckWidgetProps {
   stallHeight?: string | null | undefined
 }
 
-function TruckWidget(props: TruckWidgetProps) {
+const TruckWidget = observer((props: TruckWidgetProps) => {
   const {
     title, truckType, tipper,
     truckAmount, loadingWeight,
@@ -46,12 +46,12 @@ function TruckWidget(props: TruckWidgetProps) {
       </Row>
 
       <Row>
-        {truckAmount && <Col flex={1}>
+        {!loadingWeight && <Col flex={1}>
           <Label>จำนวนรถที่ต้องการ</Label>
           <Value>{truckAmount || '-'}{' คัน'}</Value>
         </Col>}
 
-        {loadingWeight && <Col flex={1}>
+        {!truckAmount && <Col flex={1}>
           <Label>น้ำหนักบรรทุก</Label>
           <Value>{loadingWeight || '-'}{' ตัน'}</Value>
         </Col>}
@@ -70,7 +70,7 @@ function TruckWidget(props: TruckWidgetProps) {
       </Row>
     </>
   )
-}
+})
 
 export default TruckWidget
 

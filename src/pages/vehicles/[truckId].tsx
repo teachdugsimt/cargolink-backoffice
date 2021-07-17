@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { navigate } from 'gatsby'
+import { observer } from 'mobx-react-lite';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +15,7 @@ import TruckGalleryWidget from '../../components/truck/widgets/truck-gallery';
 
 
 
-const TruckInfo = (props: any) => {
+const TruckInfo = observer((props: any) => {
   const { t } = useTranslation();
   const { truckStore } = useMst()
   const { currentTruck } = truckStore
@@ -55,7 +56,7 @@ const TruckInfo = (props: any) => {
       </Grid>
     </ >
   )
-}
+})
 
 export default TruckInfo;
 
