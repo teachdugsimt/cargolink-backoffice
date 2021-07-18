@@ -16,10 +16,10 @@ const ProductTypeWidget = observer((props: ProductTypeWidgetProps) => {
     setProductTypeName(productType?.name || '')
   }, [props.productTypeId])
 
-  useEffect(() => {
-    const productType = productTypesStore.productTypeNameById(props.productTypeId)
-    setProductTypeName(productType?.name || '')
-  }, [productTypesStore.data])
+  // useEffect(() => {
+  //   const productType = productTypesStore.productTypeNameById(props.productTypeId)
+  //   setProductTypeName(productType?.name || '')
+  // }, [productTypesStore.data])
 
   return <>{productTypeName}</>
 })

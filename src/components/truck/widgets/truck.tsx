@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite';
-import { Icon } from 'react-icons-kit'
-import { truck } from 'react-icons-kit/fa/truck'
+// import { Icon } from 'react-icons-kit'
+// import { truck } from 'react-icons-kit/fa/truck'
 
 import styled from 'styled-components'
 import images from '../../Themes/images'

@@ -60,7 +60,7 @@ export const ProductTypeStore = types
     productTypeNameById(productTypeId: number | string) {
       let ptype = self.data?.filter(e => e.id == productTypeId)
       if (!ptype?.length) {
-        // self.getProductTypes()
+        self.getProductTypes()
       }
       return ptype?.length ? ptype[0] : null
     }

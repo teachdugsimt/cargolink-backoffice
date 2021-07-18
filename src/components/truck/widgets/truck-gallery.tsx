@@ -4,18 +4,61 @@ import { useMst } from '../../../stores/root-store'
 import { Gallery, Item } from 'react-photoswipe-gallery'
 import styled from 'styled-components';
 
+import { Icon } from 'react-icons-kit'
+import { images } from 'react-icons-kit/icomoon/images'
+import mediaApi from '../../../services/media-api';
+
 interface TruckGalleryWidgetProps {
-  truckPhotos: object | null | undefined
+  truckPhotos?: {
+    front: string | null
+    back: string | null
+    left: string | null
+    right: string | null
+  } | null | undefined
 }
 
 const TruckGalleryWidget = observer((props: TruckGalleryWidgetProps) => {
 
-  // const { truckTypesStore } = useMst()
-  // const [truckTypeName, setTruckTypeName] = useState('')
+  const [frontImage, setFrontImage] = useState()
+  const [backImage, setBackImage] = useState()
+  const [leftImage, setLeftImage] = useState()
+  const [rightImage, setRightImage] = useState()
 
   useEffect(() => {
-    // const truckType = truckTypesStore.truckTypeNameById(props.truckPhotos)
-    // setTruckTypeName(truckType?.name || '')
+    const front = props.truckPhotos?.front
+    const back = props.truckPhotos?.back
+    const left = props.truckPhotos?.left
+    const right = props.truckPhotos?.right
+
+    async function fetchImage() {
+      if (front) {
+        const frontUriResponse = await mediaApi.getFileUrlByAttachCode({ attached_code: front })
+        // console.log(frontUri)
+        if (frontUriResponse.ok) {
+          setFrontImage(frontUriResponse.data.uri)
+        }
+
+      }
+      if (back) {
+        const backUriResponse = await mediaApi.getFileUrlByAttachCode({ attached_code: back })
+        if (backUriResponse.ok) {
+          setBackImage(backUriResponse.data.uri)
+        }
+      }
+      if (left) {
+        const leftUriResponse = await mediaApi.getFileUrlByAttachCode({ attached_code: left })
+        if (leftUriResponse.ok) {
+          setLeftImage(leftUriResponse.data.uri)
+        }
+      }
+      if (right) {
+        const rightUriResponse = await mediaApi.getFileUrlByAttachCode({ attached_code: right })
+        if (rightUriResponse.ok) {
+          setRightImage(rightUriResponse.data.uri)
+        }
+      }
+    }
+    fetchImage()
   }, [props.truckPhotos])
 
   // useEffect(() => {
@@ -27,57 +70,73 @@ const TruckGalleryWidget = observer((props: TruckGalleryWidgetProps) => {
     <ImageWrapper>
       <ImageItem>
         <ImageThumb>
-          <Item
-            original="https://cargolink-documents.s3.ap-southeast-1.amazonaws.com/VEHICLE_IMAGE/BACK/ACTIVE/VEHICLE_IMAGE-BACK-1624537044500"
+          {leftImage ? <Item
+            original={leftImage}
             width="1024"
             height="768"
           >
             {({ ref, open }) => (
-              <img style={{ width: 150, height: 130, objectFit: 'contain' }} ref={ref} onClick={open} src="https://cargolink-documents.s3.ap-southeast-1.amazonaws.com/VEHICLE_IMAGE/BACK/ACTIVE/VEHICLE_IMAGE-BACK-1624537044500" />
+              <img style={{ width: 150, height: 130, objectFit: 'contain' }}
+                ref={ref} onClick={open}
+                src={leftImage} />
             )}
-          </Item>
+          </Item> :
+            <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
+          }
         </ImageThumb>
         <ImageLabel>ซ้าย</ImageLabel>
       </ImageItem>
       <ImageItem>
         <ImageThumb>
-          <Item
-            original="https://placekitten.com/1024/768?image=2"
+          {rightImage ? <Item
+            original={rightImage}
             width="1024"
             height="768"
           >
             {({ ref, open }) => (
-              <img style={{ width: 150, height: 130, objectFit: 'contain' }} ref={ref} onClick={open} src="https://placekitten.com/80/60?image=2" />
+              <img style={{ width: 150, height: 130, objectFit: 'contain' }}
+                ref={ref} onClick={open}
+                src={rightImage} />
             )}
-          </Item>
+          </Item> :
+            <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
+          }
         </ImageThumb>
         <ImageLabel>ขวา</ImageLabel>
       </ImageItem>
       <ImageItem>
         <ImageThumb>
-          <Item
-            original="https://placekitten.com/1024/768?image=2"
+          {frontImage ? <Item
+            original={frontImage}
             width="1024"
             height="768"
           >
             {({ ref, open }) => (
-              <img style={{ width: 150, height: 130, objectFit: 'contain' }} ref={ref} onClick={open} src="https://placekitten.com/80/60?image=2" />
+              <img style={{ width: 150, height: 130, objectFit: 'contain' }}
+                ref={ref} onClick={open}
+                src={frontImage} />
             )}
-          </Item>
+          </Item> :
+            <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
+          }
         </ImageThumb>
         <ImageLabel>หน้า</ImageLabel>
       </ImageItem>
       <ImageItem>
         <ImageThumb>
-          <Item
-            original="https://placekitten.com/1024/768?image=2"
+          {backImage ? <Item
+            original={backImage}
             width="1024"
             height="768"
           >
             {({ ref, open }) => (
-              <img style={{ width: 150, height: 130, objectFit: 'contain' }} ref={ref} onClick={open} src="https://placekitten.com/80/60?image=2" />
+              <img style={{ width: 150, height: 130, objectFit: 'contain' }}
+                ref={ref} onClick={open}
+                src={backImage} />
             )}
-          </Item>
+          </Item> :
+            <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
+          }
         </ImageThumb>
         <ImageLabel>หลัง</ImageLabel>
       </ImageItem>

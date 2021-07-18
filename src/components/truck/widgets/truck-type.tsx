@@ -16,10 +16,10 @@ const TruckTypeWidget = observer((props: TruckTypeWidgetProps) => {
     setTruckTypeName(truckType?.name || '')
   }, [props.truckTypeId])
 
-  useEffect(() => {
-    const truckType = truckTypesStore.truckTypeNameById(props.truckTypeId)
-    setTruckTypeName(truckType?.name || '')
-  }, [truckTypesStore.data])
+  // useEffect(() => {
+  //   const truckType = truckTypesStore.truckTypeNameById(props.truckTypeId)
+  //   setTruckTypeName(truckType?.name || '')
+  // }, [truckTypesStore.data])
 
   return <>{truckTypeName}</>
 })
