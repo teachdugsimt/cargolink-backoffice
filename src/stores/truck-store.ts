@@ -152,6 +152,7 @@ export const TruckStore = types
       getTruckById: flow(function* getTruckById(params: TruckRequestParams) {
         try {
           self.loading = true
+          self.currentTruck = null
           const response = yield truckApi.getTruckById(params)
           console.log(response)
           if (response.ok) {

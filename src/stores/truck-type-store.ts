@@ -60,7 +60,7 @@ export const TruckTypeStore = types
     truckTypeNameById(truckTypeId: number | string) {
       let trucktype = self.data?.filter(e => e.id == truckTypeId)
       if (!trucktype?.length) {
-        // self.getTruckTypes()
+        self.getTruckTypes()
       }
       return trucktype?.length ? trucktype[0] : null
     }
