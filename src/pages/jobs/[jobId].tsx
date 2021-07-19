@@ -56,6 +56,7 @@ const JobItem = observer((props: any) => {
           />
           <hr />
           <TruckWidget
+            title={'รถที่ต้องการ'}
             truckType={currentJob?.truckType}
             tipper={currentJob?.tipper}
             truckAmount={currentJob?.requiredTruckAmount}

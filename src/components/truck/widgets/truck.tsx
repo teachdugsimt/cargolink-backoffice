@@ -46,12 +46,12 @@ const TruckWidget = observer((props: TruckWidgetProps) => {
       </Row>
 
       <Row>
-        {!loadingWeight && <Col flex={1}>
+        {props.hasOwnProperty('truckAmount') && <Col flex={1}>
           <Label>จำนวนรถที่ต้องการ</Label>
           <Value>{truckAmount || '-'}{' คัน'}</Value>
         </Col>}
 
-        {!truckAmount && <Col flex={1}>
+        {props.hasOwnProperty('loadingWeight') && <Col flex={1}>
           <Label>น้ำหนักบรรทุก</Label>
           <Value>{loadingWeight || '-'}{' ตัน'}</Value>
         </Col>}

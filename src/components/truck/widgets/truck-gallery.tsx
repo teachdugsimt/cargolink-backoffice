@@ -19,46 +19,62 @@ interface TruckGalleryWidgetProps {
 
 const TruckGalleryWidget = observer((props: TruckGalleryWidgetProps) => {
 
-  const [frontImage, setFrontImage] = useState()
-  const [backImage, setBackImage] = useState()
-  const [leftImage, setLeftImage] = useState()
-  const [rightImage, setRightImage] = useState()
+  const [frontImage, setFrontImage] = useState('')
+  const [backImage, setBackImage] = useState('')
+  const [leftImage, setLeftImage] = useState('')
+  const [rightImage, setRightImage] = useState('')
+
+  async function fetchImage(front: any, back: any, left: any, right: any) {
+    if (front) {
+      const frontUriResponse = await mediaApi.getFileUrlByAttachCode({ attached_code: front })
+      console.log(frontUriResponse)
+      setFrontImage(frontUriResponse.ok ? frontUriResponse.data.uri : '')
+    } else {
+      setFrontImage('')
+    }
+
+    if (back) {
+      const backUriResponse = await mediaApi.getFileUrlByAttachCode({ attached_code: back })
+      console.log(backUriResponse)
+      setBackImage(backUriResponse.ok ? backUriResponse.data.uri : '')
+    } else {
+      setBackImage('')
+    }
+
+    if (left) {
+      const leftUriResponse = await mediaApi.getFileUrlByAttachCode({ attached_code: left })
+      console.log(leftUriResponse)
+      setLeftImage(leftUriResponse.ok ? leftUriResponse.data.uri : '')
+    } else {
+      setLeftImage('')
+    }
+
+    if (right) {
+      const rightUriResponse = await mediaApi.getFileUrlByAttachCode({ attached_code: right })
+      console.log(rightUriResponse)
+      setRightImage(rightUriResponse.ok ? rightUriResponse.data.uri : '')
+    } else {
+      setRightImage('')
+    }
+  }
+
 
   useEffect(() => {
-    const front = props.truckPhotos?.front
-    const back = props.truckPhotos?.back
-    const left = props.truckPhotos?.left
-    const right = props.truckPhotos?.right
+    fetchImage(
+      props.truckPhotos?.front,
+      props.truckPhotos?.back,
+      props.truckPhotos?.left,
+      props.truckPhotos?.right
+    )
+  }, [])
 
-    async function fetchImage() {
-      if (front) {
-        const frontUriResponse = await mediaApi.getFileUrlByAttachCode({ attached_code: front })
-        // console.log(frontUri)
-        if (frontUriResponse.ok) {
-          setFrontImage(frontUriResponse.data.uri)
-        }
-
-      }
-      if (back) {
-        const backUriResponse = await mediaApi.getFileUrlByAttachCode({ attached_code: back })
-        if (backUriResponse.ok) {
-          setBackImage(backUriResponse.data.uri)
-        }
-      }
-      if (left) {
-        const leftUriResponse = await mediaApi.getFileUrlByAttachCode({ attached_code: left })
-        if (leftUriResponse.ok) {
-          setLeftImage(leftUriResponse.data.uri)
-        }
-      }
-      if (right) {
-        const rightUriResponse = await mediaApi.getFileUrlByAttachCode({ attached_code: right })
-        if (rightUriResponse.ok) {
-          setRightImage(rightUriResponse.data.uri)
-        }
-      }
-    }
-    fetchImage()
+  useEffect(() => {
+    fetchImage(
+      props.truckPhotos?.front,
+      props.truckPhotos?.back,
+      props.truckPhotos?.left,
+      props.truckPhotos?.right
+    )
   }, [props.truckPhotos])
 
   // useEffect(() => {
