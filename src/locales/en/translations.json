@@ -32,6 +32,8 @@
   "addNewJob": "ADD NEW JOB",
   "addDataCar": "Add vehicle information",
   "typeCar": "The type of car you want",
+  "stall": "Stall",
+  "sale": "Sale",
   "pleaseselect": "Please select",
   "fieldTruckType": "This field truck type is required",
   "truckAmount": "Required Truck Amount",
