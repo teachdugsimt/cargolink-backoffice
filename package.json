@@ -111,7 +111,7 @@
   "license": "MIT",
   "scripts": {
     "build": "gatsby build --verbose",
-    "dev": "GATSBY_ACTIVE_ENV=development gatsby develop",
+    "dev": "gatsby develop",
     "start": "npm run dev",
     "serve": "gatsby serve",
     "test": "cypress run --record --key d7222821-aeec-46cb-b9a6-c75789d66ce7",
