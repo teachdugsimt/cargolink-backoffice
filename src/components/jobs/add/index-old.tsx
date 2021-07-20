@@ -136,36 +136,6 @@ const AddJobContainer: React.FC = observer(() => {
             />
           </Item>
           <Item>
-            <Label style={{ marginRight: 'auto' }}>
-              {t('typeCar')} {Required}
-            </Label>
-            <Controller
-              name="truckType"
-              control={control}
-              render={({ onChange }) => <TruckTypesSelector onSelect={onChange} placeholder={t('pleaseselect')} />}
-            />
-          </Item>
-          <Item>
-            <Label>
-              {t('truckAmount')} {Required}
-            </Label>
-            <InputGroup>
-              <Input
-                type="number"
-                className="new-input-component"
-                style={{ borderColor: errors.truckAmount ? '#FF3D71' : '' }}
-                name="truckAmount"
-                id="truckAmount"
-                ref={register({ required: true })}
-                aria-invalid={errors.truckAmount ? 'true' : 'false'}
-              />
-              {errors.truckAmount ? <Error message={t('fieldTruckAmount')} /> : <ErrorInput>&nbsp;</ErrorInput>}
-            </InputGroup>
-          </Item>
-        </Grid>
-        <Divider />
-        <Grid>
-          <Item>
             <Label>
               {t('productType')} {Required}
             </Label>
@@ -200,8 +170,6 @@ const AddJobContainer: React.FC = observer(() => {
               {errors.productName ? <Error message={t('fieldproductName')} /> : <ErrorInput>&nbsp;</ErrorInput>}
             </InputGroup>
           </Item>
-        </Grid>
-        <Grid>
           <Item>
             <Label>
               {t('amountWeight')} {Required}
@@ -221,6 +189,58 @@ const AddJobContainer: React.FC = observer(() => {
               />
               {errors.weight && errors.weight.type === 'required' && <Error message={t('fieldWeight')} />}
               {errors.weight && errors.weight.type === 'min' && <Error message={t('minWeight')} />}
+            </InputGroup>
+          </Item>
+        </Grid>
+        <Divider />
+        <Grid>
+          <Item>
+            <Label style={{ marginRight: 'auto' }}>
+              {t('typeCar')} {Required}
+            </Label>
+            <Controller
+              name="truckType"
+              control={control}
+              render={({ onChange }) => <TruckTypesSelector onSelect={onChange} placeholder={t('pleaseselect')} />}
+            />
+          </Item>
+          <Item>
+            <Label style={{ marginRight: 'auto' }}>
+              {t('stall')} {Required}
+            </Label>
+            <Controller
+              name="stall"
+              control={control}
+              render={({ onChange }) => <TruckTypesSelector onSelect={onChange} placeholder={t('pleaseselect')} />}
+            />
+          </Item>
+          <Item>
+            <Label style={{ marginRight: 'auto' }}>
+              {t('sale')} {Required}
+            </Label>
+            <Controller
+              name="sale"
+              control={control}
+              render={({ onChange }) => <TruckTypesSelector onSelect={onChange} placeholder={t('pleaseselect')} />}
+            />
+          </Item>
+        </Grid>
+        <Grid>
+          <Item>
+            <Label>
+              {t('truckAmount')} {Required}
+            </Label>
+            <InputGroup>
+              <Input
+                type="number"
+                className="new-input-component"
+                style={{ borderColor: errors.truckAmount ? '#FF3D71' : '' }}
+                name="truckAmount"
+                id="truckAmount"
+                ref={register({ required: true })}
+                aria-invalid={errors.truckAmount ? 'true' : 'false'}
+              />
+              {errors.truckAmount ? <Error message={t('fieldTruckAmount')} /> : <ErrorInput>&nbsp;</ErrorInput>}
             </InputGroup>
           </Item>
         </Grid>
@@ -262,36 +282,6 @@ const AddJobContainer: React.FC = observer(() => {
         <GroupTitle>{t('priceData')}</GroupTitle>
         <Divider />
         <Grid>
-          {/* <Row> Google Maps Broken CSS
-            <Col breakPoint={{ xs: 12, sm: 12, md: 12 }}>
-              <p>
-                {t('deliveryLocation')} {Required}
-              </p>
-              <Controller
-                name="contactName"
-                control={control}
-                register={register({ required: true })}
-                rules={{ required: 'Address can not null.' }}
-                render={() => (
-                  <>
-                    <Accordion>
-                      <AccordionItem uniqueKey={1} title={<Text tx={'selectLocation'} preset="content" />}>
-                        <GoogleMapWithSearch
-                          center={{ lat: 13.736717, lng: 100.523186 }}
-                          height="500px"
-                          zoom={15}
-                          onAddressChange={(addr, region) =>
-                            onSubmitLocation(addr, region, { address: 'contactName', region: 'pickupRegion' })
-                          }
-                        />
-                      </AccordionItem>
-                    </Accordion>
-                  </>
-                )}
-              />
-              {errors.contactName && <Error message={t('fieldDeliveryLocation')} />}
-            </Col>
-          </Row> */}
           <Item>
             <Label>
               {t('dateStart')} {Required}
@@ -366,26 +356,6 @@ const AddJobContainer: React.FC = observer(() => {
                   defaultValue=""
                   render={({ onChange, value }) => <></>}
                 />
-                {/* <Controller //? hide for now due to broken css
-                  name={`items[${index}].contactName`}
-                  control={control}
-                  defaultValue=""
-                  render={({ onChange, value }) => (
-                    <Accordion>
-                      <AccordionItem uniqueKey={1} title={<Text tx={'selectLocation'} preset="content" />}>
-                        <GoogleMapWithSearch
-                          center={{ lat: 13.736717, lng: 100.523186 }}
-                          height="500px"
-                          zoom={15}
-                          onAddressChange={(addr, region) => onSubmitLocation2(addr, region, index)}
-                        />
-                      </AccordionItem>
-                    </Accordion>
-                  )}
-                  register={register({ required: true })}
-                  rules={{ required: 'Address can not null' }}
-                />
-                {errors.items && errors.items[index]?.contactName && <Error message={t('pickupLocation')} />} */}
               </ItemHorizontalLong>
               <Item>
                 <Label>

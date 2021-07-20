@@ -79,6 +79,11 @@ input[type='file'] {
   border-radius: 0.25rem;
   font-size: 0.8325rem;
   line-height: 1.5rem;
+
+  box-sizing: border-box;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
 }
 .errors-input-component {
   padding: 0.3875rem 0.8125rem;
@@ -190,7 +195,7 @@ input[type='file'] {
 }
 
 .col {
-  flex: 1
+  flex: 1;
 }
 
 hr {
