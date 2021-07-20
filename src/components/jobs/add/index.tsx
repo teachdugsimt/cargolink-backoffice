@@ -244,41 +244,8 @@ const AddJobContainer: React.FC = observer(() => {
             </InputGroup>
           </Item>
         </Grid>
-        <Grid>
-          <ItemLong style={{ display: 'flex', maxWidth: 'none', justifyContent: 'flex-start' }}>
-            <BoldLabel>
-              {t('deliveryPrice')} {Required}
-            </BoldLabel>
-            <PriceFields>
-              <BoldLabel style={{ marginRight: 5 }}>{t('price')}</BoldLabel>
-              <Controller
-                name="price"
-                control={control}
-                defaultValue={0}
-                render={({ onChange, value }) => (
-                  <Input
-                    className="new-input-component"
-                    type="number"
-                    value={value}
-                    style={{ width: 'clamp(200px, 200px, 100%)' }}
-                    onChange={(e) => onChange(e.target.value)}
-                  />
-                )}
-              />
-              <p style={{ fontWeight: 'bold', marginRight: 20, marginLeft: 5 }}>{t('baht')}</p>
-              <Controller
-                name="priceType"
-                control={control}
-                defaultValue={PriceTypeEnum.PER_TRIP}
-                render={({ onChange, value }) => (
-                  <PriceTypeToggle priceType={value} onChange={(changeTo) => onChange(changeTo)} />
-                )}
-              />
-            </PriceFields>
-          </ItemLong>
-        </Grid>
 
-        <Divider />
+        {/* <Divider />
         <GroupTitle>{t('priceData')}</GroupTitle>
         <Divider />
         <Grid>
@@ -334,8 +301,8 @@ const AddJobContainer: React.FC = observer(() => {
               {errors.contactMobileNo && <Error message={t('fieldContactNumber')} />}
             </InputGroup>
           </Item>
-        </Grid>
-        <Divider />
+        </Grid> */}
+        {/* <Divider /> */}
         <GroupTitle>{t('deliveryPoint')}</GroupTitle>
         {fields.map(({ id, contactName, name, contactMobileNo, exdate }, index) => {
           const toDate = watch(`items[${index}].exDate`);
@@ -438,6 +405,39 @@ const AddJobContainer: React.FC = observer(() => {
             </PlusButton>
           </ItemLongEnd>
           <br />
+          <ItemLong style={{ display: 'flex', maxWidth: 'none', justifyContent: 'flex-start' }}>
+            <BoldLabel>
+              {t('deliveryPrice')} {Required}
+            </BoldLabel>
+            <PriceFields>
+              <BoldLabel style={{ marginRight: 5 }}>{t('price')}</BoldLabel>
+              <Controller
+                name="price"
+                control={control}
+                defaultValue={0}
+                render={({ onChange, value }) => (
+                  <Input
+                    className="new-input-component"
+                    type="number"
+                    value={value}
+                    style={{ width: 'clamp(200px, 200px, 100%)' }}
+                    onChange={(e) => onChange(e.target.value)}
+                  />
+                )}
+              />
+              <p style={{ fontWeight: 'bold', marginRight: 20, marginLeft: 5 }}>{t('baht')}</p>
+              <Controller
+                name="priceType"
+                control={control}
+                defaultValue={PriceTypeEnum.PER_TRIP}
+                render={({ onChange, value }) => (
+                  <PriceTypeToggle priceType={value} onChange={(changeTo) => onChange(changeTo)} />
+                )}
+              />
+            </PriceFields>
+          </ItemLong>
+        </Grid>
+        <Grid>
           <ItemLongEnd>
             <FormFooter>
               <BackButton type="button" onClick={() => navigate('/jobs')}>
