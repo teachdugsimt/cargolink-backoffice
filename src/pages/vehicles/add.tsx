@@ -51,10 +51,10 @@ const AddTrucks = observer(() => {
                   <div>
                     <Row style={{ marginRight: 0 }}>
                       <Col breakPoint={{ xs: 12 }}>
-                        <Field label="เจ้าของรถ" name="example1" isRequired>
+                        <Field label="carOwner" name="carOwner" isRequired>
                           {({ fieldProps }: any) => (
                             <Fragment>
-                              <Textfield placeholder="Enter your details here" {...fieldProps} />
+                              <Textfield {...fieldProps} />
                               {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
                             </Fragment>
                           )}
@@ -63,10 +63,10 @@ const AddTrucks = observer(() => {
                     </Row>
                     <Row style={{ marginRight: 0 }}>
                       <Col breakPoint={{ xs: 12 }}>
-                        <Field label={`ประเภทรถ`} name="example1" isRequired>
+                        <Field label={`typeCar`} name="typeCar" isRequired>
                           {({ fieldProps }: any) => (
                             <Fragment>
-                              <Textfield placeholder="Enter your details here" {...fieldProps} />
+                              <Textfield {...fieldProps} />
                               {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
                             </Fragment>
                           )}
@@ -75,19 +75,19 @@ const AddTrucks = observer(() => {
                     </Row>
                     <Row between="xs" style={{ marginRight: -24 }}>
                       <Col breakPoint={{ xs: 5 }}>
-                        <Field label="คอก" name="example2">
+                        <Field label="stall" name="stall">
                           {({ fieldProps }: any) => (
                             <Fragment>
-                              <Textfield placeholder="Enter your details here" {...fieldProps} />
+                              <Textfield {...fieldProps} />
                             </Fragment>
                           )}
                         </Field>
                       </Col>
                       <Col breakPoint={{ xs: 5 }}>
-                        <Field label={`การลงสินค้า`} name="example1">
+                        <Field label={`sale`} name="sale">
                           {({ fieldProps }: any) => (
                             <Fragment>
-                              <Textfield placeholder="Enter your details here" {...fieldProps} />
+                              <Textfield {...fieldProps} />
                             </Fragment>
                           )}
                         </Field>
@@ -95,10 +95,10 @@ const AddTrucks = observer(() => {
                     </Row>
                     <Row style={{ marginRight: 0 }}>
                       <Col breakPoint={{ xs: 12 }}>
-                        <Field label={`เลขทะเบียน`} name="example1" isRequired>
+                        <Field label={`registrationNumber`} name="registrationNumber" isRequired>
                           {({ fieldProps }: any) => (
                             <Fragment>
-                              <Textfield placeholder="Enter your details here" {...fieldProps} />
+                              <Textfield {...fieldProps} />
                               {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
                             </Fragment>
                           )}
@@ -108,10 +108,10 @@ const AddTrucks = observer(() => {
                   </div>
                 </Col>
                 <Col breakPoint={{ xs: 12, md: 5 }}>
-                  <Field label="Field label" name="example2">
+                  <Field label="อัพโหลด" name="upload">
                     {({ fieldProps }: any) => (
                       <Fragment>
-                        <Textfield placeholder="Enter your details here" {...fieldProps} />
+                        <Textfield {...fieldProps} />
                         {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
                       </Fragment>
                     )}
