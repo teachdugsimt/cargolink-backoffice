@@ -75,6 +75,9 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
       {render ? <></> : <></>}
       <div style={{ paddingLeft: 12 }}>
         <Row center="xs">
+          <Col breakPoint={{ xs: 12, xl: 10.5 }}>
+            <Label>upload</Label>
+          </Col>
           <Col breakPoint={{ xs: 12, xl: 5 }}>
             {imageUpload.left ? (
               <ImageItem>
@@ -240,6 +243,17 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
   );
 });
 export default ImageUpload;
+
+const Label = styled.label`
+  font-size: 0.8571428571428571em;
+  font-style: inherit;
+  line-height: 1.3333333333333333;
+  color: #6b778c;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 4px;
+  margin-top: 0;
+`;
 
 const ImageItem = styled.div`
   width: 150px;
