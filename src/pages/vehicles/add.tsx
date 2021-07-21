@@ -74,7 +74,7 @@ const AddTrucks = observer(() => {
                       </Col>
                     </Row>
                     <Row between="xs" style={{ marginRight: -24 }}>
-                      <Col breakPoint={{ xs: 5 }}>
+                      <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
                         <Field label="stall" name="stall">
                           {({ fieldProps }: any) => (
                             <Fragment>
@@ -83,7 +83,7 @@ const AddTrucks = observer(() => {
                           )}
                         </Field>
                       </Col>
-                      <Col breakPoint={{ xs: 5 }}>
+                      <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
                         <Field label={`sale`} name="sale">
                           {({ fieldProps }: any) => (
                             <Fragment>
