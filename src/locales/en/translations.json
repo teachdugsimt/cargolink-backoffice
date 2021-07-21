@@ -31,6 +31,7 @@
   "addNewAccount": "ADD NEW ACCOUNT",
   "addNewJob": "ADD NEW JOB",
   "addDataCar": "Add vehicle information",
+  "carOwner":"Vehicle Owner",
   "typeCar": "The type of car you want",
   "stall": "Stall",
   "sale": "Sale",

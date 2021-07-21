@@ -51,7 +51,7 @@ const AddTrucks = observer(() => {
                   <div>
                     <Row style={{ marginRight: 0 }}>
                       <Col breakPoint={{ xs: 12 }}>
-                        <Field label="carOwner" name="carOwner" isRequired>
+                        <Field label={t("carOwner")} name="carOwner" isRequired>
                           {({ fieldProps }: any) => (
                             <Fragment>
                               <Textfield {...fieldProps} />
@@ -63,7 +63,7 @@ const AddTrucks = observer(() => {
                     </Row>
                     <Row style={{ marginRight: 0 }}>
                       <Col breakPoint={{ xs: 12 }}>
-                        <Field label={`typeCar`} name="typeCar" isRequired>
+                        <Field label={t("typeCar")} name="typeCar" isRequired>
                           {({ fieldProps }: any) => (
                             <Fragment>
                               <Textfield {...fieldProps} />
@@ -75,7 +75,7 @@ const AddTrucks = observer(() => {
                     </Row>
                     <Row between="xs" style={{ marginRight: -24 }}>
                       <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                        <Field label="stall" name="stall">
+                        <Field label={t("stall")} name="stall">
                           {({ fieldProps }: any) => (
                             <Fragment>
                               <Textfield {...fieldProps} />
@@ -84,7 +84,7 @@ const AddTrucks = observer(() => {
                         </Field>
                       </Col>
                       <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                        <Field label={`sale`} name="sale">
+                        <Field label={t(`sale`)} name="sale">
                           {({ fieldProps }: any) => (
                             <Fragment>
                               <Textfield {...fieldProps} />
@@ -95,7 +95,7 @@ const AddTrucks = observer(() => {
                     </Row>
                     <Row style={{ marginRight: 0 }}>
                       <Col breakPoint={{ xs: 12 }}>
-                        <Field label={`registrationNumber`} name="registrationNumber" isRequired>
+                        <Field label={t(`registrationNumber`)} name="registrationNumber" isRequired>
                           {({ fieldProps }: any) => (
                             <Fragment>
                               <Textfield {...fieldProps} />
@@ -108,7 +108,7 @@ const AddTrucks = observer(() => {
                   </div>
                 </Col>
                 <Col breakPoint={{ xs: 12, md: 5 }}>
-                  <Field label="อัพโหลด" name="upload">
+                  <Field label={t("upload")} name="upload">
                     {({ fieldProps }: any) => (
                       <Fragment>
                         <Textfield {...fieldProps} />
