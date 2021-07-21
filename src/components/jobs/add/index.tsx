@@ -36,7 +36,7 @@ const AddJobContainer: React.FC = observer(() => {
             <div>
               <Row between="xs">
                 <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
-                  <Field label="เจ้าของงาน" name="example1" isRequired>
+                  <Field label={t("่jobOwner")} name="่jobOwner" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
                         <Textfield placeholder="" {...fieldProps} />
@@ -46,7 +46,7 @@ const AddJobContainer: React.FC = observer(() => {
                   </Field>
                 </Col>
                 <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
-                  <Field label={`ประเภทสินค้า`} name="example1" isRequired>
+                  <Field label={t("productType")} name="productType" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
                         <Textfield placeholder="" {...fieldProps} />
@@ -58,7 +58,7 @@ const AddJobContainer: React.FC = observer(() => {
               </Row>
               <Row between="xs">
                 <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
-                  <Field label="ชื่อสินค้า" name="example2" isRequired>
+                  <Field label={t("productName")} name="productName" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
                         <Textfield placeholder="" {...fieldProps} />
@@ -67,7 +67,7 @@ const AddJobContainer: React.FC = observer(() => {
                   </Field>
                 </Col>
                 <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
-                  <Field label={`น้ำหนักสินค้า`} name="example1">
+                  <Field label={t(`amountWeight`)} name="amountWeight">
                     {({ fieldProps }: any) => (
                       <Fragment>
                         <Textfield placeholder="" {...fieldProps} elemAfterInput={<ElemInput>ตัน</ElemInput>} />
@@ -79,11 +79,11 @@ const AddJobContainer: React.FC = observer(() => {
             </div>
 
             <br />
-            <Header>รถที่ต้องการ</Header>
+            <Header>{t("desiredVehicle")}</Header>
             <div>
               <Row between="xs">
                 <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
-                  <Field label="ประเภทรถที่ต้องการ" name="example1" isRequired>
+                  <Field label={t("typeCar")} name="typeCar" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
                         <Textfield placeholder="" {...fieldProps} />
@@ -95,7 +95,7 @@ const AddJobContainer: React.FC = observer(() => {
                 <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
                   <Row between="xs">
                     <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                      <Field label="คอก" name="example1">
+                      <Field label={t("stall")} name="stall">
                         {({ fieldProps }: any) => (
                           <Fragment>
                             <Textfield placeholder="" {...fieldProps} />
@@ -105,7 +105,7 @@ const AddJobContainer: React.FC = observer(() => {
                       </Field>
                     </Col>
                     <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                      <Field label={`การลงสินค้า`} name="example1">
+                      <Field label={t("sale")} name="sale">
                         {({ fieldProps }: any) => (
                           <Fragment>
                             <Textfield placeholder="" {...fieldProps} />
@@ -119,7 +119,7 @@ const AddJobContainer: React.FC = observer(() => {
               </Row>
               <Row between="xs">
                 <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
-                  <Field label={`จำนวน`} name="example1">
+                  <Field label={t("amount")} name="amount">
                     {({ fieldProps }: any) => (
                       <Fragment>
                         <Textfield placeholder="" {...fieldProps} elemAfterInput={<ElemInput>คัน</ElemInput>} />
@@ -131,13 +131,13 @@ const AddJobContainer: React.FC = observer(() => {
             </div>
 
             <br />
-            <Header>จุดขึ้นลงสินค้า</Header>
+            <Header>{t("pickUpPoint")}</Header>
             <div>
               <Row between="xs">
                 <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
                   <Row between="xs" style={{ alignItems: 'flex-end' }}>
                     <Col breakPoint={{ xs: 3, md: 2.5, lg: 3 }}>
-                      <Field label="ตัวดำเนินการ" name="example2" isRequired>
+                      <Field label={t("operator")} name="operator" isRequired>
                         {({ fieldProps }: any) => (
                           <Fragment>
                             <Textfield placeholder="" {...fieldProps} />
@@ -146,7 +146,7 @@ const AddJobContainer: React.FC = observer(() => {
                       </Field>
                     </Col>
                     <Col breakPoint={{ xs: 7, md: 6.5, lg: 7 }}>
-                      <Field label={`วัน-เวลา`} name="dateTime" isRequired>
+                      <Field label={t("dateTime")} name="dateTime" isRequired>
                         {({ fieldProps }: any) => (
                           <Fragment>
                             <DateTimePicker {...fieldProps} locale={loginStore.language} />
@@ -185,7 +185,7 @@ const AddJobContainer: React.FC = observer(() => {
                   </Row>
                   <Row between="xs">
                     <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                      <Field label={t('consigneeName')} name="example2">
+                      <Field label={t('consigneeName')} name="consigneeName">
                         {({ fieldProps }: any) => (
                           <Fragment>
                             <Textfield placeholder="" {...fieldProps} />
@@ -194,7 +194,7 @@ const AddJobContainer: React.FC = observer(() => {
                       </Field>
                     </Col>
                     <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                      <Field label={t('contactNumber')} name="example1">
+                      <Field label={t('contactNumber')} name="contactNumber">
                         {({ fieldProps }: any) => (
                           <Fragment>
                             <Textfield placeholder="" {...fieldProps} />
@@ -205,7 +205,7 @@ const AddJobContainer: React.FC = observer(() => {
                   </Row>
                 </Col>
                 <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
-                  <Field label={`ที่อยู่`} name="ex1">
+                  <Field label={t('Address')} name="Address">
                     {({ fieldProps }: any) => (
                       <Fragment>
                         <Textfield placeholder="" {...fieldProps} />
