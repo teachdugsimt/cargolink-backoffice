@@ -95,6 +95,7 @@
   "COMPLETED": "COMPLETED",
   "LOADING": "Loading",
   "EXPIRED": "EXPIRED",
+  "NEW": "NEW",
   "user": "User",
   "to": "To",
   "from": "From",

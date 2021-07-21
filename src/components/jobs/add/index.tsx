@@ -10,22 +10,15 @@ import { Row, Col } from '@paljs/ui';
 import Textfield from '@atlaskit/textfield';
 import PageHeader from '@atlaskit/page-header';
 import styled from 'styled-components';
-import TextArea from '@atlaskit/textarea';
-import SearchIcon from '@atlaskit/icon/glyph/search';
 import PriceTypeToggle, { PriceTypeEnum } from './price-type-toggle';
-import DateTimePicker from './datetimePicker';
-import RouteWidget from '../../route/widgets/route';
-import Select from '@atlaskit/select';
-import th from 'date-fns/locale/th';
-import images from '../../Themes/images';
 import UserSelector from './user.selector';
 import ProductTypesSelector from '../productType.selector';
 import TruckTypesSelector from '../../dropdowns/truckType.selector';
+import PickUpPoint from './pick-up-point';
 
 const AddJobContainer: React.FC = observer(() => {
   const { t } = useTranslation();
-  const { loginStore, jobStore } = useMst();
-  const { currentJob } = jobStore;
+  const { loginStore } = useMst();
 
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => {}}>
@@ -166,96 +159,13 @@ const AddJobContainer: React.FC = observer(() => {
 
             <br />
             <Header>{t('pickUpPoint')}</Header>
-            <div>
-              <Row between="xs">
-                <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
-                  <Row between="xs" style={{ alignItems: 'flex-end' }}>
-                    <Col breakPoint={{ xs: 3, md: 2.5, lg: 3 }}>
-                      <Field
-                        label={t('operator')}
-                        name="operator"
-                        defaultValue={{ label: 'ขึ้น', value: 'UP' }}
-                        isRequired
-                      >
-                        {({ fieldProps }: any) => (
-                          <Fragment>
-                            <Select
-                              inputId="single-select-example"
-                              className="single-select"
-                              classNamePrefix="react-select"
-                              options={[
-                                { label: 'ขึ้น', value: 'UP' },
-                                { label: 'ลง', value: 'DOWN' },
-                              ]}
-                              {...fieldProps}
-                            />
-                          </Fragment>
-                        )}
-                      </Field>
-                    </Col>
-                    <Col breakPoint={{ xs: 7, md: 6.5, lg: 7 }}>
-                      <Field label={t('dateTime')} name="dateTime" isRequired>
-                        {({ fieldProps }: any) => (
-                          <Fragment>
-                            <DateTimePicker {...fieldProps} locale={loginStore.language} />
-                          </Fragment>
-                        )}
-                      </Field>
-                    </Col>
-                  </Row>
-                  <Row between="xs">
-                    <Col breakPoint={{ xs: 7, lg: 8, xl: 9 }} style={{ paddingRight: 0 }}>
-                      <Field label={t('Address')} name="address" isRequired>
-                        {({ fieldProps }: any) => (
-                          <Fragment>
-                            <TextArea
-                              resize="auto"
-                              // defaultValue="Add a message here"
-                              style={{ height: 100 }}
-                              {...fieldProps}
-                            />
-                          </Fragment>
-                        )}
-                      </Field>
-                    </Col>
-                    <Col
-                      breakPoint={{ xs: 3, lg: 3, xl: 2 }}
-                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingLeft: 0 }}
-                    >
-                      <Button type="button" style={{ backgroundColor: 'white', marginTop: 16 }}>
-                        <img src={images.homeSearch} style={{ width: 50, height: 50 }} />
-                      </Button>
-                    </Col>
-                  </Row>
-                  <Row between="xs">
-                    <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                      <Field label={t('consigneeName')} name="consigneeName">
-                        {({ fieldProps }: any) => (
-                          <Fragment>
-                            <Textfield placeholder="" {...fieldProps} />
-                          </Fragment>
-                        )}
-                      </Field>
-                    </Col>
-                    <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                      <Field label={t('contactNumber')} name="contactNumber">
-                        {({ fieldProps }: any) => (
-                          <Fragment>
-                            <Textfield placeholder="" {...fieldProps} />
-                          </Fragment>
-                        )}
-                      </Field>
-                    </Col>
-                  </Row>
-                  <FormFooter>
-                    <SubmitButton type="button">เพิ่ม</SubmitButton>
-                  </FormFooter>
-                </Col>
-                <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
-                  <RouteWidget from={currentJob?.from} to={currentJob?.to} status={currentJob?.status} />
-                </Col>
-              </Row>
-            </div>
+            <Field name="pickUpPoint">
+              {({ fieldProps }: any) => (
+                <Fragment>
+                  <PickUpPoint {...fieldProps} />
+                </Fragment>
+              )}
+            </Field>
 
             <br />
             <Header>ระยะทาง xxxx กิโลเมตร</Header>
