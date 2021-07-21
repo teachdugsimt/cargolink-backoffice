@@ -89,6 +89,8 @@
   "LOW": "Low",
   "MEDIUM": "Medium",
   "HIGH": "High",
+  "DUMP": "Dump",
+  "NO_DUMP": "No Dump",
   "OPEN": "OPEN",
   "IN-PROGRESS": "IN-PROGRESS",
   "INPROGRESS": "IN-PROGRESS",

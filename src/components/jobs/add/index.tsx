@@ -15,10 +15,19 @@ import UserSelector from './user.selector';
 import ProductTypesSelector from '../productType.selector';
 import TruckTypesSelector from '../../dropdowns/truckType.selector';
 import PickUpPoint from './pick-up-point';
+import Select from '@atlaskit/select';
+import { STALL_HEIGHT, TIPPER_DUMP } from '../../truck/stall-height';
+
+interface SelectValue {
+  labal: any;
+  value: string;
+}
 
 const AddJobContainer: React.FC = observer(() => {
   const { t } = useTranslation();
   const { loginStore } = useMst();
+  const [stalls, setStalls] = useState<SelectValue[]>([]);
+  const [dumps, setDumps] = useState<SelectValue[]>([]);
 
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => {}}>
@@ -101,37 +110,62 @@ const AddJobContainer: React.FC = observer(() => {
               <Row between="xs">
                 <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
                   <Field label={t('typeCar')} name="typeCar" isRequired>
-                    {({ fieldProps }: any) => (
-                      <Fragment>
-                        <TruckTypesSelector
-                          {...fieldProps}
-                          maxWidth="100%"
-                          onSelect={fieldProps.onChange}
-                          placeholder={t('pleaseselect')}
-                          language={loginStore.language}
-                        />
-                      </Fragment>
-                    )}
+                    {({ fieldProps }: any) => {
+                      return (
+                        <Fragment>
+                          <TruckTypesSelector
+                            {...fieldProps}
+                            maxWidth="100%"
+                            onSelect={(e: any) => {
+                              fieldProps.onChange(e);
+
+                              const stallOptions = STALL_HEIGHT(t, e);
+                              setStalls(stallOptions);
+
+                              const dumpOptions = TIPPER_DUMP(t, e);
+                              setDumps(dumpOptions);
+                            }}
+                            placeholder={t('pleaseselect')}
+                            language={loginStore.language}
+                            noResultsMessage={t('noData')}
+                          />
+                        </Fragment>
+                      );
+                    }}
                   </Field>
                 </Col>
                 <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
                   <Row between="xs">
                     <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                      <Field label={t('stall')} name="stall">
+                      <Field label={t('stall')} name="stall" defaultValue={stalls[0]}>
                         {({ fieldProps }: any) => (
                           <Fragment>
-                            <Textfield placeholder="" {...fieldProps} />
-                            {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
+                            <Select
+                              inputId="single-select-example"
+                              className="single-select"
+                              classNamePrefix="react-select"
+                              options={stalls}
+                              placeholder=""
+                              {...fieldProps}
+                              isDisabled={!stalls?.length || stalls?.length === 0}
+                            />
                           </Fragment>
                         )}
                       </Field>
                     </Col>
                     <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                      <Field label={t('sale')} name="sale">
+                      <Field label={t('sale')} name="sale" defaultValue={dumps[0]}>
                         {({ fieldProps }: any) => (
                           <Fragment>
-                            <Textfield placeholder="" {...fieldProps} />
-                            {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
+                            <Select
+                              inputId="single-select-example"
+                              className="single-select"
+                              classNamePrefix="react-select"
+                              options={dumps}
+                              placeholder=""
+                              {...fieldProps}
+                              isDisabled={!dumps?.length || dumps?.length === 0}
+                            />
                           </Fragment>
                         )}
                       </Field>

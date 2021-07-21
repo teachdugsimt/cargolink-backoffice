@@ -35,7 +35,7 @@ const PickUpPoint: React.FC = observer(() => {
     <Form onSubmit={onSubmit}>
       {({ formProps }: any) => (
         <form {...formProps}>
-          <div style={{ marginTop: -16 }}>
+          <div style={{ marginTop: -8 }}>
             <Row between="xs">
               <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
                 <Row between="xs" style={{ alignItems: 'flex-end' }}>

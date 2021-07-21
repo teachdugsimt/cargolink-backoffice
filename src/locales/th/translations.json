@@ -88,6 +88,8 @@
   "LOW": "ต่ำ",
   "MEDIUM": "กลาง",
   "HIGH": "สูง",
+  "DUMP": "ดั๊มพ์",
+  "NO_DUMP": "ไม่ดั๊มพ์",
   "OPEN": "งานใหม่",
   "IN-PROGRESS": "IN-PROGRESS",
   "INPROGRESS": "กำลังขนส่ง",
