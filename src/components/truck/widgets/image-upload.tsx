@@ -247,7 +247,7 @@ const ImageItem = styled.div`
   padding: 10px;
   border: 1px dashed gray;
   border-radius: 5px;
-  margin: 5px;
+  margin: 12px 0px;
   flex-direction: column;
   display: flex;
   align-items: center;
