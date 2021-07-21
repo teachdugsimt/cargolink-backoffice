@@ -14,9 +14,11 @@ import styled from 'styled-components';
 import TextArea from '@atlaskit/textarea';
 import SearchIcon from '@atlaskit/icon/glyph/search';
 import PriceTypeToggle, { PriceTypeEnum } from './price-type-toggle';
+import DateTimePicker from './datetimePicker';
 
 const AddJobContainer: React.FC = observer(() => {
   const { t } = useTranslation();
+  const { loginStore } = useMst();
 
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => {}}>
@@ -144,17 +146,17 @@ const AddJobContainer: React.FC = observer(() => {
                       </Field>
                     </Col>
                     <Col breakPoint={{ xs: 7, md: 6.5, lg: 7 }}>
-                      <Field label={`วัน-เวลา`} name="example1" isRequired>
+                      <Field label={`วัน-เวลา`} name="dateTime" isRequired>
                         {({ fieldProps }: any) => (
                           <Fragment>
-                            <Textfield placeholder="" {...fieldProps} />
+                            <DateTimePicker {...fieldProps} locale={loginStore.language} />
                           </Fragment>
                         )}
                       </Field>
                     </Col>
                   </Row>
                   <Row between="xs">
-                    <Col breakPoint={{ xs: 6.5, md: 7, xl: 8 }} style={{ paddingRight: 0 }}>
+                    <Col breakPoint={{ xs: 6.5, md: 7, lg: 8, xl: 9 }} style={{ paddingRight: 0 }}>
                       <Field label={t('Address')} name="address" isRequired>
                         {({ fieldProps }: any) => (
                           <Fragment>
@@ -169,13 +171,13 @@ const AddJobContainer: React.FC = observer(() => {
                       </Field>
                     </Col>
                     <Col
-                      breakPoint={{ xs: 3.5, md: 3, xl: 2 }}
+                      breakPoint={{ xs: 3.5, md: 3, lg: 3, xl: 2 }}
                       style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingLeft: 0 }}
                     >
                       <div style={{ paddingTop: 35 }}>
                         <Button type="button" appearance="primary" style={{ padding: 0, backgroundColor: 'white' }}>
                           <div style={{ display: 'flex', alignItems: 'center', color: 'black' }}>
-                            <SearchIcon primaryColor="lightgray" /> ค้นหา
+                            <SearchIcon label="home" primaryColor="lightgray" /> ค้นหา
                           </div>
                         </Button>
                       </div>
