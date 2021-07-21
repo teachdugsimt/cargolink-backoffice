@@ -190,5 +190,6 @@
   },
   "allTrucks": "รถทุกประเภท",
   "allTypes": "ทุกประเภท",
-  "allProvinces": "ทุกจังหวัด"
+  "allProvinces": "ทุกจังหวัด",
+  "takePhotoVehicle":"ถ่ายรูปรถ"
 }

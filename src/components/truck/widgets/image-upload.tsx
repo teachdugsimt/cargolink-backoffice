@@ -76,7 +76,7 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
       <div style={{ paddingLeft: 12 }}>
         <Row center="xs">
           <Col breakPoint={{ xs: 12, xl: 10.5 }}>
-            <Label>upload</Label>
+            <Label>{t("takePhotoVehicle")}</Label>
           </Col>
           <Col breakPoint={{ xs: 12, xl: 5 }}>
             {imageUpload.left ? (

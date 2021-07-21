@@ -14,10 +14,11 @@ import Form, { Field, FormFooter, HelperMessage, ErrorMessage } from '@atlaskit/
 
 import Textfield from '@atlaskit/textfield';
 import ImageUpload from '../../components/truck/widgets/image-upload';
+import TruckTypesSelector from '../../components/dropdowns/truckType.selector';
 
 const AddTrucks = observer(() => {
   const { t } = useTranslation();
-
+  const { loginStore } = useMst();
   const { register, control, handleSubmit, watch, errors } = useForm({
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -69,7 +70,13 @@ const AddTrucks = observer(() => {
                         <Field label={t('typeCar')} name="typeCar" isRequired>
                           {({ fieldProps }: any) => (
                             <Fragment>
-                              <Textfield {...fieldProps} />
+                              <TruckTypesSelector
+                                {...fieldProps}
+                                maxWidth="100%"
+                                onSelect={fieldProps.onChange}
+                                placeholder={t('pleaseselect')}
+                                language={loginStore.language}
+                              />
                               {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
                             </Fragment>
                           )}
