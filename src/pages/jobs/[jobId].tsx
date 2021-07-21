@@ -13,20 +13,20 @@ import ProductWidget from '../../components/products/widgets/product';
 import TruckWidget from '../../components/truck/widgets/truck';
 import RouteWidget from '../../components/route/widgets/route';
 
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const JobItem = observer((props: any) => {
   const { t } = useTranslation();
-  const { jobStore } = useMst()
+  const { jobStore } = useMst();
 
-  const { currentJob } = jobStore
+  const { currentJob } = jobStore;
 
   useEffect(() => {
-    console.log(props.jobId)
+    console.log(props.jobId);
 
-    jobStore.getJobById({ jobId: props.jobId })
-    return () => { }
-  }, [])
+    jobStore.getJobById({ jobId: props.jobId });
+    return () => {};
+  }, []);
 
   const breadcrumbs = (
     <Breadcrumbs>
@@ -35,12 +35,13 @@ const JobItem = observer((props: any) => {
     </Breadcrumbs>
   );
 
+  console.log('currentJob :> ', JSON.parse(JSON.stringify(currentJob)));
+
   return (
     <>
       <PageHeader breadcrumbs={breadcrumbs}>{t('job.info')}</PageHeader>
       <Grid layout="fluid" spacing="compact">
         <GridColumn medium={6}>
-
           <UserProfile
             fullname={currentJob?.owner?.fullName}
             telno={currentJob?.owner?.mobileNo}
@@ -61,22 +62,15 @@ const JobItem = observer((props: any) => {
             tipper={currentJob?.tipper}
             truckAmount={currentJob?.requiredTruckAmount}
           />
-
         </GridColumn>
 
         <GridColumn medium={6}>
-
-          <RouteWidget
-            from={currentJob?.from}
-            to={currentJob?.to}
-            status={currentJob?.status}
-          />
-
+          <RouteWidget from={currentJob?.from} to={currentJob?.to} status={currentJob?.status} />
         </GridColumn>
       </Grid>
     </>
-  )
-})
+  );
+});
 
 export default JobItem;
 

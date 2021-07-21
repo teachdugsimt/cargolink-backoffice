@@ -32,18 +32,25 @@ input[type='file'] {
   display: none;
 }
 .custom-file-upload-photo {
-  display: inline-block;
+  flex-direction: column;
   background-color: white;
-  color: #2f2b45;
-  border-radius: 0.75rem;
+  border-radius: 5px;
+  color: gray;
   outline: none;
   white-space: nowrap;
   cursor: pointer;
   text-shadow: 1px 1px #fff;
-  font-weight: 700;
-  font-size: 0.875rem;
-  line-height: 1rem;
-  height: fit-content;
+  font-weight: 500;
+  border: 1px dashed gray;
+  font-size: 16px;
+  padding: 5px;
+  line-height: 1.75;
+  letter-spacing: 0.02857em;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .block-upload-image {
   display: grid;
@@ -79,6 +86,11 @@ input[type='file'] {
   border-radius: 0.25rem;
   font-size: 0.8325rem;
   line-height: 1.5rem;
+
+  box-sizing: border-box;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
 }
 .errors-input-component {
   padding: 0.3875rem 0.8125rem;
@@ -190,7 +202,7 @@ input[type='file'] {
 }
 
 .col {
-  flex: 1
+  flex: 1;
 }
 
 hr {

@@ -31,7 +31,13 @@
   "addNewAccount": "ADD NEW ACCOUNT",
   "addNewJob": "ADD NEW JOB",
   "addDataCar": "Add vehicle information",
+  "carOwner":"Vehicle Owner",
+  "jobOwner": "Job Owner",
   "typeCar": "The type of car you want",
+  "desiredVehicle":"Desired Vehicle",
+  "stall": "Stall",
+  "sale": "Sale",
+  "amount":"Amount",
   "pleaseselect": "Please select",
   "fieldTruckType": "This field truck type is required",
   "truckAmount": "Required Truck Amount",
@@ -89,6 +95,7 @@
   "COMPLETED": "COMPLETED",
   "LOADING": "Loading",
   "EXPIRED": "EXPIRED",
+  "NEW": "NEW",
   "user": "User",
   "to": "To",
   "from": "From",
@@ -99,6 +106,8 @@
   "KM": "KM",
   "jobDetail": "Job Detail",
   "pickUpPoint": "Pick up point",
+  "operator":"Operator",
+  "dateTime":"Date-time",
   "km": "KM",
   "truckType": "Truck Type",
   "truckAmount_1": "Truck Amount",
@@ -182,5 +191,6 @@
   },
   "allTrucks": "All Trucks",
   "allTypes": "All",
-  "allProvinces": "All Provinces"
+  "allProvinces": "All Provinces",
+  "takePhotoVehicle":"Photo Vehicle"
 }

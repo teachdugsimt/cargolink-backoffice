@@ -51,7 +51,9 @@ const images = {
   warehouse: require('../../images/icons/warehouse.png'),
   truck: require('../../images/icons/delivery.png'),
   box: require('../../images/icons/box.png'),
-  compass: require('../../images/icons/compass.png')
+  compass: require('../../images/icons/compass.png'),
+
+  homeSearch: require('../../images/icons/search.png')
 };
 
 export default images;
