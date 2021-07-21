@@ -1,10 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import { useTranslation } from 'react-i18next';
 import { navigate } from 'gatsby';
 import { observer } from 'mobx-react-lite';
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { Row, Col } from '@paljs/ui';
 import { useMst } from '../../stores/root-store';
 import styled from 'styled-components';
@@ -15,26 +14,19 @@ import Form, { Field, FormFooter, HelperMessage, ErrorMessage } from '@atlaskit/
 import Textfield from '@atlaskit/textfield';
 import ImageUpload from '../../components/truck/widgets/image-upload';
 import TruckTypesSelector from '../../components/dropdowns/truckType.selector';
+import { STALL_HEIGHT, TIPPER_DUMP } from '../../components/truck/stall-height';
+import Select from '@atlaskit/select';
+
+interface SelectValue {
+  labal: any;
+  value: string;
+}
 
 const AddTrucks = observer(() => {
   const { t } = useTranslation();
   const { loginStore } = useMst();
-  const { register, control, handleSubmit, watch, errors } = useForm({
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    defaultValues: {
-      userId: null,
-      contactMobileNo: null,
-      contactName: null,
-      name: null,
-      productName: null,
-      productTypeId: null,
-      start: null,
-      truckAmount: null,
-      truckType: null,
-      weight: null,
-    },
-  });
+  const [stalls, setStalls] = useState<SelectValue[]>([]);
+  const [dumps, setDumps] = useState<SelectValue[]>([]);
 
   const breadcrumbs = (
     <Breadcrumbs>
@@ -73,11 +65,18 @@ const AddTrucks = observer(() => {
                               <TruckTypesSelector
                                 {...fieldProps}
                                 maxWidth="100%"
-                                onSelect={fieldProps.onChange}
+                                onSelect={(e: any) => {
+                                  fieldProps.onChange(e);
+
+                                  const stallOptions = STALL_HEIGHT(t, e);
+                                  setStalls(stallOptions);
+
+                                  const dumpOptions = TIPPER_DUMP(t, e);
+                                  setDumps(dumpOptions);
+                                }}
                                 placeholder={t('pleaseselect')}
                                 language={loginStore.language}
                               />
-                              {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
                             </Fragment>
                           )}
                         </Field>
@@ -85,19 +84,35 @@ const AddTrucks = observer(() => {
                     </Row>
                     <Row between="xs" style={{ marginRight: -24 }}>
                       <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                        <Field label={t('stall')} name="stall">
+                        <Field label={t('stall')} name="stall" defaultValue={stalls[0]}>
                           {({ fieldProps }: any) => (
                             <Fragment>
-                              <Textfield {...fieldProps} />
+                              <Select
+                                inputId="vehicle-stall-height"
+                                className="single-select"
+                                classNamePrefix="react-select"
+                                options={stalls}
+                                placeholder=""
+                                {...fieldProps}
+                                isDisabled={!stalls?.length || stalls?.length === 0}
+                              />
                             </Fragment>
                           )}
                         </Field>
                       </Col>
                       <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                        <Field label={t(`sale`)} name="sale">
+                        <Field label={t('sale')} name="sale" defaultValue={dumps[0]}>
                           {({ fieldProps }: any) => (
                             <Fragment>
-                              <Textfield {...fieldProps} />
+                              <Select
+                                inputId="vehicle-dump"
+                                className="single-select"
+                                classNamePrefix="react-select"
+                                options={dumps}
+                                placeholder=""
+                                {...fieldProps}
+                                isDisabled={!dumps?.length || dumps?.length === 0}
+                              />
                             </Fragment>
                           )}
                         </Field>
@@ -109,7 +124,6 @@ const AddTrucks = observer(() => {
                           {({ fieldProps }: any) => (
                             <Fragment>
                               <Textfield {...fieldProps} />
-                              {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
                             </Fragment>
                           )}
                         </Field>

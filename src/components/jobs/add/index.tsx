@@ -141,7 +141,7 @@ const AddJobContainer: React.FC = observer(() => {
                         {({ fieldProps }: any) => (
                           <Fragment>
                             <Select
-                              inputId="single-select-example"
+                              inputId="vehicle-stall-height"
                               className="single-select"
                               classNamePrefix="react-select"
                               options={stalls}
@@ -158,7 +158,7 @@ const AddJobContainer: React.FC = observer(() => {
                         {({ fieldProps }: any) => (
                           <Fragment>
                             <Select
-                              inputId="single-select-example"
+                              inputId="vehicle-dump"
                               className="single-select"
                               classNamePrefix="react-select"
                               options={dumps}
