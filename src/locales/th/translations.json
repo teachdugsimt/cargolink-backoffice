@@ -197,5 +197,6 @@
   "allProvinces": "ทุกจังหวัด",
   "takePhotoVehicle":"ถ่ายรูปรถ",
   "freightRate": "อัตราค่าขนส่ง",
-  "add": "เพิ่ม"
+  "add": "เพิ่ม",
+  "registrationsTrailers": "ไม่เกิน 2 ทะเบียน สำหรับรถพ่วง"
 }

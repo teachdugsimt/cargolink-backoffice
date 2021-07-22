@@ -34,6 +34,8 @@ const AddTrucks = observer(() => {
     </Breadcrumbs>
   );
 
+  const isDisabled = false;
+
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('vehicle.add')}</PageHeader>
@@ -44,9 +46,9 @@ const AddTrucks = observer(() => {
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div style={{ flex: 1, marginRight: 10 }}>
                   <Field label={t('carOwner')} name="carOwner" isRequired>
-                    {({ fieldProps }: any) => (
+                    {({ fieldProps, error, meta: { valid } }: any) => (
                       <Fragment>
-                        <Textfield {...fieldProps}  placeholder={`${t('carOwner')}`}/>
+                        <Textfield {...fieldProps} placeholder={`${t('carOwner')}`} />
                       </Fragment>
                     )}
                   </Field>
@@ -110,7 +112,8 @@ const AddTrucks = observer(() => {
                   <Field label={t(`registrationNumber`)} name="registrationNumber" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
-                        <Textfield {...fieldProps} placeholder={`${t('registrationNumber')}`}/>
+                        <Textfield {...fieldProps} placeholder={`${t('registrationNumber')}`} />
+                        <HelperMessage>{t('registrationsTrailers')}</HelperMessage>
                       </Fragment>
                     )}
                   </Field>
@@ -127,7 +130,25 @@ const AddTrucks = observer(() => {
               </div>
             </GroupItem>
             <FormFooter>
-              <SubmitButton type="submit" >Submit</SubmitButton>
+              <Button type="button" style={BottomBackStyled} onClick={() => navigate('/vehicles')} testId="backButton">
+                <BackText>{t('back')}</BackText>
+              </Button>
+              <Button
+                type="submit"
+                isDisabled={isDisabled}
+                style={
+                  isDisabled
+                    ? {
+                        ...BottomSubmitStyled,
+                        backgroundColor: '#D8D8D8',
+                        border: 'none',
+                      }
+                    : BottomSubmitStyled
+                }
+                testId="submitButton"
+              >
+                <SubmitText>{t('confirm')}</SubmitText>
+              </Button>
             </FormFooter>
           </form>
         )}
@@ -138,11 +159,29 @@ const AddTrucks = observer(() => {
 
 export default AddTrucks;
 
-const SubmitButton = styled(Button)`
-  border: 1px solid #fbbc12;
-  background-color: #fbbc12;
-  color: black;
+const BackText = styled.span`
+  color: #fbbc12;
 `;
+
+const SubmitText = styled.span`
+  color: #000;
+`;
+
+const BottomStyled = {
+  margin: '0 6px',
+};
+
+const BottomBackStyled = {
+  ...BottomStyled,
+  border: '1px solid #FBBC12',
+  backgroundColor: 'transparent',
+};
+
+const BottomSubmitStyled = {
+  ...BottomStyled,
+  border: '1px solid #FBBC12',
+  backgroundColor: '#FBBC12',
+};
 
 const GroupItem = styled.div`
   display: flex;

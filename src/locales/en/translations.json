@@ -197,5 +197,6 @@
   "allProvinces": "All Provinces",
   "takePhotoVehicle":"Photo Vehicle",
   "freightRate": "Freight Rate",
-  "add": "Add"
+  "add": "Add",
+  "registrationsTrailers": "No more than 2 registrations for trailers"
 }
