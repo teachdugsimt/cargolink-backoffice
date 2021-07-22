@@ -71,174 +71,161 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
 
   return (
     <Gallery>
-      <Alert setting={alertSetting} />
-      {render ? <></> : <></>}
-      <div style={{ paddingLeft: 12 }}>
-        <Row center="xs">
-          <Col breakPoint={{ xs: 12, xl: 10.5 }}>
-            <Label>{t("takePhotoVehicle")}</Label>
-          </Col>
-          <Col breakPoint={{ xs: 12, xl: 5 }}>
-            {imageUpload.left ? (
-              <ImageItem>
-                <IconImageTimes>
-                  <IconButton style={{ position: 'absolute', padding: 5 }} onClick={() => onRemoveImg('left')}>
-                    <Icon icon={timesCircleO} style={{ color: '#DE350B', display: 'flex' }} />
-                  </IconButton>
-                </IconImageTimes>
-                <ImageThumb>
-                  <Item original={imageUpload.left} width="1024" height="768">
-                    {({ ref, open }) => (
-                      <img
-                        style={{ width: 150, height: 130, objectFit: 'contain' }}
-                        ref={ref}
-                        onClick={open}
-                        src={imageUpload.left}
-                      />
-                    )}
-                  </Item>
-                </ImageThumb>
-                <ImageLabel>ซ้าย</ImageLabel>
-              </ImageItem>
-            ) : (
-              <div style={{ padding: '12px 0px' }}>
-                <label htmlFor="file-upload-left" className="custom-file-upload-photo">
-                  <ImageThumb>
-                    <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
-                  </ImageThumb>
-                  <ImageLabel>ซ้าย</ImageLabel>
-                </label>
-                <input
-                  id="file-upload-left"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e: any) => onChangePicture(e, 'left')}
-                />
-              </div>
-            )}
-          </Col>
-          <Col breakPoint={{ xs: 12, xl: 5 }}>
-            {imageUpload.right ? (
-              <ImageItem>
-                <IconImageTimes>
-                  <IconButton style={{ position: 'absolute', padding: 5 }} onClick={() => onRemoveImg('right')}>
-                    <Icon icon={timesCircleO} style={{ color: '#DE350B', display: 'flex' }} />
-                  </IconButton>
-                </IconImageTimes>
-                <ImageThumb>
-                  <Item original={imageUpload.right} width="1024" height="768">
-                    {({ ref, open }) => (
-                      <img
-                        style={{ width: 150, height: 130, objectFit: 'contain' }}
-                        ref={ref}
-                        onClick={open}
-                        src={imageUpload.right}
-                      />
-                    )}
-                  </Item>
-                </ImageThumb>
-                <ImageLabel>ขวา</ImageLabel>
-              </ImageItem>
-            ) : (
-              <div style={{ padding: '12px 0px' }}>
-                <label htmlFor="file-upload-right" className="custom-file-upload-photo">
-                  <ImageThumb>
-                    <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
-                  </ImageThumb>
-                  <ImageLabel>ขวา</ImageLabel>
-                </label>
-                <input
-                  id="file-upload-right"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e: any) => onChangePicture(e, 'right')}
-                />
-              </div>
-            )}
-          </Col>
-        </Row>
-
-        <Row center="xs">
-          <Col breakPoint={{ xs: 12, xl: 5 }}>
-            {imageUpload.front ? (
-              <ImageItem>
-                <IconImageTimes>
-                  <IconButton style={{ position: 'absolute', padding: 5 }} onClick={() => onRemoveImg('front')}>
-                    <Icon icon={timesCircleO} style={{ color: '#DE350B', display: 'flex' }} />
-                  </IconButton>
-                </IconImageTimes>
-                <ImageThumb>
-                  <Item original={imageUpload.front} width="1024" height="768">
-                    {({ ref, open }) => (
-                      <img
-                        style={{ width: 150, height: 130, objectFit: 'contain' }}
-                        ref={ref}
-                        onClick={open}
-                        src={imageUpload.front}
-                      />
-                    )}
-                  </Item>
-                </ImageThumb>
-                <ImageLabel>หน้า</ImageLabel>
-              </ImageItem>
-            ) : (
-              <div style={{ padding: '12px 0px' }}>
-                <label htmlFor="file-upload-front" className="custom-file-upload-photo">
-                  <ImageThumb>
-                    <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
-                  </ImageThumb>
-                  <ImageLabel>หน้า</ImageLabel>
-                </label>
-                <input
-                  id="file-upload-front"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e: any) => onChangePicture(e, 'front')}
-                />
-              </div>
-            )}
-          </Col>
-          <Col breakPoint={{ xs: 12, xl: 5 }}>
-            {imageUpload.back ? (
-              <ImageItem>
-                <IconImageTimes>
-                  <IconButton style={{ position: 'absolute', padding: 5 }} onClick={() => onRemoveImg('back')}>
-                    <Icon icon={timesCircleO} style={{ color: '#DE350B', display: 'flex' }} />
-                  </IconButton>
-                </IconImageTimes>
-                <ImageThumb>
-                  <Item original={imageUpload.back} width="1024" height="768">
-                    {({ ref, open }) => (
-                      <img
-                        style={{ width: 150, height: 130, objectFit: 'contain' }}
-                        ref={ref}
-                        onClick={open}
-                        src={imageUpload.back}
-                      />
-                    )}
-                  </Item>
-                </ImageThumb>
-                <ImageLabel>หน้า</ImageLabel>
-              </ImageItem>
-            ) : (
-              <div style={{ padding: '12px 0px' }}>
-                <label htmlFor="file-upload-back" className="custom-file-upload-photo">
-                  <ImageThumb>
-                    <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
-                  </ImageThumb>
-                  <ImageLabel>หลัง</ImageLabel>
-                </label>
-                <input
-                  id="file-upload-back"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e: any) => onChangePicture(e, 'back')}
-                />
-              </div>
-            )}
-          </Col>
-        </Row>
+      <div style={{ marginLeft: 10, marginBottom: -10 }}>
+        <Label>{t('takePhotoVehicle')}</Label>
       </div>
+      <ImageWrapper>
+        {imageUpload.left ? (
+          <ImageItem>
+            <IconImageTimes>
+              <IconButton style={{ position: 'absolute', padding: 5 }} onClick={() => onRemoveImg('left')}>
+                <Icon icon={timesCircleO} style={{ color: '#DE350B', display: 'flex' }} />
+              </IconButton>
+            </IconImageTimes>
+            <ImageThumb>
+              <Item original={imageUpload.left} width="1024" height="768">
+                {({ ref, open }) => (
+                  <img
+                    style={{ width: 150, height: 130, objectFit: 'contain' }}
+                    ref={ref}
+                    onClick={open}
+                    src={imageUpload.left}
+                  />
+                )}
+              </Item>
+            </ImageThumb>
+            <ImageLabel>ซ้าย</ImageLabel>
+          </ImageItem>
+        ) : (
+          <div style={{ margin: 10 }}>
+            <label htmlFor="file-upload-left" className="custom-file-upload-photo">
+              <ImageThumb>
+                <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
+              </ImageThumb>
+              <ImageLabel style={{ paddingBottom: 10 }}>ซ้าย</ImageLabel>
+            </label>
+            <input
+              id="file-upload-left"
+              type="file"
+              accept="image/*"
+              onChange={(e: any) => onChangePicture(e, 'left')}
+            />
+          </div>
+        )}
+        {imageUpload.right ? (
+          <ImageItem>
+            <IconImageTimes>
+              <IconButton style={{ position: 'absolute', padding: 5 }} onClick={() => onRemoveImg('right')}>
+                <Icon icon={timesCircleO} style={{ color: '#DE350B', display: 'flex' }} />
+              </IconButton>
+            </IconImageTimes>
+            <ImageThumb>
+              <Item original={imageUpload.right} width="1024" height="768">
+                {({ ref, open }) => (
+                  <img
+                    style={{ width: 150, height: 130, objectFit: 'contain' }}
+                    ref={ref}
+                    onClick={open}
+                    src={imageUpload.right}
+                  />
+                )}
+              </Item>
+            </ImageThumb>
+            <ImageLabel>ขวา</ImageLabel>
+          </ImageItem>
+        ) : (
+          <div style={{ margin: 10 }}>
+            <label htmlFor="file-upload-right" className="custom-file-upload-photo">
+              <ImageThumb>
+                <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
+              </ImageThumb>
+              <ImageLabel style={{ paddingBottom: 10 }}>ขวา</ImageLabel>
+            </label>
+            <input
+              id="file-upload-right"
+              type="file"
+              accept="image/*"
+              onChange={(e: any) => onChangePicture(e, 'right')}
+            />
+          </div>
+        )}
+
+        {imageUpload.front ? (
+          <ImageItem>
+            <IconImageTimes>
+              <IconButton style={{ position: 'absolute', padding: 5 }} onClick={() => onRemoveImg('front')}>
+                <Icon icon={timesCircleO} style={{ color: '#DE350B', display: 'flex' }} />
+              </IconButton>
+            </IconImageTimes>
+            <ImageThumb>
+              <Item original={imageUpload.front} width="1024" height="768">
+                {({ ref, open }) => (
+                  <img
+                    style={{ width: 150, height: 130, objectFit: 'contain' }}
+                    ref={ref}
+                    onClick={open}
+                    src={imageUpload.front}
+                  />
+                )}
+              </Item>
+            </ImageThumb>
+            <ImageLabel>หน้า</ImageLabel>
+          </ImageItem>
+        ) : (
+          <div style={{ margin: 10 }}>
+            <label htmlFor="file-upload-front" className="custom-file-upload-photo">
+              <ImageThumb>
+                <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
+              </ImageThumb>
+              <ImageLabel style={{ paddingBottom: 10 }}>หน้า</ImageLabel>
+            </label>
+            <input
+              id="file-upload-front"
+              type="file"
+              accept="image/*"
+              onChange={(e: any) => onChangePicture(e, 'front')}
+            />
+          </div>
+        )}
+
+        {imageUpload.back ? (
+          <ImageItem>
+            <IconImageTimes>
+              <IconButton style={{ position: 'absolute', padding: 5 }} onClick={() => onRemoveImg('back')}>
+                <Icon icon={timesCircleO} style={{ color: '#DE350B', display: 'flex' }} />
+              </IconButton>
+            </IconImageTimes>
+            <ImageThumb>
+              <Item original={imageUpload.back} width="1024" height="768">
+                {({ ref, open }) => (
+                  <img
+                    style={{ width: 150, height: 130, objectFit: 'contain' }}
+                    ref={ref}
+                    onClick={open}
+                    src={imageUpload.back}
+                  />
+                )}
+              </Item>
+            </ImageThumb>
+            <ImageLabel>หน้า</ImageLabel>
+          </ImageItem>
+        ) : (
+          <div style={{ margin: 10 }}>
+            <label htmlFor="file-upload-back" className="custom-file-upload-photo">
+              <ImageThumb>
+                <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
+              </ImageThumb>
+              <ImageLabel style={{ paddingBottom: 10 }}>หลัง</ImageLabel>
+            </label>
+            <input
+              id="file-upload-back"
+              type="file"
+              accept="image/*"
+              onChange={(e: any) => onChangePicture(e, 'back')}
+            />
+          </div>
+        )}
+      </ImageWrapper>
     </Gallery>
   );
 });
@@ -255,13 +242,19 @@ const Label = styled.label`
   margin-top: 0;
 `;
 
+const ImageWrapper = styled.div`
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+`;
+
 const ImageItem = styled.div`
   width: 150px;
   height: 150px;
   padding: 10px;
   border: 1px dashed gray;
   border-radius: 5px;
-  margin: 12px 0px;
+  margin: 10px;
   flex-direction: column;
   display: flex;
   align-items: center;
