@@ -47,6 +47,7 @@
   "productName_1": "ชื่อสินค้า",
   "fieldproductName": "ต้องระบุชื่อสินค้าในฟิลด์นี้",
   "amountWeight": "น้ำหนักสินค้า (ตัน)",
+  "amountWeightWithoutTon": "น้ำหนักสินค้า",
   "weight": "น้ำหนัก",
   "fieldWeight": "ต้องระบุน้ำหนักในฟิลด์นี้",
   "minWeight": "ต้องมีค่ามากกว่าหรือเท่ากับ 0",

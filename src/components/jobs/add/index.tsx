@@ -89,12 +89,12 @@ const AddJobContainer: React.FC = observer(() => {
                   </Field>
                 </div>
                 <div style={{ flex: 1, marginLeft: 10 }}>
-                  <Field label={t(`amountWeight`)} name="amountWeight">
+                  <Field label={t(`amountWeightWithoutTon`)} name="amountWeight">
                     {({ fieldProps }: any) => (
                       <Fragment>
                         <Textfield
                           type="number"
-                          placeholder={t('amountWeight')}
+                          placeholder={t('amountWeightWithoutTon')}
                           {...fieldProps}
                           elemAfterInput={<ElemInput>ตัน</ElemInput>}
                         />

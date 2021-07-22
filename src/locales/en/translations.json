@@ -48,6 +48,7 @@
   "productName_1": "Product Name",
   "fieldProductName": "This field product name is required",
   "amountWeight": "Amount of weight (ton)",
+  "amountWeightWithoutTon": "Amount of weight",
   "weight": "Weight",
   "fieldWeight": "This field amount weight is required",
   "minWeight": "Must be greater than or equal to 0",
