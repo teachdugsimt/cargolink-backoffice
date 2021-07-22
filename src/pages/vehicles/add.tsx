@@ -46,7 +46,7 @@ const AddTrucks = observer(() => {
                   <Field label={t('carOwner')} name="carOwner" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
-                        <Textfield {...fieldProps} />
+                        <Textfield {...fieldProps}  placeholder={`${t('carOwner')}`}/>
                       </Fragment>
                     )}
                   </Field>
@@ -81,7 +81,7 @@ const AddTrucks = observer(() => {
                               className="single-select"
                               classNamePrefix="react-select"
                               options={stalls}
-                              placeholder=""
+                              placeholder={t('stall')}
                               {...fieldProps}
                               isDisabled={!stalls?.length || stalls?.length === 0}
                             />
@@ -98,7 +98,7 @@ const AddTrucks = observer(() => {
                               className="single-select"
                               classNamePrefix="react-select"
                               options={dumps}
-                              placeholder=""
+                              placeholder={t('sale')}
                               {...fieldProps}
                               isDisabled={!dumps?.length || dumps?.length === 0}
                             />
@@ -110,7 +110,7 @@ const AddTrucks = observer(() => {
                   <Field label={t(`registrationNumber`)} name="registrationNumber" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
-                        <Textfield {...fieldProps} />
+                        <Textfield {...fieldProps} placeholder={`${t('registrationNumber')}`}/>
                       </Fragment>
                     )}
                   </Field>
@@ -127,7 +127,7 @@ const AddTrucks = observer(() => {
               </div>
             </GroupItem>
             <FormFooter>
-              <SubmitButton type="submit">Submit</SubmitButton>
+              <SubmitButton type="submit" >Submit</SubmitButton>
             </FormFooter>
           </form>
         )}
