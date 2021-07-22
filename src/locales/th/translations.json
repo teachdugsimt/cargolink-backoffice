@@ -189,10 +189,13 @@
   },
   "job": {
     "management": "จัดการงาน",
+    "add": "เพิ่มข้อมูลงาน",
     "info": "ข้อมูลงาน"
   },
   "allTrucks": "รถทุกประเภท",
   "allTypes": "ทุกประเภท",
   "allProvinces": "ทุกจังหวัด",
-  "takePhotoVehicle":"ถ่ายรูปรถ"
+  "takePhotoVehicle":"ถ่ายรูปรถ",
+  "freightRate": "อัตราค่าขนส่ง",
+  "add": "เพิ่ม"
 }

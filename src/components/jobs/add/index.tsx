@@ -6,7 +6,6 @@ import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import { navigate } from 'gatsby';
 import Form, { Field, FormFooter, HelperMessage, ErrorMessage } from '@atlaskit/form';
 import Button from '@atlaskit/button';
-import { Row, Col } from '@paljs/ui';
 import Textfield from '@atlaskit/textfield';
 import PageHeader from '@atlaskit/page-header';
 import styled from 'styled-components';
@@ -42,9 +41,9 @@ const AddJobContainer: React.FC = observer(() => {
       <Form onSubmit={(formState: unknown) => console.log('form submitted', formState)}>
         {({ formProps }: any) => (
           <form {...formProps}>
-            <div>
-              <Row between="xs">
-                <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
+            <GroupItem>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ flex: 1, marginRight: 10 }}>
                   <Field label={t('jobOwner')} name="่jobOwner" isRequired>
                     {({ fieldProps }: any) => {
                       return (
@@ -60,8 +59,8 @@ const AddJobContainer: React.FC = observer(() => {
                       );
                     }}
                   </Field>
-                </Col>
-                <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
+                </div>
+                <div style={{ flex: 1, marginLeft: 10 }}>
                   <Field label={t('productType')} name="productType" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
@@ -75,10 +74,10 @@ const AddJobContainer: React.FC = observer(() => {
                       </Fragment>
                     )}
                   </Field>
-                </Col>
-              </Row>
-              <Row between="xs">
-                <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ flex: 1, marginRight: 10 }}>
                   <Field label={t('productName')} name="productName" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
@@ -86,8 +85,8 @@ const AddJobContainer: React.FC = observer(() => {
                       </Fragment>
                     )}
                   </Field>
-                </Col>
-                <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
+                </div>
+                <div style={{ flex: 1, marginLeft: 10 }}>
                   <Field label={t(`amountWeight`)} name="amountWeight">
                     {({ fieldProps }: any) => (
                       <Fragment>
@@ -100,15 +99,13 @@ const AddJobContainer: React.FC = observer(() => {
                       </Fragment>
                     )}
                   </Field>
-                </Col>
-              </Row>
-            </div>
+                </div>
+              </div>
 
-            <br />
-            <Header>{t('desiredVehicle')}</Header>
-            <div>
-              <Row between="xs">
-                <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
+              <br />
+              <Header>{t('desiredVehicle')}</Header>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ flex: 1, marginRight: 10 }}>
                   <Field label={t('typeCar')} name="typeCar" isRequired>
                     {({ fieldProps }: any) => {
                       return (
@@ -133,10 +130,10 @@ const AddJobContainer: React.FC = observer(() => {
                       );
                     }}
                   </Field>
-                </Col>
-                <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
-                  <Row between="xs">
-                    <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
+                </div>
+                <div style={{ flex: 1, marginLeft: 10 }}>
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div style={{ flex: 1, marginRight: 10 }}>
                       <Field label={t('stall')} name="stall" defaultValue={stalls[0]}>
                         {({ fieldProps }: any) => (
                           <Fragment>
@@ -152,8 +149,8 @@ const AddJobContainer: React.FC = observer(() => {
                           </Fragment>
                         )}
                       </Field>
-                    </Col>
-                    <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
+                    </div>
+                    <div style={{ flex: 1, marginLeft: 10 }}>
                       <Field label={t('sale')} name="sale" defaultValue={dumps[0]}>
                         {({ fieldProps }: any) => (
                           <Fragment>
@@ -169,12 +166,12 @@ const AddJobContainer: React.FC = observer(() => {
                           </Fragment>
                         )}
                       </Field>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-              <Row between="xs">
-                <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ flex: 1, marginRight: 10 }}>
                   <Field label={t('amount')} name="amount">
                     {({ fieldProps }: any) => (
                       <Fragment>
@@ -187,38 +184,36 @@ const AddJobContainer: React.FC = observer(() => {
                       </Fragment>
                     )}
                   </Field>
-                </Col>
-              </Row>
-            </div>
+                </div>
+                <div style={{ flex: 1, marginLeft: 10 }}></div>
+              </div>
 
-            <br />
-            <Header>{t('pickUpPoint')}</Header>
-            <Field name="pickUpPoint">
-              {({ fieldProps }: any) => (
-                <Fragment>
-                  <PickUpPoint {...fieldProps} />
-                </Fragment>
-              )}
-            </Field>
+              <br />
+              <Header>{t('pickUpPoint')}</Header>
+              <Field name="pickUpPoint">
+                {({ fieldProps }: any) => (
+                  <Fragment>
+                    <PickUpPoint {...fieldProps} />
+                  </Fragment>
+                )}
+              </Field>
 
-            <br />
-            <Header>ระยะทาง xxxx กิโลเมตร</Header>
-            <Header>ราคาที่แนะนำ xxxx บาท</Header>
-            <div>
-              <Row>
-                <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
-                  <Row between="xs">
-                    <Col breakPoint={{ xs: 11.3, lg: 5 }}>
-                      <Field label="อัตราค่าขนส่ง" name="example1" isRequired>
+              <br />
+              <Header>ระยะทาง xxxx กิโลเมตร</Header>
+              <Header>ราคาที่แนะนำ xxxx บาท</Header>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ flex: 1, marginRight: 10 }}>
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div style={{ flex: 'auto', marginRight: 10 }}>
+                      <Field label={t('freightRate')} name="freightRate" isRequired>
                         {({ fieldProps }: any) => (
                           <Fragment>
                             <Textfield placeholder="" {...fieldProps} />
-                            {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
                           </Fragment>
                         )}
                       </Field>
-                    </Col>
-                    <Col breakPoint={{ xs: 12, lg: 5 }} style={{ display: 'flex', alignItems: 'flex-end' }}>
+                    </div>
+                    <div style={{ flex: 'auto', marginLeft: 10, display: 'flex', alignItems: 'flex-end' }}>
                       <Field label="" name="priceType" isRequired>
                         {({ fieldProps }: any) => (
                           <Fragment>
@@ -226,13 +221,14 @@ const AddJobContainer: React.FC = observer(() => {
                           </Fragment>
                         )}
                       </Field>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            </div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ flex: 1, marginLeft: 10 }}></div>
+              </div>
+            </GroupItem>
             <FormFooter>
-              <SubmitButton type="submit">Submit</SubmitButton>
+              <SubmitButton type="submit">{t('add')}</SubmitButton>
             </FormFooter>
           </form>
         )}
@@ -262,4 +258,9 @@ const SubmitButton = styled(Button)`
   border: 1px solid #fbbc12;
   background-color: #fbbc12;
   color: black;
+`;
+
+const GroupItem = styled.div`
+  display: flex;
+  flex-direction: column;
 `;

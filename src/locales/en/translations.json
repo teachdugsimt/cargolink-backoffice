@@ -189,10 +189,13 @@
   },
   "job": {
     "management": "Jobs Management",
+    "add": "Add Job",
     "info": "Job Info"
   },
   "allTrucks": "All Trucks",
   "allTypes": "All",
   "allProvinces": "All Provinces",
-  "takePhotoVehicle":"Photo Vehicle"
+  "takePhotoVehicle":"Photo Vehicle",
+  "freightRate": "Freight Rate",
+  "add": "Add"
 }
