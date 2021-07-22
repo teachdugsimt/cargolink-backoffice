@@ -52,7 +52,7 @@ const AddJobContainer: React.FC = observer(() => {
                             {...fieldProps}
                             maxWidth="100%"
                             onSelect={fieldProps.onChange}
-                            placeholder={t('pleaseselect')}
+                            placeholder={t('jobOwner')}
                             noResultsMessage={t('noData')}
                           />
                         </Fragment>
@@ -68,7 +68,7 @@ const AddJobContainer: React.FC = observer(() => {
                           {...fieldProps}
                           maxWidth="100%"
                           onSelect={fieldProps.onChange}
-                          placeholder={t('pleaseselect')}
+                          placeholder={t('productType')}
                           language={loginStore.language}
                         />
                       </Fragment>
@@ -81,7 +81,7 @@ const AddJobContainer: React.FC = observer(() => {
                   <Field label={t('productName')} name="productName" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
-                        <Textfield placeholder="" {...fieldProps} />
+                        <Textfield placeholder={t('productName')} {...fieldProps} />
                       </Fragment>
                     )}
                   </Field>
@@ -92,7 +92,7 @@ const AddJobContainer: React.FC = observer(() => {
                       <Fragment>
                         <Textfield
                           type="number"
-                          placeholder=""
+                          placeholder={t('amountWeight')}
                           {...fieldProps}
                           elemAfterInput={<ElemInput>ตัน</ElemInput>}
                         />
@@ -122,7 +122,7 @@ const AddJobContainer: React.FC = observer(() => {
                               const dumpOptions = TIPPER_DUMP(t, e);
                               setDumps(dumpOptions);
                             }}
-                            placeholder={t('pleaseselect')}
+                            placeholder={t('typeCar')}
                             language={loginStore.language}
                             noResultsMessage={t('noData')}
                           />
@@ -142,7 +142,7 @@ const AddJobContainer: React.FC = observer(() => {
                               className="single-select"
                               classNamePrefix="react-select"
                               options={stalls}
-                              placeholder=""
+                              placeholder={t('stall')} 
                               {...fieldProps}
                               isDisabled={!stalls?.length || stalls?.length === 0}
                             />
@@ -159,7 +159,7 @@ const AddJobContainer: React.FC = observer(() => {
                               className="single-select"
                               classNamePrefix="react-select"
                               options={dumps}
-                              placeholder=""
+                              placeholder={t('sale')}
                               {...fieldProps}
                               isDisabled={!dumps?.length || dumps?.length === 0}
                             />
@@ -177,7 +177,7 @@ const AddJobContainer: React.FC = observer(() => {
                       <Fragment>
                         <Textfield
                           type="number"
-                          placeholder=""
+                          placeholder={t('amount')}
                           {...fieldProps}
                           elemAfterInput={<ElemInput>คัน</ElemInput>}
                         />
@@ -208,7 +208,7 @@ const AddJobContainer: React.FC = observer(() => {
                       <Field label={t('freightRate')} name="freightRate" isRequired>
                         {({ fieldProps }: any) => (
                           <Fragment>
-                            <Textfield placeholder="" {...fieldProps} />
+                            <Textfield placeholder={t('freightRate')} {...fieldProps} />
                           </Fragment>
                         )}
                       </Field>

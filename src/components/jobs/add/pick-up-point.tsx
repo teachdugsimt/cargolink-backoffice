@@ -101,7 +101,7 @@ const PickUpPoint: React.FC = observer(() => {
                     <Field label={t('consigneeName')} name="contactName">
                       {({ fieldProps }: any) => (
                         <Fragment>
-                          <Textfield placeholder="" {...fieldProps} />
+                          <Textfield placeholder={t('consigneeName')} {...fieldProps} />
                         </Fragment>
                       )}
                     </Field>
@@ -110,7 +110,7 @@ const PickUpPoint: React.FC = observer(() => {
                     <Field label={t('contactNumber')} name="contactMobileNo">
                       {({ fieldProps }: any) => (
                         <Fragment>
-                          <Textfield placeholder="" {...fieldProps} />
+                          <Textfield placeholder={t('contactNumber')} {...fieldProps} />
                         </Fragment>
                       )}
                     </Field>
