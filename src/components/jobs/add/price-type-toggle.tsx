@@ -77,7 +77,6 @@ const PriceTypeToggle = styled.div<PriceTypeProps>`
   ${animation}
 
   span {
-    font-weight: bold;
     width: 50%;
     display: flex;
     justify-content: center;

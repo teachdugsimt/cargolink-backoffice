@@ -1,11 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import { useTranslation } from 'react-i18next';
 import { navigate } from 'gatsby';
 import { observer } from 'mobx-react-lite';
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
-import { Row, Col } from '@paljs/ui';
 import { useMst } from '../../stores/root-store';
 import styled from 'styled-components';
 
@@ -15,26 +13,19 @@ import Form, { Field, FormFooter, HelperMessage, ErrorMessage } from '@atlaskit/
 import Textfield from '@atlaskit/textfield';
 import ImageUpload from '../../components/truck/widgets/image-upload';
 import TruckTypesSelector from '../../components/dropdowns/truckType.selector';
+import { STALL_HEIGHT, TIPPER_DUMP } from '../../components/truck/stall-height';
+import Select from '@atlaskit/select';
+
+interface SelectValue {
+  labal: any;
+  value: string;
+}
 
 const AddTrucks = observer(() => {
   const { t } = useTranslation();
   const { loginStore } = useMst();
-  const { register, control, handleSubmit, watch, errors } = useForm({
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    defaultValues: {
-      userId: null,
-      contactMobileNo: null,
-      contactName: null,
-      name: null,
-      productName: null,
-      productTypeId: null,
-      start: null,
-      truckAmount: null,
-      truckType: null,
-      weight: null,
-    },
-  });
+  const [stalls, setStalls] = useState<SelectValue[]>([]);
+  const [dumps, setDumps] = useState<SelectValue[]>([]);
 
   const breadcrumbs = (
     <Breadcrumbs>
@@ -43,81 +34,91 @@ const AddTrucks = observer(() => {
     </Breadcrumbs>
   );
 
+  const isDisabled = false;
+
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('vehicle.add')}</PageHeader>
       <Form onSubmit={(formState: unknown) => console.log('form submitted', formState)}>
         {({ formProps }: any) => (
           <form {...formProps}>
-            <div>
-              <Row between="xs">
-                <Col breakPoint={{ xs: 12, md: 5 }}>
-                  <div>
-                    <Row style={{ marginRight: 0 }}>
-                      <Col breakPoint={{ xs: 12 }}>
-                        <Field label={t('carOwner')} name="carOwner" isRequired>
-                          {({ fieldProps }: any) => (
-                            <Fragment>
-                              <Textfield {...fieldProps} />
-                              {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
-                            </Fragment>
-                          )}
-                        </Field>
-                      </Col>
-                    </Row>
-                    <Row style={{ marginRight: 0 }}>
-                      <Col breakPoint={{ xs: 12 }}>
-                        <Field label={t('typeCar')} name="typeCar" isRequired>
-                          {({ fieldProps }: any) => (
-                            <Fragment>
-                              <TruckTypesSelector
-                                {...fieldProps}
-                                maxWidth="100%"
-                                onSelect={fieldProps.onChange}
-                                placeholder={t('pleaseselect')}
-                                language={loginStore.language}
-                              />
-                              {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
-                            </Fragment>
-                          )}
-                        </Field>
-                      </Col>
-                    </Row>
-                    <Row between="xs" style={{ marginRight: -24 }}>
-                      <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                        <Field label={t('stall')} name="stall">
-                          {({ fieldProps }: any) => (
-                            <Fragment>
-                              <Textfield {...fieldProps} />
-                            </Fragment>
-                          )}
-                        </Field>
-                      </Col>
-                      <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
-                        <Field label={t(`sale`)} name="sale">
-                          {({ fieldProps }: any) => (
-                            <Fragment>
-                              <Textfield {...fieldProps} />
-                            </Fragment>
-                          )}
-                        </Field>
-                      </Col>
-                    </Row>
-                    <Row style={{ marginRight: 0 }}>
-                      <Col breakPoint={{ xs: 12 }}>
-                        <Field label={t(`registrationNumber`)} name="registrationNumber" isRequired>
-                          {({ fieldProps }: any) => (
-                            <Fragment>
-                              <Textfield {...fieldProps} />
-                              {/* <ErrorMessage>Help or instruction text goes here</ErrorMessage> */}
-                            </Fragment>
-                          )}
-                        </Field>
-                      </Col>
-                    </Row>
+            <GroupItem>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ flex: 1, marginRight: 10 }}>
+                  <Field label={t('carOwner')} name="carOwner" isRequired>
+                    {({ fieldProps, error, meta: { valid } }: any) => (
+                      <Fragment>
+                        <Textfield {...fieldProps} placeholder={`${t('carOwner')}`} />
+                      </Fragment>
+                    )}
+                  </Field>
+                  <Field label={t('typeCar')} name="typeCar" isRequired>
+                    {({ fieldProps }: any) => (
+                      <Fragment>
+                        <TruckTypesSelector
+                          {...fieldProps}
+                          maxWidth="100%"
+                          onSelect={(e: any) => {
+                            fieldProps.onChange(e);
+
+                            const stallOptions = STALL_HEIGHT(t, e);
+                            setStalls(stallOptions);
+
+                            const dumpOptions = TIPPER_DUMP(t, e);
+                            setDumps(dumpOptions);
+                          }}
+                          placeholder={t('pleaseselect')}
+                          language={loginStore.language}
+                        />
+                      </Fragment>
+                    )}
+                  </Field>
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div style={{ flex: 1, marginRight: 10 }}>
+                      <Field label={t('stall')} name="stall" defaultValue={stalls[0]}>
+                        {({ fieldProps }: any) => (
+                          <Fragment>
+                            <Select
+                              inputId="vehicle-stall-height"
+                              className="single-select"
+                              classNamePrefix="react-select"
+                              options={stalls}
+                              placeholder={t('stall')}
+                              {...fieldProps}
+                              isDisabled={!stalls?.length || stalls?.length === 0}
+                            />
+                          </Fragment>
+                        )}
+                      </Field>
+                    </div>
+                    <div style={{ flex: 1, marginLeft: 10 }}>
+                      <Field label={t('sale')} name="sale" defaultValue={dumps[0]}>
+                        {({ fieldProps }: any) => (
+                          <Fragment>
+                            <Select
+                              inputId="vehicle-dump"
+                              className="single-select"
+                              classNamePrefix="react-select"
+                              options={dumps}
+                              placeholder={t('sale')}
+                              {...fieldProps}
+                              isDisabled={!dumps?.length || dumps?.length === 0}
+                            />
+                          </Fragment>
+                        )}
+                      </Field>
+                    </div>
                   </div>
-                </Col>
-                <Col breakPoint={{ xs: 12, md: 5 }}>
+                  <Field label={t(`registrationNumber`)} name="registrationNumber" isRequired>
+                    {({ fieldProps }: any) => (
+                      <Fragment>
+                        <Textfield {...fieldProps} placeholder={`${t('registrationNumber')}`} />
+                        <HelperMessage>{t('registrationsTrailers')}</HelperMessage>
+                      </Fragment>
+                    )}
+                  </Field>
+                </div>
+                <div style={{ flex: 1, marginLeft: 10 }}>
                   <Field label="" name="upload">
                     {({ fieldProps }: any) => (
                       <Fragment>
@@ -125,11 +126,29 @@ const AddTrucks = observer(() => {
                       </Fragment>
                     )}
                   </Field>
-                </Col>
-              </Row>
-            </div>
+                </div>
+              </div>
+            </GroupItem>
             <FormFooter>
-              <SubmitButton type="submit">Submit</SubmitButton>
+              <Button type="button" style={BottomBackStyled} onClick={() => navigate('/vehicles')} testId="backButton">
+                <BackText>{t('back')}</BackText>
+              </Button>
+              <Button
+                type="submit"
+                isDisabled={isDisabled}
+                style={
+                  isDisabled
+                    ? {
+                        ...BottomSubmitStyled,
+                        backgroundColor: '#D8D8D8',
+                        border: 'none',
+                      }
+                    : BottomSubmitStyled
+                }
+                testId="submitButton"
+              >
+                <SubmitText>{t('confirm')}</SubmitText>
+              </Button>
             </FormFooter>
           </form>
         )}
@@ -140,8 +159,31 @@ const AddTrucks = observer(() => {
 
 export default AddTrucks;
 
-const SubmitButton = styled(Button)`
-  border: 1px solid #fbbc12;
-  background-color: #fbbc12;
-  color: black;
+const BackText = styled.span`
+  color: #fbbc12;
+`;
+
+const SubmitText = styled.span`
+  color: #000;
+`;
+
+const BottomStyled = {
+  margin: '0 6px',
+};
+
+const BottomBackStyled = {
+  ...BottomStyled,
+  border: '1px solid #FBBC12',
+  backgroundColor: 'transparent',
+};
+
+const BottomSubmitStyled = {
+  ...BottomStyled,
+  border: '1px solid #FBBC12',
+  backgroundColor: '#FBBC12',
+};
+
+const GroupItem = styled.div`
+  display: flex;
+  flex-direction: column;
 `;

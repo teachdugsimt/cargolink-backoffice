@@ -48,6 +48,7 @@
   "productName_1": "Product Name",
   "fieldProductName": "This field product name is required",
   "amountWeight": "Amount of weight (ton)",
+  "amountWeightWithoutTon": "Amount of weight",
   "weight": "Weight",
   "fieldWeight": "This field amount weight is required",
   "minWeight": "Must be greater than or equal to 0",
@@ -89,6 +90,8 @@
   "LOW": "Low",
   "MEDIUM": "Medium",
   "HIGH": "High",
+  "DUMP": "Dump",
+  "NO_DUMP": "No Dump",
   "OPEN": "OPEN",
   "IN-PROGRESS": "IN-PROGRESS",
   "INPROGRESS": "IN-PROGRESS",
@@ -187,10 +190,14 @@
   },
   "job": {
     "management": "Jobs Management",
+    "add": "Add Job",
     "info": "Job Info"
   },
   "allTrucks": "All Trucks",
   "allTypes": "All",
   "allProvinces": "All Provinces",
-  "takePhotoVehicle":"Photo Vehicle"
+  "takePhotoVehicle":"Photo Vehicle",
+  "freightRate": "Freight Rate",
+  "add": "Add",
+  "registrationsTrailers": "No more than 2 registrations for trailers"
 }

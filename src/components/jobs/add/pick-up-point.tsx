@@ -31,15 +31,17 @@ const PickUpPoint: React.FC = observer(() => {
     }
   };
 
+  const isDisabled = false;
+
   return (
     <Form onSubmit={onSubmit}>
       {({ formProps }: any) => (
         <form {...formProps}>
-          <div style={{ marginTop: -16 }}>
-            <Row between="xs">
-              <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
-                <Row between="xs" style={{ alignItems: 'flex-end' }}>
-                  <Col breakPoint={{ xs: 3, md: 2.5, lg: 3 }}>
+          <GroupItem>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <div style={{ flex: 1, marginRight: 10 }}>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
+                  <div style={{ flex: 1, marginRight: 10 }}>
                     <Field
                       label={t('operator')}
                       name="operator"
@@ -61,8 +63,8 @@ const PickUpPoint: React.FC = observer(() => {
                         </Fragment>
                       )}
                     </Field>
-                  </Col>
-                  <Col breakPoint={{ xs: 7, md: 6.5, lg: 7 }}>
+                  </div>
+                  <div style={{ flex: 2, marginLeft: 10 }}>
                     <Field label={t('dateTime')} name="dateTime" isRequired>
                       {({ fieldProps }: any) => (
                         <Fragment>
@@ -70,10 +72,10 @@ const PickUpPoint: React.FC = observer(() => {
                         </Fragment>
                       )}
                     </Field>
-                  </Col>
-                </Row>
-                <Row between="xs">
-                  <Col breakPoint={{ xs: 7, lg: 8, xl: 9 }} style={{ paddingRight: 0 }}>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                  <div style={{ flex: 'auto', marginRight: 10 }}>
                     <Field label={t('Address')} name="name" isRequired>
                       {({ fieldProps }: any) => (
                         <Fragment>
@@ -81,45 +83,57 @@ const PickUpPoint: React.FC = observer(() => {
                         </Fragment>
                       )}
                     </Field>
-                  </Col>
-                  <Col
-                    breakPoint={{ xs: 3, lg: 3, xl: 2 }}
-                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingLeft: 0 }}
-                  >
-                    <Button type="button" style={{ backgroundColor: 'white', marginTop: 16 }}>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 27 }}>
+                    <Button type="button" style={{ backgroundColor: 'white' }}>
                       <img src={images.homeSearch} style={{ width: 50, height: 50 }} />
                     </Button>
-                  </Col>
-                </Row>
-                <Row between="xs">
-                  <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                  <div style={{ flex: 1, marginRight: 10 }}>
                     <Field label={t('consigneeName')} name="contactName">
                       {({ fieldProps }: any) => (
                         <Fragment>
-                          <Textfield placeholder="" {...fieldProps} />
+                          <Textfield placeholder={t('consigneeName')} {...fieldProps} />
                         </Fragment>
                       )}
                     </Field>
-                  </Col>
-                  <Col breakPoint={{ xs: 5, md: 4.5, lg: 5 }}>
+                  </div>
+                  <div style={{ flex: 1, marginLeft: 10 }}>
                     <Field label={t('contactNumber')} name="contactMobileNo">
                       {({ fieldProps }: any) => (
                         <Fragment>
-                          <Textfield placeholder="" {...fieldProps} />
+                          <Textfield placeholder={t('contactNumber')} {...fieldProps} />
                         </Fragment>
                       )}
                     </Field>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
                 <FormFooter>
-                  <SubmitButton type="submit">เพิ่ม</SubmitButton>
+                  <Button
+                    type="submit"
+                    isDisabled={isDisabled}
+                    style={
+                      isDisabled
+                        ? {
+                            ...BottomSubmitStyled,
+                            backgroundColor: '#D8D8D8',
+                            border: 'none',
+                          }
+                        : BottomSubmitStyled
+                    }
+                    testId="pickupSubmitButton"
+                  >
+                    <SubmitText>{t('add')}</SubmitText>
+                  </Button>
                 </FormFooter>
-              </Col>
-              <Col breakPoint={{ xs: 12, md: 5, lg: 5.5 }}>
+              </div>
+              <div style={{ flex: 1, marginLeft: 10 }}>
                 <RouteWidget from={pickup?.from} to={pickup?.to} status="NEW" />
-              </Col>
-            </Row>
-          </div>
+              </div>
+            </div>
+          </GroupItem>
         </form>
       )}
     </Form>
@@ -128,8 +142,22 @@ const PickUpPoint: React.FC = observer(() => {
 
 export default PickUpPoint;
 
-const SubmitButton = styled(Button)`
-  border: 1px solid #fbbc12;
-  background-color: #fbbc12;
-  color: black;
+const SubmitText = styled.span`
+  color: #000;
+`;
+
+const BottomStyled = {
+  margin: '0 6px',
+};
+
+const BottomSubmitStyled = {
+  ...BottomStyled,
+  border: '1px solid #FBBC12',
+  backgroundColor: '#FBBC12',
+};
+
+const GroupItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: -8px;
 `;
