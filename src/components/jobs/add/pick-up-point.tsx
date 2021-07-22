@@ -84,15 +84,7 @@ const PickUpPoint: React.FC = observer(() => {
                       )}
                     </Field>
                   </div>
-                  <div
-                    style={{
-                      flex: 'auto',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginTop: 27,
-                    }}
-                  >
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 27 }}>
                     <Button type="button" style={{ backgroundColor: 'white' }}>
                       <img src={images.homeSearch} style={{ width: 50, height: 50 }} />
                     </Button>

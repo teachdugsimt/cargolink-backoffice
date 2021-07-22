@@ -215,7 +215,7 @@ const AddJobContainer: React.FC = observer(() => {
                         )}
                       </Field>
                     </div>
-                    <div style={{ flex: 'auto', marginLeft: 10, display: 'flex', alignItems: 'flex-end' }}>
+                    <div style={{ marginLeft: 10, display: 'flex', alignItems: 'flex-end' }}>
                       <Field label="" name="priceType" isRequired>
                         {({ fieldProps }: any) => (
                           <Fragment>
