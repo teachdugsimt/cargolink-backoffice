@@ -35,6 +35,8 @@ const AddJobContainer: React.FC = observer(() => {
     </Breadcrumbs>
   );
 
+  const isDisabled = false;
+
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('addNewJob')}</PageHeader>
@@ -142,7 +144,7 @@ const AddJobContainer: React.FC = observer(() => {
                               className="single-select"
                               classNamePrefix="react-select"
                               options={stalls}
-                              placeholder={t('stall')} 
+                              placeholder={t('stall')}
                               {...fieldProps}
                               isDisabled={!stalls?.length || stalls?.length === 0}
                             />
@@ -228,7 +230,25 @@ const AddJobContainer: React.FC = observer(() => {
               </div>
             </GroupItem>
             <FormFooter>
-              <SubmitButton type="submit">{t('add')}</SubmitButton>
+              <Button type="button" style={BottomBackStyled} onClick={() => navigate('/jobs')} testId="backButton">
+                <BackText>{t('back')}</BackText>
+              </Button>
+              <Button
+                type="submit"
+                isDisabled={isDisabled}
+                style={
+                  isDisabled
+                    ? {
+                        ...BottomSubmitStyled,
+                        backgroundColor: '#D8D8D8',
+                        border: 'none',
+                      }
+                    : BottomSubmitStyled
+                }
+                testId="submitButton"
+              >
+                <SubmitText>{t('confirm')}</SubmitText>
+              </Button>
             </FormFooter>
           </form>
         )}
@@ -254,11 +274,29 @@ const Header = styled.h3`
   margin-bottom: 0px;
 `;
 
-const SubmitButton = styled(Button)`
-  border: 1px solid #fbbc12;
-  background-color: #fbbc12;
-  color: black;
+const BackText = styled.span`
+  color: #fbbc12;
 `;
+
+const SubmitText = styled.span`
+  color: #000;
+`;
+
+const BottomStyled = {
+  margin: '0 6px',
+};
+
+const BottomBackStyled = {
+  ...BottomStyled,
+  border: '1px solid #FBBC12',
+  backgroundColor: 'transparent',
+};
+
+const BottomSubmitStyled = {
+  ...BottomStyled,
+  border: '1px solid #FBBC12',
+  backgroundColor: '#FBBC12',
+};
 
 const GroupItem = styled.div`
   display: flex;

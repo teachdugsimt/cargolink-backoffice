@@ -31,6 +31,8 @@ const PickUpPoint: React.FC = observer(() => {
     }
   };
 
+  const isDisabled = false;
+
   return (
     <Form onSubmit={onSubmit}>
       {({ formProps }: any) => (
@@ -117,7 +119,22 @@ const PickUpPoint: React.FC = observer(() => {
                   </div>
                 </div>
                 <FormFooter>
-                  <SubmitButton type="submit">{t('add')}</SubmitButton>
+                  <Button
+                    type="submit"
+                    isDisabled={isDisabled}
+                    style={
+                      isDisabled
+                        ? {
+                            ...BottomSubmitStyled,
+                            backgroundColor: '#D8D8D8',
+                            border: 'none',
+                          }
+                        : BottomSubmitStyled
+                    }
+                    testId="pickupSubmitButton"
+                  >
+                    <SubmitText>{t('add')}</SubmitText>
+                  </Button>
                 </FormFooter>
               </div>
               <div style={{ flex: 1, marginLeft: 10 }}>
@@ -133,11 +150,19 @@ const PickUpPoint: React.FC = observer(() => {
 
 export default PickUpPoint;
 
-const SubmitButton = styled(Button)`
-  border: 1px solid #fbbc12;
-  background-color: #fbbc12;
-  color: black;
+const SubmitText = styled.span`
+  color: #000;
 `;
+
+const BottomStyled = {
+  margin: '0 6px',
+};
+
+const BottomSubmitStyled = {
+  ...BottomStyled,
+  border: '1px solid #FBBC12',
+  backgroundColor: '#FBBC12',
+};
 
 const GroupItem = styled.div`
   display: flex;
