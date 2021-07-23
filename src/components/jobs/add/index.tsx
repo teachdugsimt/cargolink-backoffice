@@ -14,6 +14,7 @@ import UserSelector from './user.selector';
 import ProductTypesSelector from '../productType.selector';
 import TruckTypesSelector from '../../dropdowns/truckType.selector';
 import PickUpPoint from './pick-up-point';
+import RouteWidget from '../../route/widgets/route';
 import Select from '@atlaskit/select';
 import { STALL_HEIGHT, TIPPER_DUMP } from '../../truck/stall-height';
 
@@ -27,6 +28,7 @@ const AddJobContainer: React.FC = observer(() => {
   const { loginStore } = useMst();
   const [stalls, setStalls] = useState<SelectValue[]>([]);
   const [dumps, setDumps] = useState<SelectValue[]>([]);
+  const [pickup, setPickup] = useState<any>(null);
 
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => {}}>
@@ -192,19 +194,19 @@ const AddJobContainer: React.FC = observer(() => {
 
               <br />
               <Header>{t('pickUpPoint')}</Header>
-              <Field name="pickUpPoint">
-                {({ fieldProps }: any) => (
-                  <Fragment>
-                    <PickUpPoint {...fieldProps} />
-                  </Fragment>
-                )}
-              </Field>
-
-              <br />
-              <Header>ระยะทาง xxxx กิโลเมตร</Header>
-              <Header>ราคาที่แนะนำ xxxx บาท</Header>
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div style={{ flex: 1, marginRight: 10 }}>
+                  <Field name="pickUpPoint">
+                    {({ fieldProps }: any) => (
+                      <Fragment>
+                        <PickUpPoint {...fieldProps} />
+                      </Fragment>
+                    )}
+                  </Field>
+
+                  <br />
+                  <Header>ระยะทาง xxxx กิโลเมตร</Header>
+                  <Header>ราคาที่แนะนำ xxxx บาท</Header>
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div style={{ flex: 'auto', marginRight: 10 }}>
                       <Field label={t('freightRate')} name="freightRate" isRequired>
@@ -226,7 +228,9 @@ const AddJobContainer: React.FC = observer(() => {
                     </div>
                   </div>
                 </div>
-                <div style={{ flex: 1, marginLeft: 10 }}></div>
+                <div style={{ flex: 1, marginLeft: 10 }}>
+                  <RouteWidget from={pickup?.from} to={pickup?.to} status="NEW" />
+                </div>
               </div>
             </GroupItem>
             <FormFooter>
