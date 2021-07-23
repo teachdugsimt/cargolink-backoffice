@@ -11,10 +11,14 @@ import DateTimePicker from './datetimePicker';
 import Select from '@atlaskit/select';
 import images from '../../Themes/images';
 
-const PickUpPoint: React.FC = observer(() => {
+interface PickUpPointProp {
+  pickup: { from: any; to: any[] };
+  setPickup: (value: { from: any; to: any[] }) => void;
+}
+
+const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) => {
   const { t } = useTranslation();
   const { loginStore } = useMst();
-  const [pickup, setPickup] = useState<any>(null);
 
   const onSubmit = (formState: any) => {
     // console.log('form submitted pickup point', formState);

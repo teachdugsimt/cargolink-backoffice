@@ -196,13 +196,7 @@ const AddJobContainer: React.FC = observer(() => {
               <Header>{t('pickUpPoint')}</Header>
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div style={{ flex: 1, marginRight: 10 }}>
-                  <Field name="pickUpPoint">
-                    {({ fieldProps }: any) => (
-                      <Fragment>
-                        <PickUpPoint {...fieldProps} />
-                      </Fragment>
-                    )}
-                  </Field>
+                  <PickUpPoint pickup={pickup} setPickup={setPickup} />
 
                   <br />
                   <Header>ระยะทาง xxxx กิโลเมตร</Header>
@@ -229,7 +223,12 @@ const AddJobContainer: React.FC = observer(() => {
                   </div>
                 </div>
                 <div style={{ flex: 1, marginLeft: 10 }}>
-                  <RouteWidget from={pickup?.from} to={pickup?.to} status="NEW" />
+                  <RouteWidget
+                    from={pickup?.from}
+                    to={pickup?.to}
+                    setTo={(to: any) => setPickup({ ...pickup, to })}
+                    status="NEW"
+                  />
                 </div>
               </div>
             </GroupItem>
