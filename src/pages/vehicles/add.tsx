@@ -8,13 +8,14 @@ import { useMst } from '../../stores/root-store';
 import styled from 'styled-components';
 
 import Button from '@atlaskit/button';
-import Form, { Field, FormFooter, HelperMessage, ErrorMessage } from '@atlaskit/form';
+import Form, { Field, FormFooter, HelperMessage, ErrorMessage, ValidMessage } from '@atlaskit/form';
 
 import Textfield from '@atlaskit/textfield';
 import ImageUpload from '../../components/truck/widgets/image-upload';
 import TruckTypesSelector from '../../components/dropdowns/truckType.selector';
 import { STALL_HEIGHT, TIPPER_DUMP } from '../../components/truck/stall-height';
 import Select from '@atlaskit/select';
+import MultiSelect from '@atlaskit/multi-select';
 
 interface SelectValue {
   labal: any;
@@ -36,10 +37,16 @@ const AddTrucks = observer(() => {
 
   const isDisabled = false;
 
+  const selectItems = [{ items: [] }];
+
+  const onSubmit = (formState: any) => {
+    console.log('form submitted', formState);
+  };
+
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('vehicle.add')}</PageHeader>
-      <Form onSubmit={(formState: unknown) => console.log('form submitted', formState)}>
+      <Form onSubmit={onSubmit}>
         {({ formProps }: any) => (
           <form {...formProps}>
             <GroupItem>
@@ -53,7 +60,7 @@ const AddTrucks = observer(() => {
                     )}
                   </Field>
                   <Field label={t('typeCar')} name="typeCar" isRequired>
-                    {({ fieldProps }: any) => (
+                    {({ fieldProps, error, meta: { valid } }: any) => (
                       <Fragment>
                         <TruckTypesSelector
                           {...fieldProps}
@@ -70,6 +77,9 @@ const AddTrucks = observer(() => {
                           placeholder={t('pleaseselect')}
                           language={loginStore.language}
                         />
+                        {error === 'INCORRECT_PHRASE' && (
+                          <ErrorMessage>Incorrect, try &lsquo;open sesame&rsquo;</ErrorMessage>
+                        )}
                       </Fragment>
                     )}
                   </Field>
@@ -110,12 +120,21 @@ const AddTrucks = observer(() => {
                     </div>
                   </div>
                   <Field label={t(`registrationNumber`)} name="registrationNumber" isRequired>
-                    {({ fieldProps }: any) => (
-                      <Fragment>
-                        <Textfield {...fieldProps} placeholder={`${t('registrationNumber')}`} />
-                        <HelperMessage>{t('registrationsTrailers')}</HelperMessage>
-                      </Fragment>
-                    )}
+                    {({ fieldProps }: any) => {
+                      return (
+                        <Fragment>
+                          <MultiSelect
+                            items={selectItems}
+                            placeholder={`${t('registrationNumber')}`}
+                            onNewItemCreated={(e: any) => console.log('onNewItemCreated', e)}
+                            onSelectedChange={(e: any) => console.log('select change', e)}
+                            shouldAllowCreateItem
+                            shouldFitContainer
+                          />
+                          <HelperMessage>{t('registrationsTrailers')}</HelperMessage>
+                        </Fragment>
+                      );
+                    }}
                   </Field>
                 </div>
                 <div style={{ flex: 1, marginLeft: 10 }}>
