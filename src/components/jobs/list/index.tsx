@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import { IJobsManagement } from '../../../stores/job-store';
 import { JobListParams } from '../../../services/job-api';
 import SearchForm from '../../search-form';
-import { navigate } from 'gatsby';
+import { Link, navigate } from 'gatsby';
 import DynamicTable from '@atlaskit/dynamic-table';
 import JobStatusFilter, { JobStatus } from './status.filter';
 import AddJobButton from '../../buttons/add';
@@ -17,6 +17,7 @@ import PageHeader from '@atlaskit/page-header';
 import ProductTypeSelector from '../productType.selector';
 import ProvincesSelector from './province.selector';
 import { IProductType } from '../../../services/product-type-api';
+import { RowType } from '@atlaskit/dynamic-table/types';
 
 import { CardBody } from '@paljs/ui/Card';
 import Row from '@paljs/ui/Row';
@@ -25,6 +26,17 @@ const INITIAL_API_PARAMS = {
   page: 1,
   descending: true,
 };
+
+const extendRows = (
+  rows: Array<RowType>,
+  onClick: (e: React.MouseEvent, rowIndex: number) => void,
+) => {
+  return rows.map((row, index) => ({
+    ...row,
+    onClick: (e: React.MouseEvent) => onClick(e, index),
+  }));
+};
+
 
 const JobContainer: React.FC = observer(() => {
   const { t } = useTranslation();
@@ -148,6 +160,10 @@ const JobContainer: React.FC = observer(() => {
     </Breadcrumbs>
   );
 
+  const onRowClick = (e: React.MouseEvent, rowIndex: number) => {
+    navigate('/jobs/' + rows[rowIndex].cells[0].content)
+  }
+
   return (
     <div>
       <HeaderGroup>
@@ -181,7 +197,7 @@ const JobContainer: React.FC = observer(() => {
         <TableWrapper>
           <DynamicTable
             head={tableHeaders}
-            rows={rows}
+            rows={extendRows(rows, onRowClick)}
             page={page}
             emptyView={<p>{t('noData')}</p>}
             rowsPerPage={jobStore.data_jobs?.lengthPerPage || 10}

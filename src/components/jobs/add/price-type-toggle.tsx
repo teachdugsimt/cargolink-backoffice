@@ -27,8 +27,6 @@ const PriceTypeToggleComponent = (props: PriceTypeToggleProps) => {
 
   const select = priceType != null ? priceType : selecting;
 
-  console.log('state', selecting)
-
   return (
     <PriceTypeToggle selecting={select} className="price-type-toggle" onClick={onClick}>
       <span className="trip">{t('perTrip')}</span>
@@ -79,7 +77,6 @@ const PriceTypeToggle = styled.div<PriceTypeProps>`
   ${animation}
 
   span {
-    font-weight: bold;
     width: 50%;
     display: flex;
     justify-content: center;

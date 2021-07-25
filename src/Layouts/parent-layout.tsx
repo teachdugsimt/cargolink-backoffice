@@ -34,7 +34,9 @@ const ParentLayout = observer(({ pageContext, children, location }) => {
     } else if (pageContext.layout == 'doc') {
       return <WhiteLayout>{children}</WhiteLayout>
     } else {
-      return <PrimaryLayout location={location}>{children}</PrimaryLayout>
+      return <PrimaryLayout location={location}>
+        {children}
+      </PrimaryLayout>
     }
   } else {
     // IS NOT LOGGED IN

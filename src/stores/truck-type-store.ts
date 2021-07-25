@@ -55,4 +55,13 @@ export const TruckTypeStore = types
         self.loading = false;
       }),
     };
-  });
+  })
+  .views(self => ({
+    truckTypeNameById(truckTypeId: number | string) {
+      let trucktype = self.data?.filter(e => e.id == truckTypeId)
+      if (!trucktype?.length) {
+        self.getTruckTypes()
+      }
+      return trucktype?.length ? trucktype[0] : null
+    }
+  }));

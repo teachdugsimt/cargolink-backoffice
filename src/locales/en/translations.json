@@ -31,7 +31,13 @@
   "addNewAccount": "ADD NEW ACCOUNT",
   "addNewJob": "ADD NEW JOB",
   "addDataCar": "Add vehicle information",
+  "carOwner":"Vehicle Owner",
+  "jobOwner": "Job Owner",
   "typeCar": "The type of car you want",
+  "desiredVehicle":"Desired Vehicle",
+  "stall": "Stall",
+  "sale": "Sale",
+  "amount":"Amount",
   "pleaseselect": "Please select",
   "fieldTruckType": "This field truck type is required",
   "truckAmount": "Required Truck Amount",
@@ -42,6 +48,7 @@
   "productName_1": "Product Name",
   "fieldProductName": "This field product name is required",
   "amountWeight": "Amount of weight (ton)",
+  "amountWeightWithoutTon": "Amount of weight",
   "weight": "Weight",
   "fieldWeight": "This field amount weight is required",
   "minWeight": "Must be greater than or equal to 0",
@@ -83,10 +90,15 @@
   "LOW": "Low",
   "MEDIUM": "Medium",
   "HIGH": "High",
+  "DUMP": "Dump",
+  "NO_DUMP": "No Dump",
   "OPEN": "OPEN",
   "IN-PROGRESS": "IN-PROGRESS",
+  "INPROGRESS": "IN-PROGRESS",
   "COMPLETED": "COMPLETED",
   "LOADING": "Loading",
+  "EXPIRED": "EXPIRED",
+  "NEW": "NEW",
   "user": "User",
   "to": "To",
   "from": "From",
@@ -97,6 +109,8 @@
   "KM": "KM",
   "jobDetail": "Job Detail",
   "pickUpPoint": "Pick up point",
+  "operator":"Operator",
+  "dateTime":"Date-time",
   "km": "KM",
   "truckType": "Truck Type",
   "truckAmount_1": "Truck Amount",
@@ -168,12 +182,22 @@
   "typeUserToFind": "Type a keyword to find users to select",
   "vehicle": {
     "management": "Trucks Management",
-    "add": "Add Vehicle"
+    "add": "Add Vehicle",
+    "info": "Vehicle Info"
   },
   "trip": {
     "management": "Trips Management"
   },
+  "job": {
+    "management": "Jobs Management",
+    "add": "Add Job",
+    "info": "Job Info"
+  },
   "allTrucks": "All Trucks",
   "allTypes": "All",
-  "allProvinces": "All Provinces"
+  "allProvinces": "All Provinces",
+  "takePhotoVehicle":"Photo Vehicle",
+  "freightRate": "Freight Rate",
+  "add": "Add",
+  "registrationsTrailers": "No more than 2 registrations for trailers"
 }

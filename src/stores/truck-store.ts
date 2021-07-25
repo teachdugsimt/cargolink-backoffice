@@ -1,6 +1,6 @@
 import { flow, types } from 'mobx-state-tree';
 import { TruckApi } from '../services';
-import { ITruck, TrucksListParams, TrucksListResponse } from '../services/truck-api';
+import truckApi, { ITruck, TruckRequestParams, TrucksListParams, TrucksListResponse } from '../services/truck-api';
 
 const AvatarType = types.model({
   object: types.maybeNull(types.string),
@@ -20,6 +20,13 @@ const ZoneType = types.model({
   province: types.maybeNull(types.number),
 });
 
+const TruckPhotosType = types.model({
+  front: types.maybeNull(types.string),
+  back: types.maybeNull(types.string),
+  left: types.maybeNull(types.string),
+  right: types.maybeNull(types.string)
+})
+
 const TruckType = types.model({
   id: types.maybeNull(types.string),
   approveStatus: types.maybeNull(types.string),
@@ -33,6 +40,7 @@ const TruckType = types.model({
   quotationNumber: types.maybeNull(types.number),
   workingZones: types.maybeNull(types.array(ZoneType)),
   owner: types.maybeNull(OwnerType),
+  truckPhotos: types.maybeNull(TruckPhotosType)
 });
 
 const TruckManagementType = types.model({
@@ -52,6 +60,7 @@ export const TruckStore = types
     loading: false,
     data_count: types.maybeNull(types.number),
     data_trucks: types.maybeNull(TruckManagementType),
+    currentTruck: types.maybeNull(TruckType),
     isFirstLoad: true,
     error_response: types.maybeNull(
       types.model({
@@ -137,6 +146,29 @@ export const TruckStore = types
             title: '',
             content: 'Failed to getTrucks',
           }
+        }
+      }),
+
+      getTruckById: flow(function* getTruckById(params: TruckRequestParams) {
+        try {
+          self.loading = true
+          self.currentTruck = null
+          const response = yield truckApi.getTruckById(params)
+          console.log(response)
+          if (response.ok) {
+            self.currentTruck = response.data.data
+          } else {
+            self.error_response = {
+              title: '',
+              content: 'Failed to get truck ' + params.truckId,
+            };
+          }
+          self.loading = false
+        } catch (error) {
+          self.error_response = {
+            title: '',
+            content: 'Failed to get truck ' + params.truckId,
+          };
         }
       })
     }

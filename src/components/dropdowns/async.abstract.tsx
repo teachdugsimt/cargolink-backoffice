@@ -9,6 +9,7 @@ interface SelectorProps {
   maxWidth?: string;
   includeNone?: boolean;
   noResultsMessage?: string;
+  isRequired?: boolean;
 }
 interface SelectorState {
   options: OptionsType;
@@ -64,6 +65,7 @@ export default abstract class AsyncSelector extends React.Component<SelectorProp
         placeholder={placeholder ? toFirstLetterUpperCase(placeholder) : undefined}
         onChange={this.onSelected}
         noOptionsMessage={() => this.props.noResultsMessage || 'no results'}
+        isRequired={this.props.isRequired}
       />
     );
   }
@@ -72,6 +74,6 @@ export default abstract class AsyncSelector extends React.Component<SelectorProp
 interface SelectStyleProps {
   maxWidth?: string;
 }
-const Select = styled(AsyncSelect) <SelectStyleProps>`
+const Select = styled(AsyncSelect)<SelectStyleProps>`
   min-width: ${({ maxWidth }) => (maxWidth ? maxWidth : '300px')};
 `;

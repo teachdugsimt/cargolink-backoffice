@@ -6,10 +6,22 @@ class JobApi {
     const response: AxiosResponse<JobsListResponse> = await ExcuteApi(`/api/v1/jobs`, params, 'get', 6e5, true, true);
     return response;
   };
+  getJobById = async (params: IJobRequest) => {
+    const response: AxiosResponse<IJob> = await ExcuteApi('/api/v1/jobs/' + params.jobId, {}, 'get', 600000, true, true);
+    return response;
+  }
 }
 
 export default new JobApi();
 
+export interface JobsListResponse {
+  data: IJob[];
+  currentPage: number;
+  numberOfElements: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
 export interface JobListParams {
   page: number;
   descending: boolean;
@@ -30,6 +42,9 @@ export interface JobListParams {
   type?: number;
 }
 
+export interface IJobRequest {
+  jobId: string
+}
 export interface IJob {
   id: string;
   productTypeId: number; //? -1 is null.
@@ -64,13 +79,4 @@ export interface IOwner {
   avatar: { //? infer
     object: string | null;
   };
-}
-
-export interface JobsListResponse {
-  data: IJob[];
-  currentPage: number;
-  numberOfElements: number;
-  size: number;
-  totalElements: number;
-  totalPages: number;
 }

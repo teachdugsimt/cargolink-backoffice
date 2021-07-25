@@ -1,6 +1,6 @@
 import { types, flow } from 'mobx-state-tree';
 import { JobApi } from '../services';
-import { IDestination, IJob, JobListParams, JobsListResponse } from '../services/job-api';
+import { IDestination, IJob, IJobRequest, JobListParams, JobsListResponse } from '../services/job-api';
 
 const DestinationType = types.model({
   name: types.maybeNull(types.string),
@@ -38,6 +38,7 @@ const JobType = types.model({
   price: types.maybeNull(types.number),
   priceType: types.maybeNull(types.string),
   tipper: types.maybeNull(types.boolean),
+  requiredTruckAmount: types.maybeNull(types.number)
 });
 
 const JobManagement = types.model({
@@ -58,6 +59,7 @@ export const JobStore = types
     data_jobs: types.maybeNull(JobManagement),
     data_count: types.maybeNull(types.number),
     isFirstLoad: true,
+    currentJob: types.maybeNull(JobType),
     error_response: types.maybeNull(
       types.model({
         title: types.maybeNull(types.string),
@@ -124,6 +126,27 @@ export const JobStore = types
           };
         }
       }),
+      getJobById: flow(function* getJobById(params: IJobRequest) {
+        try {
+          self.loading = true
+          self.currentJob = null
+
+          const response = yield JobApi.getJobById(params)
+          self.loading = false
+
+          if (response.ok) {
+            self.currentJob = response.data
+          } else {
+            self.error_response = {
+              title: '',
+              content: 'Failed to get job ' + params.jobId,
+            };
+          }
+
+        } catch (err) {
+
+        }
+      })
     };
   });
 

@@ -31,6 +31,12 @@
   "addNewAccount": "เพิ่มบัญชีใหม่",
   "addNewJob": "เพิ่มงานใหม่",
   "typeCar": "ประเภทรถที่ต้องการ",
+  "desiredVehicle":"รถที่ต้องการ",
+  "carOwner":"เจ้าของรถ",
+  "jobOwner": "เจ้าของงาน",
+  "stall": "คอก",
+  "sale": "การลงสินค้า",
+  "amount":"จำนวน",
   "pleaseselect": "โปรดเลือก",
   "fieldTruckType": "ต้องระบุประเภทรถบรรทุกในฟิลด์นี้",
   "truckAmount": "จำนวนรถที่ต้องการ",
@@ -41,6 +47,7 @@
   "productName_1": "ชื่อสินค้า",
   "fieldproductName": "ต้องระบุชื่อสินค้าในฟิลด์นี้",
   "amountWeight": "น้ำหนักสินค้า (ตัน)",
+  "amountWeightWithoutTon": "น้ำหนักสินค้า",
   "weight": "น้ำหนัก",
   "fieldWeight": "ต้องระบุน้ำหนักในฟิลด์นี้",
   "minWeight": "ต้องมีค่ามากกว่าหรือเท่ากับ 0",
@@ -82,10 +89,15 @@
   "LOW": "ต่ำ",
   "MEDIUM": "กลาง",
   "HIGH": "สูง",
-  "OPEN": "OPEN",
+  "DUMP": "ดั๊มพ์",
+  "NO_DUMP": "ไม่ดั๊มพ์",
+  "OPEN": "งานใหม่",
   "IN-PROGRESS": "IN-PROGRESS",
-  "COMPLETED": "COMPLETED",
+  "INPROGRESS": "กำลังขนส่ง",
+  "COMPLETED": "เสร็จสิ้น",
   "LOADING": "กำลังโหลด",
+  "EXPIRED": "หมดอายุ",
+  "NEW": "สร้างใหม่",
   "user": "ผู้ใช้งาน",
   "to": "ถึง",
   "from": "จาก",
@@ -96,6 +108,8 @@
   "KM": "กิโลเมตร",
   "jobDetail": "รายละเอียดงาน",
   "pickUpPoint": "จุดขึ้นลงสินค้า",
+  "operator":"ตัวดำเนินการ",
+  "dateTime":"วัน-เวลา",
   "km": "กม.",
   "truckType": "ประเภทรถ",
   "truckAmount_1": "จำนวนรถ",
@@ -168,12 +182,22 @@
   "typeUserToFind": "พิมพ์คีย์เวิร์ดเพื่อค้นหาผู้ใช้",
   "vehicle": {
     "management": "จัดการรถบรรทุก",
-    "add": "เพิ่มข้อมูลรถ"
+    "add": "เพิ่มข้อมูลรถ",
+    "info": "ข้อมูลรถ"
   },
   "trip": {
     "management": "จัดการการขนส่ง"
   },
+  "job": {
+    "management": "จัดการงาน",
+    "add": "เพิ่มข้อมูลงาน",
+    "info": "ข้อมูลงาน"
+  },
   "allTrucks": "รถทุกประเภท",
   "allTypes": "ทุกประเภท",
-  "allProvinces": "ทุกจังหวัด"
+  "allProvinces": "ทุกจังหวัด",
+  "takePhotoVehicle":"ถ่ายรูปรถ",
+  "freightRate": "อัตราค่าขนส่ง",
+  "add": "เพิ่ม",
+  "registrationsTrailers": "ไม่เกิน 2 ทะเบียน สำหรับรถพ่วง"
 }

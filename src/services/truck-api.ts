@@ -4,12 +4,14 @@ import ExcuteApi from './api-integrations/excute-api';
 class TruckApi {
   getTrucksList = async (params: TrucksListParams) => {
     const response: AxiosResponse<TrucksListResponse> = await ExcuteApi(
-      `/api/v1/trucks/`,
-      params,
-      'get',
-      6e5,
-      true,
-      true,
+      `/api/v1/trucks/`, params, 'get', 6e5, true, true,
+    );
+    return response;
+  };
+
+  getTruckById = async (params: TruckRequestParams) => {
+    const response: AxiosResponse<TrucksListResponse> = await ExcuteApi(
+      `/api/v1/trucks/${params.truckId}`, {}, 'get', 6e5, true, true,
     );
     return response;
   };
@@ -68,4 +70,8 @@ export interface ITruck {
 export interface IZone {
   region: number;
   province: number;
+}
+
+export interface TruckRequestParams {
+  truckId: string;
 }
