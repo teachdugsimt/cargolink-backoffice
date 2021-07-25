@@ -2,7 +2,7 @@
   "name": "cgl-backoffice",
   "private": true,
   "description": "Backoffice for CargoLink",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Katanyoo Ubalee",
   "dependencies": {
     "@atlaskit/atlassian-navigation": "^1.0.0",
