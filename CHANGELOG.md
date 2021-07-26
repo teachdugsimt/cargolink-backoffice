@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/paljs/gatsby-admin-template/compare/v0.2.0...v0.3.0) (2021-07-26)
+
+
+### Bug Fixes
+
+* change API_ENPOINT staging env ([d1643b0](https://github.com/paljs/gatsby-admin-template/commit/d1643b0f06dcc3b211d8b76f367d0a3a5d479dfb))
+
 ## 0.2.0 (2021-07-25)
 
 
