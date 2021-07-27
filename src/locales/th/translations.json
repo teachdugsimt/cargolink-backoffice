@@ -31,12 +31,12 @@
   "addNewAccount": "เพิ่มบัญชีใหม่",
   "addNewJob": "เพิ่มงานใหม่",
   "typeCar": "ประเภทรถที่ต้องการ",
-  "desiredVehicle":"รถที่ต้องการ",
-  "carOwner":"เจ้าของรถ",
+  "desiredVehicle": "รถที่ต้องการ",
+  "carOwner": "เจ้าของรถ",
   "jobOwner": "เจ้าของงาน",
   "stall": "คอก",
   "sale": "การลงสินค้า",
-  "amount":"จำนวน",
+  "amount": "จำนวน",
   "pleaseselect": "โปรดเลือก",
   "fieldTruckType": "ต้องระบุประเภทรถบรรทุกในฟิลด์นี้",
   "truckAmount": "จำนวนรถที่ต้องการ",
@@ -108,8 +108,8 @@
   "KM": "กิโลเมตร",
   "jobDetail": "รายละเอียดงาน",
   "pickUpPoint": "จุดขึ้นลงสินค้า",
-  "operator":"ตัวดำเนินการ",
-  "dateTime":"วัน-เวลา",
+  "operator": "ตัวดำเนินการ",
+  "dateTime": "วัน-เวลา",
   "km": "กม.",
   "truckType": "ประเภทรถ",
   "truckAmount_1": "จำนวนรถ",
@@ -193,11 +193,15 @@
     "add": "เพิ่มข้อมูลงาน",
     "info": "ข้อมูลงาน"
   },
+  "price-calculator": {
+    "index": "คำนวณราคา"
+  },
   "allTrucks": "รถทุกประเภท",
   "allTypes": "ทุกประเภท",
   "allProvinces": "ทุกจังหวัด",
-  "takePhotoVehicle":"ถ่ายรูปรถ",
+  "takePhotoVehicle": "ถ่ายรูปรถ",
   "freightRate": "อัตราค่าขนส่ง",
   "add": "เพิ่ม",
-  "registrationsTrailers": "ไม่เกิน 2 ทะเบียน สำหรับรถพ่วง"
+  "registrationsTrailers": "ไม่เกิน 2 ทะเบียน สำหรับรถพ่วง",
+  "distance": "ระยะทาง"
 }

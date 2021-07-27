@@ -63,3 +63,13 @@ const items: MenuItemType[] = [
 ];
 
 export default items;
+
+
+export const toolsMenu: MenuItemType[] = [
+  {
+    title_th: 'คำนวณราคา',
+    title_en: 'Price Calculator',
+    icon: 'calculator',
+    link: { to: '/price-calculator' }
+  }
+]

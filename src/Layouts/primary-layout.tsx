@@ -1,7 +1,7 @@
 import React from 'react'
 import pkg from '../../package.json'
 import images from '../components/Themes/images';
-import menuItems from './menu-item'
+import menuItems, { toolsMenu } from './menu-item'
 import { navigate } from 'gatsby';
 import { observer } from 'mobx-react-lite';
 import { useMst } from '../stores/root-store';
@@ -97,6 +97,21 @@ const PrimaryLayout = observer(({ children, location }) => {
                     <ButtonItem>Search issues</ButtonItem>
                   </Section>
                 </NestingItem> */}
+              </Section>
+
+              <Section hasSeparator>
+                {
+                  toolsMenu.map((e: any, i: number) => {
+                    return <ButtonItem key={i}
+                      testId={camelize(e.title_en) + 'Menu'}
+                      isSelected={location.pathname.match(e.link.to)}
+                      iconBefore={<img src={require('../images/icons/' + e.icon + '.png')} style={{ width: 20 }} />}
+                      onClick={() => { navigate(e.link.to) }}
+                    >
+                      {e[`title_${loginStore.language}`]}
+                    </ButtonItem>
+                  })
+                }
               </Section>
 
             </NestableNavigationContent>

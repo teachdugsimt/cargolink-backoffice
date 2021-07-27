@@ -53,7 +53,8 @@ const images = {
   box: require('../../images/icons/box.png'),
   compass: require('../../images/icons/compass.png'),
 
-  homeSearch: require('../../images/icons/search.png')
+  homeSearch: require('../../images/icons/search.png'),
+  calculator: require('../../images/icons/calculator.png')
 };
 
 export default images;

@@ -31,13 +31,13 @@
   "addNewAccount": "ADD NEW ACCOUNT",
   "addNewJob": "ADD NEW JOB",
   "addDataCar": "Add vehicle information",
-  "carOwner":"Vehicle Owner",
+  "carOwner": "Vehicle Owner",
   "jobOwner": "Job Owner",
   "typeCar": "The type of car you want",
-  "desiredVehicle":"Desired Vehicle",
+  "desiredVehicle": "Desired Vehicle",
   "stall": "Stall",
   "sale": "Sale",
-  "amount":"Amount",
+  "amount": "Amount",
   "pleaseselect": "Please select",
   "fieldTruckType": "This field truck type is required",
   "truckAmount": "Required Truck Amount",
@@ -109,8 +109,8 @@
   "KM": "KM",
   "jobDetail": "Job Detail",
   "pickUpPoint": "Pick up point",
-  "operator":"Operator",
-  "dateTime":"Date-time",
+  "operator": "Operator",
+  "dateTime": "Date-time",
   "km": "KM",
   "truckType": "Truck Type",
   "truckAmount_1": "Truck Amount",
@@ -193,11 +193,15 @@
     "add": "Add Job",
     "info": "Job Info"
   },
+  "price-calculator": {
+    "index": "Price Calculator"
+  },
   "allTrucks": "All Trucks",
   "allTypes": "All",
   "allProvinces": "All Provinces",
-  "takePhotoVehicle":"Photo Vehicle",
+  "takePhotoVehicle": "Photo Vehicle",
   "freightRate": "Freight Rate",
   "add": "Add",
-  "registrationsTrailers": "No more than 2 registrations for trailers"
+  "registrationsTrailers": "No more than 2 registrations for trailers",
+  "distance": "Distance"
 }
