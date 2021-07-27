@@ -111,6 +111,7 @@
   "KM": "KM",
   "jobDetail": "Job Detail",
   "pickUpPoint": "Pick up point",
+  "fieldPickUpPoint": "This section pick up point in required",
   "operator":"Operator",
   "dateTime":"Date-time",
   "km": "KM",

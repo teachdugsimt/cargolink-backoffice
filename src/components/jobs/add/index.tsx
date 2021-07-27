@@ -44,12 +44,12 @@ const AddJobContainer: React.FC = observer(() => {
       sale: null,
       amount: null,
       freightRate: null,
-      priceType: null
+      priceType: null,
     },
   });
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => { }}>
+    <Breadcrumbs onExpand={() => {}}>
       <BreadcrumbsItem onClick={() => navigate('/jobs')} text={t('jobsManagement')} key="jobs-management" />
       <BreadcrumbsItem text={t('addNewJob')} key="job-info" />
     </Breadcrumbs>
@@ -59,10 +59,10 @@ const AddJobContainer: React.FC = observer(() => {
 
   const onSubmit = (formState: any) => {
     console.log('form submitted', formState);
+    console.log('form pickup', pickup);
     setIsSubmitted(true);
-    if (pickup?.from && pickup?.to[0]) {
+    if (pickup?.from && pickup?.to && pickup?.to[0]) {
       console.log('form submitted', formState);
-      console.log('form pickup', pickup);
     }
   };
 
@@ -87,8 +87,7 @@ const AddJobContainer: React.FC = observer(() => {
                               {...fieldProps}
                               maxWidth="100%"
                               value={value}
-                              onChange={onChange}
-                              onSelect={fieldProps.onChange}
+                              onSelect={onChange}
                               placeholder={t('jobOwner')}
                               noResultsMessage={t('noData')}
                             />
@@ -115,8 +114,7 @@ const AddJobContainer: React.FC = observer(() => {
                             {...fieldProps}
                             maxWidth="100%"
                             value={value}
-                            onChange={onChange}
-                            onSelect={fieldProps.onChange}
+                            onSelect={onChange}
                             placeholder={t('productType')}
                             language={loginStore.language}
                           />
@@ -139,7 +137,8 @@ const AddJobContainer: React.FC = observer(() => {
                       name="productName"
                       ref={register({ required: true })}
                       isInvalid={!!errors.productName}
-                      placeholder={t('productName')}/>
+                      placeholder={t('productName')}
+                    />
                     {errors.productName && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
                   </Fragment>
                 )}
@@ -180,7 +179,7 @@ const AddJobContainer: React.FC = observer(() => {
                               maxWidth="100%"
                               value={value}
                               onSelect={(e: any) => {
-                                fieldProps.onChange(e);
+                                onChange(e);
 
                                 const stallOptions = STALL_HEIGHT(t, e);
                                 setStalls(stallOptions);
@@ -282,7 +281,9 @@ const AddJobContainer: React.FC = observer(() => {
 
           <br />
           <Header>{t('pickUpPoint')}</Header>
-          {isSubmitted && (!pickup?.from || !pickup?.to[0]) && <ErrorMessage>{t('fieldTypeCar')}</ErrorMessage>}
+          {isSubmitted && (!pickup?.from || !pickup?.to || !pickup?.to[0]) && (
+            <ErrorMessage>{t('fieldPickUpPoint')}</ErrorMessage>
+          )}
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <div style={{ flex: 1, marginRight: 10 }}>
               <PickUpPoint pickup={pickup} setPickup={setPickup} />
@@ -299,8 +300,9 @@ const AddJobContainer: React.FC = observer(() => {
                           name="freightRate"
                           isInvalid={!!errors.freightRate}
                           ref={register({ required: true })}
-                          placeholder={t('freightRate')} />
-                           {errors.freightRate && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
+                          placeholder={t('freightRate')}
+                        />
+                        {errors.freightRate && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
                       </Fragment>
                     )}
                   </Field>
@@ -336,10 +338,10 @@ const AddJobContainer: React.FC = observer(() => {
             style={
               isDisabled
                 ? {
-                  ...BottomSubmitStyled,
-                  backgroundColor: '#D8D8D8',
-                  border: 'none',
-                }
+                    ...BottomSubmitStyled,
+                    backgroundColor: '#D8D8D8',
+                    border: 'none',
+                  }
                 : BottomSubmitStyled
             }
             testId="submitButton"
