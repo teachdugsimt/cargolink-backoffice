@@ -35,16 +35,21 @@ const AddJobContainer: React.FC = observer(() => {
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     defaultValues: {
-      carOwner: null,
+      jobOwner: null,
+      productType: null,
+      productName: null,
+      amountWeight: null,
       typeCar: null,
       stall: null,
       sale: null,
-      registrationNumber: null,
+      amount: null,
+      freightRate: null,
+      priceType: null
     },
   });
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => {}}>
+    <Breadcrumbs onExpand={() => { }}>
       <BreadcrumbsItem onClick={() => navigate('/jobs')} text={t('jobsManagement')} key="jobs-management" />
       <BreadcrumbsItem text={t('addNewJob')} key="job-info" />
     </Breadcrumbs>
@@ -69,17 +74,29 @@ const AddJobContainer: React.FC = observer(() => {
         <GroupItem>
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <div style={{ flex: 1, marginRight: 10 }}>
-              <Field label={t('jobOwner')} name="่jobOwner" isRequired>
+              <Field label={t('jobOwner')} name="jobOwner" isRequired>
                 {({ fieldProps }: any) => {
                   return (
                     <Fragment>
-                      <UserSelector
-                        {...fieldProps}
-                        maxWidth="100%"
-                        onSelect={fieldProps.onChange}
-                        placeholder={t('jobOwner')}
-                        noResultsMessage={t('noData')}
+                      <Controller
+                        control={control}
+                        name="jobOwner"
+                        render={({ onChange, value }) => {
+                          return (
+                            <UserSelector
+                              {...fieldProps}
+                              maxWidth="100%"
+                              value={value}
+                              onChange={onChange}
+                              onSelect={fieldProps.onChange}
+                              placeholder={t('jobOwner')}
+                              noResultsMessage={t('noData')}
+                            />
+                          );
+                        }}
+                        rules={{ required: true }}
                       />
+                      {errors.jobOwner && <ErrorMessage>{t('field่JobOwner')}</ErrorMessage>}
                     </Fragment>
                   );
                 }}
@@ -89,13 +106,25 @@ const AddJobContainer: React.FC = observer(() => {
               <Field label={t('productType')} name="productType" isRequired>
                 {({ fieldProps }: any) => (
                   <Fragment>
-                    <ProductTypesSelector
-                      {...fieldProps}
-                      maxWidth="100%"
-                      onSelect={fieldProps.onChange}
-                      placeholder={t('productType')}
-                      language={loginStore.language}
+                    <Controller
+                      control={control}
+                      name="productType"
+                      render={({ onChange, value }) => {
+                        return (
+                          <ProductTypesSelector
+                            {...fieldProps}
+                            maxWidth="100%"
+                            value={value}
+                            onChange={onChange}
+                            onSelect={fieldProps.onChange}
+                            placeholder={t('productType')}
+                            language={loginStore.language}
+                          />
+                        );
+                      }}
+                      rules={{ required: true }}
                     />
+                    {errors.productType && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
                   </Fragment>
                 )}
               </Field>
@@ -106,7 +135,12 @@ const AddJobContainer: React.FC = observer(() => {
               <Field label={t('productName')} name="productName" isRequired>
                 {({ fieldProps }: any) => (
                   <Fragment>
-                    <Textfield placeholder={t('productName')} {...fieldProps} />
+                    <Textfield
+                      name="productName"
+                      ref={register({ required: true })}
+                      isInvalid={!!errors.productName}
+                      placeholder={t('productName')}/>
+                    {errors.productName && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
                   </Fragment>
                 )}
               </Field>
@@ -116,9 +150,10 @@ const AddJobContainer: React.FC = observer(() => {
                 {({ fieldProps }: any) => (
                   <Fragment>
                     <Textfield
+                      name="amountWeight"
+                      ref={register({ required: false })}
                       type="number"
                       placeholder={t('amountWeightWithoutTon')}
-                      {...fieldProps}
                       elemAfterInput={<ElemInput>ตัน</ElemInput>}
                     />
                   </Fragment>
@@ -135,22 +170,33 @@ const AddJobContainer: React.FC = observer(() => {
                 {({ fieldProps }: any) => {
                   return (
                     <Fragment>
-                      <TruckTypesSelector
-                        {...fieldProps}
-                        maxWidth="100%"
-                        onSelect={(e: any) => {
-                          fieldProps.onChange(e);
+                      <Controller
+                        control={control}
+                        name="typeCar"
+                        render={({ onChange, value }) => {
+                          return (
+                            <TruckTypesSelector
+                              {...fieldProps}
+                              maxWidth="100%"
+                              value={value}
+                              onSelect={(e: any) => {
+                                fieldProps.onChange(e);
 
-                          const stallOptions = STALL_HEIGHT(t, e);
-                          setStalls(stallOptions);
+                                const stallOptions = STALL_HEIGHT(t, e);
+                                setStalls(stallOptions);
 
-                          const dumpOptions = TIPPER_DUMP(t, e);
-                          setDumps(dumpOptions);
+                                const dumpOptions = TIPPER_DUMP(t, e);
+                                setDumps(dumpOptions);
+                              }}
+                              placeholder={t('typeCar')}
+                              language={loginStore.language}
+                              noResultsMessage={t('noData')}
+                            />
+                          );
                         }}
-                        placeholder={t('typeCar')}
-                        language={loginStore.language}
-                        noResultsMessage={t('noData')}
+                        rules={{ required: true }}
                       />
+                      {errors.typeCar && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
                     </Fragment>
                   );
                 }}
@@ -162,14 +208,24 @@ const AddJobContainer: React.FC = observer(() => {
                   <Field label={t('stall')} name="stall" defaultValue={stalls[0]}>
                     {({ fieldProps }: any) => (
                       <Fragment>
-                        <Select
-                          inputId="vehicle-stall-height"
-                          className="single-select"
-                          classNamePrefix="react-select"
-                          options={stalls}
-                          placeholder={t('stall')}
-                          {...fieldProps}
-                          isDisabled={!stalls?.length || stalls?.length === 0}
+                        <Controller
+                          control={control}
+                          name="stall"
+                          render={({ onChange, value }) => {
+                            return (
+                              <Select
+                                inputId="vehicle-stall-height"
+                                className="single-select"
+                                classNamePrefix="react-select"
+                                value={value}
+                                onChange={onChange}
+                                options={stalls}
+                                placeholder={t('stall')}
+                                {...fieldProps}
+                                isDisabled={!stalls?.length || stalls?.length === 0}
+                              />
+                            );
+                          }}
                         />
                       </Fragment>
                     )}
@@ -179,14 +235,24 @@ const AddJobContainer: React.FC = observer(() => {
                   <Field label={t('sale')} name="sale" defaultValue={dumps[0]}>
                     {({ fieldProps }: any) => (
                       <Fragment>
-                        <Select
-                          inputId="vehicle-dump"
-                          className="single-select"
-                          classNamePrefix="react-select"
-                          options={dumps}
-                          placeholder={t('sale')}
-                          {...fieldProps}
-                          isDisabled={!dumps?.length || dumps?.length === 0}
+                        <Controller
+                          control={control}
+                          name="stall"
+                          render={({ onChange, value }) => {
+                            return (
+                              <Select
+                                inputId="vehicle-dump"
+                                className="single-select"
+                                classNamePrefix="react-select"
+                                value={value}
+                                onChange={onChange}
+                                options={dumps}
+                                placeholder={t('sale')}
+                                {...fieldProps}
+                                isDisabled={!dumps?.length || dumps?.length === 0}
+                              />
+                            );
+                          }}
                         />
                       </Fragment>
                     )}
@@ -202,8 +268,9 @@ const AddJobContainer: React.FC = observer(() => {
                   <Fragment>
                     <Textfield
                       type="number"
+                      name="amount"
+                      ref={register({ required: false })}
                       placeholder={t('amount')}
-                      {...fieldProps}
                       elemAfterInput={<ElemInput>คัน</ElemInput>}
                     />
                   </Fragment>
@@ -228,7 +295,12 @@ const AddJobContainer: React.FC = observer(() => {
                   <Field label={t('freightRate')} name="freightRate" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
-                        <Textfield placeholder={t('freightRate')} {...fieldProps} />
+                        <Textfield
+                          name="freightRate"
+                          isInvalid={!!errors.freightRate}
+                          ref={register({ required: true })}
+                          placeholder={t('freightRate')} />
+                           {errors.freightRate && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
                       </Fragment>
                     )}
                   </Field>
@@ -264,10 +336,10 @@ const AddJobContainer: React.FC = observer(() => {
             style={
               isDisabled
                 ? {
-                    ...BottomSubmitStyled,
-                    backgroundColor: '#D8D8D8',
-                    border: 'none',
-                  }
+                  ...BottomSubmitStyled,
+                  backgroundColor: '#D8D8D8',
+                  border: 'none',
+                }
                 : BottomSubmitStyled
             }
             testId="submitButton"
