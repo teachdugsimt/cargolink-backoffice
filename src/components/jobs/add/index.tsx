@@ -17,6 +17,7 @@ import PickUpPoint from './pick-up-point';
 import RouteWidget from '../../route/widgets/route';
 import Select from '@atlaskit/select';
 import { STALL_HEIGHT, TIPPER_DUMP } from '../../truck/stall-height';
+import { useForm, Controller } from 'react-hook-form';
 
 interface SelectValue {
   labal: any;
@@ -29,6 +30,18 @@ const AddJobContainer: React.FC = observer(() => {
   const [stalls, setStalls] = useState<SelectValue[]>([]);
   const [dumps, setDumps] = useState<SelectValue[]>([]);
   const [pickup, setPickup] = useState<any>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { register, handleSubmit, watch, errors, setValue, control, getValues } = useForm({
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+    defaultValues: {
+      carOwner: null,
+      typeCar: null,
+      stall: null,
+      sale: null,
+      registrationNumber: null,
+    },
+  });
 
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => {}}>
@@ -39,223 +52,230 @@ const AddJobContainer: React.FC = observer(() => {
 
   const isDisabled = false;
 
+  const onSubmit = (formState: any) => {
+    console.log('form submitted', formState);
+    setIsSubmitted(true);
+    if (pickup?.from && pickup?.to[0]) {
+      console.log('form submitted', formState);
+      console.log('form pickup', pickup);
+    }
+  };
+
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('addNewJob')}</PageHeader>
-      <Form onSubmit={(formState: unknown) => console.log('form submitted', formState)}>
-        {({ formProps }: any) => (
-          <form {...formProps}>
-            <GroupItem>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <GroupItem>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ flex: 1, marginRight: 10 }}>
+              <Field label={t('jobOwner')} name="่jobOwner" isRequired>
+                {({ fieldProps }: any) => {
+                  return (
+                    <Fragment>
+                      <UserSelector
+                        {...fieldProps}
+                        maxWidth="100%"
+                        onSelect={fieldProps.onChange}
+                        placeholder={t('jobOwner')}
+                        noResultsMessage={t('noData')}
+                      />
+                    </Fragment>
+                  );
+                }}
+              </Field>
+            </div>
+            <div style={{ flex: 1, marginLeft: 10 }}>
+              <Field label={t('productType')} name="productType" isRequired>
+                {({ fieldProps }: any) => (
+                  <Fragment>
+                    <ProductTypesSelector
+                      {...fieldProps}
+                      maxWidth="100%"
+                      onSelect={fieldProps.onChange}
+                      placeholder={t('productType')}
+                      language={loginStore.language}
+                    />
+                  </Fragment>
+                )}
+              </Field>
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ flex: 1, marginRight: 10 }}>
+              <Field label={t('productName')} name="productName" isRequired>
+                {({ fieldProps }: any) => (
+                  <Fragment>
+                    <Textfield placeholder={t('productName')} {...fieldProps} />
+                  </Fragment>
+                )}
+              </Field>
+            </div>
+            <div style={{ flex: 1, marginLeft: 10 }}>
+              <Field label={t(`amountWeightWithoutTon`)} name="amountWeight">
+                {({ fieldProps }: any) => (
+                  <Fragment>
+                    <Textfield
+                      type="number"
+                      placeholder={t('amountWeightWithoutTon')}
+                      {...fieldProps}
+                      elemAfterInput={<ElemInput>ตัน</ElemInput>}
+                    />
+                  </Fragment>
+                )}
+              </Field>
+            </div>
+          </div>
+
+          <br />
+          <Header>{t('desiredVehicle')}</Header>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ flex: 1, marginRight: 10 }}>
+              <Field label={t('typeCar')} name="typeCar" isRequired>
+                {({ fieldProps }: any) => {
+                  return (
+                    <Fragment>
+                      <TruckTypesSelector
+                        {...fieldProps}
+                        maxWidth="100%"
+                        onSelect={(e: any) => {
+                          fieldProps.onChange(e);
+
+                          const stallOptions = STALL_HEIGHT(t, e);
+                          setStalls(stallOptions);
+
+                          const dumpOptions = TIPPER_DUMP(t, e);
+                          setDumps(dumpOptions);
+                        }}
+                        placeholder={t('typeCar')}
+                        language={loginStore.language}
+                        noResultsMessage={t('noData')}
+                      />
+                    </Fragment>
+                  );
+                }}
+              </Field>
+            </div>
+            <div style={{ flex: 1, marginLeft: 10 }}>
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div style={{ flex: 1, marginRight: 10 }}>
-                  <Field label={t('jobOwner')} name="่jobOwner" isRequired>
-                    {({ fieldProps }: any) => {
-                      return (
-                        <Fragment>
-                          <UserSelector
-                            {...fieldProps}
-                            maxWidth="100%"
-                            onSelect={fieldProps.onChange}
-                            placeholder={t('jobOwner')}
-                            noResultsMessage={t('noData')}
-                          />
-                        </Fragment>
-                      );
-                    }}
+                  <Field label={t('stall')} name="stall" defaultValue={stalls[0]}>
+                    {({ fieldProps }: any) => (
+                      <Fragment>
+                        <Select
+                          inputId="vehicle-stall-height"
+                          className="single-select"
+                          classNamePrefix="react-select"
+                          options={stalls}
+                          placeholder={t('stall')}
+                          {...fieldProps}
+                          isDisabled={!stalls?.length || stalls?.length === 0}
+                        />
+                      </Fragment>
+                    )}
                   </Field>
                 </div>
                 <div style={{ flex: 1, marginLeft: 10 }}>
-                  <Field label={t('productType')} name="productType" isRequired>
+                  <Field label={t('sale')} name="sale" defaultValue={dumps[0]}>
                     {({ fieldProps }: any) => (
                       <Fragment>
-                        <ProductTypesSelector
+                        <Select
+                          inputId="vehicle-dump"
+                          className="single-select"
+                          classNamePrefix="react-select"
+                          options={dumps}
+                          placeholder={t('sale')}
                           {...fieldProps}
-                          maxWidth="100%"
-                          onSelect={fieldProps.onChange}
-                          placeholder={t('productType')}
-                          language={loginStore.language}
+                          isDisabled={!dumps?.length || dumps?.length === 0}
                         />
                       </Fragment>
                     )}
                   </Field>
                 </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div style={{ flex: 1, marginRight: 10 }}>
-                  <Field label={t('productName')} name="productName" isRequired>
-                    {({ fieldProps }: any) => (
-                      <Fragment>
-                        <Textfield placeholder={t('productName')} {...fieldProps} />
-                      </Fragment>
-                    )}
-                  </Field>
-                </div>
-                <div style={{ flex: 1, marginLeft: 10 }}>
-                  <Field label={t(`amountWeightWithoutTon`)} name="amountWeight">
-                    {({ fieldProps }: any) => (
-                      <Fragment>
-                        <Textfield
-                          type="number"
-                          placeholder={t('amountWeightWithoutTon')}
-                          {...fieldProps}
-                          elemAfterInput={<ElemInput>ตัน</ElemInput>}
-                        />
-                      </Fragment>
-                    )}
-                  </Field>
-                </div>
-              </div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ flex: 1, marginRight: 10 }}>
+              <Field label={t('amount')} name="amount">
+                {({ fieldProps }: any) => (
+                  <Fragment>
+                    <Textfield
+                      type="number"
+                      placeholder={t('amount')}
+                      {...fieldProps}
+                      elemAfterInput={<ElemInput>คัน</ElemInput>}
+                    />
+                  </Fragment>
+                )}
+              </Field>
+            </div>
+            <div style={{ flex: 1, marginLeft: 10 }}></div>
+          </div>
+
+          <br />
+          <Header>{t('pickUpPoint')}</Header>
+          {isSubmitted && (!pickup?.from || !pickup?.to[0]) && <ErrorMessage>{t('fieldTypeCar')}</ErrorMessage>}
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ flex: 1, marginRight: 10 }}>
+              <PickUpPoint pickup={pickup} setPickup={setPickup} />
 
               <br />
-              <Header>{t('desiredVehicle')}</Header>
+              <Header>ระยะทาง xxxx กิโลเมตร</Header>
+              <Header>ราคาที่แนะนำ xxxx บาท</Header>
               <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div style={{ flex: 1, marginRight: 10 }}>
-                  <Field label={t('typeCar')} name="typeCar" isRequired>
-                    {({ fieldProps }: any) => {
-                      return (
-                        <Fragment>
-                          <TruckTypesSelector
-                            {...fieldProps}
-                            maxWidth="100%"
-                            onSelect={(e: any) => {
-                              fieldProps.onChange(e);
-
-                              const stallOptions = STALL_HEIGHT(t, e);
-                              setStalls(stallOptions);
-
-                              const dumpOptions = TIPPER_DUMP(t, e);
-                              setDumps(dumpOptions);
-                            }}
-                            placeholder={t('typeCar')}
-                            language={loginStore.language}
-                            noResultsMessage={t('noData')}
-                          />
-                        </Fragment>
-                      );
-                    }}
-                  </Field>
-                </div>
-                <div style={{ flex: 1, marginLeft: 10 }}>
-                  <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div style={{ flex: 1, marginRight: 10 }}>
-                      <Field label={t('stall')} name="stall" defaultValue={stalls[0]}>
-                        {({ fieldProps }: any) => (
-                          <Fragment>
-                            <Select
-                              inputId="vehicle-stall-height"
-                              className="single-select"
-                              classNamePrefix="react-select"
-                              options={stalls}
-                              placeholder={t('stall')}
-                              {...fieldProps}
-                              isDisabled={!stalls?.length || stalls?.length === 0}
-                            />
-                          </Fragment>
-                        )}
-                      </Field>
-                    </div>
-                    <div style={{ flex: 1, marginLeft: 10 }}>
-                      <Field label={t('sale')} name="sale" defaultValue={dumps[0]}>
-                        {({ fieldProps }: any) => (
-                          <Fragment>
-                            <Select
-                              inputId="vehicle-dump"
-                              className="single-select"
-                              classNamePrefix="react-select"
-                              options={dumps}
-                              placeholder={t('sale')}
-                              {...fieldProps}
-                              isDisabled={!dumps?.length || dumps?.length === 0}
-                            />
-                          </Fragment>
-                        )}
-                      </Field>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div style={{ flex: 1, marginRight: 10 }}>
-                  <Field label={t('amount')} name="amount">
+                <div style={{ flex: 'auto', marginRight: 10 }}>
+                  <Field label={t('freightRate')} name="freightRate" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
-                        <Textfield
-                          type="number"
-                          placeholder={t('amount')}
-                          {...fieldProps}
-                          elemAfterInput={<ElemInput>คัน</ElemInput>}
-                        />
+                        <Textfield placeholder={t('freightRate')} {...fieldProps} />
                       </Fragment>
                     )}
                   </Field>
                 </div>
-                <div style={{ flex: 1, marginLeft: 10 }}></div>
-              </div>
-
-              <br />
-              <Header>{t('pickUpPoint')}</Header>
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div style={{ flex: 1, marginRight: 10 }}>
-                  <PickUpPoint pickup={pickup} setPickup={setPickup} />
-
-                  <br />
-                  <Header>ระยะทาง xxxx กิโลเมตร</Header>
-                  <Header>ราคาที่แนะนำ xxxx บาท</Header>
-                  <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div style={{ flex: 'auto', marginRight: 10 }}>
-                      <Field label={t('freightRate')} name="freightRate" isRequired>
-                        {({ fieldProps }: any) => (
-                          <Fragment>
-                            <Textfield placeholder={t('freightRate')} {...fieldProps} />
-                          </Fragment>
-                        )}
-                      </Field>
-                    </div>
-                    <div style={{ marginLeft: 10, display: 'flex', alignItems: 'flex-end' }}>
-                      <Field label="" name="priceType" isRequired>
-                        {({ fieldProps }: any) => (
-                          <Fragment>
-                            <PriceTypeToggle {...fieldProps} />
-                          </Fragment>
-                        )}
-                      </Field>
-                    </div>
-                  </div>
-                </div>
-                <div style={{ flex: 1, marginLeft: 10 }}>
-                  <RouteWidget
-                    from={pickup?.from}
-                    to={pickup?.to}
-                    setTo={(to: any) => setPickup({ ...pickup, to })}
-                    status="NEW"
-                  />
+                <div style={{ marginLeft: 10, display: 'flex', alignItems: 'flex-end' }}>
+                  <Field label="" name="priceType" isRequired>
+                    {({ fieldProps }: any) => (
+                      <Fragment>
+                        <PriceTypeToggle {...fieldProps} />
+                      </Fragment>
+                    )}
+                  </Field>
                 </div>
               </div>
-            </GroupItem>
-            <FormFooter>
-              <Button type="button" style={BottomBackStyled} onClick={() => navigate('/jobs')} testId="backButton">
-                <BackText>{t('back')}</BackText>
-              </Button>
-              <Button
-                type="submit"
-                isDisabled={isDisabled}
-                style={
-                  isDisabled
-                    ? {
-                        ...BottomSubmitStyled,
-                        backgroundColor: '#D8D8D8',
-                        border: 'none',
-                      }
-                    : BottomSubmitStyled
-                }
-                testId="submitButton"
-              >
-                <SubmitText>{t('confirm')}</SubmitText>
-              </Button>
-            </FormFooter>
-          </form>
-        )}
-      </Form>
+            </div>
+            <div style={{ flex: 1, marginLeft: 10 }}>
+              <RouteWidget
+                from={pickup?.from}
+                to={pickup?.to}
+                setTo={(to: any) => setPickup({ ...pickup, to })}
+                status="NEW"
+              />
+            </div>
+          </div>
+        </GroupItem>
+        <FormFooter>
+          <Button type="button" style={BottomBackStyled} onClick={() => navigate('/jobs')} testId="backButton">
+            <BackText>{t('back')}</BackText>
+          </Button>
+          <Button
+            type="submit"
+            isDisabled={isDisabled}
+            style={
+              isDisabled
+                ? {
+                    ...BottomSubmitStyled,
+                    backgroundColor: '#D8D8D8',
+                    border: 'none',
+                  }
+                : BottomSubmitStyled
+            }
+            testId="submitButton"
+          >
+            <SubmitText>{t('confirm')}</SubmitText>
+          </Button>
+        </FormFooter>
+      </form>
     </div>
   );
 });
