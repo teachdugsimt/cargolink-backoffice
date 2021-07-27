@@ -16,9 +16,15 @@ import TruckTypesSelector from '../../components/dropdowns/truckType.selector';
 import { STALL_HEIGHT, TIPPER_DUMP } from '../../components/truck/stall-height';
 import Select from '@atlaskit/select';
 import MultiSelect from '@atlaskit/multi-select';
+import { useForm, Controller } from 'react-hook-form';
 
 interface SelectValue {
   labal: any;
+  value: string;
+}
+
+interface SelectContent {
+  content: string;
   value: string;
 }
 
@@ -27,6 +33,18 @@ const AddTrucks = observer(() => {
   const { loginStore } = useMst();
   const [stalls, setStalls] = useState<SelectValue[]>([]);
   const [dumps, setDumps] = useState<SelectValue[]>([]);
+  const [regisVehicles, setRegisVehicles] = useState<SelectContent[] | null>([]);
+  const { register, handleSubmit, watch, errors, setValue, control, getValues } = useForm({
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+    defaultValues: {
+      carOwner: null,
+      typeCar: null,
+      stall: null,
+      sale: null,
+      registrationNumber: null,
+    },
+  });
 
   const breadcrumbs = (
     <Breadcrumbs>
@@ -46,132 +64,192 @@ const AddTrucks = observer(() => {
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('vehicle.add')}</PageHeader>
-      <Form onSubmit={onSubmit}>
-        {({ formProps }: any) => (
-          <form {...formProps}>
-            <GroupItem>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <GroupItem>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ flex: 1, marginRight: 10 }}>
+              <Field label={t('carOwner')} name="carOwner" isRequired>
+                {({ fieldProps, error, meta: { valid } }: any) => (
+                  <Fragment>
+                    <Textfield
+                      name="carOwner"
+                      placeholder={`${t('carOwner')}`}
+                      ref={register({ required: true })}
+                      isInvalid={!!errors.carOwner}
+                    />
+                    {errors.carOwner && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
+                  </Fragment>
+                )}
+              </Field>
+              <Field label={t('typeCar')} name="typeCar" isRequired>
+                {({ fieldProps, error, meta: { valid } }: any) => (
+                  <Fragment>
+                    <Controller
+                      control={control}
+                      name="typeCar"
+                      render={({ onChange, value }) => {
+                        return (
+                          <TruckTypesSelector
+                            {...fieldProps}
+                            maxWidth="100%"
+                            value={value}
+                            onSelect={(e: any) => {
+                              onChange(e);
+
+                              const stallOptions = STALL_HEIGHT(t, e);
+                              setStalls(stallOptions);
+
+                              const dumpOptions = TIPPER_DUMP(t, e);
+                              setDumps(dumpOptions);
+                            }}
+                            placeholder={t('pleaseselect')}
+                            language={loginStore.language}
+                            isInvalid={!!errors.typeCar}
+                          />
+                        );
+                      }}
+                      rules={{ required: true }}
+                    />
+                    {errors.typeCar && <ErrorMessage>{t('fieldTypeCar')}</ErrorMessage>}
+                  </Fragment>
+                )}
+              </Field>
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div style={{ flex: 1, marginRight: 10 }}>
-                  <Field label={t('carOwner')} name="carOwner" isRequired>
-                    {({ fieldProps, error, meta: { valid } }: any) => (
+                  <Field label={t('stall')} name="stall" defaultValue={stalls[0]}>
+                    {({ fieldProps }: any) => (
                       <Fragment>
-                        <Textfield {...fieldProps} placeholder={`${t('carOwner')}`} />
-                      </Fragment>
-                    )}
-                  </Field>
-                  <Field label={t('typeCar')} name="typeCar" isRequired>
-                    {({ fieldProps, error, meta: { valid } }: any) => (
-                      <Fragment>
-                        <TruckTypesSelector
-                          {...fieldProps}
-                          maxWidth="100%"
-                          onSelect={(e: any) => {
-                            fieldProps.onChange(e);
-
-                            const stallOptions = STALL_HEIGHT(t, e);
-                            setStalls(stallOptions);
-
-                            const dumpOptions = TIPPER_DUMP(t, e);
-                            setDumps(dumpOptions);
+                        <Controller
+                          control={control}
+                          name="stall"
+                          render={({ onChange, value }) => {
+                            return (
+                              <Select
+                                inputId="vehicle-stall-height"
+                                className="single-select"
+                                classNamePrefix="react-select"
+                                options={stalls}
+                                placeholder={t('stall')}
+                                {...fieldProps}
+                                value={value}
+                                onChange={onChange}
+                                isDisabled={!stalls?.length || stalls?.length === 0}
+                              />
+                            );
                           }}
-                          placeholder={t('pleaseselect')}
-                          language={loginStore.language}
                         />
-                        {error === 'INCORRECT_PHRASE' && (
-                          <ErrorMessage>Incorrect, try &lsquo;open sesame&rsquo;</ErrorMessage>
-                        )}
                       </Fragment>
                     )}
-                  </Field>
-                  <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div style={{ flex: 1, marginRight: 10 }}>
-                      <Field label={t('stall')} name="stall" defaultValue={stalls[0]}>
-                        {({ fieldProps }: any) => (
-                          <Fragment>
-                            <Select
-                              inputId="vehicle-stall-height"
-                              className="single-select"
-                              classNamePrefix="react-select"
-                              options={stalls}
-                              placeholder={t('stall')}
-                              {...fieldProps}
-                              isDisabled={!stalls?.length || stalls?.length === 0}
-                            />
-                          </Fragment>
-                        )}
-                      </Field>
-                    </div>
-                    <div style={{ flex: 1, marginLeft: 10 }}>
-                      <Field label={t('sale')} name="sale" defaultValue={dumps[0]}>
-                        {({ fieldProps }: any) => (
-                          <Fragment>
-                            <Select
-                              inputId="vehicle-dump"
-                              className="single-select"
-                              classNamePrefix="react-select"
-                              options={dumps}
-                              placeholder={t('sale')}
-                              {...fieldProps}
-                              isDisabled={!dumps?.length || dumps?.length === 0}
-                            />
-                          </Fragment>
-                        )}
-                      </Field>
-                    </div>
-                  </div>
-                  <Field label={t(`registrationNumber`)} name="registrationNumber" isRequired>
-                    {({ fieldProps }: any) => {
-                      return (
-                        <Fragment>
-                          <MultiSelect
-                            items={selectItems}
-                            placeholder={`${t('registrationNumber')}`}
-                            onNewItemCreated={(e: any) => console.log('onNewItemCreated', e)}
-                            onSelectedChange={(e: any) => console.log('select change', e)}
-                            shouldAllowCreateItem
-                            shouldFitContainer
-                          />
-                          <HelperMessage>{t('registrationsTrailers')}</HelperMessage>
-                        </Fragment>
-                      );
-                    }}
                   </Field>
                 </div>
                 <div style={{ flex: 1, marginLeft: 10 }}>
-                  <Field label="" name="upload">
+                  <Field label={t('sale')} name="sale" defaultValue={dumps[0]}>
                     {({ fieldProps }: any) => (
                       <Fragment>
-                        <ImageUpload {...fieldProps} />
+                        <Controller
+                          control={control}
+                          name="sale"
+                          render={({ onChange, value }) => {
+                            return (
+                              <Select
+                                inputId="vehicle-dump"
+                                className="single-select"
+                                classNamePrefix="react-select"
+                                options={dumps}
+                                placeholder={t('sale')}
+                                {...fieldProps}
+                                value={value}
+                                onChange={onChange}
+                                isDisabled={!dumps?.length || dumps?.length === 0}
+                              />
+                            );
+                          }}
+                        />
                       </Fragment>
                     )}
                   </Field>
                 </div>
               </div>
-            </GroupItem>
-            <FormFooter>
-              <Button type="button" style={BottomBackStyled} onClick={() => navigate('/vehicles')} testId="backButton">
-                <BackText>{t('back')}</BackText>
-              </Button>
-              <Button
-                type="submit"
-                isDisabled={isDisabled}
-                style={
-                  isDisabled
-                    ? {
-                        ...BottomSubmitStyled,
-                        backgroundColor: '#D8D8D8',
-                        border: 'none',
-                      }
-                    : BottomSubmitStyled
-                }
-                testId="submitButton"
-              >
-                <SubmitText>{t('confirm')}</SubmitText>
-              </Button>
-            </FormFooter>
-          </form>
-        )}
-      </Form>
+              <Field label={t(`registrationNumber`)} name="registrationNumber" isRequired>
+                {({ fieldProps }: any) => {
+                  return (
+                    <Fragment>
+                      <Controller
+                        control={control}
+                        name="registrationNumber"
+                        render={({ onChange, value }) => {
+                          return (
+                            <MultiSelect
+                              items={selectItems}
+                              placeholder={`${t('registrationNumber')}`}
+                              value={value}
+                              onNewItemCreated={(e: any) => {
+                                const licenses = JSON.parse(JSON.stringify(regisVehicles)) || [];
+                                licenses.push(e.item);
+                                onChange(licenses);
+                                setRegisVehicles(licenses);
+                              }}
+                              onSelectedChange={(e: any) => {
+                                if (e.items?.length === 0) {
+                                  onChange(null);
+                                  setRegisVehicles(null);
+                                } else {
+                                  onChange(e.items);
+                                  setRegisVehicles(e.items);
+                                }
+                              }}
+                              shouldAllowCreateItem
+                              shouldFitContainer
+                              isInvalid={!!errors.registrationNumber}
+                            />
+                          );
+                        }}
+                        rules={{ required: true }}
+                      />
+                      {errors.registrationNumber ? (
+                        <ErrorMessage>{t('fieldRegistrationNumber')}</ErrorMessage>
+                      ) : (
+                        <HelperMessage>{t('registrationsTrailers')}</HelperMessage>
+                      )}
+                    </Fragment>
+                  );
+                }}
+              </Field>
+            </div>
+            <div style={{ flex: 1, marginLeft: 10 }}>
+              <Field label="" name="upload">
+                {({ fieldProps }: any) => (
+                  <Fragment>
+                    <ImageUpload {...fieldProps} />
+                  </Fragment>
+                )}
+              </Field>
+            </div>
+          </div>
+        </GroupItem>
+        <FormFooter>
+          <Button type="button" style={BottomBackStyled} onClick={() => navigate('/vehicles')} testId="backButton">
+            <BackText>{t('back')}</BackText>
+          </Button>
+          <Button
+            type="submit"
+            isDisabled={isDisabled}
+            style={
+              isDisabled
+                ? {
+                    ...BottomSubmitStyled,
+                    backgroundColor: '#D8D8D8',
+                    border: 'none',
+                  }
+                : BottomSubmitStyled
+            }
+            testId="submitButton"
+          >
+            <SubmitText>{t('confirm')}</SubmitText>
+          </Button>
+        </FormFooter>
+      </form>
     </div>
   );
 });

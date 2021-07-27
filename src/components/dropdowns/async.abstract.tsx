@@ -10,6 +10,7 @@ interface SelectorProps {
   includeNone?: boolean;
   noResultsMessage?: string;
   isRequired?: boolean;
+  isInvalid?: boolean;
 }
 interface SelectorState {
   options: OptionsType;
@@ -66,6 +67,7 @@ export default abstract class AsyncSelector extends React.Component<SelectorProp
         onChange={this.onSelected}
         noOptionsMessage={() => this.props.noResultsMessage || 'no results'}
         isRequired={this.props.isRequired}
+        isInvalid={this.props.isInvalid}
       />
     );
   }
