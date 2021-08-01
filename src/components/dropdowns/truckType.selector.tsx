@@ -18,7 +18,5 @@ export default class TruckTypesSelector extends AbstractAsyncSelector {
     } catch (error) {
       console.error('error when search truck types', error);
     }
-
   }
-
 }
