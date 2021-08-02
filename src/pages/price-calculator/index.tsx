@@ -13,7 +13,7 @@ import { useMst } from '../../stores/root-store';
 import priceCalculator from '../../helpers/price-calculator';
 
 import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
-import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
+// import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
 import * as dstnc from 'google-distance-matrix'
 
 const PriceCalculator = observer(() => {
@@ -107,6 +107,7 @@ const PriceCalculator = observer(() => {
                         <>
                           <GooglePlacesAutocomplete
                             apiKey={process.env.GOOGLE_API_KEY || "AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw"}
+                            apiOptions={{ language: 'th', region: 'th' }}
                             selectProps={{
                               value: '',
                               onChange: (e) => {
@@ -132,6 +133,7 @@ const PriceCalculator = observer(() => {
                         <>
                           <GooglePlacesAutocomplete
                             apiKey={process.env.GOOGLE_API_KEY || "AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw"}
+                            apiOptions={{ language: 'th', region: 'th' }}
                             selectProps={{
                               value: '',
                               onChange: (e) => {
@@ -212,21 +214,6 @@ const PriceCalculator = observer(() => {
           </form>
         )}
       </Form>
-
-      <ModalTransition>
-        {showLocationPicker && (
-          <Modal
-            actions={[
-              { text: 'Try it now', onClick: close },
-              { text: 'Learn more' },
-            ]}
-            onClose={() => setShowLocationPicker(false)}
-            heading="เลือกสถานที่"
-          >
-
-          </Modal>
-        )}
-      </ModalTransition>
 
     </div>
   )

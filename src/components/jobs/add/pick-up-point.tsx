@@ -11,6 +11,8 @@ import DateTimePicker from './datetimePicker';
 import Select from '@atlaskit/select';
 import images from '../../Themes/images';
 
+import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+
 interface PickUpPointProp {
   pickup: { from: any; to: any[] };
   setPickup: (value: { from: any; to: any[] }) => void;
@@ -19,8 +21,13 @@ interface PickUpPointProp {
 const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) => {
   const { t } = useTranslation();
   const { loginStore } = useMst();
-  const [transport, setTransport] = useState<any>({ operator: { label: 'ขึ้น', value: 'UP' } });
+  const [transport, setTransport] = useState<any>({
+    operator: { label: 'ขึ้น', value: 'UP' },
+    location: { lat: 0, lng: 0 }
+  });
   const [isAdd, setIsAdd] = useState(false);
+  const [addressLabel, setAddressLabel] = useState('')
+  const [addressLocation, setAddressLocation] = useState<{ lat: number, lng: number } | null>(null)
 
   const onSubmit = () => {
     // console.log('form submitted pickup point', transport);
@@ -34,6 +41,10 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
       setPickup({ ...pickup, to });
     }
   };
+
+  useEffect(() => {
+    console.log(transport)
+  }, [transport])
 
   const isDisabled = false;
 
@@ -80,7 +91,27 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
         </div>
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div style={{ flex: 'auto', marginRight: 10 }}>
+        <div style={{ flex: 'auto', marginTop: 20 }}>
+
+          <GooglePlacesAutocomplete
+            apiKey={process.env.GOOGLE_API_KEY || "AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw"}
+            apiOptions={{ language: 'th' }}
+            selectProps={{
+              value: '',
+              onChange: (e) => {
+                // setAddressLabel(e.label)
+                // setTransport({ ...transport, name: e.label })
+                geocodeByAddress(e.label)
+                  .then(results => getLatLng(results[0]))
+                  .then(({ lat, lng }) => {
+                    // setAddressLocation({ lat, lng })
+                    setTransport({ ...transport, name: e.label, location: { lat, lng } })
+                    console.log('Successfully got latitude and longitude', { lat, lng })
+                  });
+              }
+            }}
+          />
+
           <Field label={t('Address')} name="name">
             {({ fieldProps }: any) => (
               <Fragment>
@@ -96,12 +127,44 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
               </Fragment>
             )}
           </Field>
+
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ flex: 1, marginRight: 10 }}>
+              <Field name="lat">
+                {({ fieldProps }: any) => (
+                  <Fragment>
+                    <Textfield
+                      placeholder={'latitude'}
+                      {...fieldProps}
+                      value={transport?.location?.lat}
+                      onChange={(e: any) => setTransport({ ...transport, contactName: e.target.value })}
+                    />
+                  </Fragment>
+                )}
+              </Field>
+            </div>
+            <div style={{ flex: 1, marginLeft: 10 }}>
+              <Field name="lng">
+                {({ fieldProps }: any) => (
+                  <Fragment>
+                    <Textfield
+                      placeholder={'longitude'}
+                      {...fieldProps}
+                      value={transport?.location?.lng}
+                      onChange={(e: any) => setTransport({ ...transport, contactMobileNo: e.target.value })}
+                    />
+                  </Fragment>
+                )}
+              </Field>
+            </div>
+          </div>
+
         </div>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 27 }}>
+        {/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 27 }}>
           <Button type="button" style={{ backgroundColor: 'white' }}>
             <img src={images.homeSearch} style={{ width: 50, height: 50 }} />
           </Button>
-        </div>
+        </div> */}
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ flex: 1, marginRight: 10 }}>
@@ -140,10 +203,10 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
           style={
             isDisabled
               ? {
-                  ...BottomSubmitStyled,
-                  backgroundColor: '#D8D8D8',
-                  border: 'none',
-                }
+                ...BottomSubmitStyled,
+                backgroundColor: '#D8D8D8',
+                border: 'none',
+              }
               : BottomSubmitStyled
           }
           testId="pickupSubmitButton"
