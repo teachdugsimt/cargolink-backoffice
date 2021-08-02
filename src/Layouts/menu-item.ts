@@ -45,6 +45,12 @@ const items: MenuItemType[] = [
     link: { to: '/users' },
   },
   {
+    title_th: 'ข่าวและโปรโมชั่น',
+    title_en: 'News & Promotion',
+    icon: 'promote',
+    link: { to: '/news' },
+  },
+  {
     title_th: 'ตั้งค่า',
     title_en: 'Settings',
     icon: 'settings',

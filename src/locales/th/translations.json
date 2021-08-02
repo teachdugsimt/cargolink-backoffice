@@ -200,6 +200,9 @@
   "price-calculator": {
     "index": "คำนวณราคา"
   },
+  "news": {
+    "index": "ข่าวและโปรโมชั่น"
+  },
   "allTrucks": "รถทุกประเภท",
   "allTypes": "ทุกประเภท",
   "allProvinces": "ทุกจังหวัด",

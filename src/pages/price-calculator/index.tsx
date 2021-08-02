@@ -55,7 +55,13 @@ const PriceCalculator = observer(() => {
   useEffect(() => {
 
     async function getDirection() {
-      const result = await fetch('https://maps.googleapis.com/maps/api/directions/json?origin=13.788485,100.610133&destination=18.7883439,98.98530079&key=AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw')
+      const result = await fetch(
+        'https://maps.googleapis.com/maps/api/directions/json?origin=13.788485,100.610133&destination=18.7883439,98.98530079&key=AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw',
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
       console.log(result)
     }
 

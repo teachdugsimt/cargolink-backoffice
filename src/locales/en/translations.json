@@ -199,6 +199,9 @@
   "price-calculator": {
     "index": "Price Calculator"
   },
+  "news": {
+    "index": "News & Promotion"
+  },
   "allTrucks": "All Trucks",
   "allTypes": "All",
   "allProvinces": "All Provinces",
