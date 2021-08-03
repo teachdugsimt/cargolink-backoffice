@@ -65,8 +65,8 @@ const AddTrucks = observer(() => {
     const payload: PostTruckParams = {
       carrierId: formState.carrierId,
       truckTypes: formState.truckTypes,
-      stallHeight: formState.stallHeight?.value,
-      tipper: formState.tipper?.value,
+      stallHeight: formState?.stallHeight?.value,
+      tipper: formState?.tipper?.value,
       registrationNumber: formState?.registrationNumber?.map((e: any) => e.content),
       truckPhotos: vehicleImages,
     };

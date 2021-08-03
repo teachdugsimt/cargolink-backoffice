@@ -41,7 +41,7 @@ export default PriceTypeToggleComponent;
 //? DEFAULT STYLES
 const DEFAULT_WIDTH = '150px';
 const DEFAULT_HEIGHT = '35px';
-const TEXT_COLOR = '#FFF';
+const TEXT_COLOR = '#000000';
 const TEXT_COLOR_OFF = '#AAA';
 const BACKGROUND_COLOR = '#E8E8E8';
 const SWITCH_COLOR = '#FBBC12';

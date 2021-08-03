@@ -208,9 +208,12 @@
   "allProvinces": "ทุกจังหวัด",
   "takePhotoVehicle": "ถ่ายรูปรถ",
   "freightRate": "อัตราค่าขนส่ง",
+  "fieldFreightRate": "ต้องระบุอัตราค่าขนส่งในฟิลด์นี้",
   "add": "เพิ่ม",
   "registrationsTrailers": "ไม่เกิน 2 ทะเบียน สำหรับรถพ่วง",
   "distance": "ระยะทาง",
   "createTruckSuccess": "สร้างการจัดการรถบรรทุกแล้ว",
-  "createTruckErrorByUser": "ข้อมูลไม่ถูกต้อง โปรดตรวจสอบข้อมูลใหม่"
+  "createTruckErrorByUser": "ข้อมูลไม่ถูกต้อง โปรดตรวจสอบข้อมูลใหม่",
+  "createJobSuccess": "สร้างการจัดการรถบรรทุกแล้ว",
+  "createJobErrorByUser": "ข้อมูลไม่ถูกต้อง โปรดตรวจสอบข้อมูลใหม่"
 }

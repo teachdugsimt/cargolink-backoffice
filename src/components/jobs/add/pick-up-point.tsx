@@ -23,11 +23,11 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
   const { loginStore } = useMst();
   const [transport, setTransport] = useState<any>({
     operator: { label: 'ขึ้น', value: 'UP' },
-    location: { lat: 0, lng: 0 }
+    location: { lat: 0, lng: 0 },
   });
   const [isAdd, setIsAdd] = useState(false);
-  const [addressLabel, setAddressLabel] = useState('')
-  const [addressLocation, setAddressLocation] = useState<{ lat: number, lng: number } | null>(null)
+  const [addressLabel, setAddressLabel] = useState('');
+  const [addressLocation, setAddressLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   const onSubmit = () => {
     // console.log('form submitted pickup point', transport);
@@ -41,10 +41,6 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
       setPickup({ ...pickup, to });
     }
   };
-
-  useEffect(() => {
-    console.log(transport)
-  }, [transport])
 
   const isDisabled = false;
 
@@ -92,23 +88,22 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ flex: 'auto', marginTop: 20 }}>
-
           <GooglePlacesAutocomplete
-            apiKey={process.env.GOOGLE_API_KEY || "AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw"}
+            apiKey={process.env.GOOGLE_API_KEY || 'AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw'}
             apiOptions={{ language: 'th' }}
             selectProps={{
               value: '',
-              onChange: (e) => {
+              onChange: (e: any) => {
                 // setAddressLabel(e.label)
                 // setTransport({ ...transport, name: e.label })
                 geocodeByAddress(e.label)
-                  .then(results => getLatLng(results[0]))
+                  .then((results) => getLatLng(results[0]))
                   .then(({ lat, lng }) => {
                     // setAddressLocation({ lat, lng })
-                    setTransport({ ...transport, name: e.label, location: { lat, lng } })
-                    console.log('Successfully got latitude and longitude', { lat, lng })
+                    setTransport({ ...transport, name: e.label, location: { lat, lng } });
+                    // console.log('Successfully got latitude and longitude', { lat, lng });
                   });
-              }
+              },
             }}
           />
 
@@ -158,7 +153,6 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
               </Field>
             </div>
           </div>
-
         </div>
         {/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 27 }}>
           <Button type="button" style={{ backgroundColor: 'white' }}>
@@ -203,10 +197,10 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
           style={
             isDisabled
               ? {
-                ...BottomSubmitStyled,
-                backgroundColor: '#D8D8D8',
-                border: 'none',
-              }
+                  ...BottomSubmitStyled,
+                  backgroundColor: '#D8D8D8',
+                  border: 'none',
+                }
               : BottomSubmitStyled
           }
           testId="pickupSubmitButton"
