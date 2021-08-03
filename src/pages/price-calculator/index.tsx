@@ -109,6 +109,13 @@ const PriceCalculator = observer(() => {
                             apiKey={process.env.GOOGLE_API_KEY || "AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw"}
                             apiOptions={{ language: 'th', region: 'th' }}
                             selectProps={{
+                              placeholder: 'ค้นหาที่อยู่ ...',
+                              styles: {
+                                control: (base) => ({
+                                  ...base,
+                                  border: '2px solid #f5f5f5'
+                                })
+                              },
                               value: '',
                               onChange: (e) => {
                                 setPickupAddress(e.label)
@@ -135,6 +142,13 @@ const PriceCalculator = observer(() => {
                             apiKey={process.env.GOOGLE_API_KEY || "AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw"}
                             apiOptions={{ language: 'th', region: 'th' }}
                             selectProps={{
+                              placeholder: 'ค้นหาที่อยู่ ...',
+                              styles: {
+                                control: (base) => ({
+                                  ...base,
+                                  border: '2px solid #f5f5f5'
+                                })
+                              },
                               value: '',
                               onChange: (e) => {
                                 setDeliveryAddress(e.label)

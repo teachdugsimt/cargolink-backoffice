@@ -97,7 +97,14 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
             apiKey={process.env.GOOGLE_API_KEY || "AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw"}
             apiOptions={{ language: 'th' }}
             selectProps={{
-              value: '',
+              placeholder: 'ค้นหาที่อยู่ ...',
+              value: null,
+              styles: {
+                control: (base) => ({
+                  ...base,
+                  border: '2px solid #f5f5f5'
+                })
+              },
               onChange: (e) => {
                 // setAddressLabel(e.label)
                 // setTransport({ ...transport, name: e.label })
@@ -110,6 +117,7 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
                   });
               }
             }}
+
           />
 
           <Field label={t('Address')} name="name">
