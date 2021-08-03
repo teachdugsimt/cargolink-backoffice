@@ -209,5 +209,7 @@
   "freightRate": "Freight Rate",
   "add": "Add",
   "registrationsTrailers": "No more than 2 registrations for trailers",
-  "distance": "Distance"
+  "distance": "Distance",
+  "createTruckSuccess": "Created truck successfully",
+  "createTruckErrorByUser": "Some on your data is invalid, please recheck and try again"
 }

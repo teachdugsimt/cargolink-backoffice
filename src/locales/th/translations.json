@@ -210,5 +210,7 @@
   "freightRate": "อัตราค่าขนส่ง",
   "add": "เพิ่ม",
   "registrationsTrailers": "ไม่เกิน 2 ทะเบียน สำหรับรถพ่วง",
-  "distance": "ระยะทาง"
+  "distance": "ระยะทาง",
+  "createTruckSuccess": "สร้างการจัดการรถบรรทุกแล้ว",
+  "createTruckErrorByUser": "ข้อมูลไม่ถูกต้อง โปรดตรวจสอบข้อมูลใหม่"
 }

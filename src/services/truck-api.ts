@@ -4,14 +4,36 @@ import ExcuteApi from './api-integrations/excute-api';
 class TruckApi {
   getTrucksList = async (params: TrucksListParams) => {
     const response: AxiosResponse<TrucksListResponse> = await ExcuteApi(
-      `/api/v1/trucks/`, params, 'get', 6e5, true, true,
+      `/api/v1/trucks/`,
+      params,
+      'get',
+      6e5,
+      true,
+      true,
     );
     return response;
   };
 
   getTruckById = async (params: TruckRequestParams) => {
     const response: AxiosResponse<TrucksListResponse> = await ExcuteApi(
-      `/api/v1/trucks/${params.truckId}`, {}, 'get', 6e5, true, true,
+      `/api/v1/trucks/${params.truckId}`,
+      {},
+      'get',
+      6e5,
+      true,
+      true,
+    );
+    return response;
+  };
+
+  addTruck = async (params: PostTruckParams) => {
+    const response: AxiosResponse<TrucksListResponse> = await ExcuteApi(
+      `/api/v1/trucks/`,
+      params,
+      'post',
+      6e5,
+      true,
+      true,
     );
     return response;
   };
@@ -74,4 +96,27 @@ export interface IZone {
 
 export interface TruckRequestParams {
   truckId: string;
+}
+
+export interface PostTruckParams {
+  carrierId?: string;
+  truckTypes?: string;
+  loadingWeight?: number;
+  stallHeight?: 'LOW' | 'MEDIUM' | 'HEIGHT' | null;
+  tipper?: boolean;
+  registrationNumber?: string[];
+  truckPhotos?: TruckPhotos;
+  workingZones?: WorkingZone[];
+}
+
+export interface TruckPhotos {
+  front: string | null;
+  back: string | null;
+  left: string | null;
+  right: string | null;
+}
+
+export interface WorkingZone {
+  region: number;
+  province: number;
 }

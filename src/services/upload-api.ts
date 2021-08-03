@@ -14,13 +14,17 @@ class UploadApi {
   uploadByUser = async (userId: string, payload: UserUploadPayload) => {
     const response = await ExcuteApi(`/api/v1/users/${userId}/update-user-profile`, payload, 'post', 6e5, true, true);
     return response;
-  }
+  };
 }
 
 export default new UploadApi();
 
 export enum UploadFilePath {
   USER_DOC = 'USER_DOC',
+  VEHICLE_IMAGE_FRONT = 'VEHICLE_IMAGE/FRONT',
+  VEHICLE_IMAGE_BACK = 'VEHICLE_IMAGE/BACK',
+  VEHICLE_IMAGE_LEFT = 'VEHICLE_IMAGE/LEFT',
+  VEHICLE_IMAGE_RIGHT = 'VEHICLE_IMAGE/RIGHT',
 }
 
 export interface UploadFilePayload {

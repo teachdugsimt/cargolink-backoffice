@@ -1,63 +1,59 @@
 import IconButton from '@material-ui/core/IconButton';
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import Icon from 'react-icons-kit';
 import { images } from 'react-icons-kit/icomoon/images';
 import { timesCircleO } from 'react-icons-kit/fa/timesCircleO';
-import { UploadImageStore } from '../../../stores/upload-image-store';
-import Alert from '../../alert';
-import { defaultAlertSetting } from '../../simple-data';
 import styled from 'styled-components';
 import { Gallery, Item } from 'react-photoswipe-gallery';
-import { Row, Col } from '@paljs/ui';
+import { useMst } from '../../../stores/root-store';
+import { UploadFilePath } from '../../../services/upload-api';
+import { LoadingButton } from '@atlaskit/button';
 
+export interface Image {
+  front: string | null;
+  back: string | null;
+  left: string | null;
+  right: string | null;
+}
 interface ImageProps {
-  submitted?: boolean;
+  vehicleImages: Image;
+  setVehicleImages: (value: Image) => void;
 }
 
-const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
+const ImageUpload: React.FC<ImageProps> = observer(({ vehicleImages, setVehicleImages }) => {
   const { t } = useTranslation();
-  const [render, setRender] = useState(false);
+  const { uploadFileStore } = useMst();
   const [imageUpload, setImageUpload] = useState({ front: '', back: '', left: '', right: '' });
-  const [alertSetting, setAlertSetting] = useState(defaultAlertSetting);
+  const [loading, setLoading] = useState({ front: false, back: false, left: false, right: false });
+  const uploadImageLeftRef = useRef<HTMLInputElement | null>(null);
+  const uploadImageRightRef = useRef<HTMLInputElement | null>(null);
+  const uploadImageFrontRef = useRef<HTMLInputElement | null>(null);
+  const uploadImageBackRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    // UploadImageStore.clearUploadImageStore();
-    setAlertSetting(defaultAlertSetting);
+    uploadFileStore.clear();
   }, []);
 
-  // useEffect(() => {
-  //   const { loading } = UploadImageStore;
-  //   setAlertSetting({
-  //     icon: '',
-  //     show: loading,
-  //     type: 'loading',
-  //     title: '',
-  //     content: t('LOADING'),
-  //   });
-  // }, [UploadImageStore.loading]);
-
-  // useEffect(() => {
-  //   const { error_response } = UploadImageStore;
-  //   if (error_response) {
-  //     setAlertSetting({
-  //       icon: 'error',
-  //       show: true,
-  //       type: 'general',
-  //       title: error_response.title || '',
-  //       content: error_response.content || '',
-  //     });
-  //   }
-  // }, [UploadImageStore.error_response]);
-
   const onChangePicture = (e: any, imageName: string) => {
-    if (e.target.files[0]) {
-      let images = JSON.parse(JSON.stringify(imageUpload));
-      images[`${imageName}`] = URL.createObjectURL(e.target.files[0]);
-      setImageUpload(images);
-      setRender(!render);
-      // UploadImageStore.uploadImage(e.target.files[0], imageName); //! for upload image
+    const file = e.target.files[0];
+
+    let uploadFilePath = UploadFilePath.VEHICLE_IMAGE_LEFT;
+    if (imageName === 'right') uploadFilePath = UploadFilePath.VEHICLE_IMAGE_LEFT;
+    else if (imageName === 'front') uploadFilePath = UploadFilePath.VEHICLE_IMAGE_FRONT;
+    else if (imageName === 'back') uploadFilePath = UploadFilePath.VEHICLE_IMAGE_BACK;
+
+    if (file) {
+      setLoading({ ...loading, [imageName]: true });
+      uploadFileStore.uploadFile(uploadFilePath, file).then(() => {
+        setLoading({ ...loading, [imageName]: false });
+        const imageFile = JSON.parse(JSON.stringify(uploadFileStore.file));
+        if (imageFile) {
+          setImageUpload({ ...imageUpload, [imageName]: URL.createObjectURL(file) });
+          setVehicleImages({ ...vehicleImages, [imageName]: imageFile.attachCode });
+        }
+      });
     }
   };
 
@@ -65,8 +61,6 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
     let images = JSON.parse(JSON.stringify(imageUpload));
     images[`${imageName}`] = '';
     setImageUpload(images);
-    // UploadImageStore.removeImage(imageName);
-    setRender(!render);
   };
 
   return (
@@ -99,15 +93,29 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
         ) : (
           <div style={{ margin: 10 }}>
             <label htmlFor="file-upload-left" className="custom-file-upload-photo">
-              <ImageThumb>
-                <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
-              </ImageThumb>
-              <ImageLabel style={{ paddingBottom: 10 }}>ซ้าย</ImageLabel>
+              {loading.left ? (
+                <LoadingButton
+                  id="vehicleImageLeft"
+                  isLoading={loading.left}
+                  style={{ backgroundColor: 'white' }}
+                  onClick={() => uploadImageLeftRef.current?.click()}
+                >
+                  {t('upload')}
+                </LoadingButton>
+              ) : (
+                <>
+                  <ImageThumb>
+                    <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
+                  </ImageThumb>
+                  <ImageLabel style={{ paddingBottom: 10 }}>ซ้าย</ImageLabel>
+                </>
+              )}
             </label>
             <input
               id="file-upload-left"
               type="file"
               accept="image/*"
+              ref={uploadImageLeftRef}
               onChange={(e: any) => onChangePicture(e, 'left')}
             />
           </div>
@@ -136,15 +144,29 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
         ) : (
           <div style={{ margin: 10 }}>
             <label htmlFor="file-upload-right" className="custom-file-upload-photo">
-              <ImageThumb>
-                <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
-              </ImageThumb>
-              <ImageLabel style={{ paddingBottom: 10 }}>ขวา</ImageLabel>
+              {loading.right ? (
+                <LoadingButton
+                  id="vehicleImageRight"
+                  isLoading={loading.right}
+                  style={{ backgroundColor: 'white' }}
+                  onClick={() => uploadImageRightRef.current?.click()}
+                >
+                  {t('upload')}
+                </LoadingButton>
+              ) : (
+                <>
+                  <ImageThumb>
+                    <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
+                  </ImageThumb>
+                  <ImageLabel style={{ paddingBottom: 10 }}>ขวา</ImageLabel>
+                </>
+              )}
             </label>
             <input
               id="file-upload-right"
               type="file"
               accept="image/*"
+              ref={uploadImageRightRef}
               onChange={(e: any) => onChangePicture(e, 'right')}
             />
           </div>
@@ -174,15 +196,29 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
         ) : (
           <div style={{ margin: 10 }}>
             <label htmlFor="file-upload-front" className="custom-file-upload-photo">
-              <ImageThumb>
-                <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
-              </ImageThumb>
-              <ImageLabel style={{ paddingBottom: 10 }}>หน้า</ImageLabel>
+              {loading.front ? (
+                <LoadingButton
+                  id="vehicleImageFront"
+                  isLoading={loading.front}
+                  style={{ backgroundColor: 'white' }}
+                  onClick={() => uploadImageFrontRef.current?.click()}
+                >
+                  {t('upload')}
+                </LoadingButton>
+              ) : (
+                <>
+                  <ImageThumb>
+                    <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
+                  </ImageThumb>
+                  <ImageLabel style={{ paddingBottom: 10 }}>หน้า</ImageLabel>
+                </>
+              )}
             </label>
             <input
               id="file-upload-front"
               type="file"
               accept="image/*"
+              ref={uploadImageFrontRef}
               onChange={(e: any) => onChangePicture(e, 'front')}
             />
           </div>
@@ -212,15 +248,29 @@ const ImageUpload: React.FC<ImageProps> = observer(({ submitted }) => {
         ) : (
           <div style={{ margin: 10 }}>
             <label htmlFor="file-upload-back" className="custom-file-upload-photo">
-              <ImageThumb>
-                <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
-              </ImageThumb>
-              <ImageLabel style={{ paddingBottom: 10 }}>หลัง</ImageLabel>
+              {loading.back ? (
+                <LoadingButton
+                  id="vehicleImageBack"
+                  isLoading={loading.back}
+                  style={{ backgroundColor: 'white' }}
+                  onClick={() => uploadImageBackRef.current?.click()}
+                >
+                  {t('upload')}
+                </LoadingButton>
+              ) : (
+                <>
+                  <ImageThumb>
+                    <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
+                  </ImageThumb>
+                  <ImageLabel style={{ paddingBottom: 10 }}>หลัง</ImageLabel>
+                </>
+              )}
             </label>
             <input
               id="file-upload-back"
               type="file"
               accept="image/*"
+              ref={uploadImageBackRef}
               onChange={(e: any) => onChangePicture(e, 'back')}
             />
           </div>

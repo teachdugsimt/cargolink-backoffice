@@ -10,13 +10,16 @@ import styled from 'styled-components';
 import Button from '@atlaskit/button';
 import Form, { Field, FormFooter, HelperMessage, ErrorMessage, ValidMessage } from '@atlaskit/form';
 
-import Textfield from '@atlaskit/textfield';
-import ImageUpload from '../../components/truck/widgets/image-upload';
+import ImageUpload, { Image } from '../../components/truck/widgets/image-upload';
 import TruckTypesSelector from '../../components/dropdowns/truckType.selector';
 import { STALL_HEIGHT, TIPPER_DUMP } from '../../components/truck/stall-height';
 import Select from '@atlaskit/select';
 import MultiSelect from '@atlaskit/multi-select';
 import { useForm, Controller } from 'react-hook-form';
+import UserSelector from '../../components/jobs/add/user.selector';
+import truckApi, { PostTruckParams, TruckRequestParams } from '../../services/truck-api';
+import Swal from 'sweetalert2';
+import { AxiosResponse } from 'axios';
 
 interface SelectValue {
   labal: any;
@@ -30,7 +33,8 @@ interface SelectContent {
 
 const AddTrucks = observer(() => {
   const { t } = useTranslation();
-  const { loginStore } = useMst();
+  const { loginStore, truckStore } = useMst();
+  const [vehicleImages, setVehicleImages] = useState<Image>({ front: null, back: null, left: null, right: null });
   const [stalls, setStalls] = useState<SelectValue[]>([]);
   const [dumps, setDumps] = useState<SelectValue[]>([]);
   const [regisVehicles, setRegisVehicles] = useState<SelectContent[] | null>([]);
@@ -38,10 +42,10 @@ const AddTrucks = observer(() => {
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     defaultValues: {
-      carOwner: null,
-      typeCar: null,
-      stall: null,
-      sale: null,
+      carrierId: null,
+      truckTypes: null,
+      stallHeight: null,
+      tipper: null,
       registrationNumber: null,
     },
   });
@@ -58,7 +62,55 @@ const AddTrucks = observer(() => {
   const selectItems = [{ items: [] }];
 
   const onSubmit = (formState: any) => {
-    console.log('form submitted', formState);
+    const payload: PostTruckParams = {
+      carrierId: formState.carrierId,
+      truckTypes: formState.truckTypes,
+      stallHeight: formState.stallHeight?.value,
+      tipper: formState.tipper?.value,
+      registrationNumber: formState?.registrationNumber?.map((e: any) => e.content),
+      truckPhotos: vehicleImages,
+    };
+    const MODAL_TIMEOUT = 1000;
+
+    Swal.fire({
+      didOpen: () => {
+        Swal.showLoading();
+        truckApi
+          .addTruck(payload)
+          .then((response) => {
+            if (response && response.status < 300) {
+              Swal.hideLoading();
+              // response as AxiosResponse<TruckRequestParams>
+              console.log('add truck response', response);
+              const data = (response as any).data;
+              console.log('add truck response', data);
+              Swal.update({
+                icon: 'success',
+                titleText: '',
+                text: t('createTruckSuccess'),
+                showConfirmButton: false,
+              });
+              return setTimeout(() => {
+                Swal.close();
+                navigate('/vehicles');
+              }, MODAL_TIMEOUT);
+            } else {
+              Swal.fire({
+                icon: 'error',
+                text: t('createTruckErrorByUser'),
+              });
+              console.error('create truck: truck error', response);
+            }
+          })
+          .catch((error) => {
+            console.error('Error while create this truck', error);
+            Swal.fire({
+              icon: 'error',
+              text: 'Error while create this truck',
+            });
+          });
+      },
+    });
   };
 
   return (
@@ -69,25 +121,38 @@ const AddTrucks = observer(() => {
         <GroupItem>
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <div style={{ flex: 1, marginRight: 10 }}>
-              <Field label={t('carOwner')} name="carOwner" isRequired>
-                {({ fieldProps, error, meta: { valid } }: any) => (
-                  <Fragment>
-                    <Textfield
-                      name="carOwner"
-                      placeholder={`${t('carOwner')}`}
-                      ref={register({ required: true })}
-                      isInvalid={!!errors.carOwner}
-                    />
-                    {errors.carOwner && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
-                  </Fragment>
-                )}
+              <Field label={t('carOwner')} name="carrierId" isRequired>
+                {({ fieldProps }: any) => {
+                  return (
+                    <Fragment>
+                      <Controller
+                        control={control}
+                        name="carrierId"
+                        render={({ onChange, value }) => {
+                          return (
+                            <UserSelector
+                              {...fieldProps}
+                              maxWidth="100%"
+                              value={value}
+                              onSelect={onChange}
+                              placeholder={t('carOwner')}
+                              noResultsMessage={t('noData')}
+                            />
+                          );
+                        }}
+                        rules={{ required: true }}
+                      />
+                      {errors.carrierId && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
+                    </Fragment>
+                  );
+                }}
               </Field>
-              <Field label={t('typeCar')} name="typeCar" isRequired>
+              <Field label={t('typeCar')} name="truckTypes" isRequired>
                 {({ fieldProps, error, meta: { valid } }: any) => (
                   <Fragment>
                     <Controller
                       control={control}
-                      name="typeCar"
+                      name="truckTypes"
                       render={({ onChange, value }) => {
                         return (
                           <TruckTypesSelector
@@ -105,24 +170,24 @@ const AddTrucks = observer(() => {
                             }}
                             placeholder={t('pleaseselect')}
                             language={loginStore.language}
-                            isInvalid={!!errors.typeCar}
+                            isInvalid={!!errors.truckTypes}
                           />
                         );
                       }}
                       rules={{ required: true }}
                     />
-                    {errors.typeCar && <ErrorMessage>{t('fieldTypeCar')}</ErrorMessage>}
+                    {errors.truckTypes && <ErrorMessage>{t('fieldTypeCar')}</ErrorMessage>}
                   </Fragment>
                 )}
               </Field>
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div style={{ flex: 1, marginRight: 10 }}>
-                  <Field label={t('stall')} name="stall" defaultValue={stalls[0]}>
+                  <Field label={t('stall')} name="stallHeight" defaultValue={stalls[0]}>
                     {({ fieldProps }: any) => (
                       <Fragment>
                         <Controller
                           control={control}
-                          name="stall"
+                          name="stallHeight"
                           render={({ onChange, value }) => {
                             return (
                               <Select
@@ -144,12 +209,12 @@ const AddTrucks = observer(() => {
                   </Field>
                 </div>
                 <div style={{ flex: 1, marginLeft: 10 }}>
-                  <Field label={t('sale')} name="sale" defaultValue={dumps[0]}>
+                  <Field label={t('sale')} name="tipper" defaultValue={dumps[0]}>
                     {({ fieldProps }: any) => (
                       <Fragment>
                         <Controller
                           control={control}
-                          name="sale"
+                          name="tipper"
                           render={({ onChange, value }) => {
                             return (
                               <Select
@@ -221,7 +286,7 @@ const AddTrucks = observer(() => {
               <Field label="" name="upload">
                 {({ fieldProps }: any) => (
                   <Fragment>
-                    <ImageUpload {...fieldProps} />
+                    <ImageUpload vehicleImages={vehicleImages} setVehicleImages={setVehicleImages} />
                   </Fragment>
                 )}
               </Field>
