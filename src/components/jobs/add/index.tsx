@@ -18,6 +18,10 @@ import RouteWidget from '../../route/widgets/route';
 import Select from '@atlaskit/select';
 import { STALL_HEIGHT, TIPPER_DUMP } from '../../truck/stall-height';
 import { useForm, Controller } from 'react-hook-form';
+import jobApi, { PostJobParams, CreateJobResponse } from '../../../services/job-api';
+import Swal from 'sweetalert2';
+import { AxiosResponse } from 'axios';
+import moment from 'moment';
 
 interface SelectValue {
   labal: any;
@@ -27,7 +31,6 @@ interface SelectValue {
 const AddJobContainer: React.FC = observer(() => {
   const { t } = useTranslation();
   const { loginStore } = useMst();
-  const [stalls, setStalls] = useState<SelectValue[]>([]);
   const [dumps, setDumps] = useState<SelectValue[]>([]);
   const [pickup, setPickup] = useState<any>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -35,16 +38,15 @@ const AddJobContainer: React.FC = observer(() => {
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     defaultValues: {
-      jobOwner: null,
-      productType: null,
+      userId: null,
+      productTypeId: null,
       productName: null,
-      amountWeight: null,
-      typeCar: null,
-      stall: null,
-      sale: null,
-      amount: null,
-      freightRate: null,
-      priceType: null,
+      weight: null,
+      truckType: null,
+      tipper: null,
+      truckAmount: null,
+      price: null,
+      priceType: 'PER_TRIP',
     },
   });
 
@@ -58,11 +60,82 @@ const AddJobContainer: React.FC = observer(() => {
   const isDisabled = false;
 
   const onSubmit = (formState: any) => {
-    console.log('form submitted', formState);
-    console.log('form pickup', pickup);
     setIsSubmitted(true);
     if (pickup?.from && pickup?.to && pickup?.to[0]) {
-      console.log('form submitted', formState);
+      const { from, to } = pickup;
+
+      const payload: PostJobParams = {
+        truckType: formState?.truckType,
+        truckAmount: formState?.truckAmount ? parseInt(formState.truckAmount) : null,
+        productTypeId: formState?.productTypeId,
+        productName: formState?.productName,
+        weight: formState?.weight ? parseInt(formState.weight) : null,
+        price: formState?.price ? parseInt(formState.price) : null,
+        tipper: formState?.tipper?.value,
+        priceType: formState?.priceType,
+        expiredTime: moment(from.dateTime).subtract(1, 'days').format('DD-MM-YYYY HH:mm:ss'),
+        publicAsCgl: true, // เป็นเจ้าของงานจริง หรือเป็น cargolink
+        from: {
+          name: from?.name,
+          dateTime: moment(from.dateTime).format('DD-MM-YYYY HH:mm:ss'),
+          contactName: from?.contactName,
+          contactMobileNo: from?.contactMobileNo,
+          lat: from?.location?.lat,
+          lng: from?.location?.lng,
+        },
+        to: to.map((e: any) => {
+          return {
+            name: e?.name,
+            dateTime: moment(e.dateTime).format('DD-MM-YYYY HH:mm:ss'),
+            contactName: e?.contactName,
+            contactMobileNo: e?.contactMobileNo,
+            lat: e?.location?.lat,
+            lng: e?.location?.lng,
+          };
+        }),
+        platform: 0, // 0 = website, 1 = mobile
+        userId: formState?.userId,
+      };
+
+      const MODAL_TIMEOUT = 1000;
+
+      Swal.fire({
+        didOpen: () => {
+          Swal.showLoading();
+          jobApi
+            .createJob(payload)
+            .then((response) => {
+              if (response && response.status < 300) {
+                Swal.hideLoading();
+                const data = (response as AxiosResponse<CreateJobResponse>).data;
+                console.log('add job response', data);
+                Swal.update({
+                  icon: 'success',
+                  titleText: '',
+                  text: t('createJobSuccess'),
+                  showConfirmButton: false,
+                });
+                return setTimeout(() => {
+                  Swal.close();
+                  navigate('/jobs');
+                }, MODAL_TIMEOUT);
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  text: t('createJobErrorByUser'),
+                });
+                console.error('create job: job error', response);
+              }
+            })
+            .catch((error) => {
+              console.error('Error while create this job', error);
+              Swal.fire({
+                icon: 'error',
+                text: 'Error while create this job',
+              });
+            });
+        },
+      });
     }
   };
 
@@ -74,13 +147,13 @@ const AddJobContainer: React.FC = observer(() => {
         <GroupItem>
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <div style={{ flex: 1, marginRight: 10 }}>
-              <Field label={t('jobOwner')} name="jobOwner" isRequired>
+              <Field label={t('jobOwner')} name="userId" isRequired>
                 {({ fieldProps }: any) => {
                   return (
                     <Fragment>
                       <Controller
                         control={control}
-                        name="jobOwner"
+                        name="userId"
                         render={({ onChange, value }) => {
                           return (
                             <UserSelector
@@ -95,19 +168,19 @@ const AddJobContainer: React.FC = observer(() => {
                         }}
                         rules={{ required: true }}
                       />
-                      {errors.jobOwner && <ErrorMessage>{t('field่JobOwner')}</ErrorMessage>}
+                      {errors.userId && <ErrorMessage>{t('field่JobOwner')}</ErrorMessage>}
                     </Fragment>
                   );
                 }}
               </Field>
             </div>
             <div style={{ flex: 1, marginLeft: 10 }}>
-              <Field label={t('productType')} name="productType" isRequired>
+              <Field label={t('productType')} name="productTypeId" isRequired>
                 {({ fieldProps }: any) => (
                   <Fragment>
                     <Controller
                       control={control}
-                      name="productType"
+                      name="productTypeId"
                       render={({ onChange, value }) => {
                         return (
                           <ProductTypesSelector
@@ -122,7 +195,7 @@ const AddJobContainer: React.FC = observer(() => {
                       }}
                       rules={{ required: true }}
                     />
-                    {errors.productType && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
+                    {errors.productTypeId && <ErrorMessage>{t('fieldproductType')}</ErrorMessage>}
                   </Fragment>
                 )}
               </Field>
@@ -139,17 +212,17 @@ const AddJobContainer: React.FC = observer(() => {
                       isInvalid={!!errors.productName}
                       placeholder={t('productName')}
                     />
-                    {errors.productName && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
+                    {errors.productName && <ErrorMessage>{t('fieldproductName')}</ErrorMessage>}
                   </Fragment>
                 )}
               </Field>
             </div>
             <div style={{ flex: 1, marginLeft: 10 }}>
-              <Field label={t(`amountWeightWithoutTon`)} name="amountWeight">
+              <Field label={t(`amountWeightWithoutTon`)} name="weight">
                 {({ fieldProps }: any) => (
                   <Fragment>
                     <Textfield
-                      name="amountWeight"
+                      name="weight"
                       ref={register({ required: false })}
                       type="number"
                       placeholder={t('amountWeightWithoutTon')}
@@ -165,13 +238,13 @@ const AddJobContainer: React.FC = observer(() => {
           <Header>{t('desiredVehicle')}</Header>
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <div style={{ flex: 1, marginRight: 10 }}>
-              <Field label={t('typeCar')} name="typeCar" isRequired>
+              <Field label={t('typeCar')} name="truckType" isRequired>
                 {({ fieldProps }: any) => {
                   return (
                     <Fragment>
                       <Controller
                         control={control}
-                        name="typeCar"
+                        name="truckType"
                         render={({ onChange, value }) => {
                           return (
                             <TruckTypesSelector
@@ -180,10 +253,6 @@ const AddJobContainer: React.FC = observer(() => {
                               value={value}
                               onSelect={(e: any) => {
                                 onChange(e);
-
-                                const stallOptions = STALL_HEIGHT(t, e);
-                                setStalls(stallOptions);
-
                                 const dumpOptions = TIPPER_DUMP(t, e);
                                 setDumps(dumpOptions);
                               }}
@@ -195,79 +264,48 @@ const AddJobContainer: React.FC = observer(() => {
                         }}
                         rules={{ required: true }}
                       />
-                      {errors.typeCar && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
+                      {errors.truckType && <ErrorMessage>{t('fieldTypeCar')}</ErrorMessage>}
                     </Fragment>
                   );
                 }}
               </Field>
             </div>
             <div style={{ flex: 1, marginLeft: 10 }}>
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div style={{ flex: 1, marginRight: 10 }}>
-                  <Field label={t('stall')} name="stall" defaultValue={stalls[0]}>
-                    {({ fieldProps }: any) => (
-                      <Fragment>
-                        <Controller
-                          control={control}
-                          name="stall"
-                          render={({ onChange, value }) => {
-                            return (
-                              <Select
-                                inputId="vehicle-stall-height"
-                                className="single-select"
-                                classNamePrefix="react-select"
-                                value={value}
-                                onChange={onChange}
-                                options={stalls}
-                                placeholder={t('stall')}
-                                {...fieldProps}
-                                isDisabled={!stalls?.length || stalls?.length === 0}
-                              />
-                            );
-                          }}
-                        />
-                      </Fragment>
-                    )}
-                  </Field>
-                </div>
-                <div style={{ flex: 1, marginLeft: 10 }}>
-                  <Field label={t('sale')} name="sale" defaultValue={dumps[0]}>
-                    {({ fieldProps }: any) => (
-                      <Fragment>
-                        <Controller
-                          control={control}
-                          name="stall"
-                          render={({ onChange, value }) => {
-                            return (
-                              <Select
-                                inputId="vehicle-dump"
-                                className="single-select"
-                                classNamePrefix="react-select"
-                                value={value}
-                                onChange={onChange}
-                                options={dumps}
-                                placeholder={t('sale')}
-                                {...fieldProps}
-                                isDisabled={!dumps?.length || dumps?.length === 0}
-                              />
-                            );
-                          }}
-                        />
-                      </Fragment>
-                    )}
-                  </Field>
-                </div>
-              </div>
+              <Field label={t('sale')} name="tipper" defaultValue={dumps[0]}>
+                {({ fieldProps }: any) => (
+                  <Fragment>
+                    <Controller
+                      control={control}
+                      name="tipper"
+                      render={({ onChange, value }) => {
+                        return (
+                          <Select
+                            inputId="vehicle-dump"
+                            className="single-select"
+                            classNamePrefix="react-select"
+                            options={dumps}
+                            placeholder={t('sale')}
+                            {...fieldProps}
+                            value={value}
+                            onChange={onChange}
+                            isDisabled={!dumps?.length || dumps?.length === 0}
+                          />
+                        );
+                      }}
+                    />
+                  </Fragment>
+                )}
+              </Field>
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <div style={{ flex: 1, marginRight: 10 }}>
-              <Field label={t('amount')} name="amount">
+              <Field label={t('amount')} name="truckAmount">
                 {({ fieldProps }: any) => (
                   <Fragment>
                     <Textfield
                       type="number"
-                      name="amount"
+                      name="truckAmount"
                       ref={register({ required: false })}
                       placeholder={t('amount')}
                       elemAfterInput={<ElemInput>คัน</ElemInput>}
@@ -293,16 +331,17 @@ const AddJobContainer: React.FC = observer(() => {
               <Header>ราคาที่แนะนำ xxxx บาท</Header>
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div style={{ flex: 'auto', marginRight: 10 }}>
-                  <Field label={t('freightRate')} name="freightRate" isRequired>
+                  <Field label={t('freightRate')} name="price" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
                         <Textfield
-                          name="freightRate"
-                          isInvalid={!!errors.freightRate}
+                          type="number"
+                          name="price"
+                          isInvalid={!!errors.price}
                           ref={register({ required: true })}
                           placeholder={t('freightRate')}
                         />
-                        {errors.freightRate && <ErrorMessage>{t('fieldCarOwner')}</ErrorMessage>}
+                        {errors.price && <ErrorMessage>{t('fieldFreightRate')}</ErrorMessage>}
                       </Fragment>
                     )}
                   </Field>
@@ -311,7 +350,13 @@ const AddJobContainer: React.FC = observer(() => {
                   <Field label="" name="priceType" isRequired>
                     {({ fieldProps }: any) => (
                       <Fragment>
-                        <PriceTypeToggle {...fieldProps} />
+                        <Controller
+                          control={control}
+                          name="priceType"
+                          render={({ onChange, value }) => {
+                            return <PriceTypeToggle {...fieldProps} priceType={value} onChange={onChange} />;
+                          }}
+                        />
                       </Fragment>
                     )}
                   </Field>

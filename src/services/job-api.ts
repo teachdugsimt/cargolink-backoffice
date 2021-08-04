@@ -7,9 +7,21 @@ class JobApi {
     return response;
   };
   getJobById = async (params: IJobRequest) => {
-    const response: AxiosResponse<IJob> = await ExcuteApi('/api/v1/jobs/' + params.jobId, {}, 'get', 600000, true, true);
+    const response: AxiosResponse<IJob> = await ExcuteApi('/api/v1/jobs/' + params.jobId, {}, 'get', 6e5, true, true);
     return response;
-  }
+  };
+
+  createJob = async (params: PostJobParams) => {
+    const response: AxiosResponse<CreateJobResponse> = await ExcuteApi(
+      `/api/v1/jobs/`,
+      params,
+      'post',
+      6e5,
+      true,
+      true,
+    );
+    return response;
+  };
 }
 
 export default new JobApi();
@@ -43,7 +55,7 @@ export interface JobListParams {
 }
 
 export interface IJobRequest {
-  jobId: string
+  jobId: string;
 }
 export interface IJob {
   id: string;
@@ -76,7 +88,30 @@ export interface IOwner {
   fullName: string | null;
   email: string | null;
   mobileNo: string;
-  avatar: { //? infer
+  avatar: {
+    //? infer
     object: string | null;
   };
+}
+
+export interface PostJobParams {
+  truckType?: string;
+  truckAmount?: number | null;
+  productTypeId?: string;
+  productName?: string;
+  weight?: number | null;
+  price?: number | null;
+  tipper?: boolean;
+  priceType?: string;
+  expiredTime?: string;
+  note?: string;
+  publicAsCgl?: boolean;
+  from?: IDestination;
+  to?: IDestination[];
+  platform?: number;
+  userId?: string;
+}
+
+export interface CreateJobResponse {
+  id: string;
 }

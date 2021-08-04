@@ -12,8 +12,8 @@ export const STALL_HEIGHT = (t: any, productType: any) => {
 
 export const TIPPER_DUMP = (t: any, productType: any) => {
   const dumps: any[] = [
-    { label: t('DUMP'), value: 'yes' },
-    { label: t('NO_DUMP'), value: 'no' },
+    { label: t('DUMP'), value: true },
+    { label: t('NO_DUMP'), value: false },
   ];
   if (productType == '15' || productType == '23' || productType == '24') return dumps;
   return [];
