@@ -12,7 +12,14 @@ class JobApi {
   };
 
   createJob = async (params: PostJobParams) => {
-    const response: AxiosResponse<JobsListResponse> = await ExcuteApi(`/api/v1/jobs/`, params, 'post', 6e5, true, true);
+    const response: AxiosResponse<CreateJobResponse> = await ExcuteApi(
+      `/api/v1/jobs/`,
+      params,
+      'post',
+      6e5,
+      true,
+      true,
+    );
     return response;
   };
 }
@@ -103,4 +110,8 @@ export interface PostJobParams {
   to?: IDestination[];
   platform?: number;
   userId?: string;
+}
+
+export interface CreateJobResponse {
+  id: string;
 }

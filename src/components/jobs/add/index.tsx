@@ -18,9 +18,10 @@ import RouteWidget from '../../route/widgets/route';
 import Select from '@atlaskit/select';
 import { STALL_HEIGHT, TIPPER_DUMP } from '../../truck/stall-height';
 import { useForm, Controller } from 'react-hook-form';
-import jobApi, { PostJobParams } from '../../../services/job-api';
+import jobApi, { PostJobParams, CreateJobResponse } from '../../../services/job-api';
 import Swal from 'sweetalert2';
 import { AxiosResponse } from 'axios';
+import moment from 'moment';
 
 interface SelectValue {
   labal: any;
@@ -62,6 +63,7 @@ const AddJobContainer: React.FC = observer(() => {
     setIsSubmitted(true);
     if (pickup?.from && pickup?.to && pickup?.to[0]) {
       const { from, to } = pickup;
+
       const payload: PostJobParams = {
         truckType: formState?.truckType,
         truckAmount: formState?.truckAmount ? parseInt(formState.truckAmount) : null,
@@ -71,10 +73,11 @@ const AddJobContainer: React.FC = observer(() => {
         price: formState?.price ? parseInt(formState.price) : null,
         tipper: formState?.tipper?.value,
         priceType: formState?.priceType,
+        expiredTime: moment(from.dateTime).subtract(1, 'days').format('DD-MM-YYYY HH:mm:ss'),
         publicAsCgl: true, // เป็นเจ้าของงานจริง หรือเป็น cargolink
         from: {
           name: from?.name,
-          dateTime: from?.dateTime,
+          dateTime: moment(from.dateTime).format('DD-MM-YYYY HH:mm:ss'),
           contactName: from?.contactName,
           contactMobileNo: from?.contactMobileNo,
           lat: from?.location?.lat,
@@ -83,7 +86,7 @@ const AddJobContainer: React.FC = observer(() => {
         to: to.map((e: any) => {
           return {
             name: e?.name,
-            dateTime: e?.dateTime,
+            dateTime: moment(e.dateTime).format('DD-MM-YYYY HH:mm:ss'),
             contactName: e?.contactName,
             contactMobileNo: e?.contactMobileNo,
             lat: e?.location?.lat,
@@ -104,9 +107,7 @@ const AddJobContainer: React.FC = observer(() => {
             .then((response) => {
               if (response && response.status < 300) {
                 Swal.hideLoading();
-                // response as AxiosResponse<JobRequestParams>
-                console.log('add job response', response);
-                const data = (response as any).data;
+                const data = (response as AxiosResponse<CreateJobResponse>).data;
                 console.log('add job response', data);
                 Swal.update({
                   icon: 'success',

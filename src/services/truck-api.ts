@@ -27,7 +27,7 @@ class TruckApi {
   };
 
   addTruck = async (params: PostTruckParams) => {
-    const response: AxiosResponse<TrucksListResponse> = await ExcuteApi(
+    const response: AxiosResponse<CreateTruckResponse> = await ExcuteApi(
       `/api/v1/trucks/`,
       params,
       'post',
@@ -119,4 +119,8 @@ export interface TruckPhotos {
 export interface WorkingZone {
   region: number;
   province: number;
+}
+
+export interface CreateTruckResponse extends PostTruckParams {
+  id: string;
 }

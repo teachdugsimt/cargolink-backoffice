@@ -17,7 +17,7 @@ import Select from '@atlaskit/select';
 import MultiSelect from '@atlaskit/multi-select';
 import { useForm, Controller } from 'react-hook-form';
 import UserSelector from '../../components/jobs/add/user.selector';
-import truckApi, { PostTruckParams, TruckRequestParams } from '../../services/truck-api';
+import truckApi, { PostTruckParams, CreateTruckResponse } from '../../services/truck-api';
 import Swal from 'sweetalert2';
 import { AxiosResponse } from 'axios';
 
@@ -80,9 +80,7 @@ const AddTrucks = observer(() => {
           .then((response) => {
             if (response && response.status < 300) {
               Swal.hideLoading();
-              // response as AxiosResponse<TruckRequestParams>
-              console.log('add truck response', response);
-              const data = (response as any).data;
+              const data = (response as AxiosResponse<CreateTruckResponse>).data;
               console.log('add truck response', data);
               Swal.update({
                 icon: 'success',
