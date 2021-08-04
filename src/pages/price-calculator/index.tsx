@@ -10,6 +10,11 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components'
 import TruckTypesSelector from '../../components/dropdowns/truckType.selector';
 import { useMst } from '../../stores/root-store';
+import priceCalculator from '../../helpers/price-calculator';
+
+import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+// import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
+import * as dstnc from 'google-distance-matrix'
 
 const PriceCalculator = observer(() => {
   const { t } = useTranslation();
@@ -18,6 +23,12 @@ const PriceCalculator = observer(() => {
   const [distance, setDistance] = useState(50)
   const [price, setPrice] = useState(0)
   const [cost, setCost] = useState(0)
+  const [pickupAddress, setPickupAddress] = useState('')
+  const [pickupLocation, setPickupLocation] = useState<{ lat: number, lng: number } | null>(null)
+  const [deliveryAddress, setDeliveryAddress] = useState('')
+  const [deliveryLocation, setDeliveryLocation] = useState<{ lat: number, lng: number } | null>(null)
+
+  const [showLocationPicker, setShowLocationPicker] = useState(false)
 
   const breadcrumbs = (
     <Breadcrumbs>
@@ -31,12 +42,8 @@ const PriceCalculator = observer(() => {
 
   useEffect(() => {
 
-    if (truckType == 3) {
-      let p = 550 + Math.floor((distance - 3) / 5) * 50
-      setPrice(p)
-    } else {
-      setPrice(0)
-    }
+    const p = priceCalculator(+truckType, +distance)
+    setPrice(p)
 
   }, [truckType, distance])
 
@@ -44,6 +51,23 @@ const PriceCalculator = observer(() => {
     let c = price - (price * 15 / 100)
     setCost(c)
   }, [price])
+
+  useEffect(() => {
+
+    async function getDirection() {
+      const result = await fetch(
+        'https://maps.googleapis.com/maps/api/directions/json?origin=13.788485,100.610133&destination=18.7883439,98.98530079&key=AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw',
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+      console.log(result)
+    }
+
+    getDirection()
+
+  }, [pickupLocation, deliveryLocation])
 
   return (
     <div>
@@ -81,7 +105,31 @@ const PriceCalculator = observer(() => {
                     <Field label={'จุดขึ้นสินค้า'} name="from">
                       {({ fieldProps, error, meta: { valid } }: any) => (
                         <>
-                          <Textfield {...fieldProps} placeholder={`จุดขึ้นสินค้า`} />
+                          <GooglePlacesAutocomplete
+                            apiKey={process.env.GOOGLE_API_KEY || "AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw"}
+                            apiOptions={{ language: 'th', region: 'th' }}
+                            selectProps={{
+                              placeholder: 'ค้นหาที่อยู่ ...',
+                              styles: {
+                                control: (base) => ({
+                                  ...base,
+                                  border: '2px solid #f5f5f5'
+                                })
+                              },
+                              value: '',
+                              onChange: (e) => {
+                                setPickupAddress(e.label)
+                                geocodeByAddress(e.label)
+                                  .then(results => getLatLng(results[0]))
+                                  .then(({ lat, lng }) => {
+                                    setPickupLocation({ lat, lng })
+                                    console.log('Successfully got latitude and longitude', { lat, lng })
+                                  });
+                              }
+                            }}
+                          />
+                          <span>{pickupAddress}<br />{pickupLocation?.lat} {pickupLocation?.lng}</span>
+                          {/* <Textfield  {...fieldProps} placeholder={`จุดขึ้นสินค้า`} value={pickupAddress} /> */}
                         </>
                       )}
                     </Field>
@@ -90,14 +138,38 @@ const PriceCalculator = observer(() => {
                     <Field label={'จุดลงสินค้า'} name="to">
                       {({ fieldProps, error, meta: { valid } }: any) => (
                         <>
-                          <Textfield {...fieldProps} placeholder={`จุดลงสินค้า`} />
+                          <GooglePlacesAutocomplete
+                            apiKey={process.env.GOOGLE_API_KEY || "AIzaSyD_xZbQQVruH1NWLqCE2kgSWBPoWH7l3Sw"}
+                            apiOptions={{ language: 'th', region: 'th' }}
+                            selectProps={{
+                              placeholder: 'ค้นหาที่อยู่ ...',
+                              styles: {
+                                control: (base) => ({
+                                  ...base,
+                                  border: '2px solid #f5f5f5'
+                                })
+                              },
+                              value: '',
+                              onChange: (e) => {
+                                setDeliveryAddress(e.label)
+                                geocodeByAddress(e.label)
+                                  .then(results => getLatLng(results[0]))
+                                  .then(({ lat, lng }) => {
+                                    setDeliveryLocation({ lat, lng })
+                                    console.log('Successfully got latitude and longitude', { lat, lng })
+                                  });
+                              }
+                            }}
+                          />
+                          <span>{deliveryAddress}<br />{deliveryLocation?.lat} {deliveryLocation?.lng}</span>
+                          {/* <Textfield placeholder={`จุดลงสินค้า`} value={deliveryAddress} /> */}
                         </>
                       )}
                     </Field>
                   </Col>
                 </Row>
 
-                <Field label={t('distance')} name="distance" isRequired>
+                <Field label={t('distance') + ' (km.)'} name="distance" isRequired>
                   {({ fieldProps, error, meta: { valid } }: any) => (
                     <>
                       <Textfield {...fieldProps} placeholder={`${t('distance')}`} type="number"

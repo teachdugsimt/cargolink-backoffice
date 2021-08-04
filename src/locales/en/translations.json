@@ -199,12 +199,20 @@
   "price-calculator": {
     "index": "Price Calculator"
   },
+  "news": {
+    "index": "News & Promotion"
+  },
   "allTrucks": "All Trucks",
   "allTypes": "All",
   "allProvinces": "All Provinces",
   "takePhotoVehicle": "Photo Vehicle",
   "freightRate": "Freight Rate",
+  "fieldFreightRate": "This field freight rate is required",
   "add": "Add",
   "registrationsTrailers": "No more than 2 registrations for trailers",
-  "distance": "Distance"
+  "distance": "Distance",
+  "createTruckSuccess": "Created truck successfully",
+  "createTruckErrorByUser": "Some on your data is invalid, please recheck and try again",
+  "createJobSuccess": "Created job successfully",
+  "createJobErrorByUser": "Some on your data is invalid, please recheck and try again"
 }

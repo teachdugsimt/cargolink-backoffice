@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/paljs/gatsby-admin-template/compare/v0.3.0...v0.4.0) (2021-08-04)
+
+
+### Features
+
+* **calculator:** add price-calculator page ([bf2d5e1](https://github.com/paljs/gatsby-admin-template/commit/bf2d5e1926f126d5045488124f3fea77f0cecf86))
+* **news:** add news and promotion page ([5470493](https://github.com/paljs/gatsby-admin-template/commit/5470493ae9f8be44899ec59a8dc3935427e64230))
+* **price-calculator:** add location picker ([2c67d16](https://github.com/paljs/gatsby-admin-template/commit/2c67d167bb6bd5fd64d7fe86f8f89c9d4a9bd75b))
+
+
+### Bug Fixes
+
+* **add-job:** connect api ([1b72342](https://github.com/paljs/gatsby-admin-template/commit/1b723426d335541a80c55daea82ad6fd0a30ee8a))
+* **add-job:** connect api ([685a34c](https://github.com/paljs/gatsby-admin-template/commit/685a34ca6113f00f4acd4346c22223c41b02d995))
+* **add-job:** form ([50a4204](https://github.com/paljs/gatsby-admin-template/commit/50a4204e0ccec938f26f8b9b9989ba4e294dc9e3))
+* **add-truck:** connect api ([f9b3775](https://github.com/paljs/gatsby-admin-template/commit/f9b3775671f2767285ea154754dc7b11734b865e))
+* **add-truck:** react hook form ([a38f0b0](https://github.com/paljs/gatsby-admin-template/commit/a38f0b0904225751fb16ad791b6efe89f0d690d4))
+* **places-autocomplete:** incorrect setting transport state ([ff15255](https://github.com/paljs/gatsby-admin-template/commit/ff15255d71ad7cd4e9a227dc7d9ea3ab039ef77d))
+* merge conflict ([9a67f98](https://github.com/paljs/gatsby-admin-template/commit/9a67f988225f92dc4a0e9be280d18d74095c09ca))
+* **add-job:** form ([d737de1](https://github.com/paljs/gatsby-admin-template/commit/d737de1224931ffcec38d6eed9475af948bd93f1))
+* **add-vehicle:** form hook ([d70fc3e](https://github.com/paljs/gatsby-admin-template/commit/d70fc3e7c4720f3125a3e7fb04731a4237c16b1f))
+
 ## [0.3.0](https://github.com/paljs/gatsby-admin-template/compare/v0.2.0...v0.3.0) (2021-07-26)
 
 

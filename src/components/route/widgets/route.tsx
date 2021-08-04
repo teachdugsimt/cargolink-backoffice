@@ -18,6 +18,7 @@ interface DeliverPoint {
   dateTime: string | null | undefined;
   contactName: string | null | undefined;
   contactMobileNo: string | null | undefined;
+  location: { lat: number, lng: number } | null;
 }
 
 interface RouteWidgetProps {
@@ -55,12 +56,15 @@ function RouteWidget(props: RouteWidgetProps) {
               className="vertical-timeline-element--work"
               contentStyle={{ background: '#018ECE88', color: '#000' }}
               contentArrowStyle={{ borderRight: '7px solid #018ECE88' }}
-              date={moment(from?.dateTime, 'DD-MM-YYYY HH:mm').format('lll')}
+              date={moment(from?.dateTime).format('lll')}
               iconStyle={{ background: '#018ECE88', color: '#000' }}
               icon={<span>ขึ้น</span>}
             >
               <Row>
                 <Address>{from?.name}</Address>
+              </Row>
+              <Row>
+                <span style={{ fontSize: 12 }}>{from?.location?.lat}, {from?.location?.lng}</span>
               </Row>
               <Row>
                 <Icon icon={userCircleO} size={15} />
@@ -82,7 +86,7 @@ function RouteWidget(props: RouteWidgetProps) {
                   className="vertical-timeline-element--work"
                   contentStyle={{ background: '#FC544C88', color: '#000' }}
                   contentArrowStyle={{ borderRight: '7px solid #FC544C88' }}
-                  date={moment(e.dateTime, 'DD-MM-YYYY HH:mm').format('lll')}
+                  date={moment(e.dateTime).format('lll')}
                   iconStyle={{ background: '#FC544C88', color: '#000' }}
                   icon={<span>ลง</span>}
                 >
@@ -103,6 +107,9 @@ function RouteWidget(props: RouteWidgetProps) {
                   )}
                   <Row>
                     <Address>{e.name}</Address>
+                  </Row>
+                  <Row>
+                    <span style={{ fontSize: 12 }}>{e?.location?.lat}, {e?.location?.lng}</span>
                   </Row>
                   <Row>
                     <Icon icon={userCircleO} size={15} />
