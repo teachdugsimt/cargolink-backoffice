@@ -78,6 +78,20 @@ const priceCalculator = (truckType: number, distance: number) => {
         + Math.ceil(distance / 240) * 300
       break;
 
+    case 24: // 10 ล้อพ่วง คอก
+      p = 4800
+      p = p
+        + Math.floor(distance / 5) * 100
+        + Math.floor(distance / 240) * 300
+      break;
+
+    case 25: // 10 ล้อพว่ง ตู้ทึบ
+      p = 5300
+      p = p
+        + Math.floor(distance / 5) * 100
+        + Math.floor(distance / 240) * 300
+      break;
+
     case 31: // เทรลเลอร์ ตู้ทึบ (cgl ไม่มี), หัวลากตู้ทึบ
       p = 4900
       p = p

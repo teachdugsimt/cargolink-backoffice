@@ -22,6 +22,7 @@ import jobApi, { PostJobParams, CreateJobResponse } from '../../../services/job-
 import Swal from 'sweetalert2';
 import { AxiosResponse } from 'axios';
 import moment from 'moment';
+import { findProvince } from '../../../utils';
 
 interface SelectValue {
   labal: any;
@@ -51,7 +52,7 @@ const AddJobContainer: React.FC = observer(() => {
   });
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => {}}>
+    <Breadcrumbs onExpand={() => { }}>
       <BreadcrumbsItem onClick={() => navigate('/jobs')} text={t('jobsManagement')} key="jobs-management" />
       <BreadcrumbsItem text={t('addNewJob')} key="job-info" />
     </Breadcrumbs>
@@ -109,6 +110,22 @@ const AddJobContainer: React.FC = observer(() => {
                 Swal.hideLoading();
                 const data = (response as AxiosResponse<CreateJobResponse>).data;
                 console.log('add job response', data);
+
+
+                fetch('http://localhost:3000/api/v1/messaging/notification/send', {
+                  headers: { 'Content-Type': 'application/json' },
+                  method: 'POST',
+                  body: JSON.stringify({
+                    "tokens": [
+                      "eDRTel7BTyGk76Yf9_crI4:APA91bGMg21mONjBEw5qjLZwLJ-Vc__iU_sYra05-qaGDbHfTiV8OTYZa6yQFCtD5obJ0Q1jH_EnM1wt4JcAZ3knANC64AWTd6nG7DLv_DrLaD82Wos5W1ARTxIauyHkgcvEInl6ZtBy"
+                    ],
+                    "title": "คาร์โก้ลิ้งค์ มีงานที่คุณอาจสนใจ",
+                    "message": `งานขนส่ง ${payload.productName} ~ ${findProvince(payload?.from?.name ?? "-")} => ${findProvince(payload?.to[0]?.name ?? "-")}`
+                  })
+                })
+                  .then(res => res.json())
+                  .then(json => console.log(json))
+
                 Swal.update({
                   icon: 'success',
                   titleText: '',
@@ -116,7 +133,7 @@ const AddJobContainer: React.FC = observer(() => {
                   showConfirmButton: false,
                 });
                 return setTimeout(() => {
-                  Swal.close();
+                  // Swal.close();
                   navigate('/jobs');
                 }, MODAL_TIMEOUT);
               } else {
@@ -134,6 +151,11 @@ const AddJobContainer: React.FC = observer(() => {
                 text: 'Error while create this job',
               });
             });
+
+
+
+
+
         },
       });
     }
@@ -383,10 +405,10 @@ const AddJobContainer: React.FC = observer(() => {
             style={
               isDisabled
                 ? {
-                    ...BottomSubmitStyled,
-                    backgroundColor: '#D8D8D8',
-                    border: 'none',
-                  }
+                  ...BottomSubmitStyled,
+                  backgroundColor: '#D8D8D8',
+                  border: 'none',
+                }
                 : BottomSubmitStyled
             }
             testId="submitButton"
