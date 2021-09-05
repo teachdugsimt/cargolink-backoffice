@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/paljs/gatsby-admin-template/compare/v0.4.0...v0.5.0) (2021-09-05)
+
+
+### Bug Fixes
+
+* add some field to user, job, truck ([e27e298](https://github.com/paljs/gatsby-admin-template/commit/e27e298feae6c4d72114d008c544744f790c2716))
+* show created_at at job management page ([28cb1fc](https://github.com/paljs/gatsby-admin-template/commit/28cb1fc25a2fd6ce19f8cd2278b96e7675a62c18))
+* **add-job:** show phoneNumber instead of userId ([bc5fdef](https://github.com/paljs/gatsby-admin-template/commit/bc5fdefeadba51fc6a32d89de7fd4fdae418c8bd))
+
 ## [0.4.0](https://github.com/paljs/gatsby-admin-template/compare/v0.3.0...v0.4.0) (2021-08-04)
 
 
