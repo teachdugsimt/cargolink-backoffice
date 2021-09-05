@@ -14,7 +14,7 @@ export default class UserSelectorNew extends AbstractAsyncSelector {
       if (response && response.ok) {
         const users = response.data.data;
         const usersOptions = users.map((user) => ({
-          label: user.fullName || user.email || user.userId,
+          label: user.fullName || user.email || user.phoneNumber || user.userId,
           value: user.userId,
         }));
         this.setState({ options: usersOptions, items: users });

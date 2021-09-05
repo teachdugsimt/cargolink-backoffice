@@ -71,6 +71,7 @@ export interface IJob {
   price: number;
   priceType: 'PER_TRIP' | 'PER_TON';
   tipper: boolean;
+  createdAt: string;
 }
 
 export interface IDestination {

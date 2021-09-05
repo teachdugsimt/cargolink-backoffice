@@ -10,6 +10,8 @@ import ReactDOMServer from 'react-dom/server';
 import CopyIcon from '@atlaskit/icon/glyph/copy';
 import EditIcon from '@atlaskit/icon/glyph/edit';
 import TrashIcon from '@atlaskit/icon/glyph/trash';
+import moment from 'moment';
+import DocStatus from '../../widgets/doc-status';
 
 export const sortabled: any = {
   phoneNumber: true, //! Note that: DESC = true, ASC = fasle
@@ -37,17 +39,17 @@ export const createHead = (withWidth: boolean) => {
   return {
     cells: [
       {
-        key: 'id',
-        content: 'Id',
+        key: 'created_at',
+        content: 'Created at',
         isSortable: true,
-        width: withWidth ? 5 : undefined,
+        width: withWidth ? '120px' : undefined,
       },
       {
         key: 'phoneNumber',
         content: 'Phone number',
         shouldTruncate: true,
         isSortable: true,
-        // width: withWidth ? 15 : undefined,
+        width: withWidth ? '120px' : undefined,
       },
       {
         key: 'email',
@@ -63,21 +65,30 @@ export const createHead = (withWidth: boolean) => {
         // width: withWidth ? 10 : undefined,
       },
       {
+        key: 'docStatus',
+        content: 'Doc status',
+        shouldTruncate: true,
+        width: '120px'
+      },
+      {
         key: 'status',
         content: 'status',
         shouldTruncate: true,
         isSortable: true,
+        width: '80px'
       },
       {
         key: 'legalType',
         content: 'legalType',
         shouldTruncate: true,
         isSortable: true,
+        width: '80px'
       },
       {
         key: 'action',
         content: '',
         shouldTruncate: true,
+        width: '100px'
       },
     ],
   };
@@ -160,12 +171,18 @@ export const createRow = (
           return '-';
       }
     })(user.status)
+
+
     return {
       key: `row-${index}-${user.phoneNumber}`,
       cells: [
+        // {
+        //   key: user.id,
+        //   content: user.id,
+        // },
         {
-          key: user.id,
-          content: user.id,
+          key: user.createdAt,
+          content: moment(user.createdAt).format('ll')
         },
         {
           key: user.phoneNumber,
@@ -178,6 +195,10 @@ export const createRow = (
         {
           key: user.fullName,
           content: user.fullName || '-',
+        },
+        {
+          key: user.documentStatus,
+          content: <DocStatus status={user.documentStatus} />,
         },
         {
           key: user.status,

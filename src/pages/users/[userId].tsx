@@ -139,7 +139,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
   const [isOpenDocumentAddress, setIsOpenDocumentAddress] = useState<boolean>(false);
 
   const userId = props.userId;
-  type Fields = 'email' | 'legalType' | 'phoneNumber' | 'attachCode' | 'userType';
+  type Fields = 'fullName' | 'email' | 'legalType' | 'phoneNumber' | 'attachCode' | 'userType';
 
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => { }}>
@@ -404,7 +404,25 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
           </GridColumn>
 
           <GridColumn medium={6}>
-            <Name isNoData={!userData?.fullName}>{userData?.fullName || fullNamePlaceholder}</Name>
+
+            <FieldWrapper>
+              <InlineEdit
+                defaultValue={userData.fullName}
+                editView={({ errorMessage, ...fieldProps }) => (
+                  <Textfield {...fieldProps} css={{ width: '100%' }} autoFocus />
+                )}
+                readView={() => (
+                  <ReadViewContainer data-testid="userFullname">
+                    <Name isNoData={!userData?.fullName}>{userData?.fullName || fullNamePlaceholder}</Name>
+                  </ReadViewContainer>
+                )}
+                onConfirm={(value) => {
+                  if (!value) return;
+                  return handleSave('fullName', value)
+                }}
+              />
+            </FieldWrapper>
+
             <FieldWrapper>
               <DetailLabel>
                 {t('memberSince')} :

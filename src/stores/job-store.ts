@@ -38,7 +38,8 @@ const JobType = types.model({
   price: types.maybeNull(types.number),
   priceType: types.maybeNull(types.string),
   tipper: types.maybeNull(types.boolean),
-  requiredTruckAmount: types.maybeNull(types.number)
+  requiredTruckAmount: types.maybeNull(types.number),
+  createdAt: types.maybeNull(types.string)
 });
 
 const JobManagement = types.model({

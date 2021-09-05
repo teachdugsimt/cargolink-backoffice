@@ -6,6 +6,7 @@ import { IJob } from '../../../services/job-api';
 import { TFunction } from 'i18next';
 import { IProductType } from '../../../services/product-type-api';
 import { findProvince } from '../../../utils';
+import moment from 'moment'
 
 export const sortable: any = {
   id: true, //! Note that: DESC = true, ASC = fasle
@@ -22,6 +23,12 @@ export const createTableHeader = () => ({
     {
       key: 'id',
       content: 'Job No.',
+      shouldTruncate: true,
+      isSortable: true,
+    },
+    {
+      key: 'createdAt',
+      content: 'Created At',
       shouldTruncate: true,
       isSortable: true,
     },
@@ -115,6 +122,10 @@ export const createTableRows = (
             // {job.id}
             // </span>
           ),
+        },
+        {
+          key: job.createdAt,
+          content: moment(job.createdAt).format('ll') || '-',
         },
         {
           key: job.productTypeId,
