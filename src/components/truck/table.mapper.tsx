@@ -27,8 +27,15 @@ export const createTableHeader = (withWidth: boolean) => {
   return {
     cells: [
       {
-        key: 'id',
-        content: 'ID',
+        key: 'mobileNo',
+        content: 'Phone No.',
+        isSortable: true,
+        width: '150px'
+      },
+      {
+        owner: 'owner',
+        content: 'Owner',
+        shouldTruncate: true,
         isSortable: true,
       },
       {
@@ -57,12 +64,6 @@ export const createTableHeader = (withWidth: boolean) => {
         isSortable: true,
       },
       {
-        owner: 'owner',
-        content: 'Owner',
-        shouldTruncate: true,
-        isSortable: true,
-      },
-      {
         key: 'createdAt',
         content: 'Register Date',
         shouldTruncate: true,
@@ -73,6 +74,16 @@ export const createTableHeader = (withWidth: boolean) => {
 };
 
 export const tableHeader = createTableHeader(true);
+
+function formatPhoneNumber(phoneNumberString: string) {
+  var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+  var match = cleaned.match(/^(66|)?(\d{2})(\d{3})(\d{4})$/);
+  if (match) {
+    var intlCode = (match[1] ? '+66 ' : '');
+    return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
+  }
+  return phoneNumberString;
+}
 
 export const createTableRows = async (
   trucks: (ITruck | ITruckNull)[],
@@ -112,8 +123,12 @@ export const createTableRows = async (
       key: `row-${index}-${truck.id}`,
       cells: [
         {
-          key: truck.id,
-          content: (truck.id),
+          key: truck.owner?.mobileNo,
+          content: formatPhoneNumber(truck.owner?.mobileNo),
+        },
+        {
+          key: truck.owner?.fullName,
+          content: truck.owner?.fullName || '-',
         },
         {
           key: truckType?.id || '-',
@@ -130,10 +145,6 @@ export const createTableRows = async (
         {
           key: truck.registrationNumber ? truck.registrationNumber.join('') : '',
           content: truck.registrationNumber ? truck.registrationNumber.join(', ') : '',
-        },
-        {
-          key: truck.owner?.fullName,
-          content: truck.owner?.fullName || '-',
         },
         {
           key: truck.createdAt ? momentFormat(truck.createdAt, loginStore.language) : '',
