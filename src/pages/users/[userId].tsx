@@ -32,6 +32,10 @@ import { UploadFileResponse } from '../../services/upload-api';
 import UploadButton from '../../components/UploadButton/index';
 import { ListFile } from '../../components/list-file/list-file';
 import AutoCompleteTypeahead from '../../components/auto-complete-typeahead/auto-complete-typeahead';
+import LicensePlate from '../../components/truck/license-plate';
+import TruckDoc from '../../components/truck/truck-doc';
+import { Col, Row } from '../../Layouts/Controller/controller';
+import UserDoc from './user-doc';
 
 interface Props {
   userId?: number;
@@ -401,6 +405,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                 )}
               </Field>
             </ImageFram>
+
           </GridColumn>
 
           <GridColumn medium={6}>
@@ -503,148 +508,26 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
           </GridColumn>
 
           <GridColumn medium={4}>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-              }}
-            >
-              <Name>{t('userDoc')}</Name>
-              <Field label="" name="uploadFile" defaultValue="">
-                {({ fieldProps, error, meta: { valid } }: any) => (
-                  <UploadButton isLoading={uploadFileStore.loading} accept=".pdf" onChange={handleUploadFile} />
-                )}
-              </Field>
-            </div>
-            {userData?.files?.length ? (
-              userData.files.map((file: any) => {
-                console.log(file)
 
-                if (typeof file != 'string') {
-                  return (
-                    <div key={file.attachCode}>
-
-                      <ListFile
-                        fileName={file.fileName}
-                        date={file.uploadedDate}
-                        handleDelete={() => {
-                          const red = '#E03616';
-                          const blue = '#3085D6';
-                          Swal.mixin({
-                            iconColor: red,
-                            confirmButtonColor: red,
-                            cancelButtonColor: blue,
-                            confirmButtonText: t('delete'),
-                            cancelButtonText: t('cancel'),
-                          })
-                            .fire({
-                              title: t('deleteConfirmAlertTitle'),
-                              titleText: t('deleteConfirmAlertText'),
-                              icon: 'warning',
-                              showCancelButton: true,
-                            })
-                            .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file.attachCode));
-                        }}
-                      />
-                    </div>
-                  );
-                } else {
-                  return <div key={file}>
-
-                    {/* "https://d3c8ovmhhst6ne.cloudfront.net/api/v1/media/file-stream-three?attachCode=04957a62bff4edfc356e8ad85c9ff92e2ee64a868676bd5f66c80d4795d229760fd20705ba0be98c925c75ebbeec8be0233b08f1b22ca579b23654ebf9775f48" */}
-
-
-                    <ListFile
-                      fileName={file}
-                      // date={''}
-                      handlePreview={(attachCode) => {
-                        // console.log(attachCode)
-                        setIsOpen(true)
-                      }}
-                      handleDelete={() => {
-                        const red = '#E03616';
-                        const blue = '#3085D6';
-                        Swal.mixin({
-                          iconColor: red,
-                          confirmButtonColor: red,
-                          cancelButtonColor: blue,
-                          confirmButtonText: t('delete'),
-                          cancelButtonText: t('cancel'),
-                        })
-                          .fire({
-                            title: t('deleteConfirmAlertTitle'),
-                            titleText: t('deleteConfirmAlertText'),
-                            icon: 'warning',
-                            showCancelButton: true,
-                          })
-                          .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file));
-                      }}
-                    />
-                  </div>
-                }
-              })
-            ) : (
-              <span>{t('noDocuments')}</span>
-            )}
-            {/* <div style={{ marginTop: '1rem' }}> */}
-            <ModalTransition>
-              {isOpen && (
-                <ModalDialog
-                  actions={[
-                    { text: 'Get started', onClick: close },
-                    { text: 'Skip' },
-                  ]}
-                  onClose={() => { setIsOpen(false) }}
-                  heading="Easily set up your own projects"
-                  width={'x-large'}
-                >
-                  <FilePreviewer file={{
-                    url: "https://cargolink-documents.s3.ap-southeast-1.amazonaws.com/USER_DOC/ACTIVE/USER_DOC-1625477727808.pdf"
-                  }}
-                  />
-                </ModalDialog>
-              )}
-            </ModalTransition>
-
-            <FieldWrapper>
-              <DetailLabel>
-                {t('status')} :
-              </DetailLabel>
-              <InlineEdit
-                defaultValue={userData.documentStatus}
-                editView={({ errorMessage, ...fieldProps }) => (
-                  <EditViewContainer>
-                    <Select
-                      {...fieldProps}
-                      options={statusOptions}
-                      autoFocus
-                      openMenuOnFocus
-                    />
-                  </EditViewContainer>
-                )}
-                readView={() => (
-                  <ReadViewContainer data-testid="docStatusField">
-                    {statusOptions.filter(e => e.value == userData.documentStatus)[0].label}
-                  </ReadViewContainer>
-                )}
-                onConfirm={(value) => {
-                  try {
-                    const status = value;
-                    handleChangeDocStatus(status.value);
-                  } catch (error) {
-                    console.error('Error casting document status change (maybe invalid status)', error);
-                  }
-                }}
-              />
-            </FieldWrapper>
-
-            {/* </div> */}
           </GridColumn>
-
-
         </Grid>
-        <div style={{ borderTop: '1px solid #ddd', margin: '30px 0' }} />
+        <div style={{ borderTop: '1px solid #ddd', margin: '30px 0 10px 0' }} />
+
+        <Row>
+          <Col>
+            <UserDoc userData={userData} handleDeleteFile={handleDeleteFile} />
+          </Col>
+          <div style={{
+            backgroundColor: 'lightgrey',
+            height: 'auto', width: 1,
+            marginRight: 20
+          }}></div>
+          <Col flex={2}>
+            <TruckDoc carrierId={userData.userId} />
+          </Col>
+        </Row>
+
+
         {/* <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} /> */}
         {/* <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} fieldStyle={{}} /> */}
 

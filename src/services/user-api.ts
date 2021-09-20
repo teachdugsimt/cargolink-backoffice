@@ -61,7 +61,7 @@ export interface CreateUserPayload {
   fullName: string;
   phoneNumber: string;
   email?: string;
-  userType: 0; //? fix 0 for now
+  userType: 'SHIPPER' | 'CARRIER' | 'BOTH'; //? fix 0 for now
   legalType: 'INDIVIDUAL' | 'JURISTIC';
   url?: string[];
 }

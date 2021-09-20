@@ -1,6 +1,10 @@
 {
-    "noDocument": "No Document",
-    "waitForVerify": "Wait for Verify",
-    "verified": "Verified",
-    "rejected": "Rejected"
+  "noDocument": "No Document",
+  "waitForVerify": "Wait for Verify",
+  "verified": "Verified",
+  "rejected": "Rejected",
+  "NO_DOCUMENT": "No document",
+  "WAIT_FOR_VERIFIED": "Wait to verify",
+  "APPROVED": "Approved",
+  "REJECTED": "Rejected"
 }

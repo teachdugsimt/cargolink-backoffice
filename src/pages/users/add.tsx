@@ -130,7 +130,7 @@ const AddUser: React.FC<Props> = observer(() => {
     const payload: CreateUserPayload = {
       fullName: formState.fullName,
       email: formState.email,
-      userType: 0,
+      userType: 'BOTH',
       phoneNumber: `+66${phoneNumber.substr(1)}`,
       legalType,
       url: attachCodes,

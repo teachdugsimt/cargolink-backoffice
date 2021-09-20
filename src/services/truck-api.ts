@@ -14,14 +14,18 @@ class TruckApi {
     return response;
   };
 
+  getTruckByCarrierId = async (params: TrucksByCarrierParams) => {
+    const response: AxiosResponse<TrucksListResponse> = await ExcuteApi(
+      `/api/v1/trucks/carrier/${params.carrierId}`,
+      {}, 'get', 6e5, true, true
+    )
+    return response
+  }
+
   getTruckById = async (params: TruckRequestParams) => {
     const response: AxiosResponse<TrucksListResponse> = await ExcuteApi(
       `/api/v1/trucks/${params.truckId}`,
-      {},
-      'get',
-      6e5,
-      true,
-      true,
+      {}, 'get', 6e5, true, true,
     );
     return response;
   };
@@ -54,6 +58,9 @@ export interface TrucksListParams {
   status?: 0 | 1;
 }
 
+export interface TrucksByCarrierParams {
+  carrierId: string;
+}
 export interface TrucksListResponse {
   data: ITruck[];
   size: number;

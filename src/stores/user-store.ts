@@ -10,7 +10,7 @@ const userType = types.model({
   fullName: types.maybeNull(types.string),
   phoneNumber: types.maybeNull(types.string),
   email: types.maybeNull(types.string),
-  userType: types.maybeNull(types.number),
+  userType: types.maybeNull(types.string),
   userId: types.maybeNull(types.string),
   createdAt: types.maybeNull(types.string),
   createdBy: types.maybeNull(types.string),
@@ -152,7 +152,7 @@ export interface IUserDTO {
   fullName: string | null;
   phoneNumber: string | null;
   email: string;
-  userType: number;
+  userType: string;
   userId: string;
   createdAt: string;
   createdBy: string | null;

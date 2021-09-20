@@ -23,6 +23,7 @@ const UploadButton = (props: IProps) => {
   return (
     <>
       <LoadingButton
+        spacing='compact'
         testId="uploadButton" isLoading={isLoading}
         appearance="primary" onClick={() => uploadInputRef.current?.click()}>
         {t('upload')}

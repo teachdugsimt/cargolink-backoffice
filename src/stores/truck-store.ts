@@ -1,6 +1,6 @@
 import { flow, types } from 'mobx-state-tree';
 import { TruckApi } from '../services';
-import truckApi, { ITruck, TruckRequestParams, TrucksListParams, TrucksListResponse } from '../services/truck-api';
+import truckApi, { ITruck, TruckRequestParams, TrucksByCarrierParams, TrucksListParams, TrucksListResponse } from '../services/truck-api';
 
 const AvatarType = types.model({
   object: types.maybeNull(types.string),
@@ -58,6 +58,7 @@ export interface ITrucksManagement {
 export const TruckStore = types
   .model('TruckStore', {
     loading: false,
+    userTrucks_loading: false,
     data_count: types.maybeNull(types.number),
     data_trucks: types.maybeNull(TruckManagementType),
     currentTruck: types.maybeNull(TruckType),
@@ -169,6 +170,25 @@ export const TruckStore = types
             title: '',
             content: 'Failed to get truck ' + params.truckId,
           };
+        }
+      }),
+
+      getTrucksListByCarrierId: flow(function* getTrucksListByCarrierId(params: TrucksByCarrierParams) {
+        try {
+          self.userTrucks_loading = true;
+
+          const response = yield truckApi.getTruckByCarrierId(params)
+          console.log(response)
+          self.userTrucks_loading = false
+          if (response.ok) {
+            // const { data, size, totalElements, totalPages }: TrucksListResponse = response.data;
+            // console.log(response.data)
+            return response.data
+          } else {
+
+          }
+        } catch (error) {
+          return error
         }
       })
     }
