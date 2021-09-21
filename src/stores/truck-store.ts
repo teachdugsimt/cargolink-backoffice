@@ -1,6 +1,12 @@
 import { flow, types } from 'mobx-state-tree';
 import { TruckApi } from '../services';
-import truckApi, { ITruck, TruckRequestParams, TrucksListParams, TrucksListResponse } from '../services/truck-api';
+import truckApi, {
+  ITruck,
+  TruckRequestParams,
+  TrucksByCarrierParams,
+  TrucksListParams,
+  TrucksListResponse,
+} from '../services/truck-api';
 
 const AvatarType = types.model({
   object: types.maybeNull(types.string),
@@ -24,8 +30,8 @@ const TruckPhotosType = types.model({
   front: types.maybeNull(types.string),
   back: types.maybeNull(types.string),
   left: types.maybeNull(types.string),
-  right: types.maybeNull(types.string)
-})
+  right: types.maybeNull(types.string),
+});
 
 const TruckType = types.model({
   id: types.maybeNull(types.string),
@@ -40,7 +46,7 @@ const TruckType = types.model({
   quotationNumber: types.maybeNull(types.number),
   workingZones: types.maybeNull(types.array(ZoneType)),
   owner: types.maybeNull(OwnerType),
-  truckPhotos: types.maybeNull(TruckPhotosType)
+  truckPhotos: types.maybeNull(TruckPhotosType),
 });
 
 const TruckManagementType = types.model({
@@ -58,6 +64,7 @@ export interface ITrucksManagement {
 export const TruckStore = types
   .model('TruckStore', {
     loading: false,
+    userTrucks_loading: false,
     data_count: types.maybeNull(types.number),
     data_trucks: types.maybeNull(TruckManagementType),
     currentTruck: types.maybeNull(TruckType),
@@ -97,11 +104,11 @@ export const TruckStore = types
                   if (x == null) return x;
                   if (isNaN(+x)) throw new Error('this should not be NaN: ' + x);
                   return +x;
-                }
+                };
                 const owner = {
                   ...truck.owner,
                   id: toNumber(truck.owner.id),
-                }
+                };
                 const result: ITruck = {
                   ...truck,
                   loadingWeight: toNumber(loadingWeight),
@@ -136,7 +143,7 @@ export const TruckStore = types
             self.error_response = {
               title: response.problem,
               content: 'GET trucks : ' + response.originalError.message,
-            }
+            };
           }
         } catch (error) {
           console.error('Failed to getTrucks :>', error);
@@ -145,33 +152,51 @@ export const TruckStore = types
           self.error_response = {
             title: '',
             content: 'Failed to getTrucks',
-          }
+          };
         }
       }),
 
       getTruckById: flow(function* getTruckById(params: TruckRequestParams) {
         try {
-          self.loading = true
-          self.currentTruck = null
-          const response = yield truckApi.getTruckById(params)
-          console.log(response)
+          self.loading = true;
+          self.currentTruck = null;
+          const response = yield truckApi.getTruckById(params);
+          console.log(response);
           if (response.ok) {
-            self.currentTruck = response.data.data
+            self.currentTruck = response.data.data;
           } else {
             self.error_response = {
               title: '',
               content: 'Failed to get truck ' + params.truckId,
             };
           }
-          self.loading = false
+          self.loading = false;
         } catch (error) {
           self.error_response = {
             title: '',
             content: 'Failed to get truck ' + params.truckId,
           };
         }
-      })
-    }
+      }),
+
+      getTrucksListByCarrierId: flow(function* getTrucksListByCarrierId(params: TrucksByCarrierParams) {
+        try {
+          self.userTrucks_loading = true;
+
+          const response = yield truckApi.getTruckByCarrierId(params);
+          console.log(response);
+          self.userTrucks_loading = false;
+          if (response.ok) {
+            // const { data, size, totalElements, totalPages }: TrucksListResponse = response.data;
+            // console.log(response.data)
+            return response.data;
+          } else {
+          }
+        } catch (error) {
+          return error;
+        }
+      }),
+    };
   });
 
 export interface ITruckNull {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, CSSProperties } from 'react'
+import React, { useEffect, useState, CSSProperties } from 'react';
 import { observer } from 'mobx-react-lite';
 import { navigate } from 'gatsby';
 import { useTranslation } from 'react-i18next';
@@ -32,6 +32,10 @@ import { UploadFileResponse } from '../../services/upload-api';
 import UploadButton from '../../components/UploadButton/index';
 import { ListFile } from '../../components/list-file/list-file';
 import AutoCompleteTypeahead from '../../components/auto-complete-typeahead/auto-complete-typeahead';
+import LicensePlate from '../../components/truck/license-plate';
+import TruckDoc from '../../components/truck/truck-doc';
+import { Col, Row } from '../../Layouts/Controller/controller';
+import UserDoc from './user-doc';
 
 interface Props {
   userId?: number;
@@ -101,7 +105,7 @@ const FieldWrapper = styled.div`
 
 const DetailLabel = styled.div`
   margin-top: 8px;
-  color: #AAA;
+  color: #aaa;
 `;
 
 const EditViewContainer = styled.div`
@@ -128,7 +132,6 @@ interface AddressProps {
 }
 
 const UserDetail: React.FC<Props> = observer((props: any) => {
-
   const { t } = useTranslation();
   const [previewImage, setPreviewImage] = useState<any>(null);
   const [userData, setUserData] = useState<IUserDTO | null>(null);
@@ -142,14 +145,14 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
   type Fields = 'fullName' | 'email' | 'legalType' | 'phoneNumber' | 'attachCode' | 'userType';
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => { }}>
+    <Breadcrumbs onExpand={() => {}}>
       <BreadcrumbsItem onClick={() => navigate('/users')} text={t('userManagement')} key="user-management" />
       <BreadcrumbsItem text={t('userInfo')} key="user-info" />
     </Breadcrumbs>
   );
 
   useEffect(() => {
-    console.log(userId)
+    console.log(userId);
     // if (!userId) navigate('/user-management');
     // else
     getUser(userId);
@@ -162,11 +165,9 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
   }, []);
 
   useEffect(() => {
-    console.log("LOADING", uploadFileStore.loading)
-    return () => {
-    }
-  }, [uploadFileStore.loading])
-
+    console.log('LOADING', uploadFileStore.loading);
+    return () => {};
+  }, [uploadFileStore.loading]);
 
   const getUser = async (uId: string) => {
     UserApi.getUser(uId)
@@ -221,7 +222,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
 
   const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
-    console.log('FILE', file)
+    console.log('FILE', file);
     file && uploadFileStore.uploadFile('USER_DOC', file);
   };
 
@@ -271,7 +272,6 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
     },
   ];
 
-
   const AddressForm = ({ onDismiss }: { onDismiss: () => any }) => {
     return (
       <>
@@ -283,7 +283,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
           }}
         >
           <div style={{}}>
-            <Field label={t('addressNo')} name={'addressNo'} defaultValue=''>
+            <Field label={t('addressNo')} name={'addressNo'} defaultValue="">
               {({ fieldProps, error, valid }: any) => <Textfield {...fieldProps} />}
             </Field>
           </div>
@@ -297,7 +297,11 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
               {({ fieldProps, error, valid }: any) => <Textfield {...fieldProps} />}
             </Field>
           </div>
-          <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} fieldStyle={{}} />
+          <AutoCompleteTypeahead
+            data={addressOptions}
+            handleValue={(data: any) => handleAddressValue(data)}
+            fieldStyle={{}}
+          />
         </div>
       </>
     );
@@ -363,7 +367,6 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
     });
   };
 
-
   if (!userData) return <></>;
   const fullNamePlaceholder = t('fullNamePlaceholder');
 
@@ -404,7 +407,6 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
           </GridColumn>
 
           <GridColumn medium={6}>
-
             <FieldWrapper>
               <InlineEdit
                 defaultValue={userData.fullName}
@@ -418,34 +420,25 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                 )}
                 onConfirm={(value) => {
                   if (!value) return;
-                  return handleSave('fullName', value)
+                  return handleSave('fullName', value);
                 }}
               />
             </FieldWrapper>
 
             <FieldWrapper>
-              <DetailLabel>
-                {t('memberSince')} :
-              </DetailLabel>
+              <DetailLabel>{t('memberSince')} :</DetailLabel>
               <div style={{ marginTop: 8, marginLeft: 5 }}>
                 {DateFormat(userData.createdAt as string, loginStore.language)}
               </div>
             </FieldWrapper>
 
             <FieldWrapper>
-              <DetailLabel>
-                {t('legalType')} :
-              </DetailLabel>
+              <DetailLabel>{t('legalType')} :</DetailLabel>
               <InlineEdit<ValueType<OptionType, true>>
                 defaultValue={userData?.legalType === 'INDIVIDUAL' ? t('individual') : t('company')}
                 editView={(fieldProps) => (
                   <EditViewContainer>
-                    <Select
-                      {...fieldProps}
-                      options={legalTypeOptions}
-                      autoFocus
-                      openMenuOnFocus
-                    />
+                    <Select {...fieldProps} options={legalTypeOptions} autoFocus openMenuOnFocus />
                   </EditViewContainer>
                 )}
                 readView={() => (
@@ -454,16 +447,14 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                   </ReadViewContainer>
                 )}
                 onConfirm={(value) => {
-                  console.log('LEGAL VALUE', value)
-                  return handleSave('legalType', value.value)
+                  console.log('LEGAL VALUE', value);
+                  return handleSave('legalType', value.value);
                 }}
               />
             </FieldWrapper>
 
             <FieldWrapper>
-              <DetailLabel>
-                {t('phoneNumber')} :
-              </DetailLabel>
+              <DetailLabel>{t('phoneNumber')} :</DetailLabel>
               <InlineEdit
                 defaultValue={userData.phoneNumber}
                 editView={({ errorMessage, ...fieldProps }) => (
@@ -477,21 +468,17 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                 onConfirm={(value) => {
                   if (!value) return;
                   if (value.startsWith('0')) value = `+66${value.substr(1)}`;
-                  return handleSave('phoneNumber', value)
+                  return handleSave('phoneNumber', value);
                 }}
               />
             </FieldWrapper>
 
             <FieldWrapper>
-              <DetailLabel>
-                {t('email')} :
-              </DetailLabel>
+              <DetailLabel>{t('email')} :</DetailLabel>
               <InlineEdit
                 defaultValue={userData.email}
                 // label={t('email')}
-                editView={({ errorMessage, ...fieldProps }) => (
-                  <Textfield {...fieldProps} autoFocus />
-                )}
+                editView={({ errorMessage, ...fieldProps }) => <Textfield {...fieldProps} autoFocus />}
                 readView={() => (
                   <ReadViewContainer data-testid="emailField">
                     {userData.email || <div style={{ color: '#aaa' }}>{t('clickToEnterValue')}</div>}
@@ -502,149 +489,27 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
             </FieldWrapper>
           </GridColumn>
 
-          <GridColumn medium={4}>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-              }}
-            >
-              <Name>{t('userDoc')}</Name>
-              <Field label="" name="uploadFile" defaultValue="">
-                {({ fieldProps, error, meta: { valid } }: any) => (
-                  <UploadButton isLoading={uploadFileStore.loading} accept=".pdf" onChange={handleUploadFile} />
-                )}
-              </Field>
-            </div>
-            {userData?.files?.length ? (
-              userData.files.map((file: any) => {
-                console.log(file)
-
-                if (typeof file != 'string') {
-                  return (
-                    <div key={file.attachCode}>
-
-                      <ListFile
-                        fileName={file.fileName}
-                        date={file.uploadedDate}
-                        handleDelete={() => {
-                          const red = '#E03616';
-                          const blue = '#3085D6';
-                          Swal.mixin({
-                            iconColor: red,
-                            confirmButtonColor: red,
-                            cancelButtonColor: blue,
-                            confirmButtonText: t('delete'),
-                            cancelButtonText: t('cancel'),
-                          })
-                            .fire({
-                              title: t('deleteConfirmAlertTitle'),
-                              titleText: t('deleteConfirmAlertText'),
-                              icon: 'warning',
-                              showCancelButton: true,
-                            })
-                            .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file.attachCode));
-                        }}
-                      />
-                    </div>
-                  );
-                } else {
-                  return <div key={file}>
-
-                    {/* "https://d3c8ovmhhst6ne.cloudfront.net/api/v1/media/file-stream-three?attachCode=04957a62bff4edfc356e8ad85c9ff92e2ee64a868676bd5f66c80d4795d229760fd20705ba0be98c925c75ebbeec8be0233b08f1b22ca579b23654ebf9775f48" */}
-
-
-                    <ListFile
-                      fileName={file}
-                      // date={''}
-                      handlePreview={(attachCode) => {
-                        // console.log(attachCode)
-                        setIsOpen(true)
-                      }}
-                      handleDelete={() => {
-                        const red = '#E03616';
-                        const blue = '#3085D6';
-                        Swal.mixin({
-                          iconColor: red,
-                          confirmButtonColor: red,
-                          cancelButtonColor: blue,
-                          confirmButtonText: t('delete'),
-                          cancelButtonText: t('cancel'),
-                        })
-                          .fire({
-                            title: t('deleteConfirmAlertTitle'),
-                            titleText: t('deleteConfirmAlertText'),
-                            icon: 'warning',
-                            showCancelButton: true,
-                          })
-                          .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file));
-                      }}
-                    />
-                  </div>
-                }
-              })
-            ) : (
-              <span>{t('noDocuments')}</span>
-            )}
-            {/* <div style={{ marginTop: '1rem' }}> */}
-            <ModalTransition>
-              {isOpen && (
-                <ModalDialog
-                  actions={[
-                    { text: 'Get started', onClick: close },
-                    { text: 'Skip' },
-                  ]}
-                  onClose={() => { setIsOpen(false) }}
-                  heading="Easily set up your own projects"
-                  width={'x-large'}
-                >
-                  <FilePreviewer file={{
-                    url: "https://cargolink-documents.s3.ap-southeast-1.amazonaws.com/USER_DOC/ACTIVE/USER_DOC-1625477727808.pdf"
-                  }}
-                  />
-                </ModalDialog>
-              )}
-            </ModalTransition>
-
-            <FieldWrapper>
-              <DetailLabel>
-                {t('status')} :
-              </DetailLabel>
-              <InlineEdit
-                defaultValue={userData.documentStatus}
-                editView={({ errorMessage, ...fieldProps }) => (
-                  <EditViewContainer>
-                    <Select
-                      {...fieldProps}
-                      options={statusOptions}
-                      autoFocus
-                      openMenuOnFocus
-                    />
-                  </EditViewContainer>
-                )}
-                readView={() => (
-                  <ReadViewContainer data-testid="docStatusField">
-                    {statusOptions.filter(e => e.value == userData.documentStatus)[0].label}
-                  </ReadViewContainer>
-                )}
-                onConfirm={(value) => {
-                  try {
-                    const status = value;
-                    handleChangeDocStatus(status.value);
-                  } catch (error) {
-                    console.error('Error casting document status change (maybe invalid status)', error);
-                  }
-                }}
-              />
-            </FieldWrapper>
-
-            {/* </div> */}
-          </GridColumn>
-
-
+          <GridColumn medium={4}></GridColumn>
         </Grid>
-        <div style={{ borderTop: '1px solid #ddd', margin: '30px 0' }} />
+        <div style={{ borderTop: '1px solid #ddd', margin: '30px 0 10px 0' }} />
+
+        <Row>
+          <Col>
+            <UserDoc userData={userData} handleDeleteFile={handleDeleteFile} />
+          </Col>
+          <div
+            style={{
+              backgroundColor: 'lightgrey',
+              height: 'auto',
+              width: 1,
+              marginRight: 20,
+            }}
+          ></div>
+          <Col flex={2}>
+            <TruckDoc carrierId={userData.userId} />
+          </Col>
+        </Row>
+
         {/* <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} /> */}
         {/* <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} fieldStyle={{}} /> */}
 
@@ -733,11 +598,9 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
           </form>
         )}
       </Form> */}
-
-
       </Page>
     </>
-  )
-})
+  );
+});
 
-export default UserDetail
+export default UserDetail;

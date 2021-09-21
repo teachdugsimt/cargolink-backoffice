@@ -152,7 +152,7 @@ export interface IUserDTO {
   fullName: string | null;
   phoneNumber: string | null;
   email: string;
-  userType: number;
+  userType: string;
   userId: string;
   createdAt: string;
   createdBy: string | null;
