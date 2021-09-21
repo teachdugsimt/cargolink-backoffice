@@ -27,16 +27,12 @@ enum TruckFilterState {
   ALL = -1,
 }
 
-const extendRows = (
-  rows: Array<RowType>,
-  onClick: (e: React.MouseEvent, rowIndex: number) => void,
-) => {
+const extendRows = (rows: Array<RowType>, onClick: (e: React.MouseEvent, rowIndex: number) => void) => {
   return rows.map((row, index) => ({
     ...row,
     onClick: (e: React.MouseEvent) => onClick(e, index),
   }));
 };
-
 
 const TrucksListComponent: React.FC = observer(() => {
   const { t } = useTranslation();
@@ -149,9 +145,8 @@ const TrucksListComponent: React.FC = observer(() => {
   );
 
   const onRowClick = (e: React.MouseEvent, rowIndex: number) => {
-    navigate('/vehicles/' + rowData[rowIndex].cells[0].content)
-  }
-
+    navigate('/vehicles/' + rowData[rowIndex].cells[7].content);
+  };
   return (
     <div>
       <HeaderGroup>
