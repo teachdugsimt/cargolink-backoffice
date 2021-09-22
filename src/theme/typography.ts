@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const SectionHeader = styled.span`
   color: #333;
@@ -8,4 +8,4 @@ export const SectionHeader = styled.span`
   :first-letter {
     text-transform: capitalize;
   }
-`
+`;

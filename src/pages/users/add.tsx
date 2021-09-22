@@ -27,7 +27,7 @@ import { Property } from 'csstype';
 import { useMst } from '../../stores/root-store';
 import { UploadFilePath } from '../../services/upload-api';
 
-interface Props { }
+interface Props {}
 interface FileProps {
   lastModified?: number;
   lastModifiedDate?: string;
@@ -107,7 +107,7 @@ const AddUser: React.FC<Props> = observer(() => {
   // const onSubmit = data => console.log(data);
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => { }}>
+    <Breadcrumbs onExpand={() => {}}>
       <BreadcrumbsItem onClick={() => navigate('/user-management')} text={t('userManagement')} key="user-management" />
       <BreadcrumbsItem text={t('addNewAccount')} key="user-info" />
     </Breadcrumbs>
@@ -171,7 +171,7 @@ const AddUser: React.FC<Props> = observer(() => {
               text: 'Error while create this user',
             });
           });
-      }
+      },
     });
   };
 
@@ -234,7 +234,6 @@ const AddUser: React.FC<Props> = observer(() => {
         {({ formProps }) => (
           <form {...formProps} name="add-user" style={{ overflow: 'hidden' }}>
             <div style={groupItemsStyle}>
-
               <div>
                 <Field label={t('legalType')} isRequired name="legalType">
                   {({ fieldProps, error, meta: { valid } }: any) => (
@@ -248,8 +247,6 @@ const AddUser: React.FC<Props> = observer(() => {
                   )}
                 </Field>
               </div>
-
-
 
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div style={{ flex: 1, marginRight: 10 }}>
@@ -274,10 +271,8 @@ const AddUser: React.FC<Props> = observer(() => {
                       </Fragment>
                     )}
                   </Field>
-
                 </div>
                 <div style={{ flex: 1, marginLeft: 10 }}>
-
                   <Field
                     label={t('phoneNumber')}
                     isRequired
@@ -300,8 +295,6 @@ const AddUser: React.FC<Props> = observer(() => {
                       </Fragment>
                     )}
                   </Field>
-
-
                 </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -330,7 +323,6 @@ const AddUser: React.FC<Props> = observer(() => {
                   // borderTop: '1px solid #D8D8D8',
                 }}
               >
-
                 <Field
                   label={`${t('citizenId')} / ${t('companyCertificate')}`}
                   name="uploadFile"
@@ -344,15 +336,10 @@ const AddUser: React.FC<Props> = observer(() => {
                     </div>
                   )}
                 </Field>
-
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '0 -.5rem', marginTop: '2rem' }}>
-              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '0 -.5rem', marginTop: '2rem' }}></div>
               <FormFooter>
-                <Button type="button" style={BottomBackStyled}
-                  onClick={() => navigate('/users')}
-                  testId="backButton"
-                >
+                <Button type="button" style={BottomBackStyled} onClick={() => navigate('/users')} testId="backButton">
                   <BackText>{t('back')}</BackText>
                 </Button>
                 <Button
@@ -361,10 +348,10 @@ const AddUser: React.FC<Props> = observer(() => {
                   style={
                     isDisabled
                       ? {
-                        ...BottomSubmitStyled,
-                        backgroundColor: '#D8D8D8',
-                        border: 'none',
-                      }
+                          ...BottomSubmitStyled,
+                          backgroundColor: '#D8D8D8',
+                          border: 'none',
+                        }
                       : BottomSubmitStyled
                   }
                   testId="submitButton"
@@ -376,7 +363,6 @@ const AddUser: React.FC<Props> = observer(() => {
           </form>
         )}
       </Form>
-
     </div>
   );
 });

@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { SectionHeader } from '../../theme/typography'
-import { ListFile } from '../list-file/list-file'
-import UploadButton from '../UploadButton'
-import LicensePlate from './license-plate'
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { SectionHeader } from '../../theme/typography';
+import { ListFile } from '../list-file/list-file';
+import UploadButton from '../UploadButton';
+import LicensePlate from './license-plate';
 import DynamicTable from '@atlaskit/dynamic-table';
-import DropdownMenu, {
-  DropdownItem,
-  DropdownItemGroup,
-} from '@atlaskit/dropdown-menu';
-import moment from 'moment'
-import { useMst } from '../../stores/root-store'
-import { useTranslation } from 'react-i18next'
+import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdown-menu';
+import moment from 'moment';
+import { useMst } from '../../stores/root-store';
+import { useTranslation } from 'react-i18next';
 
 const DocItem = styled.div`
   display: flex;
   flex-direction: column;
-`
+`;
 
 const Row = styled.div`
   display: flex;
@@ -24,7 +21,7 @@ const Row = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-`
+`;
 
 const createHead = (withWidth: boolean) => {
   return {
@@ -56,7 +53,7 @@ const createHead = (withWidth: boolean) => {
         shouldTruncate: true,
         isSortable: true,
         width: withWidth ? 20 : undefined,
-      }
+      },
     ],
   };
 };
@@ -72,32 +69,29 @@ const transformData = (data: object[]) => {
     createdAt: e.createdAt,
     status: e.document_status,
     url: '',
-  }))
-}
+  }));
+};
 
 function TruckDoc(props: any) {
-
   const head = createHead(true);
-  const { carrierId } = props
-  const { truckStore, loginStore } = useMst()
-  const { t } = useTranslation('docStatus')
-  const [fileList, setFileList] = useState<object[]>([])
-  const [fileStatus, setFileStatus] = useState('NO_DOCUMENT')
+  const { carrierId } = props;
+  const { truckStore, loginStore } = useMst();
+  const { t } = useTranslation('docStatus');
+  const [fileList, setFileList] = useState<object[]>([]);
+  const [fileStatus, setFileStatus] = useState('NO_DOCUMENT');
 
   useEffect(() => {
     // console.log('USER DATA', loginStore.data_profile?.userId)
     async function fetchData() {
       if (carrierId) {
-        const data = await truckStore.getTrucksListByCarrierId({ carrierId })
-        console.log(data)
-        setFileList(
-          transformData(data.data) ?? []
-        )
+        const data = await truckStore.getTrucksListByCarrierId({ carrierId });
+        console.log(data);
+        setFileList(transformData(data.data) ?? []);
       }
     }
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const rows = fileList.map((file: any, index: number) => ({
     key: `row-${index}-${createKey(file.licensePlate)}`,
@@ -118,12 +112,22 @@ function TruckDoc(props: any) {
         content: (
           <DropdownMenu trigger={fileStatus} triggerType="button">
             <DropdownItemGroup>
-              <DropdownItem onClick={(e: any) => {
-                console.log(e)
-              }} isCompact>{'NO_DOCUMENT'}</DropdownItem>
-              <DropdownItem onClick={(e: any) => {
-                console.log(e)
-              }} isCompact>{'WAIT_FOR_VERIFIED'}</DropdownItem>
+              <DropdownItem
+                onClick={(e: any) => {
+                  console.log(e);
+                }}
+                isCompact
+              >
+                {'NO_DOCUMENT'}
+              </DropdownItem>
+              <DropdownItem
+                onClick={(e: any) => {
+                  console.log(e);
+                }}
+                isCompact
+              >
+                {'WAIT_FOR_VERIFIED'}
+              </DropdownItem>
               <DropdownItem isCompact>{'APPROVED'}</DropdownItem>
               <DropdownItem isCompact>{'REJECTED'}</DropdownItem>
             </DropdownItemGroup>
@@ -161,9 +165,8 @@ function TruckDoc(props: any) {
           return <ListFile />
         })
       } */}
-
     </DocItem>
-  )
+  );
 }
 
-export default TruckDoc
+export default TruckDoc;

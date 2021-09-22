@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { navigate } from 'gatsby'
+import { navigate } from 'gatsby';
 import { observer } from 'mobx-react-lite';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
@@ -9,21 +9,18 @@ import { Grid, GridColumn } from '@atlaskit/page';
 import TruckTypeWidget from '../../components/truck/widgets/truck-type';
 import TruckWidget from '../../components/truck/widgets/truck';
 
-import 'photoswipe/dist/photoswipe.css'
-import 'photoswipe/dist/default-skin/default-skin.css'
+import 'photoswipe/dist/photoswipe.css';
+import 'photoswipe/dist/default-skin/default-skin.css';
 import TruckGalleryWidget from '../../components/truck/widgets/truck-gallery';
-
-
 
 const TruckInfo = observer((props: any) => {
   const { t } = useTranslation();
-  const { truckStore } = useMst()
-  const { currentTruck } = truckStore
+  const { truckStore } = useMst();
+  const { currentTruck } = truckStore;
 
   useEffect(() => {
-    console.log(props.truckId)
-    truckStore.getTruckById({ truckId: props.truckId })
-  }, [])
+    truckStore.getTruckById({ truckId: props.truckId });
+  }, []);
 
   const breadcrumbs = (
     <Breadcrumbs>
@@ -36,7 +33,6 @@ const TruckInfo = observer((props: any) => {
       <PageHeader breadcrumbs={breadcrumbs}>{t('vehicle.info')}</PageHeader>
       <Grid layout="fluid" spacing="compact">
         <GridColumn medium={6}>
-
           <TruckWidget
             title={currentTruck?.id}
             truckType={currentTruck?.truckType}
@@ -45,18 +41,14 @@ const TruckInfo = observer((props: any) => {
             loadingWeight={currentTruck?.loadingWeight}
             registrationNumber={currentTruck?.registrationNumber}
           />
-
         </GridColumn>
 
         <GridColumn medium={6}>
-
           <TruckGalleryWidget truckPhotos={currentTruck?.truckPhotos} />
-
         </GridColumn>
       </Grid>
-    </ >
-  )
-})
+    </>
+  );
+});
 
 export default TruckInfo;
-

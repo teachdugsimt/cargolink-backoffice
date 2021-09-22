@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import { SectionHeader } from '../../theme/typography'
+import React, { useState } from 'react';
+import { SectionHeader } from '../../theme/typography';
 import { useTranslation } from 'react-i18next';
 import UploadButton from '../../components/UploadButton';
 import { ListFile } from '../../components/list-file/list-file';
 import Swal from 'sweetalert2';
 import { Row, Col } from '../../Layouts/Controller/controller';
-import styled from 'styled-components'
+import styled from 'styled-components';
 import InlineEdit from '@atlaskit/inline-edit';
 import { fontSize, gridSize } from '@atlaskit/theme/constants';
 import Select, { ValueType } from '@atlaskit/select';
@@ -22,7 +22,7 @@ const FieldWrapper = styled.div`
 
 const DetailLabel = styled.div`
   margin-top: 8px;
-  color: #AAA;
+  color: #aaa;
 `;
 
 const EditViewContainer = styled.div`
@@ -38,14 +38,11 @@ const ReadViewContainer = styled.div`
   word-break: break-word;
 `;
 
-
-
 function UserDoc(props: any) {
-
   const [isOpen, setIsOpen] = useState(false);
 
-  const { t } = useTranslation()
-  const { userData, handleDeleteFile } = props
+  const { t } = useTranslation();
+  const { userData, handleDeleteFile } = props;
 
   const statusOptions = [
     {
@@ -99,51 +96,47 @@ function UserDoc(props: any) {
       .catch((error) => console.error('change doc status result', error));
   };
 
-
   return (
     <Col>
-
       <SectionHeader>{t('userDoc')}</SectionHeader>
-
 
       {userData?.files?.length ? (
         userData.files.map((file: any) => {
-          const fileName = typeof file != 'string' ? file.fileName : file
-          const date = typeof file != 'string' ? file.uploadedDate : ''
+          const fileName = typeof file != 'string' ? file.fileName : file;
+          const date = typeof file != 'string' ? file.uploadedDate : '';
 
-          return <div key={file}>
+          return (
+            <div key={file}>
+              {/* "https://d3c8ovmhhst6ne.cloudfront.net/api/v1/media/file-stream-three?attachCode=04957a62bff4edfc356e8ad85c9ff92e2ee64a868676bd5f66c80d4795d229760fd20705ba0be98c925c75ebbeec8be0233b08f1b22ca579b23654ebf9775f48" */}
 
-            {/* "https://d3c8ovmhhst6ne.cloudfront.net/api/v1/media/file-stream-three?attachCode=04957a62bff4edfc356e8ad85c9ff92e2ee64a868676bd5f66c80d4795d229760fd20705ba0be98c925c75ebbeec8be0233b08f1b22ca579b23654ebf9775f48" */}
-
-
-            <ListFile
-              fileName={fileName}
-              date={date}
-              handlePreview={(attachCode) => {
-                // console.log(attachCode)
-                setIsOpen(true)
-              }}
-              handleDelete={() => {
-                const red = '#E03616';
-                const blue = '#3085D6';
-                Swal.mixin({
-                  iconColor: red,
-                  confirmButtonColor: red,
-                  cancelButtonColor: blue,
-                  confirmButtonText: t('delete'),
-                  cancelButtonText: t('cancel'),
-                })
-                  .fire({
-                    title: t('deleteConfirmAlertTitle'),
-                    titleText: t('deleteConfirmAlertText'),
-                    icon: 'warning',
-                    showCancelButton: true,
+              <ListFile
+                fileName={fileName}
+                date={date}
+                handlePreview={(attachCode) => {
+                  // console.log(attachCode)
+                  setIsOpen(true);
+                }}
+                handleDelete={() => {
+                  const red = '#E03616';
+                  const blue = '#3085D6';
+                  Swal.mixin({
+                    iconColor: red,
+                    confirmButtonColor: red,
+                    cancelButtonColor: blue,
+                    confirmButtonText: t('delete'),
+                    cancelButtonText: t('cancel'),
                   })
-                  .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file));
-              }}
-            />
-          </div>
-
+                    .fire({
+                      title: t('deleteConfirmAlertTitle'),
+                      titleText: t('deleteConfirmAlertText'),
+                      icon: 'warning',
+                      showCancelButton: true,
+                    })
+                    .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file));
+                }}
+              />
+            </div>
+          );
         })
       ) : (
         <span>{t('noDocuments')}</span>
@@ -151,24 +144,17 @@ function UserDoc(props: any) {
 
       <Row justifyContent={'space-between'} alignItems={'center'}>
         <FieldWrapper>
-          <DetailLabel>
-            {t('status')} :
-          </DetailLabel>
+          <DetailLabel>{t('status')} :</DetailLabel>
           <InlineEdit
             defaultValue={userData.documentStatus}
             editView={({ errorMessage, ...fieldProps }) => (
               <EditViewContainer>
-                <Select
-                  {...fieldProps}
-                  options={statusOptions}
-                  autoFocus
-                  openMenuOnFocus
-                />
+                <Select {...fieldProps} options={statusOptions} autoFocus openMenuOnFocus />
               </EditViewContainer>
             )}
             readView={() => (
               <ReadViewContainer data-testid="docStatusField">
-                {statusOptions.filter(e => e.value == userData.documentStatus)[0].label}
+                {statusOptions.filter((e) => e.value == userData.documentStatus)[0].label}
               </ReadViewContainer>
             )}
             onConfirm={(value) => {
@@ -182,7 +168,7 @@ function UserDoc(props: any) {
           />
         </FieldWrapper>
 
-        <UploadButton isLoading={false} accept=".pdf,.png,.jpg,.jpeg" onChange={() => { }} />
+        <UploadButton isLoading={false} accept=".pdf,.png,.jpg,.jpeg" onChange={() => {}} />
       </Row>
 
       <ModalTransition>
@@ -192,21 +178,24 @@ function UserDoc(props: any) {
               { text: 'ปิด', onClick: () => setIsOpen(false) },
               // { text: 'Skip' },
             ]}
-            onClose={() => { setIsOpen(false) }}
+            onClose={() => {
+              setIsOpen(false);
+            }}
             heading="แสดงตัวอย่างไฟล์"
             width={'x-large'}
           >
-            <FilePreviewer file={{
-              mimeType: 'application/pdf',
-              url: "https://cargolink-documents.s3.ap-southeast-1.amazonaws.com/USER_DOC/ACTIVE/USER_DOC-1625477727808.pdf"
-            }}
+            <FilePreviewer
+              file={{
+                mimeType: 'application/pdf',
+                url:
+                  'https://cargolink-documents.s3.ap-southeast-1.amazonaws.com/USER_DOC/ACTIVE/USER_DOC-1625477727808.pdf',
+              }}
             />
           </ModalDialog>
         )}
       </ModalTransition>
-
     </Col>
-  )
+  );
 }
 
-export default UserDoc
+export default UserDoc;

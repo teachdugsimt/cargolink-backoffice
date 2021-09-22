@@ -1,6 +1,5 @@
-import React from 'react'
-import styled from 'styled-components'
-
+import React from 'react';
+import styled from 'styled-components';
 
 const Plate = styled.div`
   width: 90px;
@@ -15,15 +14,11 @@ const Plate = styled.div`
   margin-bottom: 15;
   text-align: center;
   line-height: 15px;
-`
+`;
 
 function LicensePlate(props: any) {
-  const plateId = props?.plateId ?? '-'
-  return (
-    <Plate>
-      {plateId}
-    </Plate>
-  )
+  const plateId = props?.plateId ?? '-';
+  return <Plate>{plateId}</Plate>;
 }
 
-export default LicensePlate
+export default LicensePlate;

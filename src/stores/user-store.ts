@@ -1,9 +1,8 @@
-import { AxiosResponse } from 'axios';
 import { types, flow } from 'mobx-state-tree';
 import uploadApi, { UserUploadPayload } from '../services/upload-api';
 import userApi, { GetUsersListParams, GetUsersListResponse } from '../services/user-api';
 
-const userType = types.model({
+const userTypeModel = types.model({
   id: types.maybeNull(types.string),
   avatar: types.maybeNull(types.string),
   enabled: types.maybeNull(types.boolean),
@@ -20,11 +19,13 @@ const userType = types.model({
   deviceToken: types.maybeNull(types.string),
   status: types.maybeNull(types.string),
   documentStatus: types.maybeNull(types.string),
+  document: types.maybeNull(types.map(types.string)),
   legalType: types.maybeNull(types.string),
+  attachCodeCitizenId: types.maybeNull(types.string),
 });
 
 const userManagement = types.model({
-  content: types.maybeNull(types.array(userType)),
+  content: types.maybeNull(types.array(types.maybeNull(userTypeModel))),
   reRender: types.boolean,
   lengthPerPage: types.maybeNull(types.number),
 });
@@ -90,6 +91,7 @@ export const UserStore = types
                 ];
               }
             } else user.content = [];
+
             self.data_user = user;
           } else {
             self.loading = false;
@@ -110,32 +112,30 @@ export const UserStore = types
         }
       }),
       submitUploadFile: flow(function* submitUploadFile(userId: string, payload: UserUploadPayload) {
-        self.loading = true
+        self.loading = true;
 
         try {
-          const response = yield uploadApi.uploadByUser(userId, payload)
-          console.log("Upload Response", response)
+          const response = yield uploadApi.uploadByUser(userId, payload);
+          console.log('Upload Response', response);
           if (response.ok) {
-            self.success_response = true
-            self.response_message = response.data.message
+            self.success_response = true;
+            self.response_message = response.data.message;
           } else {
-            self.success_response = false
-            self.error_response = response.data
+            self.success_response = false;
+            self.error_response = response.data;
           }
-          self.loading = false
+          self.loading = false;
         } catch (error) {
-          console.error(error)
-          self.loading = false
-          self.data_user = null
+          console.error(error);
+          self.loading = false;
+          self.data_user = null;
           self.error_response = {
             title: '',
-            content: ''
-          }
+            content: '',
+          };
         }
-
-      })
+      }),
     };
-
   });
 
 interface IUserManagementProps {
@@ -160,6 +160,8 @@ export interface IUserDTO {
   updatedBy: string | null;
   confirmationToken: string;
   deviceToken: string | null;
+  document: object | null;
+  attachCodeCitizenId: string | null;
   status: 'ACTIVE' | 'INACTIVE';
   documentStatus: DocumentStatus;
   legalType: 'INDIVIDUAL' | 'JURISTIC';
@@ -189,6 +191,8 @@ export interface IUserNull {
   confirmationToken: null;
   deviceToken: null;
   status: null;
+  document: null;
+  attachCodeCitizenId: null;
   documentStatus: null;
   legalType: null;
   files: null;

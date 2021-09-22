@@ -1,4 +1,4 @@
-import React, { useEffect, useState, CSSProperties } from 'react'
+import React, { useEffect, useState, CSSProperties } from 'react';
 import { observer } from 'mobx-react-lite';
 import { navigate } from 'gatsby';
 import { useTranslation } from 'react-i18next';
@@ -105,7 +105,7 @@ const FieldWrapper = styled.div`
 
 const DetailLabel = styled.div`
   margin-top: 8px;
-  color: #AAA;
+  color: #aaa;
 `;
 
 const EditViewContainer = styled.div`
@@ -132,7 +132,6 @@ interface AddressProps {
 }
 
 const UserDetail: React.FC<Props> = observer((props: any) => {
-
   const { t } = useTranslation();
   const [previewImage, setPreviewImage] = useState<any>(null);
   const [userData, setUserData] = useState<IUserDTO | null>(null);
@@ -146,14 +145,14 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
   type Fields = 'fullName' | 'email' | 'legalType' | 'phoneNumber' | 'attachCode' | 'userType';
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => { }}>
+    <Breadcrumbs onExpand={() => {}}>
       <BreadcrumbsItem onClick={() => navigate('/users')} text={t('userManagement')} key="user-management" />
       <BreadcrumbsItem text={t('userInfo')} key="user-info" />
     </Breadcrumbs>
   );
 
   useEffect(() => {
-    console.log(userId)
+    console.log(userId);
     // if (!userId) navigate('/user-management');
     // else
     getUser(userId);
@@ -166,11 +165,9 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
   }, []);
 
   useEffect(() => {
-    console.log("LOADING", uploadFileStore.loading)
-    return () => {
-    }
-  }, [uploadFileStore.loading])
-
+    console.log('LOADING', uploadFileStore.loading);
+    return () => {};
+  }, [uploadFileStore.loading]);
 
   const getUser = async (uId: string) => {
     UserApi.getUser(uId)
@@ -225,7 +222,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
 
   const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
-    console.log('FILE', file)
+    console.log('FILE', file);
     file && uploadFileStore.uploadFile('USER_DOC', file);
   };
 
@@ -275,7 +272,6 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
     },
   ];
 
-
   const AddressForm = ({ onDismiss }: { onDismiss: () => any }) => {
     return (
       <>
@@ -287,7 +283,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
           }}
         >
           <div style={{}}>
-            <Field label={t('addressNo')} name={'addressNo'} defaultValue=''>
+            <Field label={t('addressNo')} name={'addressNo'} defaultValue="">
               {({ fieldProps, error, valid }: any) => <Textfield {...fieldProps} />}
             </Field>
           </div>
@@ -301,7 +297,11 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
               {({ fieldProps, error, valid }: any) => <Textfield {...fieldProps} />}
             </Field>
           </div>
-          <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} fieldStyle={{}} />
+          <AutoCompleteTypeahead
+            data={addressOptions}
+            handleValue={(data: any) => handleAddressValue(data)}
+            fieldStyle={{}}
+          />
         </div>
       </>
     );
@@ -367,7 +367,6 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
     });
   };
 
-
   if (!userData) return <></>;
   const fullNamePlaceholder = t('fullNamePlaceholder');
 
@@ -405,11 +404,9 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                 )}
               </Field>
             </ImageFram>
-
           </GridColumn>
 
           <GridColumn medium={6}>
-
             <FieldWrapper>
               <InlineEdit
                 defaultValue={userData.fullName}
@@ -423,34 +420,25 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                 )}
                 onConfirm={(value) => {
                   if (!value) return;
-                  return handleSave('fullName', value)
+                  return handleSave('fullName', value);
                 }}
               />
             </FieldWrapper>
 
             <FieldWrapper>
-              <DetailLabel>
-                {t('memberSince')} :
-              </DetailLabel>
+              <DetailLabel>{t('memberSince')} :</DetailLabel>
               <div style={{ marginTop: 8, marginLeft: 5 }}>
                 {DateFormat(userData.createdAt as string, loginStore.language)}
               </div>
             </FieldWrapper>
 
             <FieldWrapper>
-              <DetailLabel>
-                {t('legalType')} :
-              </DetailLabel>
+              <DetailLabel>{t('legalType')} :</DetailLabel>
               <InlineEdit<ValueType<OptionType, true>>
                 defaultValue={userData?.legalType === 'INDIVIDUAL' ? t('individual') : t('company')}
                 editView={(fieldProps) => (
                   <EditViewContainer>
-                    <Select
-                      {...fieldProps}
-                      options={legalTypeOptions}
-                      autoFocus
-                      openMenuOnFocus
-                    />
+                    <Select {...fieldProps} options={legalTypeOptions} autoFocus openMenuOnFocus />
                   </EditViewContainer>
                 )}
                 readView={() => (
@@ -459,16 +447,14 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                   </ReadViewContainer>
                 )}
                 onConfirm={(value) => {
-                  console.log('LEGAL VALUE', value)
-                  return handleSave('legalType', value.value)
+                  console.log('LEGAL VALUE', value);
+                  return handleSave('legalType', value.value);
                 }}
               />
             </FieldWrapper>
 
             <FieldWrapper>
-              <DetailLabel>
-                {t('phoneNumber')} :
-              </DetailLabel>
+              <DetailLabel>{t('phoneNumber')} :</DetailLabel>
               <InlineEdit
                 defaultValue={userData.phoneNumber}
                 editView={({ errorMessage, ...fieldProps }) => (
@@ -482,21 +468,17 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                 onConfirm={(value) => {
                   if (!value) return;
                   if (value.startsWith('0')) value = `+66${value.substr(1)}`;
-                  return handleSave('phoneNumber', value)
+                  return handleSave('phoneNumber', value);
                 }}
               />
             </FieldWrapper>
 
             <FieldWrapper>
-              <DetailLabel>
-                {t('email')} :
-              </DetailLabel>
+              <DetailLabel>{t('email')} :</DetailLabel>
               <InlineEdit
                 defaultValue={userData.email}
                 // label={t('email')}
-                editView={({ errorMessage, ...fieldProps }) => (
-                  <Textfield {...fieldProps} autoFocus />
-                )}
+                editView={({ errorMessage, ...fieldProps }) => <Textfield {...fieldProps} autoFocus />}
                 readView={() => (
                   <ReadViewContainer data-testid="emailField">
                     {userData.email || <div style={{ color: '#aaa' }}>{t('clickToEnterValue')}</div>}
@@ -507,9 +489,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
             </FieldWrapper>
           </GridColumn>
 
-          <GridColumn medium={4}>
-
-          </GridColumn>
+          <GridColumn medium={4}></GridColumn>
         </Grid>
         <div style={{ borderTop: '1px solid #ddd', margin: '30px 0 10px 0' }} />
 
@@ -517,16 +497,18 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
           <Col>
             <UserDoc userData={userData} handleDeleteFile={handleDeleteFile} />
           </Col>
-          <div style={{
-            backgroundColor: 'lightgrey',
-            height: 'auto', width: 1,
-            marginRight: 20
-          }}></div>
+          <div
+            style={{
+              backgroundColor: 'lightgrey',
+              height: 'auto',
+              width: 1,
+              marginRight: 20,
+            }}
+          ></div>
           <Col flex={2}>
             <TruckDoc carrierId={userData.userId} />
           </Col>
         </Row>
-
 
         {/* <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} /> */}
         {/* <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} fieldStyle={{}} /> */}
@@ -616,11 +598,9 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
           </form>
         )}
       </Form> */}
-
-
       </Page>
     </>
-  )
-})
+  );
+});
 
-export default UserDetail
+export default UserDetail;

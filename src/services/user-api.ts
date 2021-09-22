@@ -9,7 +9,7 @@ class UserApi {
   getUser = async (userId: string) => {
     const response = await ExcuteApi('/api/v1/users/' + userId, null, 'get', 6e5, true, true);
     return response;
-  }
+  };
   getUploadLink = async (userId: string): Promise<AxiosResponse<GetUploadLinkResponse>> => {
     const response = await ExcuteApi(`/api/v1/users/${userId}/gen-doc-upload-link`, {}, 'post', 6e5, true, true);
     return response;
@@ -79,7 +79,7 @@ export interface EditUserPayload {
 }
 export interface EditUserResponse {
   message: string;
-  responseCode: number,
+  responseCode: number;
   data: any;
 }
 
