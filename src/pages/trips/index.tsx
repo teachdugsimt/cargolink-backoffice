@@ -1,10 +1,11 @@
-import React from 'react'
+import React from 'react';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import DynamicTable from '@atlaskit/dynamic-table';
+import { navigate } from 'gatsby';
 
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 function Trip() {
   const { t } = useTranslation();
@@ -17,7 +18,7 @@ function Trip() {
   return (
     <div>
       <PageHeader breadcrumbs={breadcrumbs}>{t('trip.management')}</PageHeader>
-
+      <button onClick={() => navigate('/trips/add')}>ADD TRIP</button>
       {/* <TableWrapper>
         <DynamicTable
           head={tableHeaders}
@@ -33,10 +34,10 @@ function Trip() {
         />
       </TableWrapper> */}
     </div>
-  )
+  );
 }
 
-export default Trip
+export default Trip;
 
 const TableWrapper = styled.div`
   margin-top: 10px;

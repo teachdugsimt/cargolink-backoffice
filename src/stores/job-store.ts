@@ -39,7 +39,7 @@ const JobType = types.model({
   priceType: types.maybeNull(types.string),
   tipper: types.maybeNull(types.boolean),
   requiredTruckAmount: types.maybeNull(types.number),
-  createdAt: types.maybeNull(types.string)
+  createdAt: types.maybeNull(types.string),
 });
 
 const JobManagement = types.model({
@@ -90,25 +90,26 @@ export const JobStore = types
             };
             if (!self.isFirstLoad) jobs.reRender = !!!self.data_jobs?.reRender;
             if (data.length) {
-              const emptyContent: any = Object.keys(data[0]).reduce(
-                (object: any, curr: string) => ({
-                  ...object,
-                  [curr]: null,
-                }),
-                {},
-              );
-              if (self.isFirstLoad) self.isFirstLoad = false;
-              const pagesBeforeContent = currentPage - 1;
-              const emptyContentsBeforeFirstItem = pagesBeforeContent * size;
-              const pagesAfterContent = totalPages - currentPage;
-              const emptyContentsAfterLastItem = pagesAfterContent * size;
-              jobs.content = [
-                ...Array(emptyContentsBeforeFirstItem).fill(emptyContent),
-                ...data,
-                ...Array(emptyContentsAfterLastItem).fill(emptyContent),
-              ];
+              // const emptyContent: any = Object.keys(data[0]).reduce(
+              //   (object: any, curr: string) => ({
+              //     ...object,
+              //     [curr]: null,
+              //   }),
+              //   {},
+              // );
+              // if (self.isFirstLoad) self.isFirstLoad = false;
+              // const pagesBeforeContent = currentPage - 1;
+              // const emptyContentsBeforeFirstItem = pagesBeforeContent * size;
+              // const pagesAfterContent = totalPages - currentPage;
+              // const emptyContentsAfterLastItem = pagesAfterContent * size;
+              // jobs.content = [
+              //   ...Array(emptyContentsBeforeFirstItem).fill(emptyContent),
+              //   ...data,
+              //   ...Array(emptyContentsAfterLastItem).fill(emptyContent),
+              // ];
+              jobs.content = data;
             } else jobs.content = [];
-            self.data_jobs = jobs;
+            self.data_jobs = JSON.parse(JSON.stringify(jobs));
           } else {
             self.loading = false;
             self.data_jobs = null;
@@ -129,25 +130,25 @@ export const JobStore = types
       }),
       getJobById: flow(function* getJobById(params: IJobRequest) {
         try {
-          self.loading = true
-          self.currentJob = null
+          self.loading = true;
+          self.currentJob = null;
 
-          const response = yield JobApi.getJobById(params)
-          self.loading = false
+          const response = yield JobApi.getJobById(params);
+          self.loading = false;
 
           if (response.ok) {
-            self.currentJob = response.data
+            self.currentJob = response.data;
           } else {
             self.error_response = {
               title: '',
               content: 'Failed to get job ' + params.jobId,
             };
           }
-
-        } catch (err) {
-
-        }
-      })
+        } catch (err) {}
+      }),
+      clearJobs: function () {
+        self.data_jobs = null;
+      },
     };
   });
 
