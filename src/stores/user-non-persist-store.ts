@@ -29,6 +29,40 @@ const Profile = types.model({
   files: types.maybeNull(types.array(types.string)),
   roleName: types.maybeNull(types.array(types.string)),
 });
+const ProfileFully = types.model({
+  attachCodeCitizenId: types.maybeNull(types.string),
+  fullName: types.maybeNull(types.string),
+  phoneNumber: types.maybeNull(types.string),
+  email: types.maybeNull(types.string),
+  approveStatus: types.maybeNull(types.string),
+  avatar: types.maybeNull(types.string),
+  id: types.maybeNull(types.number),
+  userId: types.maybeNull(types.string),
+  userType: types.maybeNull(types.string),
+  document: types.maybeNull(types.map(types.string)),
+  documentStatus: types.maybeNull(types.string),
+
+  confirmationToken: types.maybeNull(types.string),
+  enabled: types.maybeNull(types.boolean),
+  deviceToken: types.maybeNull(types.string),
+  createdAt: types.maybeNull(types.string),
+  updatedAt: types.maybeNull(types.string),
+  createdBy: types.maybeNull(types.string),
+  updatedBy: types.maybeNull(types.string),
+  status: types.maybeNull(types.string),
+  legalType: types.maybeNull(types.string),
+  files: types.maybeNull(
+    types.array(
+      types.model({
+        fileName: types.maybeNull(types.string),
+        url: types.maybeNull(types.string),
+        type: types.maybeNull(types.string),
+        attachCode: types.maybeNull(types.string),
+      }),
+    ),
+  ),
+  roleName: types.maybeNull(types.array(types.string)),
+});
 
 const userTypeModel = types.model({
   id: types.maybeNull(types.string),
@@ -80,7 +114,7 @@ const ModelAttachObject = types.model({
   url: types.maybeNull(types.string),
 });
 
-export const UserStore = types
+export const UserNonPersistStore = types
   .model('UserStore', {
     loading: false,
     success_response: false,
@@ -101,6 +135,10 @@ export const UserStore = types
     data_get_user_id: types.maybeNull(Profile),
 
     data_delete_user_doc: types.maybeNull(types.boolean),
+
+    data_patch_user: types.maybeNull(Profile),
+
+    data_get_user_id_fully: types.maybeNull(ProfileFully),
   })
   .actions((self) => {
     return {
@@ -203,6 +241,7 @@ export const UserStore = types
           if (response && response.ok) {
             const { data } = response;
             yield userApi.editUser(userId, { url: [data.attachCode] });
+            yield UserNonPersistStore.getFullyUserProfile(userId);
             self.loading = false;
             self.data_upload = data;
             self.error_response = null;
@@ -260,9 +299,60 @@ export const UserStore = types
           const response = yield userApi.deleteUserDoc(userId, attachCode);
           self.loading = false;
           if (response.ok) {
+            yield UserNonPersistStore.getFullyUserProfile(userId);
             console.log('Get User by id : ', response);
             self.data_delete_user_doc = response.data?.message;
-            yield UserStore.getUserById(userId);
+          } else {
+          }
+        } catch (error) {
+          self.loading = false;
+          return error;
+        }
+      }),
+
+      patchUser: flow(function* deleteUserDocumnet(userId: string, params: object) {
+        try {
+          self.loading = true;
+          const response = yield userApi.editUser(userId, params);
+          self.loading = false;
+          if (response.ok) {
+            yield UserNonPersistStore.getUserById(userId);
+            console.log('Get User by id : ', response);
+            self.data_patch_user = response.data;
+          } else {
+          }
+        } catch (error) {
+          self.loading = false;
+          return error;
+        }
+      }),
+
+      getFullyUserProfile: flow(function* getFullyUserProfile(userId: string) {
+        try {
+          self.loading = true;
+          const response: any = yield userApi.getUser(userId);
+          self.loading = false;
+          if (response.ok) {
+            console.log('Get User by id : ', response);
+
+            if (response.data.files && response.data.files.length > 0) {
+              const responseLink = yield truckApi.getLinkDownLoad(response.data.files);
+              if (responseLink.ok) {
+                let tmpLinkResponse = responseLink.data.data || [];
+                let tmpFileList = tmpLinkResponse.map((e: any) => {
+                  return {
+                    fileName: e.file_name,
+                    url: e.url,
+                    type: e.file_name.split('.')[1] || '',
+                    attachCode: e.attach_code,
+                  };
+                });
+                let tmpProfile = response.data;
+                tmpProfile.files = tmpFileList;
+                console.log('TMP FULLY PROFILE :: ', tmpProfile);
+                self.data_get_user_id_fully = tmpProfile;
+              }
+            } else self.data_get_user_id_fully = response.data;
           } else {
           }
         } catch (error) {
@@ -275,7 +365,24 @@ export const UserStore = types
         self.user_link_document = null;
         self.data_delete_user_doc = null;
       },
+      clearUploadLinkDocument() {
+        self.user_link_document = null;
+      },
     };
+  })
+  .create({
+    loading: false,
+    success_response: false,
+    response_message: null,
+    error_response: null,
+    data_user: null,
+    data_count: null,
+    isFirstLoad: true,
+    data_upload: null,
+    user_link_document: null,
+    data_get_user_id: null,
+    data_delete_user_doc: null,
+    data_get_user_id_fully: null,
   });
 
 interface IUserManagementProps {
@@ -305,7 +412,7 @@ export interface IUserDTO {
   status: 'ACTIVE' | 'INACTIVE';
   documentStatus: DocumentStatus;
   legalType: 'INDIVIDUAL' | 'JURISTIC';
-  files?: string[];
+  files: any[];
 }
 
 export enum DocumentStatus {

@@ -18,8 +18,9 @@ class UserApi {
     const response = await ExcuteApi(`/api/v1/users`, payload, 'post', 6e5, true, true);
     return response;
   };
-  editUser = async (userId: string, payload: Partial<EditUserPayload>) => {
+  editUser = async (userId: string, payload: Partial<PatchUser>) => {
     const response = await ExcuteApi(`/api/v1/users/${userId}`, payload, 'patch', 6e5, true, true);
+    console.log('Response eedit user :: ', response);
     return response;
   };
   changeDocStatus = async (userId: string, payload: ChangeDocStatusPayload) => {
@@ -28,6 +29,18 @@ class UserApi {
   };
   deleteUser = async (userId: string) => {
     const response = await ExcuteApi(`/api/v1/users/${userId}`, {}, 'delete', 6e5, true, true);
+    return response;
+  };
+  deleteUserDoc = async (userId: string, attachCode: string) => {
+    const response = await ExcuteApi(
+      `/api/v1/users/${userId}/document`,
+      { docId: attachCode },
+      'delete',
+      6e5,
+      true,
+      true,
+    );
+    console.log('Response delete doc : ', response);
     return response;
   };
 }
@@ -77,6 +90,16 @@ export interface EditUserPayload {
   legalType: 'INDIVIDUAL' | 'JURISTIC';
   attachCode: string[];
 }
+
+export interface PatchUser {
+  name?: string;
+  phoneNumber?: string;
+  email?: string;
+  legalType?: 'INDIVIDUAL' | 'JURISTIC';
+  attachCode?: string[];
+  url?: string[];
+}
+
 export interface EditUserResponse {
   message: string;
   responseCode: number;

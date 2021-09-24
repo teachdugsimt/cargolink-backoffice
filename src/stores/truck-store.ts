@@ -205,9 +205,6 @@ export const TruckStore = types
           console.log(response);
           self.userTrucks_loading = false;
           if (response.ok) {
-            // const { data, size, totalElements, totalPages }: TrucksListResponse = response.data;
-            // console.log(response.data)
-            console.log('Get Truck list by carrier id : ', response);
             return response.data;
           } else {
           }

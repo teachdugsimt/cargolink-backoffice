@@ -3,9 +3,16 @@ import { create } from 'apisauce';
 import Header from './header';
 import { AxiosResponse } from 'axios';
 
-const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = true, admin_api = false) => {
+const ExcuteApi = async (
+  url,
+  params,
+  method,
+  timeout = 20000,
+  requiredToken = true,
+  admin_api = false,
+  optionsHeader,
+) => {
   console.time('ExcuteApi');
-  console.log('Params Excute header : ', params);
   try {
     const api = create(
       await Header(
@@ -14,9 +21,9 @@ const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = t
         url.includes('upload') && !url.includes('gen-doc-upload-link') && method == 'post' ? 'upload' : null,
         timeout,
         requiredToken,
+        optionsHeader,
       ),
     );
-
     // process.env.MODE == 'development' && api.addMonitor(Reactotron.apisauce)
 
     let response;

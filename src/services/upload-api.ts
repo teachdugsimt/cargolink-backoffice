@@ -2,13 +2,17 @@ import ExcuteApi from './api-integrations/excute-api';
 
 class UploadApi {
   upload = async (fileType: UploadFilePath, file: File) => {
+    console.log('File type : ', fileType);
+    console.log('File data :: ', file);
     const path = `${fileType}/INPROGRESS/`;
 
     const formData = new FormData();
     formData.append('file', file);
     formData.append('path', path);
 
-    const response = await ExcuteApi('/api/v1/media/upload', formData, 'post', 6e5, true, true);
+    const options = file.type.toString().includes('pdf') ? 'pdf' : null;
+
+    const response = await ExcuteApi('/api/v1/media/upload', formData, 'post', 6e5, true, true, options);
     return response;
   };
   uploadByUser = async (userId: string, payload: UserUploadPayload) => {

@@ -115,8 +115,6 @@ function TruckDoc(props: any) {
     fetchData();
   }, []);
 
-  fileList.map((e) => console.log('file : ', e));
-
   const rows = fileList.map((file: any, index: number) => ({
     key: `row-${index}-${createKey(file.licensePlate)}`,
     cells: [

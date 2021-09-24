@@ -57,6 +57,7 @@ let initialState = RootModel.create({
       reRender: false,
       lengthPerPage: 10,
     },
+    data_upload: {},
   },
   passwordResetStore: {
     data_password: {

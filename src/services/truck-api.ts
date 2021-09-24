@@ -71,6 +71,7 @@ export interface TrucksListParams {
   rowsPerPage?: number;
   truckTypes?: string;
   workingZones?: string;
+  searchText?: string;
   registrationNumber?: string;
   stallHeight?: string;
   loadingWeight?: number;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SectionHeader } from '../../theme/typography';
 import { useTranslation } from 'react-i18next';
 import UploadButton from '../../components/UploadButton';
@@ -9,10 +9,30 @@ import styled from 'styled-components';
 import InlineEdit from '@atlaskit/inline-edit';
 import { fontSize, gridSize } from '@atlaskit/theme/constants';
 import Select, { ValueType } from '@atlaskit/select';
-import { DocumentStatus } from '../../stores/user-store';
+import { DocumentStatus, UserStore } from '../../stores/user-store';
 import { UserApi } from '../../services';
 import ModalDialog, { ModalTransition } from '@atlaskit/modal-dialog';
 import FilePreviewer from 'react-file-previewer';
+import { useMst } from '../../stores/root-store';
+import { observer } from 'mobx-react-lite';
+
+export interface UploadData {
+  attachCode: string | null;
+  token: string | null;
+  fileName: string | null;
+  type: string | null;
+  status: string | null;
+  fileUrl: string | null;
+  fileType: string | null;
+  uploadedDate: string | null;
+}
+
+export interface StateFileObject {
+  fileName: string | null;
+  url: string | null;
+  type: string | null;
+  attachCode?: string | null;
+}
 
 const FieldWrapper = styled.div`
   display: flex;
@@ -38,11 +58,12 @@ const ReadViewContainer = styled.div`
   word-break: break-word;
 `;
 
-function UserDoc(props: any) {
+const UserDoc = observer((props: any) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { userStore, loginStore } = useMst();
 
   const { t } = useTranslation();
-  const { userData, handleDeleteFile } = props;
+  const { userData, handleDeleteFile, onUploadDocument } = props;
 
   const statusOptions = [
     {
@@ -86,7 +107,7 @@ function UserDoc(props: any) {
   // };
 
   const handleChangeDocStatus = (status: DocumentStatus) => {
-    UserApi.changeDocStatus(userData.id, { status })
+    UserApi.changeDocStatus(userData.userId, { status })
       .then((response: any) => {
         if (response && response.ok) {
           console.log('change doc status result', response);
@@ -96,21 +117,23 @@ function UserDoc(props: any) {
       .catch((error) => console.error('change doc status result', error));
   };
 
+  const [listUpload, setlistUpload] = useState<Array<StateFileObject>>([]);
+
+  console.log('User data sub-level :: ', userData);
+  console.log('List upload object :: ', listUpload);
+
   return (
     <Col>
       <SectionHeader>{t('userDoc')}</SectionHeader>
 
-      {userData?.files?.length ? (
-        userData.files.map((file: any) => {
+      {userData.files.length ? (
+        userData.files.map((file: StateFileObject) => {
           const fileName = typeof file != 'string' ? file.fileName : file;
-          const date = typeof file != 'string' ? file.uploadedDate : '';
-
+          const date = '';
           return (
-            <div key={file}>
-              {/* "https://d3c8ovmhhst6ne.cloudfront.net/api/v1/media/file-stream-three?attachCode=04957a62bff4edfc356e8ad85c9ff92e2ee64a868676bd5f66c80d4795d229760fd20705ba0be98c925c75ebbeec8be0233b08f1b22ca579b23654ebf9775f48" */}
-
+            <div key={fileName}>
               <ListFile
-                fileName={fileName}
+                fileName={fileName || ''}
                 date={date}
                 handlePreview={(attachCode) => {
                   // console.log(attachCode)
@@ -132,7 +155,7 @@ function UserDoc(props: any) {
                       icon: 'warning',
                       showCancelButton: true,
                     })
-                    .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(file));
+                    .then(({ isConfirmed }) => isConfirmed && handleDeleteFile(userData.userId, file.attachCode));
                 }}
               />
             </div>
@@ -142,33 +165,35 @@ function UserDoc(props: any) {
         <span>{t('noDocuments')}</span>
       )}
 
-      <Row justifyContent={'space-between'} alignItems={'center'}>
-        <FieldWrapper>
-          <DetailLabel>{t('status')} :</DetailLabel>
-          <InlineEdit
-            defaultValue={userData.documentStatus}
-            editView={({ errorMessage, ...fieldProps }) => (
-              <EditViewContainer>
-                <Select {...fieldProps} options={statusOptions} autoFocus openMenuOnFocus />
-              </EditViewContainer>
-            )}
-            readView={() => (
-              <ReadViewContainer data-testid="docStatusField">
-                {statusOptions.filter((e) => e.value == userData.documentStatus)[0].label}
-              </ReadViewContainer>
-            )}
-            onConfirm={(value) => {
-              try {
-                const status = value;
-                handleChangeDocStatus(status.value);
-              } catch (error) {
-                console.error('Error casting document status change (maybe invalid status)', error);
-              }
-            }}
-          />
-        </FieldWrapper>
+      <Row justifyContent={'space-between'} alignItem={'center'}>
+        {userData && userData.documentStatus && (
+          <FieldWrapper>
+            <DetailLabel>{t('status')} :</DetailLabel>
+            <InlineEdit
+              defaultValue={userData.documentStatus}
+              editView={({ errorMessage, ...fieldProps }) => (
+                <EditViewContainer>
+                  <Select {...fieldProps} options={statusOptions} autoFocus openMenuOnFocus />
+                </EditViewContainer>
+              )}
+              readView={() => (
+                <ReadViewContainer data-testid="docStatusField">
+                  {statusOptions.filter((e) => e.value == userData.documentStatus)[0].label}
+                </ReadViewContainer>
+              )}
+              onConfirm={(value) => {
+                try {
+                  const status = value;
+                  handleChangeDocStatus(status.value);
+                } catch (error) {
+                  console.error('Error casting document status change (maybe invalid status)', error);
+                }
+              }}
+            />
+          </FieldWrapper>
+        )}
 
-        <UploadButton isLoading={false} accept=".pdf,.png,.jpg,.jpeg" onChange={() => {}} />
+        <UploadButton isLoading={false} accept=".pdf,.png,.jpg,.jpeg" onChange={onUploadDocument} />
       </Row>
 
       <ModalTransition>
@@ -196,6 +221,6 @@ function UserDoc(props: any) {
       </ModalTransition>
     </Col>
   );
-}
+});
 
 export default UserDoc;

@@ -1,4 +1,11 @@
-const Header = async (admin_api = false, is_login = null, is_upload = null, timeout = 20000, requiredToken = true) => {
+const Header = async (
+  admin_api = false,
+  is_login = null,
+  is_upload = null,
+  timeout = 20000,
+  requiredToken = true,
+  options = null,
+) => {
   const baseURL = admin_api ? process.env.API_ENDPOINT_ADMIN : process.env.API_ENDPOINT;
   let header = {};
   let language = await localStorage.getItem('profileLanguage');
@@ -23,7 +30,9 @@ const Header = async (admin_api = false, is_login = null, is_upload = null, time
     header = {
       baseURL,
       headers: {
-        'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>',
+        'Content-Type': options
+          ? 'application/pdf; boundary=<calculated when request is sent>'
+          : 'multipart/form-data; boundary=<calculated when request is sent>',
         Accept: '*/*',
         Authorization: accessToken,
         'Accept-Language': language,
