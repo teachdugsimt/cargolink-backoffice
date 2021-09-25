@@ -16,6 +16,7 @@ import images from '../../components/Themes/images';
 import ArrowLeftIcon from '@atlaskit/icon/glyph/arrow-left';
 import { DatePicker } from '@atlaskit/datetime-picker';
 import Button from '@atlaskit/button';
+import TrashIcon from '@atlaskit/icon/glyph/trash';
 
 interface LocationProps {
   header: string;
@@ -43,6 +44,14 @@ const VEHICLE_BACKGROUND_IMGAE: CSSProperties = {
   opacity: 0.4,
   display: 'flex',
   alignItems: 'baseline',
+};
+
+const TRASH: CSSProperties = {
+  color: '#ff0000',
+  position: 'absolute',
+  right: 0,
+  paddingRight: 15,
+  cursor: 'pointer',
 };
 
 const reorder = (list: [], startIndex: number, endIndex: number): object => {
@@ -118,7 +127,7 @@ const AddTrip: React.FC<Props> = observer(() => {
   const { jobStore, truckTypesStore, productTypesStore } = useMst();
   const { t } = useTranslation();
   const [state, setState] = useState<any>({
-    jobs: [],
+    truckSelected: [],
     // trucks: getItems(5, 10)
     trucks: [
       {
@@ -515,11 +524,9 @@ const AddTrip: React.FC<Props> = observer(() => {
   }, [searchJob]);
 
   const droppableIds: any = {
-    droppable1: 'jobs',
-    droppable2: 'trucks',
+    droppable1: 'trucks',
+    droppable2: 'truckSelected',
   };
-
-  console.log('jobs :>> ', jobs);
 
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => {}}>
@@ -534,6 +541,7 @@ const AddTrip: React.FC<Props> = observer(() => {
 
   const onDragEnd = (result: any) => {
     const { source, destination } = result;
+    console.log('result :>> ', result);
 
     // dropped outside the list
     if (!destination) {
@@ -541,23 +549,25 @@ const AddTrip: React.FC<Props> = observer(() => {
     }
 
     if (source.droppableId === destination.droppableId) {
+      console.log('source.droppableId === destination.droppableId');
       const items: object = reorder(getList(source.droppableId), source.index, destination.index);
 
       let copiedState: any = Object.assign({}, state);
 
-      if (source.droppableId === 'droppable1') {
-        copiedState.jobs = items;
-      } else if (source.droppableId === 'droppable2') {
+      if (source.droppableId === 'droppable2') {
+        copiedState.truckSelected = items;
+      } else if (source.droppableId === 'droppable1') {
         copiedState.trucks = items;
       }
 
       setState(copiedState);
     } else {
+      console.log('else');
       const result: any = move(getList(source.droppableId), getList(destination.droppableId), source, destination);
 
       setState({
-        jobs: result.droppable1 ? result.droppable1 : state.jobs,
-        trucks: result.droppable2 ? result.droppable2 : state.trucks,
+        trucks: result.droppable1 ? result.droppable1 : state.trucks,
+        truckSelected: result.droppable2 ? result.droppable2 : state.truckSelected,
       });
     }
   };
@@ -582,22 +592,36 @@ const AddTrip: React.FC<Props> = observer(() => {
     setJobDetail(jobDetail);
   };
 
-  const jobDroppable = {
-    droppableId: 'droppable1',
-    listId: 'jobs',
-    title: 'Search jobs',
-    // droppable: false,
-    onChange: onChangeValueJob,
-    onSubmit: onSubmitJob,
+  const removeTruck = (truckId: string) => {
+    console.log('truckId :>> ', truckId);
+    const truckDetail = state.truckSelected.find((truck: any) => truck.id === truckId);
+    const newTruckList = state.trucks;
+    newTruckList.push(truckDetail);
+
+    const removeTruckList = state.truckSelected.filter((truck: any) => truck.id !== truckId);
+
+    setState({
+      trucks: newTruckList,
+      truckSelected: removeTruckList,
+    });
   };
 
   const truckDroppable = {
-    droppableId: 'droppable2',
+    droppableId: 'droppable1',
     listId: 'trucks',
     title: 'Search trucks',
     // droppable: true,
     onChange: onChangeValueTruck,
     onSubmit: onSubmitTruck,
+  };
+
+  const truckSelectedDroppable = {
+    droppableId: 'droppable2',
+    listId: 'truckSelected',
+    title: '',
+    // droppable: false,
+    // onChange: onChangeValueJob,
+    // onSubmit: onSubmitJob,
   };
 
   return (
@@ -702,18 +726,18 @@ const AddTrip: React.FC<Props> = observer(() => {
                       topic={<Header text={'รถที่เลือก'} />}
                       children={
                         <Droppable
-                          key={`truck-droppable-1`}
-                          droppableId={jobDroppable.droppableId}
-                          // isDropDisabled={jobDroppable.droppable}
+                          key={`truck-selected-droppable-1`}
+                          droppableId={truckSelectedDroppable.droppableId}
+                          // isDropDisabled={truckSelectedDroppable.droppable}
                         >
                           {(provided: any, snapshot: any) => (
                             <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
                               {jobStore.loading && <h1>Loading ...</h1>}
-                              {state[jobDroppable.listId] &&
-                                state[jobDroppable.listId].map((item: any, index: number) => (
+                              {state[truckSelectedDroppable.listId] &&
+                                state[truckSelectedDroppable.listId].map((item: any, index: number) => (
                                   <Draggable
-                                    key={`${jobDroppable.listId}-${item.id}-${index}`}
-                                    draggableId={`${jobDroppable.listId}-${item.id}-${index}`}
+                                    key={`${truckSelectedDroppable.listId}-${item.id}-${index}`}
+                                    draggableId={`${truckSelectedDroppable.listId}-${item.id}-${index}`}
                                     index={index}
                                   >
                                     {(provided: any, snapshot: any) => (
@@ -759,6 +783,9 @@ const AddTrip: React.FC<Props> = observer(() => {
                                             onChange={(date) => console.log('date :>> ', date)}
                                           />
                                         </div>
+                                        <span style={TRASH} onClick={() => removeTruck(item.id)}>
+                                          <TrashIcon label={'trash-icon'} size={'medium'} />
+                                        </span>
                                       </div>
                                     )}
                                   </Draggable>
@@ -775,7 +802,7 @@ const AddTrip: React.FC<Props> = observer(() => {
             </div>
           </GridColumn>
           <GridColumn medium={5}>
-            <div style={LEFT_RIGHT_SPACING}>
+            <div style={{ ...LEFT_RIGHT_SPACING, maxHeight: 1000, overflowX: 'scroll' }}>
               <Droppable
                 key={`truck-droppable-1`}
                 droppableId={truckDroppable.droppableId}
@@ -798,79 +825,89 @@ const AddTrip: React.FC<Props> = observer(() => {
                         </form>
                       )}
                     </Form>
-                    {jobStore.loading && <h1>Loading ...</h1>}
-                    {state[truckDroppable.listId] &&
-                      state[truckDroppable.listId].map((item: any, index: number) => (
-                        <Draggable
-                          key={`${truckDroppable.listId}-${item.id}-${index}`}
-                          draggableId={`${truckDroppable.listId}-${item.id}-${index}`}
-                          index={index}
-                        >
-                          {(provided: any, snapshot: any) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-                            >
-                              <Row style={{ marginBottom: 0, paddingBottom: 10 }}>
-                                <div>
-                                  <Value style={{ marginBottom: 0 }}>{item.registrationNumber.join(' / ')}</Value>
-                                </div>
-                              </Row>
-                              <Row style={{ marginBottom: 10 }}>
-                                <Col flex={3}>
-                                  <Detail
-                                    header={'ประเภท'}
-                                    content={truckTypes?.find((type: any) => type.id === +item.truckType)?.name ?? '-'}
-                                  />
-                                </Col>
-                                <Col flex={4}>
-                                  <Detail header={'ความสูงคอกรถ'} content={item.stallHeight} />
-                                </Col>
-                              </Row>
-                              <Row
-                                style={{
-                                  justifyContent: 'space-between',
-                                  alignItems: 'center',
-                                  borderTop: '1px dashed #ebeef3',
-                                  margin: 0,
-                                }}
+                    <div>
+                      {jobStore.loading && <h1>Loading ...</h1>}
+                      {state[truckDroppable.listId] &&
+                        state[truckDroppable.listId].map((item: any, index: number) => (
+                          <Draggable
+                            key={`${truckDroppable.listId}-${item.id}-${index}`}
+                            draggableId={`${truckDroppable.listId}-${item.id}-${index}`}
+                            index={index}
+                          >
+                            {(provided: any, snapshot: any) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                               >
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                  <span style={{ color: '#ffc107' }}>
-                                    <ArrowLeftIcon label={'chevron-down'} size={'large'} />
-                                  </span>
-                                  <Value style={{ color: '#ffc107' }}>{'เลือกรถคันนี้'}</Value>
-                                </div>
-                                <div
+                                <Row style={{ marginBottom: 0, paddingBottom: 10 }}>
+                                  <div>
+                                    <Value style={{ marginBottom: 0 }}>{item.registrationNumber.join(' / ')}</Value>
+                                  </div>
+                                </Row>
+                                <Row style={{ marginBottom: 10 }}>
+                                  <Col flex={3}>
+                                    <Detail
+                                      header={'ประเภท'}
+                                      content={
+                                        truckTypes?.find((type: any) => type.id === +item.truckType)?.name ?? '-'
+                                      }
+                                    />
+                                  </Col>
+                                  <Col flex={4}>
+                                    <Detail header={'ความสูงคอกรถ'} content={item.stallHeight} />
+                                  </Col>
+                                </Row>
+                                <Row
                                   style={{
-                                    display: 'flex',
+                                    justifyContent: 'space-between',
                                     alignItems: 'center',
+                                    borderTop: '1px dashed #ebeef3',
+                                    margin: 0,
+                                    paddingTop: 10,
                                   }}
                                 >
-                                  <div>
-                                    <span>
-                                      <Value>{item.owner?.fullName}</Value>
+                                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <span style={{ color: '#ffc107' }}>
+                                      <ArrowLeftIcon label={'chevron-down'} size={'large'} />
                                     </span>
+                                    <Value style={{ color: '#ffc107' }}>{'เลือกรถคันนี้'}</Value>
                                   </div>
-                                  <div style={{ paddingLeft: 10 }}>
-                                    <img
-                                      src={images.pinDrop}
-                                      style={{ width: 35, borderRadius: '50%', backgroundColor: '#ebeef3', padding: 2 }}
-                                    />
+                                  <div
+                                    style={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                    }}
+                                  >
+                                    <div>
+                                      <span>
+                                        <Value>{item.owner?.fullName}</Value>
+                                      </span>
+                                    </div>
+                                    <div style={{ paddingLeft: 10 }}>
+                                      <img
+                                        src={images.pinDrop}
+                                        style={{
+                                          width: 35,
+                                          borderRadius: '50%',
+                                          backgroundColor: '#ebeef3',
+                                          padding: 2,
+                                        }}
+                                      />
+                                    </div>
                                   </div>
+                                </Row>
+                                <div style={VEHICLE_BACKGROUND_IMGAE}>
+                                  {item.truckType && (
+                                    <img src={images[`Truck${item.truckType}`] ?? undefined} style={{ width: 250 }} />
+                                  )}
                                 </div>
-                              </Row>
-                              <div style={VEHICLE_BACKGROUND_IMGAE}>
-                                {item.truckType && (
-                                  <img src={images[`Truck${item.truckType}`] ?? undefined} style={{ width: 250 }} />
-                                )}
                               </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
+                            )}
+                          </Draggable>
+                        ))}
+                    </div>
                     {provided.placeholder}
                   </div>
                 )}
@@ -922,26 +959,26 @@ const ButtonGroup = styled.div`
 `;
 
 const ButtonBack = styled(Button)`
-  border: 1px solid #ffc107;
+  border: 1px solid #ffc107 !important;
   color: #ffc107 !important;
-  background-color: transparent;
-  width: 100px;
+  background-color: transparent !important;
+  width: 100px !important;
 
   &:hover {
     color: white !important;
-    background: #ffc107;
+    background: #ffc107 !important;
   }
 `;
 
 const ButtonConfrim = styled(Button)`
-  border: 1px solid #ffc107;
+  border: 1px solid #ffc107 !important;
   color: #000 !important;
-  background-color: #ffc107;
-  width: 100px;
-  margin-left: 15px;
+  background-color: #ffc107 !important;
+  width: 100px !important;
+  margin-left: 15px !important;
 
   &:hover {
     color: #ffc107 !important;
-    background: #fff;
+    background: #fff !important;
   }
 `;
