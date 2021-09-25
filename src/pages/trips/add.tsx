@@ -469,12 +469,26 @@ const AddTrip: React.FC<Props> = observer(() => {
   const [searchTruck, setSearchTruck] = useState<any>('');
 
   useEffect(() => {
-    setTruckTypes(JSON.parse(JSON.stringify(truckTypesStore.data)));
-    setProductTypes(JSON.parse(JSON.stringify(productTypesStore.data)));
     return () => {
       jobStore.clearJobs();
     };
   }, []);
+
+  useEffect(() => {
+    if (!truckTypesStore.data) {
+      truckTypesStore.getTruckTypes();
+    } else {
+      setTruckTypes(JSON.parse(JSON.stringify(truckTypesStore.data)));
+    }
+  }, [truckTypesStore.data]);
+
+  useEffect(() => {
+    if (!productTypesStore.data) {
+      productTypesStore.getProductTypes();
+    } else {
+      setProductTypes(JSON.parse(JSON.stringify(productTypesStore.data)));
+    }
+  }, [productTypesStore.data]);
 
   useEffect(() => {
     console.log('jobStore.data_jobs?.content?.length :>> ', jobStore.data_jobs?.content?.length);
@@ -494,6 +508,8 @@ const AddTrip: React.FC<Props> = observer(() => {
         console.log('Requesting ...');
         jobStore.getJobsList({ page: 1, descending: true, textSearch: searchJob });
       }, 200);
+    } else {
+      clearTimeout(delayDebounceFn);
     }
     return () => clearTimeout(delayDebounceFn);
   }, [searchJob]);
@@ -621,7 +637,9 @@ const AddTrip: React.FC<Props> = observer(() => {
                             <Col flex={1}>
                               <Detail
                                 header={'ประเภท'}
-                                content={productTypes.find((prod: any) => prod.id === jobDetail.productTypeId)?.name}
+                                content={
+                                  productTypes?.find((prod: any) => prod.id === jobDetail.productTypeId)?.name ?? '-'
+                                }
                               />
                             </Col>
                             <Col flex={1}>
@@ -651,7 +669,9 @@ const AddTrip: React.FC<Props> = observer(() => {
                               <div style={{ display: 'flex' }}>
                                 <Detail
                                   header={'ประเภทรถ'}
-                                  content={truckTypes.find((type: any) => type.id === +jobDetail.truckType)?.name}
+                                  content={
+                                    truckTypes?.find((type: any) => type.id === +jobDetail.truckType)?.name ?? '-'
+                                  }
                                   style={{ flex: 1 }}
                                 />
 
@@ -721,7 +741,8 @@ const AddTrip: React.FC<Props> = observer(() => {
                                               <Detail
                                                 header={'ประเภท'}
                                                 content={
-                                                  truckTypes.find((type: any) => type.id === +item.truckType)?.name
+                                                  truckTypes?.find((type: any) => type.id === +item.truckType)?.name ??
+                                                  '-'
                                                 }
                                               />
                                             </Col>
@@ -801,7 +822,7 @@ const AddTrip: React.FC<Props> = observer(() => {
                                 <Col flex={3}>
                                   <Detail
                                     header={'ประเภท'}
-                                    content={truckTypes.find((type: any) => type.id === +item.truckType)?.name}
+                                    content={truckTypes?.find((type: any) => type.id === +item.truckType)?.name ?? '-'}
                                   />
                                 </Col>
                                 <Col flex={4}>
