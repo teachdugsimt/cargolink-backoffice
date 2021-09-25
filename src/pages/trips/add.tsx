@@ -112,7 +112,7 @@ interface JobItemProps {
   label: string;
 }
 
-interface Props {}
+interface Props { }
 
 const AddTrip: React.FC<Props> = observer(() => {
   const { jobStore, truckTypesStore, productTypesStore } = useMst();
@@ -506,7 +506,7 @@ const AddTrip: React.FC<Props> = observer(() => {
   console.log('jobs :>> ', jobs);
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => {}}>
+    <Breadcrumbs onExpand={() => { }}>
       <BreadcrumbsItem onClick={() => navigate('/trips')} text={t('trip.management')} key="trips-management" />
       <BreadcrumbsItem text={'Bulk cargo management'} key="bulk-cargo-management" />
     </Breadcrumbs>
@@ -684,7 +684,7 @@ const AddTrip: React.FC<Props> = observer(() => {
                         <Droppable
                           key={`truck-droppable-1`}
                           droppableId={jobDroppable.droppableId}
-                          // isDropDisabled={jobDroppable.droppable}
+                        // isDropDisabled={jobDroppable.droppable}
                         >
                           {(provided: any, snapshot: any) => (
                             <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
@@ -758,7 +758,7 @@ const AddTrip: React.FC<Props> = observer(() => {
               <Droppable
                 key={`truck-droppable-1`}
                 droppableId={truckDroppable.droppableId}
-                // isDropDisabled={truckDroppable.droppable}
+              // isDropDisabled={truckDroppable.droppable}
               >
                 {(provided: any, snapshot: any) => (
                   <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
