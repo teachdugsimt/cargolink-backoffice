@@ -60,6 +60,7 @@ const TrucksListComponent: React.FC = observer(() => {
       searchParams = {
         ...searchParams,
         registrationNumber: value,
+        searchText: value,
         stallHeight,
       };
       if (!isNaN(+value)) searchParams = { ...searchParams, loadingWeight: +value };

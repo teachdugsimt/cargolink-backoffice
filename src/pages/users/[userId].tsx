@@ -24,7 +24,7 @@ import ModalDialog, { ModalTransition } from '@atlaskit/modal-dialog';
 // import { Checkbox } from '@atlaskit/checkbox';
 
 import { useMst } from '../../stores/root-store';
-import { IUserDTO, DocumentStatus } from '../../stores/user-store';
+import { IUserDTO, DocumentStatus } from '../../stores/user-non-persist-store';
 import { DateFormat } from '../../components/simple-data';
 import { EditUserPayload, EditUserResponse } from '../../services/user-api';
 import { UserApi } from '../../services';
@@ -36,6 +36,9 @@ import LicensePlate from '../../components/truck/license-plate';
 import TruckDoc from '../../components/truck/truck-doc';
 import { Col, Row } from '../../Layouts/Controller/controller';
 import UserDoc from './user-doc';
+import { UserNonPersistStore } from '../../stores/user-non-persist-store';
+import async from '@atlaskit/select/node_modules/@types/react-select/async';
+import { UploadFilePath } from '../../services/upload-api';
 
 interface Props {
   userId?: number;
@@ -135,11 +138,12 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
   const { t } = useTranslation();
   const [previewImage, setPreviewImage] = useState<any>(null);
   const [userData, setUserData] = useState<IUserDTO | null>(null);
-  const { userStore, loginStore, uploadFileStore } = useMst();
+  const { loginStore, uploadFileStore } = useMst();
   const [files, setFiles] = useState<UploadFileResponse[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [address, setAddress] = useState<AddressProps>({});
   const [isOpenDocumentAddress, setIsOpenDocumentAddress] = useState<boolean>(false);
+  const [reRender, setreRender] = useState<boolean>(false);
 
   const userId = props.userId;
   type Fields = 'fullName' | 'email' | 'legalType' | 'phoneNumber' | 'attachCode' | 'userType';
@@ -153,42 +157,38 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
 
   useEffect(() => {
     console.log(userId);
-    // if (!userId) navigate('/user-management');
-    // else
-    getUser(userId);
     uploadFileStore.clear();
+    UserNonPersistStore.getFullyUserProfile(userId);
 
     return () => {
       setFiles([]);
       uploadFileStore.clear();
+      UserNonPersistStore.clear();
     };
   }, []);
 
+  console.log('ROOT User data :: ', userData);
   useEffect(() => {
-    console.log('LOADING', uploadFileStore.loading);
-    return () => {};
-  }, [uploadFileStore.loading]);
+    const tmpProfile = JSON.parse(JSON.stringify(UserNonPersistStore.data_get_user_id_fully));
+    console.log('TRIGGER GET USER ID FULLY!! : ', tmpProfile);
+    if (tmpProfile) {
+      const user: IUserDTO = {
+        ...tmpProfile,
+        phoneNumber: tmpProfile.phoneNumber ? `0${tmpProfile.phoneNumber.substr(3)}` : null,
+      };
+      setUserData(user);
+    }
+  }, [JSON.stringify(UserNonPersistStore.data_get_user_id_fully)]);
 
-  const getUser = async (uId: string) => {
-    UserApi.getUser(uId)
-      .then((response) => {
-        if (response && response.ok) {
-          const user: IUserDTO = {
-            ...response.data,
-            phoneNumber: response.data.phoneNumber ? `0${response.data.phoneNumber.substr(3)}` : null,
-          };
-          setUserData(user);
-        } else {
-          console.error('Unexpected error while loading user', response);
-        }
-      })
-      .catch((error) => {
-        console.error('Error while loading this user', error);
-        Swal.fire({
-          icon: 'error',
-          text: 'Error while loading this user',
-        });
-      });
+  const onUploadDocument = (event: any) => {
+    event.persist();
+    setTimeout(() => {
+      console.log('Event click : ', event?.target?.files[0] || undefined);
+      let fileObject = event?.target?.files[0] || undefined;
+      if (fileObject) {
+        UserNonPersistStore.uploadImage(UploadFilePath.USER_DOC, fileObject, userId);
+      }
+    }, 100);
   };
 
   const handleChangeImage = (event: any) => {
@@ -203,42 +203,13 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
   const handleSave = (field: Fields, value: any) => {
     console.log(field, ':>> ', value);
     const payload: Partial<EditUserPayload> = { [field]: value };
-    UserApi.editUser(userId, payload)
-      .then((response) => {
-        if (response && response.ok) {
-          const data = (response as AxiosResponse<EditUserResponse>).data;
-          console.log('edit user response', data);
-          return getUser(userId);
-        } else console.error('Unexpected error while loading user', response);
-      })
-      .catch((error) => {
-        console.error('Error while edit this user', error);
-        Swal.fire({
-          icon: 'error',
-          text: 'Error while edit this user',
-        });
-      });
+    UserNonPersistStore.patchUser(userId, payload);
   };
 
-  const handleUploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files[0];
-    console.log('FILE', file);
-    file && uploadFileStore.uploadFile('USER_DOC', file);
-  };
-
-  const handleDeleteFile = (id: number | string) => {
+  const handleDeleteFile = (id: string, attachCode: string) => {
     console.log('file id :>> ', id);
-  };
-
-  const handleChangeDocStatus = (status: DocumentStatus) => {
-    UserApi.changeDocStatus(userId, { status })
-      .then((response: any) => {
-        if (response && response.ok) {
-          console.log('change doc status result', response);
-          return getUser(userId);
-        }
-      })
-      .catch((error) => console.error('change doc status result', error));
+    console.log('Attach code :: >> ', attachCode);
+    UserNonPersistStore.deleteUserDocumnet(id, attachCode);
   };
 
   const legalTypeOptions: any = [
@@ -271,101 +242,6 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
       value: DocumentStatus.REJECTED,
     },
   ];
-
-  const AddressForm = ({ onDismiss }: { onDismiss: () => any }) => {
-    return (
-      <>
-        <div
-          style={{
-            ...groupItemsStyle,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div style={{}}>
-            <Field label={t('addressNo')} name={'addressNo'} defaultValue="">
-              {({ fieldProps, error, valid }: any) => <Textfield {...fieldProps} />}
-            </Field>
-          </div>
-          <div style={{}}>
-            <Field label={t('alley')} name={'alley'} defaultValue={() => ''}>
-              {({ fieldProps, error, valid }: any) => <Textfield {...fieldProps} />}
-            </Field>
-          </div>
-          <div style={{}}>
-            <Field label={t('street')} name={'street'} defaultValue={''}>
-              {({ fieldProps, error, valid }: any) => <Textfield {...fieldProps} />}
-            </Field>
-          </div>
-          <AutoCompleteTypeahead
-            data={addressOptions}
-            handleValue={(data: any) => handleAddressValue(data)}
-            fieldStyle={{}}
-          />
-        </div>
-      </>
-    );
-  };
-
-  const groupItemsStyle: CSSProperties = {
-    display: 'flex',
-    flexWrap: 'wrap',
-    margin: '0 -.5rem',
-  };
-  const addressOptions: any = [
-    {
-      type: 'DISTRICT',
-      label: t('subDistrict'),
-      isRequired: true,
-      breakPoint: {
-        xs: 12,
-        sm: 12,
-        md: 6,
-        lg: 6,
-      },
-    },
-    {
-      type: 'AMPHOE',
-      label: t('district'),
-      isRequired: true,
-      breakPoint: {
-        xs: 12,
-        sm: 12,
-        md: 6,
-        lg: 6,
-      },
-    },
-    {
-      type: 'PROVINCE',
-      label: t('province'),
-      isRequired: true,
-      breakPoint: {
-        xs: 12,
-        sm: 12,
-        md: 6,
-        lg: 6,
-      },
-    },
-    {
-      type: 'ZIPCODE',
-      label: t('postcode'),
-      isRequired: true,
-      breakPoint: {
-        xs: 12,
-        sm: 12,
-        md: 6,
-        lg: 6,
-      },
-    },
-  ];
-  const handleAddressValue = ({ district, amphoe, province, zipcode }: any) => {
-    setAddress({
-      district,
-      amphoe,
-      province,
-      zipcode,
-    });
-  };
 
   if (!userData) return <></>;
   const fullNamePlaceholder = t('fullNamePlaceholder');
@@ -495,7 +371,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
 
         <Row>
           <Col>
-            <UserDoc userData={userData} handleDeleteFile={handleDeleteFile} />
+            <UserDoc userData={userData} handleDeleteFile={handleDeleteFile} onUploadDocument={onUploadDocument} />
           </Col>
           <div
             style={{
@@ -509,95 +385,6 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
             <TruckDoc carrierId={userData.userId} />
           </Col>
         </Row>
-
-        {/* <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} /> */}
-        {/* <AutoCompleteTypeahead data={addressOptions} handleValue={(data: any) => handleAddressValue(data)} fieldStyle={{}} /> */}
-
-        {/* <Form onSubmit={handleSubmit}>
-        {({ formProps }) => (
-          <form {...formProps} name="add-user" style={FormStyled}>
-            <div style={groupItemsStyle}>
-              <div
-                style={{
-                  ...fieldItemStyle('half'),
-                  flexDirection: 'row',
-                }}
-              >
-
-              </div>
-              <div
-                style={{
-                  ...fieldItemStyle('half'),
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                }}
-              >
-
-
-              </div>
-            </div>
-            <div style={groupItemsStyle}>
-              {'Under development'} <br /><br />
-              <div style={fieldItemStyle('full')}>
-                <Name style={{ marginBottom: 12 }}>{t('generalAddr')}</Name>
-                <div style={AddressStyled}>
-                  <Address>
-                    {'-'}
-                  </Address>
-                  <button
-                    style={BUTTON}
-                    onClick={() => {
-                      setIsOpenGeneralAddress((currentValue) => !currentValue);
-                      setIsOpenDocumentAddress(false);
-                    }}
-                  >
-                    <Icon icon={isOpenGeneralAddress ? close : pencil} style={ICON_STYLED} size={22} />
-                  </button>
-                </div>
-                {isOpenGeneralAddress && <AddressForm onDismiss={() => setIsOpenGeneralAddress(false)} />}
-              </div>
-            </div>
-            <div style={{
-              ...groupItemsStyle,
-              marginTop: '1rem',
-            }}>
-              <div style={fieldItemStyle('full')}>
-                <Name style={{ marginBottom: 12 }}>{t('documentDeliverAddr')}</Name>
-                <Checkbox
-                  value={1}
-                  isChecked={isChecked}
-                  isDisabled={isOpenDocumentAddress || isOpenGeneralAddress}
-                  label={t('sameGeneralAddress').toString()}
-                  onChange={handleCheckBox}
-                  name="checkbox-default"
-                  testId="same-general-address"
-                  size={'large'}
-                />
-                {!isChecked && (
-                  <div style={{
-                    ...AddressStyled,
-                    marginTop: '1rem',
-                  }}>
-                    <Address>
-                      {'-'}
-                    </Address>
-                    <button
-                      style={BUTTON}
-                      onClick={() => {
-                        setIsOpenDocumentAddress((currentValue) => !currentValue);
-                        setIsOpenGeneralAddress(false);
-                      }}
-                    >
-                      <Icon icon={isOpenDocumentAddress ? close : pencil} style={ICON_STYLED} size={22} />
-                    </button>
-                  </div>
-                )}
-                {isOpenDocumentAddress && <AddressForm onDismiss={() => setIsOpenDocumentAddress(false)} />}
-              </div>
-            </div>
-          </form>
-        )}
-      </Form> */}
       </Page>
     </>
   );

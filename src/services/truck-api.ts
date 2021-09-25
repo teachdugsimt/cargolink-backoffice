@@ -25,6 +25,17 @@ class TruckApi {
     );
     return response;
   };
+  getLinkDownLoad = async (params: string[]) => {
+    const response: AxiosResponse<UrlDownload> = await ExcuteApi(
+      `/api/v1/media/file-by-attach-code`,
+      { url: JSON.stringify(params) },
+      'get',
+      6e5,
+      true,
+      true,
+    );
+    return response;
+  };
 
   getTruckById = async (params: TruckRequestParams) => {
     const response: AxiosResponse<TrucksListResponse> = await ExcuteApi(
@@ -60,6 +71,7 @@ export interface TrucksListParams {
   rowsPerPage?: number;
   truckTypes?: string;
   workingZones?: string;
+  searchText?: string;
   registrationNumber?: string;
   stallHeight?: string;
   loadingWeight?: number;
@@ -76,6 +88,10 @@ export interface TrucksListResponse {
   totalPages: number;
   totalElements: number;
   numberOfElements: number;
+}
+
+export interface UrlDownload {
+  uri: string[];
 }
 
 export interface IOwner {

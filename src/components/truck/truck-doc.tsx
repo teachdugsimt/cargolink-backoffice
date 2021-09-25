@@ -9,6 +9,8 @@ import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdow
 import moment from 'moment';
 import { useMst } from '../../stores/root-store';
 import { useTranslation } from 'react-i18next';
+import { CommonSeriesSettingsHoverStyle } from 'devextreme-react/chart';
+import { ITruck } from '../../services/truck-api';
 
 const DocItem = styled.div`
   display: flex;
@@ -54,6 +56,11 @@ const createHead = (withWidth: boolean) => {
         isSortable: true,
         width: withWidth ? 20 : undefined,
       },
+      {
+        key: 'upload',
+        content: 'Upload',
+        width: withWidth ? 20 : undefined,
+      },
     ],
   };
 };
@@ -85,8 +92,23 @@ function TruckDoc(props: any) {
     async function fetchData() {
       if (carrierId) {
         const data = await truckStore.getTrucksListByCarrierId({ carrierId });
-        console.log(data);
-        setFileList(transformData(data.data) ?? []);
+        let tmp: any;
+        if (data.data && Array.isArray(data.data) && data.data.length > 0) {
+          tmp = await Promise.all(
+            data.data.map(async (item: any, index: number) => {
+              if (item.document && typeof item.document == 'object' && Object.keys(item.document).length > 0) {
+                const listAttachCode = Object.keys(item.document).map((e) => item.document[e]);
+                const urlList = await truckStore.getLinkDownLoad(listAttachCode);
+                let tmpItem = JSON.parse(JSON.stringify(item));
+                const listUrl = JSON.parse(JSON.stringify(urlList));
+                tmpItem.document = listUrl.data || null;
+                return tmpItem;
+              } else return item;
+            }),
+          );
+        }
+        console.log('truck doc list : ', tmp);
+        setFileList(transformData(tmp) ?? []);
       }
     }
 
@@ -101,14 +123,14 @@ function TruckDoc(props: any) {
         content: file.licensePlate,
       },
       {
-        key: createKey(file.fileName),
-        content: <a href={file.url}>{file.fileName}</a>,
+        key: createKey(file.fileName?.file_name),
+        content: <a href={file.fileName?.url}>{file.fileName?.file_name || '-'}</a>,
       },
       {
         content: moment(file.createdAt).format('ll'),
       },
       {
-        key: createKey(file.fileName),
+        key: `status-${index}-${createKey(file.status)}`,
         content: (
           <DropdownMenu trigger={fileStatus} triggerType="button">
             <DropdownItemGroup>
@@ -133,6 +155,10 @@ function TruckDoc(props: any) {
             </DropdownItemGroup>
           </DropdownMenu>
         ),
+      },
+      {
+        key: `upload-button-${index}`,
+        content: <button onClick={() => console.log('test button : ', file)}> Test</button>,
       },
     ],
   }));
