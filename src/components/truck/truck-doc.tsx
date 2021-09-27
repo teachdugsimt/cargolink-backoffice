@@ -70,6 +70,7 @@ function createKey(input: string) {
 }
 
 const transformData = (data: object[]) => {
+  if (!data) return []
   return data.map((e: any) => ({
     licensePlate: e.registrationNumber.join(', '),
     fileName: e.document ? e.document[0] : '-',
