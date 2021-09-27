@@ -158,7 +158,7 @@ function TruckDoc(props: any) {
       },
       {
         key: `upload-button-${index}`,
-        content: <button onClick={() => console.log('test button : ', file)}> Test</button>,
+        content: <UploadButton isLoading={false} accept=".pdf,.png,.jpg,.jpeg" onChange={() => { }} />,
       },
     ],
   }));
