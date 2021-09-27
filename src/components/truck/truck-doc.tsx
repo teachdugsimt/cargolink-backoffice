@@ -11,6 +11,8 @@ import { useMst } from '../../stores/root-store';
 import { useTranslation } from 'react-i18next';
 import { CommonSeriesSettingsHoverStyle } from 'devextreme-react/chart';
 import { ITruck } from '../../services/truck-api';
+import { TruckNonPersistStore } from '../../stores/truck-non-persist-store';
+import { UploadFilePath } from '../../services/upload-api';
 
 const DocItem = styled.div`
   display: flex;
@@ -61,6 +63,11 @@ const createHead = (withWidth: boolean) => {
         content: 'Upload',
         width: withWidth ? 20 : undefined,
       },
+      {
+        key: 'id',
+        content: 'ID',
+        width: withWidth ? 20 : undefined,
+      },
     ],
   };
 };
@@ -70,50 +77,64 @@ function createKey(input: string) {
 }
 
 const transformData = (data: object[]) => {
+  console.log('Data transform truck:: ', data);
   return data.map((e: any) => ({
     licensePlate: e.registrationNumber.join(', '),
     fileName: e.document ? e.document[0] : '-',
     createdAt: e.createdAt,
     status: e.document_status,
     url: '',
+    id: e.id,
   }));
 };
 
 function TruckDoc(props: any) {
   const head = createHead(true);
-  const { carrierId } = props;
+  const { carrierId, id } = props;
   const { truckStore, loginStore } = useMst();
   const { t } = useTranslation('docStatus');
   const [fileList, setFileList] = useState<object[]>([]);
   const [fileStatus, setFileStatus] = useState('NO_DOCUMENT');
 
-  useEffect(() => {
-    // console.log('USER DATA', loginStore.data_profile?.userId)
-    async function fetchData() {
-      if (carrierId) {
-        const data = await truckStore.getTrucksListByCarrierId({ carrierId });
-        let tmp: any;
-        if (data.data && Array.isArray(data.data) && data.data.length > 0) {
-          tmp = await Promise.all(
-            data.data.map(async (item: any, index: number) => {
-              if (item.document && typeof item.document == 'object' && Object.keys(item.document).length > 0) {
-                const listAttachCode = Object.keys(item.document).map((e) => item.document[e]);
-                const urlList = await truckStore.getLinkDownLoad(listAttachCode);
-                let tmpItem = JSON.parse(JSON.stringify(item));
-                const listUrl = JSON.parse(JSON.stringify(urlList));
-                tmpItem.document = listUrl.data || null;
-                return tmpItem;
-              } else return item;
-            }),
-          );
-        }
-        console.log('truck doc list : ', tmp);
-        setFileList(transformData(tmp) ?? []);
+  async function fetchData() {
+    if (carrierId) {
+      const data = await truckStore.getTrucksListByCarrierId({ carrierId });
+      let tmp: any;
+      if (data.data && Array.isArray(data.data) && data.data.length > 0) {
+        tmp = await Promise.all(
+          data.data.map(async (item: any) => {
+            if (item.document && typeof item.document == 'object' && Object.keys(item.document).length > 0) {
+              const listAttachCode = Object.keys(item.document).map((e) => item.document[e]);
+              const urlList = await truckStore.getLinkDownLoad(listAttachCode);
+              let tmpItem = JSON.parse(JSON.stringify(item));
+              const listUrl = JSON.parse(JSON.stringify(urlList));
+              tmpItem.document = listUrl.data || null;
+              return tmpItem;
+            } else return item;
+          }),
+        );
       }
+      console.log('truck doc list : ', tmp);
+      setFileList(transformData(tmp) ?? []);
     }
-
+  }
+  useEffect(() => {
     fetchData();
   }, []);
+
+  const onUploadDocument = (event: any, truckId: string) => {
+    event.persist();
+    setTimeout(() => {
+      let fileObject = event?.target?.files[0] || undefined;
+      if (fileObject) {
+        console.log('File object :: ', fileObject);
+        console.log('Truck id :: ', truckId);
+        TruckNonPersistStore.uploadTruckDocument(UploadFilePath.VEHICLE_DOC, fileObject, truckId).then(() =>
+          fetchData(),
+        );
+      }
+    }, 200);
+  };
 
   const rows = fileList.map((file: any, index: number) => ({
     key: `row-${index}-${createKey(file.licensePlate)}`,
@@ -158,7 +179,17 @@ function TruckDoc(props: any) {
       },
       {
         key: `upload-button-${index}`,
-        content: <button onClick={() => console.log('test button : ', file)}> Test</button>,
+        content: (
+          <UploadButton
+            isLoading={false}
+            accept=".pdf,.png,.jpg,.jpeg"
+            onChange={(event: any) => onUploadDocument(event, file.id)}
+          />
+        ),
+      },
+      {
+        key: `${index}-${createKey(file.id)}`,
+        content: file.id,
       },
     ],
   }));

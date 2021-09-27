@@ -60,6 +60,10 @@ class TruckApi {
     );
     return response;
   };
+  patchTruck = async (params: PostTruckParams, id: string) => {
+    const response: AxiosResponse<boolean> = await ExcuteApi(`/api/v1/trucks/${id}`, params, 'put', 6e5, true, true);
+    return response;
+  };
 }
 
 export default new TruckApi();
@@ -81,6 +85,7 @@ export interface TrucksListParams {
 export interface TrucksByCarrierParams {
   carrierId: string;
 }
+
 export interface TrucksListResponse {
   data: ITruck[];
   size: number;
@@ -138,6 +143,7 @@ export interface PostTruckParams {
   registrationNumber?: string[];
   truckPhotos?: TruckPhotos;
   workingZones?: WorkingZone[];
+  document?: string[] | null;
 }
 
 export interface TruckPhotos {
