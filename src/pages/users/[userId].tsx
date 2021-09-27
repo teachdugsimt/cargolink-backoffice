@@ -156,7 +156,6 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
   );
 
   useEffect(() => {
-    console.log(userId);
     uploadFileStore.clear();
     UserNonPersistStore.getFullyUserProfile(userId);
 
@@ -167,10 +166,8 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
     };
   }, []);
 
-  console.log('ROOT User data :: ', userData);
   useEffect(() => {
     const tmpProfile = JSON.parse(JSON.stringify(UserNonPersistStore.data_get_user_id_fully));
-    console.log('TRIGGER GET USER ID FULLY!! : ', tmpProfile);
     if (tmpProfile) {
       const user: IUserDTO = {
         ...tmpProfile,
@@ -183,7 +180,6 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
   const onUploadDocument = (event: any) => {
     event.persist();
     setTimeout(() => {
-      console.log('Event click : ', event?.target?.files[0] || undefined);
       let fileObject = event?.target?.files[0] || undefined;
       if (fileObject) {
         UserNonPersistStore.uploadImage(UploadFilePath.USER_DOC, fileObject, userId);
@@ -196,19 +192,15 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
     if (event.target?.files?.length) {
       const previewImg = URL.createObjectURL(event.target.files[0]);
       setPreviewImage(previewImg);
-      console.log('previewImg :>> ', previewImg);
     }
   };
 
   const handleSave = (field: Fields, value: any) => {
-    console.log(field, ':>> ', value);
     const payload: Partial<EditUserPayload> = { [field]: value };
     UserNonPersistStore.patchUser(userId, payload);
   };
 
   const handleDeleteFile = (id: string, attachCode: string) => {
-    console.log('file id :>> ', id);
-    console.log('Attach code :: >> ', attachCode);
     UserNonPersistStore.deleteUserDocumnet(id, attachCode);
   };
 
@@ -323,7 +315,6 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
                   </ReadViewContainer>
                 )}
                 onConfirm={(value) => {
-                  console.log('LEGAL VALUE', value);
                   return handleSave('legalType', value.value);
                 }}
               />

@@ -110,7 +110,6 @@ const UserDoc = observer((props: any) => {
     UserApi.changeDocStatus(userData.userId, { status })
       .then((response: any) => {
         if (response && response.ok) {
-          console.log('change doc status result', response);
           // return getUser(userId);
         }
       })
@@ -118,9 +117,6 @@ const UserDoc = observer((props: any) => {
   };
 
   const [listUpload, setlistUpload] = useState<Array<StateFileObject>>([]);
-
-  console.log('User data sub-level :: ', userData);
-  console.log('List upload object :: ', listUpload);
 
   return (
     <Col>
@@ -136,7 +132,6 @@ const UserDoc = observer((props: any) => {
                 fileName={fileName || ''}
                 date={date}
                 handlePreview={(attachCode) => {
-                  // console.log(attachCode)
                   setIsOpen(true);
                 }}
                 handleDelete={() => {
