@@ -673,7 +673,13 @@ const AddTrip: React.FC<Props> = observer(() => {
             </div>
           </GridColumn>
           <GridColumn medium={5}>
-            <div style={{ ...LEFT_RIGHT_SPACING, maxHeight: 1000, height: 500, overflowX: 'scroll' }}>
+            <div
+              style={{
+                ...LEFT_RIGHT_SPACING,
+                maxHeight: 1000,
+                ...(state.trucks?.length ? { overflowX: 'scroll' } : undefined),
+              }}
+            >
               <Droppable
                 key={`truck-droppable-1`}
                 droppableId={truckDroppable.droppableId}
