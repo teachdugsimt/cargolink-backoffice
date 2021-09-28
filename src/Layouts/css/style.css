@@ -235,3 +235,7 @@ hr {
 .vertical-timeline-element {
   margin: 2em 0 !important;
 }
+
+#main-async-select-job > div:first-of-type > div {
+  margin-left: 30px !important;
+}

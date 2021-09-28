@@ -48,16 +48,27 @@ const JobManagement = types.model({
   lengthPerPage: types.maybeNull(types.number),
 });
 
+const JobListManagement = types.model({
+  content: types.maybeNull(types.array(JobType)),
+  totalPages: types.maybeNull(types.number),
+});
+
 export interface IJobsManagement {
   content: (IJob | IJobNull)[];
   reRender: boolean;
   lengthPerPage: number | null;
 }
 
+export interface IJobListManagement {
+  content: (IJob | IJobNull)[];
+  totalPages: number | null;
+}
+
 export const JobStore = types
   .model('JobStore', {
     loading: false,
     data_jobs: types.maybeNull(JobManagement),
+    jobList: types.maybeNull(JobListManagement),
     data_count: types.maybeNull(types.number),
     isFirstLoad: true,
     currentJob: types.maybeNull(JobType),
@@ -90,26 +101,25 @@ export const JobStore = types
             };
             if (!self.isFirstLoad) jobs.reRender = !!!self.data_jobs?.reRender;
             if (data.length) {
-              // const emptyContent: any = Object.keys(data[0]).reduce(
-              //   (object: any, curr: string) => ({
-              //     ...object,
-              //     [curr]: null,
-              //   }),
-              //   {},
-              // );
-              // if (self.isFirstLoad) self.isFirstLoad = false;
-              // const pagesBeforeContent = currentPage - 1;
-              // const emptyContentsBeforeFirstItem = pagesBeforeContent * size;
-              // const pagesAfterContent = totalPages - currentPage;
-              // const emptyContentsAfterLastItem = pagesAfterContent * size;
-              // jobs.content = [
-              //   ...Array(emptyContentsBeforeFirstItem).fill(emptyContent),
-              //   ...data,
-              //   ...Array(emptyContentsAfterLastItem).fill(emptyContent),
-              // ];
-              jobs.content = data;
+              const emptyContent: any = Object.keys(data[0]).reduce(
+                (object: any, curr: string) => ({
+                  ...object,
+                  [curr]: null,
+                }),
+                {},
+              );
+              if (self.isFirstLoad) self.isFirstLoad = false;
+              const pagesBeforeContent = currentPage - 1;
+              const emptyContentsBeforeFirstItem = pagesBeforeContent * size;
+              const pagesAfterContent = totalPages - currentPage;
+              const emptyContentsAfterLastItem = pagesAfterContent * size;
+              jobs.content = [
+                ...Array(emptyContentsBeforeFirstItem).fill(emptyContent),
+                ...data,
+                ...Array(emptyContentsAfterLastItem).fill(emptyContent),
+              ];
             } else jobs.content = [];
-            self.data_jobs = JSON.parse(JSON.stringify(jobs));
+            self.data_jobs = jobs;
           } else {
             self.loading = false;
             self.data_jobs = null;
@@ -146,8 +156,50 @@ export const JobStore = types
           }
         } catch (err) {}
       }),
+
+      getJobsListWithoutEmptyContent: flow(function* getJobsList(params: JobListParams) {
+        self.loading = true;
+        self.jobList = null;
+        self.data_count = null;
+        self.error_response = null;
+        try {
+          const response = yield JobApi.getJobsList(params);
+          console.log('getJobs response :> ', response);
+          if (response && response.ok) {
+            const { data, size, totalElements, totalPages }: JobsListResponse = response.data;
+            self.loading = false;
+            self.data_count = totalElements;
+            const jobs: IJobListManagement = {
+              content: [],
+              totalPages: totalPages,
+            };
+            if (data.length) {
+              jobs.content = data;
+            } else {
+              jobs.content = [];
+            }
+            self.jobList = jobs;
+          } else {
+            self.loading = false;
+            self.jobList = null;
+            self.error_response = {
+              title: response.problem,
+              content: 'GET jobs : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to getJobs :>', error);
+          self.loading = false;
+          self.jobList = null;
+          self.error_response = {
+            title: '',
+            content: 'Failed to get all jobs list',
+          };
+        }
+      }),
+
       clearJobs: function () {
-        self.data_jobs = null;
+        self.jobList = null;
       },
     };
   });

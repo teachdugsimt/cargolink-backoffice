@@ -9,7 +9,8 @@ import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import { navigate } from 'gatsby';
 import PageHeader from '@atlaskit/page-header';
 import { useTranslation } from 'react-i18next';
-import Select from 'react-select';
+// import Select from 'react-select';
+import { AsyncSelect, OptionsType, OptionType, ValueType } from '@atlaskit/select';
 import styled from 'styled-components';
 import Collapse from '../../components/collapse/collapse';
 import images from '../../components/Themes/images';
@@ -17,6 +18,10 @@ import ArrowLeftIcon from '@atlaskit/icon/glyph/arrow-left';
 import { DatePicker } from '@atlaskit/datetime-picker';
 import Button from '@atlaskit/button';
 import TrashIcon from '@atlaskit/icon/glyph/trash';
+import LottieView from 'react-lottie';
+import Spinner from '@atlaskit/spinner';
+import SearchIcon from '@atlaskit/icon/glyph/search';
+import MoreIcon from '@atlaskit/icon/glyph/more';
 
 interface LocationProps {
   header: string;
@@ -54,6 +59,76 @@ const TRASH: CSSProperties = {
   cursor: 'pointer',
 };
 
+const DROP_BOX_SHOW: CSSProperties = {
+  position: 'relative',
+  marginTop: 15,
+  minHeight: 200,
+  marginLeft: 10,
+  marginRight: 10,
+  marginBottom: 10,
+  border: '1px dashed #cfcfcf',
+  borderRadius: 5,
+  transitionProperty: 'all',
+  transitionDuration: '0.5s',
+  transitionTimingFunction: 'ease',
+};
+
+const DROP_BOX_HIDE: CSSProperties = {
+  minHeight: 0,
+  transitionProperty: 'all',
+  transitionDuration: '0.5s',
+  transitionTimingFunction: 'ease',
+};
+
+const DROP_BOX_CONTENT: CSSProperties = {
+  position: 'absolute',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
+const SEARCH_ICON: CSSProperties = {
+  position: 'absolute',
+  left: 9,
+  top: 7,
+  color: '#cfcfcf',
+  zIndex: 99,
+};
+
+const LOADING_ICON: CSSProperties = {
+  position: 'absolute',
+  right: 9,
+  top: 7,
+  color: '#cfcfcf',
+  zIndex: 99,
+};
+
+const TruckAnimate = () => (
+  <LottieView
+    options={{
+      autoplay: true,
+      loop: true,
+      animationData: require('../../images/animations/trruck-loading.json'),
+    }}
+  />
+);
+
+const Dots = () => (
+  <LottieView
+    options={{
+      autoplay: true,
+      loop: true,
+      animationData: require('../../images/animations/dots-loading.json'),
+    }}
+    width={60}
+    height={40}
+  />
+);
+
 const reorder = (list: [], startIndex: number, endIndex: number): object => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
@@ -88,7 +163,7 @@ const getItemStyle = (isDragging: boolean, draggableStyle: any): CSSProperties =
 
 const getListStyle = (isDraggingOver: boolean): CSSProperties => ({
   background: isDraggingOver ? 'lightblue' : '#ebeef3',
-  padding: 15,
+  padding: '15px 15px 5px 15px',
   margin: '3px',
   flex: 1,
   borderRadius: 5,
@@ -121,365 +196,36 @@ interface JobItemProps {
   label: string;
 }
 
+interface MasterTypeProps {
+  id: string;
+  name: string;
+}
+
 interface Props {}
 
+let truckPage: number = 1;
+
 const AddTrip: React.FC<Props> = observer(() => {
-  const { jobStore, truckTypesStore, productTypesStore } = useMst();
+  const { jobStore, truckStore, truckTypesStore, productTypesStore } = useMst();
   const { t } = useTranslation();
   const [state, setState] = useState<any>({
     truckSelected: [],
-    // trucks: getItems(5, 10)
-    trucks: [
-      {
-        id: '9KP9Q3ZR',
-        approveStatus: 'INACTIVE',
-        loadingWeight: 1,
-        registrationNumber: ['GG-wp52'],
-        stallHeight: 'LOW',
-        tipper: false,
-        truckType: 10,
-        createdAt: '2021-09-23T08:13:46.000Z',
-        updatedAt: '2021-09-23T08:13:46.000Z',
-        quotationNumber: '0',
-        workingZones: [
-          {
-            region: 2,
-            province: 47,
-          },
-          {
-            region: 2,
-            province: 46,
-          },
-        ],
-        owner: {
-          id: 612,
-          fullName: 'Art tist zys',
-          companyName: 'Art tist zys',
-          email: 'Weaver_kenzellll@gmail.com',
-          mobileNo: '+66929818252',
-          avatar: {
-            object:
-              '8e4aca19957a4f63469e9145092ba38ddeeb7f1b8ceeebe7b690fa77aac6a89b49d5edaaca619a777c9b10c2a4729ea0e4aba210712c6c2e176ecb460509828a',
-          },
-          userId: 'DLG448ZX',
-        },
-      },
-      {
-        id: 'DZXGPWLO',
-        approveStatus: 'INACTIVE',
-        loadingWeight: 1,
-        registrationNumber: ['GG-wp53'],
-        stallHeight: 'LOW',
-        tipper: false,
-        truckType: 4,
-        createdAt: '2021-09-23T08:06:18.000Z',
-        updatedAt: '2021-09-23T08:11:45.000Z',
-        quotationNumber: '0',
-        workingZones: [
-          {
-            region: 2,
-            province: 39,
-          },
-          {
-            region: 2,
-            province: 42,
-          },
-          {
-            region: 2,
-            province: 43,
-          },
-          {
-            region: 2,
-            province: 40,
-          },
-          {
-            region: 2,
-            province: 41,
-          },
-        ],
-        owner: {
-          id: 612,
-          fullName: 'Art tist zys',
-          companyName: 'Art tist zys',
-          email: 'Weaver_kenzellll@gmail.com',
-          mobileNo: '+66929818252',
-          avatar: {
-            object:
-              '8e4aca19957a4f63469e9145092ba38ddeeb7f1b8ceeebe7b690fa77aac6a89b49d5edaaca619a777c9b10c2a4729ea0e4aba210712c6c2e176ecb460509828a',
-          },
-          userId: 'DLG448ZX',
-        },
-      },
-      {
-        id: '4LN7OYKY',
-        approveStatus: 'INACTIVE',
-        loadingWeight: 1,
-        registrationNumber: ['GG-wp56'],
-        stallHeight: 'LOW',
-        tipper: false,
-        truckType: 4,
-        createdAt: '2021-09-22T15:13:34.000Z',
-        updatedAt: '2021-09-22T15:13:34.000Z',
-        quotationNumber: '0',
-        workingZones: [
-          {
-            region: 2,
-            province: 40,
-          },
-          {
-            region: 2,
-            province: 39,
-          },
-        ],
-        owner: {
-          id: 612,
-          fullName: 'Art tist zys',
-          companyName: 'Art tist zys',
-          email: 'Weaver_kenzellll@gmail.com',
-          mobileNo: '+66929818252',
-          avatar: {
-            object:
-              '8e4aca19957a4f63469e9145092ba38ddeeb7f1b8ceeebe7b690fa77aac6a89b49d5edaaca619a777c9b10c2a4729ea0e4aba210712c6c2e176ecb460509828a',
-          },
-          userId: 'DLG448ZX',
-        },
-      },
-      {
-        id: 'XKJVY7K8',
-        approveStatus: 'INACTIVE',
-        loadingWeight: 1,
-        registrationNumber: ['GG-wp55'],
-        stallHeight: 'LOW',
-        tipper: false,
-        truckType: 4,
-        createdAt: '2021-09-22T12:44:06.000Z',
-        updatedAt: '2021-09-22T12:44:06.000Z',
-        quotationNumber: '0',
-        workingZones: [
-          {
-            region: 2,
-            province: 40,
-          },
-          {
-            region: 2,
-            province: 39,
-          },
-        ],
-        owner: {
-          id: 612,
-          fullName: 'Art tist zys',
-          companyName: 'Art tist zys',
-          email: 'Weaver_kenzellll@gmail.com',
-          mobileNo: '+66929818252',
-          avatar: {
-            object:
-              '8e4aca19957a4f63469e9145092ba38ddeeb7f1b8ceeebe7b690fa77aac6a89b49d5edaaca619a777c9b10c2a4729ea0e4aba210712c6c2e176ecb460509828a',
-          },
-          userId: 'DLG448ZX',
-        },
-      },
-      {
-        id: 'GL5OVMZ6',
-        approveStatus: 'INACTIVE',
-        loadingWeight: 0,
-        registrationNumber: ['CE-9844', 'CB-0988'],
-        stallHeight: 'LOW',
-        tipper: false,
-        truckType: 0,
-        createdAt: '2021-09-21T16:15:15.000Z',
-        updatedAt: '2021-09-21T16:15:15.000Z',
-        quotationNumber: '0',
-        workingZones: [],
-        owner: {
-          id: 684,
-          fullName: 'Sylvia Art',
-          companyName: 'Sylvia Art',
-          email: null,
-          mobileNo: '+66814592282',
-          avatar: {
-            object:
-              'a7a9e3a1bfab45cdf65783b23326ddf68384faed15a00b718d7fffff5f1d6406a69c9281a5fef8aa8500ef7a08d02a6f0420f039fd6ecc1df6d3ff918bd84adb',
-          },
-          userId: 'DLG498ZX',
-        },
-      },
-      {
-        id: 'MK7EDELQ',
-        approveStatus: 'INACTIVE',
-        loadingWeight: 1,
-        registrationNumber: ['112234'],
-        stallHeight: 'LOW',
-        tipper: false,
-        truckType: 1,
-        createdAt: '2021-09-21T16:10:00.000Z',
-        updatedAt: '2021-09-21T16:10:00.000Z',
-        quotationNumber: '0',
-        workingZones: [
-          {
-            region: 1,
-            province: 10,
-          },
-        ],
-        owner: {
-          id: 680,
-          fullName: 'แอนดรูว์ ทรานสปอร์ต 22',
-          companyName: 'แอนดรูว์ ทรานสปอร์ต 22',
-          email: null,
-          mobileNo: '+66815722022',
-          avatar: {
-            object:
-              '07915b70bd545e137bfb0e06042fdee4fffc9479999449a785612fdf45b3e216195dc9d495ba475b9d35e26694839fae6ead73cdea33f88c40b1add477709985',
-          },
-          userId: '4LN7YEKY',
-        },
-      },
-      {
-        id: 'EZQWEEZ1',
-        approveStatus: 'INACTIVE',
-        loadingWeight: 1,
-        registrationNumber: ['กข 1234'],
-        stallHeight: 'LOW',
-        tipper: false,
-        truckType: 6,
-        createdAt: '2021-09-21T16:08:51.000Z',
-        updatedAt: '2021-09-21T16:08:51.000Z',
-        quotationNumber: '0',
-        workingZones: [
-          {
-            region: 1,
-            province: 3,
-          },
-          {
-            region: 1,
-            province: 6,
-          },
-          {
-            region: 1,
-            province: 5,
-          },
-        ],
-        owner: {
-          id: 680,
-          fullName: 'แอนดรูว์ ทรานสปอร์ต 22',
-          companyName: 'แอนดรูว์ ทรานสปอร์ต 22',
-          email: null,
-          mobileNo: '+66815722022',
-          avatar: {
-            object:
-              '07915b70bd545e137bfb0e06042fdee4fffc9479999449a785612fdf45b3e216195dc9d495ba475b9d35e26694839fae6ead73cdea33f88c40b1add477709985',
-          },
-          userId: '4LN7YEKY',
-        },
-      },
-      {
-        id: 'QVKE00KE',
-        approveStatus: 'INACTIVE',
-        loadingWeight: 1,
-        registrationNumber: ['TT-0001', 'TT-0002'],
-        stallHeight: 'LOW',
-        tipper: false,
-        truckType: 4,
-        createdAt: '2021-09-21T11:50:49.000Z',
-        updatedAt: '2021-09-21T11:51:15.000Z',
-        quotationNumber: '0',
-        workingZones: [
-          {
-            region: 2,
-            province: 43,
-          },
-          {
-            region: 2,
-            province: 44,
-          },
-        ],
-        owner: {
-          id: 612,
-          fullName: 'Art tist zys',
-          companyName: 'Art tist zys',
-          email: 'Weaver_kenzellll@gmail.com',
-          mobileNo: '+66929818252',
-          avatar: {
-            object:
-              '8e4aca19957a4f63469e9145092ba38ddeeb7f1b8ceeebe7b690fa77aac6a89b49d5edaaca619a777c9b10c2a4729ea0e4aba210712c6c2e176ecb460509828a',
-          },
-          userId: 'DLG448ZX',
-        },
-      },
-      {
-        id: 'WEL929ZP',
-        approveStatus: 'INACTIVE',
-        loadingWeight: 1,
-        registrationNumber: ['FE-0099'],
-        stallHeight: 'LOW',
-        tipper: true,
-        truckType: 4,
-        createdAt: '2021-09-20T18:33:45.000Z',
-        updatedAt: '2021-09-20T18:42:38.000Z',
-        quotationNumber: '0',
-        workingZones: [],
-        owner: {
-          id: 612,
-          fullName: 'Art tist zys',
-          companyName: 'Art tist zys',
-          email: 'Weaver_kenzellll@gmail.com',
-          mobileNo: '+66929818252',
-          avatar: {
-            object:
-              '8e4aca19957a4f63469e9145092ba38ddeeb7f1b8ceeebe7b690fa77aac6a89b49d5edaaca619a777c9b10c2a4729ea0e4aba210712c6c2e176ecb460509828a',
-          },
-          userId: 'DLG448ZX',
-        },
-      },
-      {
-        id: '2NZO1YZ4',
-        approveStatus: 'INACTIVE',
-        loadingWeight: 1,
-        registrationNumber: ['ฟก-5222'],
-        stallHeight: 'LOW',
-        tipper: false,
-        truckType: 5,
-        createdAt: '2021-09-15T11:32:58.000Z',
-        updatedAt: '2021-09-17T13:28:01.000Z',
-        quotationNumber: '0',
-        workingZones: [
-          {
-            region: 7,
-            province: 7,
-          },
-          {
-            region: 1,
-            province: 9,
-          },
-          {
-            region: 2,
-            province: 39,
-          },
-        ],
-        owner: {
-          id: 684,
-          fullName: 'Sylvia Art',
-          companyName: 'Sylvia Art',
-          email: null,
-          mobileNo: '+66814592282',
-          avatar: {
-            object:
-              'a7a9e3a1bfab45cdf65783b23326ddf68384faed15a00b718d7fffff5f1d6406a69c9281a5fef8aa8500ef7a08d02a6f0420f039fd6ecc1df6d3ff918bd84adb',
-          },
-          userId: 'DLG498ZX',
-        },
-      },
-    ],
+    trucks: [],
   });
   const [jobs, setJobs] = useState<Array<JobItemProps>>([]);
+  // const [jobs, setJobs] = useState<Array<any>>([]);
   const [jobDetail, setJobDetail] = useState<any>(null);
-  const [truckTypes, setTruckTypes] = useState<Array<any>>([]);
-  const [productTypes, setProductTypes] = useState<Array<any>>([]);
+  const [truckTypes, setTruckTypes] = useState<MasterTypeProps | any>({});
+  const [productTypes, setProductTypes] = useState<MasterTypeProps | any>({});
   const [searchJob, setSearchJob] = useState<any>('');
   const [searchTruck, setSearchTruck] = useState<any>('');
+  const [isDragStart, setIsDragStart] = useState<boolean>(false);
+  const [typingTimeout, setTypingTimeout] = useState<any>(0);
 
   useEffect(() => {
     return () => {
       jobStore.clearJobs();
+      truckStore.clearTrucks();
     };
   }, []);
 
@@ -487,7 +233,14 @@ const AddTrip: React.FC<Props> = observer(() => {
     if (!truckTypesStore.data) {
       truckTypesStore.getTruckTypes();
     } else {
-      setTruckTypes(JSON.parse(JSON.stringify(truckTypesStore.data)));
+      const newTruckType = JSON.parse(JSON.stringify(truckTypesStore.data)).reduce(
+        (obj: any, item: any) => ({
+          ...obj,
+          [item['id']]: item.name,
+        }),
+        {},
+      );
+      setTruckTypes(newTruckType);
     }
   }, [truckTypesStore.data]);
 
@@ -495,33 +248,49 @@ const AddTrip: React.FC<Props> = observer(() => {
     if (!productTypesStore.data) {
       productTypesStore.getProductTypes();
     } else {
-      setProductTypes(JSON.parse(JSON.stringify(productTypesStore.data)));
+      const newProductType = JSON.parse(JSON.stringify(productTypesStore.data)).reduce(
+        (obj: any, item: any) => ({
+          ...obj,
+          [item['id']]: item.name,
+        }),
+        {},
+      );
+      setProductTypes(newProductType);
     }
   }, [productTypesStore.data]);
 
   useEffect(() => {
-    console.log('jobStore.data_jobs?.content?.length :>> ', jobStore.data_jobs?.content?.length);
-    if (jobStore.data_jobs?.content?.length) {
-      const items = JSON.parse(JSON.stringify(jobStore.data_jobs?.content)).map((job: any) => ({
-        label: `${job.productName} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo}`,
-        value: job.id,
+    if (truckStore.truckList?.content?.length) {
+      setState((prev: any) => ({
+        ...prev,
+        trucks: JSON.parse(JSON.stringify(truckStore.truckList?.content)),
       }));
-      setJobs(items);
     }
-  }, [JSON.stringify(jobStore.data_jobs)]);
+  }, [JSON.stringify(truckStore.truckList)]);
 
-  useEffect(() => {
-    let delayDebounceFn: any;
-    if (searchJob.length >= 3) {
-      delayDebounceFn = setTimeout(() => {
-        console.log('Requesting ...');
-        jobStore.getJobsList({ page: 1, descending: true, textSearch: searchJob });
-      }, 200);
-    } else {
-      clearTimeout(delayDebounceFn);
-    }
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchJob]);
+  // useEffect(() => {
+  //   console.log('jobStore.jobList?.content?.length :>> ', jobStore.jobList?.content?.length);
+  //   if (jobStore.jobList?.content?.length) {
+  //     const items = JSON.parse(JSON.stringify(jobStore.jobList?.content)).map((job: any) => ({
+  //       label: `${job.productName} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo}`,
+  //       value: job.id,
+  //     }));
+  //     setJobs(items);
+  //   }
+  // }, [JSON.stringify(jobStore.jobList)]);
+
+  // useEffect(() => {
+  //   let delayDebounceFn: any;
+  //   if (searchJob.length >= 3) {
+  //     delayDebounceFn = setTimeout(() => {
+  //       console.log('Requesting ...');
+  //       jobStore.getJobsList({ page: 1, descending: true, textSearch: searchJob });
+  //     }, 200);
+  //   } else {
+  //     clearTimeout(delayDebounceFn);
+  //   }
+  //   return () => clearTimeout(delayDebounceFn);
+  // }, [searchJob]);
 
   const droppableIds: any = {
     droppable1: 'trucks',
@@ -540,8 +309,8 @@ const AddTrip: React.FC<Props> = observer(() => {
   const getList = (id: string): any => state[droppableIds[id]];
 
   const onDragEnd = (result: any) => {
+    setIsDragStart(false);
     const { source, destination } = result;
-    console.log('result :>> ', result);
 
     // dropped outside the list
     if (!destination) {
@@ -549,7 +318,6 @@ const AddTrip: React.FC<Props> = observer(() => {
     }
 
     if (source.droppableId === destination.droppableId) {
-      console.log('source.droppableId === destination.droppableId');
       const items: object = reorder(getList(source.droppableId), source.index, destination.index);
 
       let copiedState: any = Object.assign({}, state);
@@ -562,7 +330,6 @@ const AddTrip: React.FC<Props> = observer(() => {
 
       setState(copiedState);
     } else {
-      console.log('else');
       const result: any = move(getList(source.droppableId), getList(destination.droppableId), source, destination);
 
       setState({
@@ -580,16 +347,35 @@ const AddTrip: React.FC<Props> = observer(() => {
   };
 
   const onSubmitJob = () => {
-    jobStore.getJobsList({ page: 1, descending: true, textSearch: searchJob });
+    jobStore.getJobsListWithoutEmptyContent({ page: 1, descending: true, textSearch: searchJob });
   };
 
   const onSubmitTruck = () => {
-    console.log('Submit truck');
+    truckStore.clearTrucks();
+    truckStore.getTrucksListWithoutEmptyContent({
+      page: 1,
+      descending: true,
+      truckTypes: JSON.stringify([+searchTruck]),
+    });
+    truckPage = 1;
+  };
+
+  const loadMoreTruck = () => {
+    truckStore.getTrucksListWithoutEmptyContent({
+      page: ++truckPage,
+      descending: true,
+      truckTypes: JSON.stringify([+searchTruck]),
+    });
   };
 
   const onSelected = (val: any) => {
-    const jobDetail = JSON.parse(JSON.stringify(jobStore.data_jobs?.content)).find((job: any) => job.id === val.value);
+    const jobDetail = JSON.parse(JSON.stringify(jobStore.jobList?.content)).find((job: any) => job.id === val.value);
     setJobDetail(jobDetail);
+  };
+
+  const onImageError = (e: any) => {
+    e.target.onerror = null;
+    e.target.src = images.pinDrop;
   };
 
   const removeTruck = (truckId: string) => {
@@ -619,10 +405,37 @@ const AddTrip: React.FC<Props> = observer(() => {
     droppableId: 'droppable2',
     listId: 'truckSelected',
     title: '',
-    // droppable: false,
-    // onChange: onChangeValueJob,
-    // onSubmit: onSubmitJob,
   };
+
+  const filterTruck = async (inputValue: string): Promise<any> => {
+    if (inputValue.length < 3 || typingTimeout) {
+      clearTimeout(typingTimeout);
+      setTypingTimeout(0);
+      return [];
+    }
+
+    return new Promise((resolve) => {
+      setTimeout(async () => {
+        console.log('Requesting ...');
+        await jobStore.getJobsListWithoutEmptyContent({ page: 1, descending: true, textSearch: inputValue });
+        if (jobStore.jobList?.content?.length) {
+          const items = JSON.parse(JSON.stringify(jobStore.jobList?.content)).map((job: any) => ({
+            label: `${job.productName} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo}`,
+            value: job.id,
+          }));
+          setJobs(items);
+          setTypingTimeout(items);
+          resolve(items);
+        }
+        resolve([]);
+      }, 2000);
+    });
+  };
+
+  const promiseOptions = (inputValue: string): Promise<any> =>
+    new Promise((resolve) => resolve(filterTruck(inputValue)));
+
+  console.log('truckStore.loading :>> ', truckStore.loading);
 
   return (
     <Page>
@@ -631,22 +444,33 @@ const AddTrip: React.FC<Props> = observer(() => {
         <ButtonBack onClick={() => navigate('/trips')}>{t('back')}</ButtonBack>
         <ButtonConfrim>{t('confirm')}</ButtonConfrim>
       </ButtonGroup>
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragEnd={onDragEnd} onBeforeDragStart={() => setIsDragStart(true)}>
         <Grid layout="fluid" spacing="compact">
           <GridColumn medium={7}>
             <div style={LEFT_RIGHT_SPACING}>
-              {/* <Select
-              hasAutocomplete
-              items={jobs}
-              placeholder={'Search job'}
-              noMatchesFound={'No match ...'}
-              shouldFitContainer
-              onFilterChange={onChangeValueJob}
-              onSelected={() => console.log('onSelected')}
-            /> */}
-
               <div>
-                <Select options={jobs} onChange={onSelected} onInputChange={onChangeValueJob} />
+                {/* <Select
+                  options={jobs}
+                  loadingMessage={() => 'Loading ...'}
+                  noOptionsMessage={() => jobStore.loading ? '<Spinner size="medium" />' : 'Search ดีๆ เดี๋ยวก็เจอ'}
+                  onChange={onSelected}
+                  onInputChange={onChangeValueJob}
+                /> */}
+                <div style={{ position: 'relative' }}>
+                  <span style={SEARCH_ICON}>
+                    <SearchIcon label={'search-icon'} size={'medium'} />
+                  </span>
+                  <AsyncSelect
+                    cacheOptions
+                    defaultOptions
+                    loadOptions={promiseOptions}
+                    placeholder={'Search job'}
+                    onChange={onSelected}
+                    noOptionsMessage={() => 'No results'}
+                    isRequired
+                    id={'main-async-select-job'}
+                  />
+                </div>
               </div>
 
               {jobDetail && (
@@ -662,7 +486,8 @@ const AddTrip: React.FC<Props> = observer(() => {
                               <Detail
                                 header={'ประเภท'}
                                 content={
-                                  productTypes?.find((prod: any) => prod.id === jobDetail.productTypeId)?.name ?? '-'
+                                  productTypes[jobDetail.productTypeId] ??
+                                  (productTypes?.length ? '-' : <Spinner size="medium" />)
                                 }
                               />
                             </Col>
@@ -694,7 +519,8 @@ const AddTrip: React.FC<Props> = observer(() => {
                                 <Detail
                                   header={'ประเภทรถ'}
                                   content={
-                                    truckTypes?.find((type: any) => type.id === +jobDetail.truckType)?.name ?? '-'
+                                    truckTypes[jobDetail.truckType] ??
+                                    (Object.keys(truckTypes)?.length ? '-' : <Spinner size="medium" />)
                                   }
                                   style={{ flex: 1 }}
                                 />
@@ -725,75 +551,81 @@ const AddTrip: React.FC<Props> = observer(() => {
                       isExpanded
                       topic={<Header text={'รถที่เลือก'} />}
                       children={
-                        <Droppable
-                          key={`truck-selected-droppable-1`}
-                          droppableId={truckSelectedDroppable.droppableId}
-                          // isDropDisabled={truckSelectedDroppable.droppable}
-                        >
-                          {(provided: any, snapshot: any) => (
-                            <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
-                              {jobStore.loading && <h1>Loading ...</h1>}
-                              {state[truckSelectedDroppable.listId] &&
-                                state[truckSelectedDroppable.listId].map((item: any, index: number) => (
-                                  <Draggable
-                                    key={`${truckSelectedDroppable.listId}-${item.id}-${index}`}
-                                    draggableId={`${truckSelectedDroppable.listId}-${item.id}-${index}`}
-                                    index={index}
-                                  >
-                                    {(provided: any, snapshot: any) => (
-                                      <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        style={{
-                                          ...getItemStyle(snapshot.isDragging, provided.draggableProps.style),
-                                          display: 'flex',
-                                          paddingTop: 10,
-                                          paddingBottom: 10,
-                                        }}
-                                      >
-                                        <div style={{ flex: 2 }}>
-                                          <Row style={{ marginBottom: 0 }}>
-                                            <div>
-                                              <Value style={{ marginBottom: 0 }}>
-                                                {item.registrationNumber.join(' / ')}
-                                              </Value>
-                                            </div>
-                                          </Row>
-                                          <Row style={{ marginBottom: 0 }}>
-                                            <Col flex={1}>
-                                              <Detail
-                                                header={'ประเภท'}
-                                                content={
-                                                  truckTypes?.find((type: any) => type.id === +item.truckType)?.name ??
-                                                  '-'
-                                                }
-                                              />
-                                            </Col>
-                                            <Col flex={1}>
-                                              <Detail header={'ความสูงคอกรถ'} content={item.stallHeight} />
-                                            </Col>
-                                          </Row>
-                                        </div>
-                                        <div style={{ flex: 1, paddingLeft: 15, borderLeft: '1px solid #ebeef3' }}>
-                                          <Label>{'วันที่เรื่มงาน :'}</Label>
-                                          <DatePicker
-                                            defaultValue={new Date().toISOString()}
-                                            dateFormat="DD/MM/YYYY"
-                                            onChange={(date) => console.log('date :>> ', date)}
-                                          />
-                                        </div>
-                                        <span style={TRASH} onClick={() => removeTruck(item.id)}>
-                                          <TrashIcon label={'trash-icon'} size={'medium'} />
-                                        </span>
-                                      </div>
-                                    )}
-                                  </Draggable>
-                                ))}
-                              {provided.placeholder}
+                        <div style={isDragStart ? DROP_BOX_SHOW : DROP_BOX_HIDE}>
+                          {isDragStart && !state.truckSelected?.length && (
+                            <div style={DROP_BOX_CONTENT}>
+                              <TruckAnimate />
                             </div>
                           )}
-                        </Droppable>
+                          <Droppable
+                            key={`truck-selected-droppable-1`}
+                            droppableId={truckSelectedDroppable.droppableId}
+                            // isDropDisabled={truckSelectedDroppable.droppable}
+                          >
+                            {(provided: any, snapshot: any) => (
+                              <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
+                                {state[truckSelectedDroppable.listId] &&
+                                  state[truckSelectedDroppable.listId].map((item: any, index: number) => (
+                                    <Draggable
+                                      key={`${truckSelectedDroppable.listId}-${item.id}-${index}`}
+                                      draggableId={`${truckSelectedDroppable.listId}-${item.id}-${index}`}
+                                      index={index}
+                                    >
+                                      {(provided: any, snapshot: any) => (
+                                        <div
+                                          ref={provided.innerRef}
+                                          {...provided.draggableProps}
+                                          {...provided.dragHandleProps}
+                                          style={{
+                                            ...getItemStyle(snapshot.isDragging, provided.draggableProps.style),
+                                            display: 'flex',
+                                            paddingTop: 10,
+                                            paddingBottom: 10,
+                                          }}
+                                        >
+                                          <div style={{ flex: 2 }}>
+                                            <Row style={{ marginBottom: 0 }}>
+                                              <div>
+                                                <Value style={{ marginBottom: 0 }}>
+                                                  {item.registrationNumber ? item.registrationNumber.join(' / ') : '-'}
+                                                </Value>
+                                              </div>
+                                            </Row>
+                                            <Row style={{ marginBottom: 0 }}>
+                                              <Col flex={1}>
+                                                <Detail
+                                                  header={'ประเภท'}
+                                                  content={
+                                                    truckTypes[item.truckType] ??
+                                                    (Object.keys(truckTypes)?.length ? '-' : <Spinner size="medium" />)
+                                                  }
+                                                />
+                                              </Col>
+                                              <Col flex={1}>
+                                                <Detail header={'ความสูงคอกรถ'} content={item.stallHeight} />
+                                              </Col>
+                                            </Row>
+                                          </div>
+                                          <div style={{ flex: 1, paddingLeft: 15, borderLeft: '1px solid #ebeef3' }}>
+                                            <Label>{'วันที่เรื่มงาน :'}</Label>
+                                            <DatePicker
+                                              defaultValue={new Date().toISOString()}
+                                              dateFormat="DD/MM/YYYY"
+                                              onChange={(date) => console.log('date :>> ', date)}
+                                            />
+                                          </div>
+                                          <span style={TRASH} onClick={() => removeTruck(item.id)}>
+                                            <TrashIcon label={'trash-icon'} size={'medium'} />
+                                          </span>
+                                        </div>
+                                      )}
+                                    </Draggable>
+                                  ))}
+                                {provided.placeholder}
+                              </div>
+                            )}
+                          </Droppable>
+                        </div>
                       }
                     />
                   </Box>
@@ -812,21 +644,31 @@ const AddTrip: React.FC<Props> = observer(() => {
                   <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
                     <Form onSubmit={truckDroppable.onSubmit}>
                       {({ formProps }: any) => (
-                        <form {...formProps} style={{ marginBottom: 20 }}>
-                          <Field name={truckDroppable.title}>
-                            {({ fieldProps }: any) => (
-                              <Textfield
-                                placeholder={truckDroppable.title}
-                                {...fieldProps}
-                                onChange={(e: any) => truckDroppable.onChange(e)}
-                              />
+                        <form {...formProps} style={{ paddingBottom: 20 }}>
+                          <div style={{ position: 'relative' }}>
+                            <span style={SEARCH_ICON}>
+                              <SearchIcon label={'search-icon'} size={'medium'} />
+                            </span>
+                            <Field name={truckDroppable.title}>
+                              {({ fieldProps }: any) => (
+                                <Textfield
+                                  placeholder={truckDroppable.title}
+                                  {...fieldProps}
+                                  style={{ paddingLeft: 40 }}
+                                  onChange={(e: any) => truckDroppable.onChange(e)}
+                                />
+                              )}
+                            </Field>
+                            {truckStore.loading && (
+                              <span style={LOADING_ICON}>
+                                <Spinner size={'small'} />
+                              </span>
                             )}
-                          </Field>
+                          </div>
                         </form>
                       )}
                     </Form>
                     <div>
-                      {jobStore.loading && <h1>Loading ...</h1>}
                       {state[truckDroppable.listId] &&
                         state[truckDroppable.listId].map((item: any, index: number) => (
                           <Draggable
@@ -843,7 +685,9 @@ const AddTrip: React.FC<Props> = observer(() => {
                               >
                                 <Row style={{ marginBottom: 0, paddingBottom: 10 }}>
                                   <div>
-                                    <Value style={{ marginBottom: 0 }}>{item.registrationNumber.join(' / ')}</Value>
+                                    <Value style={{ marginBottom: 0 }}>
+                                      {item.registrationNumber ? item.registrationNumber.join(' / ') : '-'}
+                                    </Value>
                                   </div>
                                 </Row>
                                 <Row style={{ marginBottom: 10 }}>
@@ -851,7 +695,8 @@ const AddTrip: React.FC<Props> = observer(() => {
                                     <Detail
                                       header={'ประเภท'}
                                       content={
-                                        truckTypes?.find((type: any) => type.id === +item.truckType)?.name ?? '-'
+                                        truckTypes[item.truckType] ??
+                                        (Object.keys(truckTypes)?.length ? '-' : <Spinner size="medium" />)
                                       }
                                     />
                                   </Col>
@@ -887,13 +732,15 @@ const AddTrip: React.FC<Props> = observer(() => {
                                     </div>
                                     <div style={{ paddingLeft: 10 }}>
                                       <img
-                                        src={images.pinDrop}
+                                        src={`${process.env.API_ENDPOINT}/api/v1/media/file-stream?attachCode=${item.owner?.avatar?.object}`}
+                                        // src={images.pinDrop}
                                         style={{
                                           width: 35,
                                           borderRadius: '50%',
                                           backgroundColor: '#ebeef3',
                                           padding: 2,
                                         }}
+                                        onError={onImageError}
                                       />
                                     </div>
                                   </div>
@@ -909,6 +756,15 @@ const AddTrip: React.FC<Props> = observer(() => {
                         ))}
                     </div>
                     {provided.placeholder}
+                    {truckStore.truckList?.content && truckPage < (truckStore.truckList.totalPages ?? 0) && (
+                      <div style={{ paddingBottom: 5, display: 'flex', justifyContent: 'center' }}>
+                        <ButtonLoadMore onClick={loadMoreTruck}>
+                          <span style={{ width: 60, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            {!truckStore.loading ? <MoreIcon label={'more-icon'} size={'medium'} /> : <Dots />}
+                          </span>
+                        </ButtonLoadMore>
+                      </div>
+                    )}
                   </div>
                 )}
               </Droppable>
@@ -981,4 +837,11 @@ const ButtonConfrim = styled(Button)`
     color: #ffc107 !important;
     background: #fff !important;
   }
+`;
+
+const ButtonLoadMore = styled(Button)`
+  border: 1px solid #cccccc !important;
+  color: #000 !important;
+  background-color: #cccccc !important;
+  align-items: center;
 `;
