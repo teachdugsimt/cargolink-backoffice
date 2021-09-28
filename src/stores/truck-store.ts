@@ -55,10 +55,20 @@ const TruckManagementType = types.model({
   lengthPerPage: types.maybeNull(types.number),
 });
 
+const TruckListManagementType = types.model({
+  content: types.maybeNull(types.array(TruckType)),
+  totalPages: types.maybeNull(types.number),
+});
+
 export interface ITrucksManagement {
   content: (ITruck | ITruckNull)[];
   reRender: boolean;
   lengthPerPage: number | null;
+}
+
+export interface ITruckListManagement {
+  content: (ITruck | ITruckNull)[];
+  totalPages: number | null;
 }
 
 export const TruckStore = types
@@ -67,6 +77,7 @@ export const TruckStore = types
     userTrucks_loading: false,
     data_count: types.maybeNull(types.number),
     data_trucks: types.maybeNull(TruckManagementType),
+    truckList: types.maybeNull(TruckListManagementType),
     currentTruck: types.maybeNull(TruckType),
     isFirstLoad: true,
     error_response: types.maybeNull(
@@ -215,6 +226,73 @@ export const TruckStore = types
           return error;
         }
       }),
+
+      getTrucksListWithoutEmptyContent: flow(function* getTrucksList(params: TrucksListParams) {
+        self.loading = true;
+        self.data_count = null;
+        self.error_response = null;
+        try {
+          const response = yield TruckApi.getTrucksList(params);
+          console.log('getTrucks response :>', response);
+          if (response && response.ok) {
+            const { data, size, totalElements, totalPages }: TrucksListResponse = response.data;
+            self.data_count = totalElements;
+            const trucks: ITruckListManagement = {
+              content: [],
+              totalPages: totalPages,
+            };
+            if (data.length) {
+              const parsedData: ITruck[] = data.map((truck) => {
+                const { loadingWeight, quotationNumber, truckType } = truck;
+                const toNumber = (x: any) => {
+                  if (x == null) return x;
+                  if (isNaN(+x)) throw new Error('this should not be NaN: ' + x);
+                  return +x;
+                };
+                const owner = {
+                  ...truck.owner,
+                  id: toNumber(truck.owner.id),
+                };
+                return {
+                  ...truck,
+                  loadingWeight: toNumber(loadingWeight),
+                  quotationNumber: toNumber(quotationNumber),
+                  truckType: toNumber(truckType),
+                  owner,
+                };
+              });
+              if (self.truckList?.content?.length) {
+                trucks.content = [...JSON.parse(JSON.stringify(self.truckList.content)), ...parsedData];
+              } else {
+                trucks.content = parsedData;
+              }
+            } else {
+              trucks.content = [];
+            }
+            self.loading = false;
+            self.truckList = trucks;
+          } else {
+            self.loading = false;
+            self.truckList = null;
+            self.error_response = {
+              title: response.problem,
+              content: 'GET trucks : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to getTrucks :>', error);
+          self.loading = false;
+          self.truckList = null;
+          self.error_response = {
+            title: '',
+            content: 'Failed to getTrucks',
+          };
+        }
+      }),
+
+      clearTrucks: function () {
+        self.truckList = null;
+      },
     };
   });
 
