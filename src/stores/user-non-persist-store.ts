@@ -1,6 +1,6 @@
 import { types, flow } from 'mobx-state-tree';
 import uploadApi, { UserUploadPayload } from '../services/upload-api';
-import userApi, { GetUsersListParams, GetUsersListResponse } from '../services/user-api';
+import userApi, { GetUsersListParams, GetUsersListResponse, ChangeDocStatusPayload } from '../services/user-api';
 import { UploadFilePath } from '../services/upload-api';
 import truckApi from '../services/truck-api';
 
@@ -284,7 +284,7 @@ export const UserNonPersistStore = types
           const response = yield userApi.getUser(params);
           self.loading = false;
           if (response.ok) {
-            console.log('Get User by id : ', response);
+            console.log('Raw get user by id : ', response);
             self.data_get_user_id = response.data;
           } else {
           }
@@ -300,7 +300,7 @@ export const UserNonPersistStore = types
           self.loading = false;
           if (response.ok) {
             yield UserNonPersistStore.getFullyUserProfile(userId);
-            console.log('Get User by id : ', response);
+            console.log('Delete document by id : ', response);
             self.data_delete_user_doc = response.data?.message;
           } else {
           }
@@ -314,11 +314,27 @@ export const UserNonPersistStore = types
         try {
           self.loading = true;
           const response = yield userApi.editUser(userId, params);
+          console.log('Patch User by id : ', response);
           self.loading = false;
           if (response.ok) {
-            yield UserNonPersistStore.getUserById(userId);
-            console.log('Get User by id : ', response);
+            yield UserNonPersistStore.getFullyUserProfile(userId);
             self.data_patch_user = response.data;
+          } else {
+          }
+        } catch (error) {
+          self.loading = false;
+          return error;
+        }
+      }),
+      updateUserDocument: flow(function* updateUserDocument(userId: string, params: ChangeDocStatusPayload) {
+        try {
+          self.loading = true;
+          const response = yield userApi.changeDocStatus(userId, params);
+          console.log('Update doc status : ', response);
+          self.loading = false;
+          if (response.ok) {
+            yield UserNonPersistStore.getFullyUserProfile(userId);
+            // self.data_patch_user = response.data;
           } else {
           }
         } catch (error) {

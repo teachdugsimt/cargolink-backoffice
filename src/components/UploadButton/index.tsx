@@ -8,9 +8,10 @@ interface IProps {
   isLoading?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => any;
   disabled?: boolean;
+  containerStyles?: React.CSSProperties;
 }
 const UploadButton = (props: IProps) => {
-  const { accept, isLoading, onChange } = props;
+  const { accept, isLoading, onChange, containerStyles } = props;
   const { t } = useTranslation();
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -22,6 +23,7 @@ const UploadButton = (props: IProps) => {
   return (
     <>
       <LoadingButton
+        style={containerStyles}
         spacing="compact"
         testId="uploadButton"
         isLoading={isLoading}

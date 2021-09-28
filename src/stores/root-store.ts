@@ -81,6 +81,7 @@ let initialState = RootModel.create({
   },
   truckStore: {
     loading: false,
+    userTrucks_loading: false,
     error_response: null,
   },
   truckTypesStore: {

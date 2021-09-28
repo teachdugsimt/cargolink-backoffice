@@ -64,6 +64,10 @@ class TruckApi {
     const response: AxiosResponse<boolean> = await ExcuteApi(`/api/v1/trucks/${id}`, params, 'put', 6e5, true, true);
     return response;
   };
+  changeDocStatus = async (userId: string, payload: ChangeDocStatusPayload) => {
+    const response = await ExcuteApi(`/api/v1/trucks/${userId}/doc-status`, payload, 'patch', 6e5, true, true);
+    return response;
+  };
 }
 
 export default new TruckApi();
@@ -123,6 +127,8 @@ export interface ITruck {
   quotationNumber: number | null;
   workingZones: IZone[];
   owner: IOwner;
+  document?: object;
+  documentStatus?: string;
 }
 
 export interface IZone {
@@ -160,4 +166,15 @@ export interface WorkingZone {
 
 export interface CreateTruckResponse extends PostTruckParams {
   id: string;
+}
+
+export interface ChangeDocStatusPayload {
+  status: DocumentStatus;
+}
+
+export enum DocumentStatus {
+  NO_DOCUMENT = 'NO_DOCUMENT',
+  WAIT_FOR_VERIFIED = 'WAIT_FOR_VERIFIED',
+  VERIFIED = 'VERIFIED',
+  REJECTED = 'REJECTED',
 }

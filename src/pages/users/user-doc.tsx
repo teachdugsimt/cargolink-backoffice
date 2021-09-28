@@ -15,6 +15,7 @@ import ModalDialog, { ModalTransition } from '@atlaskit/modal-dialog';
 import FilePreviewer from 'react-file-previewer';
 import { useMst } from '../../stores/root-store';
 import { observer } from 'mobx-react-lite';
+import { UserNonPersistStore } from '../../stores/user-non-persist-store';
 
 export interface UploadData {
   attachCode: string | null;
@@ -58,12 +59,18 @@ const ReadViewContainer = styled.div`
   word-break: break-word;
 `;
 
+const MARGIN_TOP_10: React.CSSProperties = {
+  marginTop: 10,
+};
+
 const UserDoc = observer((props: any) => {
   const [isOpen, setIsOpen] = useState(false);
   const { userStore, loginStore } = useMst();
 
   const { t } = useTranslation();
   const { userData, handleDeleteFile, onUploadDocument } = props;
+
+  const [fileClick, setfileClick] = useState<StateFileObject | null>(null);
 
   const statusOptions = [
     {
@@ -107,17 +114,19 @@ const UserDoc = observer((props: any) => {
   // };
 
   const handleChangeDocStatus = (status: DocumentStatus) => {
-    UserApi.changeDocStatus(userData.userId, { status })
-      .then((response: any) => {
-        if (response && response.ok) {
-          // return getUser(userId);
-        }
-      })
-      .catch((error) => console.error('change doc status result', error));
+    // UserApi.changeDocStatus(userData.userId, { status })
+    // .then((response: any) => {
+    //   if (response && response.ok) {
+    //     console.log("Response user doc : ", response)
+    //     // return getUser(userId);
+    //   }
+    // })
+    // .catch((error) => console.error('change doc status result', error));
+    UserNonPersistStore.updateUserDocument(userData.userId, { status });
   };
 
   const [listUpload, setlistUpload] = useState<Array<StateFileObject>>([]);
-
+  console.log('User data files :: ', userData);
   return (
     <Col>
       <SectionHeader>{t('userDoc')}</SectionHeader>
@@ -132,6 +141,7 @@ const UserDoc = observer((props: any) => {
                 fileName={fileName || ''}
                 date={date}
                 handlePreview={(attachCode) => {
+                  setfileClick(file);
                   setIsOpen(true);
                 }}
                 handleDelete={() => {
@@ -188,7 +198,12 @@ const UserDoc = observer((props: any) => {
           </FieldWrapper>
         )}
 
-        <UploadButton isLoading={false} accept=".pdf,.png,.jpg,.jpeg" onChange={onUploadDocument} />
+        <UploadButton
+          containerStyles={MARGIN_TOP_10}
+          isLoading={false}
+          accept=".pdf,.png,.jpg,.jpeg"
+          onChange={onUploadDocument}
+        />
       </Row>
 
       <ModalTransition>
@@ -206,9 +221,7 @@ const UserDoc = observer((props: any) => {
           >
             <FilePreviewer
               file={{
-                mimeType: 'application/pdf',
-                url:
-                  'https://cargolink-documents.s3.ap-southeast-1.amazonaws.com/USER_DOC/ACTIVE/USER_DOC-1625477727808.pdf',
+                url: fileClick?.url || '',
               }}
             />
           </ModalDialog>
