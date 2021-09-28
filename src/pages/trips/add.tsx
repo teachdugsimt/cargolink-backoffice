@@ -1,4 +1,4 @@
-import React, { useState, useEffect, CSSProperties } from 'react';
+import React, { useState, useEffect, CSSProperties, useCallback, memo } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Form, { Field } from '@atlaskit/form';
 import Textfield from '@atlaskit/textfield';
@@ -11,6 +11,7 @@ import PageHeader from '@atlaskit/page-header';
 import { useTranslation } from 'react-i18next';
 // import Select from 'react-select';
 import { AsyncSelect, OptionsType, OptionType, ValueType } from '@atlaskit/select';
+import { AsyncPaginate } from 'react-select-async-paginate';
 import styled from 'styled-components';
 import Collapse from '../../components/collapse/collapse';
 import images from '../../components/Themes/images';
@@ -22,6 +23,7 @@ import LottieView from 'react-lottie';
 import Spinner from '@atlaskit/spinner';
 import SearchIcon from '@atlaskit/icon/glyph/search';
 import MoreIcon from '@atlaskit/icon/glyph/more';
+import debounce from 'debounce-promise';
 
 interface LocationProps {
   header: string;
@@ -129,6 +131,30 @@ const Dots = () => (
   />
 );
 
+const Image = memo(
+  ({ src, id, onError }: any) => (
+    <img
+      src={src}
+      style={{
+        width: 35,
+        borderRadius: '50%',
+        backgroundColor: '#ebeef3',
+        padding: 2,
+      }}
+      onError={onError}
+    />
+  ),
+  (prevProps, nextProps) => {
+    console.log('prevProps :>> ', prevProps);
+    console.log('nextProps :>> ', nextProps);
+
+    if (prevProps.id === nextProps.id) {
+      return true;
+    }
+    return false;
+  },
+);
+
 const reorder = (list: [], startIndex: number, endIndex: number): object => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
@@ -221,6 +247,7 @@ const AddTrip: React.FC<Props> = observer(() => {
   const [searchTruck, setSearchTruck] = useState<any>('');
   const [isDragStart, setIsDragStart] = useState<boolean>(false);
   const [typingTimeout, setTypingTimeout] = useState<any>(0);
+  // const [debounce, setDebounce] = useState<any>({});
 
   useEffect(() => {
     return () => {
@@ -228,6 +255,14 @@ const AddTrip: React.FC<Props> = observer(() => {
       truckStore.clearTrucks();
     };
   }, []);
+
+  // useEffect(() => {
+  //   const { cb, delay } = debounce;
+  //   if (cb) {
+  //     const timeout = setTimeout(cb, delay);
+  //     return () => clearTimeout(timeout);
+  //   }
+  // }, [debounce]);
 
   useEffect(() => {
     if (!truckTypesStore.data) {
@@ -369,6 +404,7 @@ const AddTrip: React.FC<Props> = observer(() => {
   };
 
   const onSelected = (val: any) => {
+    setSearchJob(val);
     const jobDetail = JSON.parse(JSON.stringify(jobStore.jobList?.content)).find((job: any) => job.id === val.value);
     setJobDetail(jobDetail);
   };
@@ -408,32 +444,38 @@ const AddTrip: React.FC<Props> = observer(() => {
   };
 
   const filterTruck = async (inputValue: string): Promise<any> => {
-    if (inputValue.length < 3 || typingTimeout) {
-      clearTimeout(typingTimeout);
-      setTypingTimeout(0);
+    if (inputValue.length < 3) {
       return [];
     }
 
-    return new Promise((resolve) => {
-      setTimeout(async () => {
-        console.log('Requesting ...');
-        await jobStore.getJobsListWithoutEmptyContent({ page: 1, descending: true, textSearch: inputValue });
-        if (jobStore.jobList?.content?.length) {
-          const items = JSON.parse(JSON.stringify(jobStore.jobList?.content)).map((job: any) => ({
-            label: `${job.productName} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo}`,
-            value: job.id,
-          }));
-          setJobs(items);
-          setTypingTimeout(items);
-          resolve(items);
-        }
-        resolve([]);
-      }, 2000);
-    });
+    console.log('Requesting ...');
+    await jobStore.getJobsListWithoutEmptyContent({ page: 1, descending: true, textSearch: inputValue });
+    if (jobStore.jobList?.content?.length) {
+      const items = JSON.parse(JSON.stringify(jobStore.jobList?.content)).map((job: any) => ({
+        label: `${job.productName} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo}`,
+        value: job.id,
+      }));
+      setJobs(items);
+      return Promise.resolve(items);
+    }
+    return Promise.resolve([]);
   };
 
-  const promiseOptions = (inputValue: string): Promise<any> =>
-    new Promise((resolve) => resolve(filterTruck(inputValue)));
+  const loadOptions = async (inputValue: string, loadedOptions: any): Promise<any> => {
+    const response = await filterTruck(inputValue);
+
+    return {
+      options: response,
+      hasMore: false,
+      // additional: {
+      //   page: page + 1,
+      // },
+      cacheUniqs: true,
+    };
+  };
+
+  const wrappedLoadOptions = (...args: any): Promise<any> =>
+    new Promise((resolve) => loadOptions(...args).then((value) => resolve(value)));
 
   console.log('truckStore.loading :>> ', truckStore.loading);
 
@@ -449,26 +491,30 @@ const AddTrip: React.FC<Props> = observer(() => {
           <GridColumn medium={7}>
             <div style={LEFT_RIGHT_SPACING}>
               <div>
-                {/* <Select
-                  options={jobs}
-                  loadingMessage={() => 'Loading ...'}
-                  noOptionsMessage={() => jobStore.loading ? '<Spinner size="medium" />' : 'Search ดีๆ เดี๋ยวก็เจอ'}
-                  onChange={onSelected}
-                  onInputChange={onChangeValueJob}
-                /> */}
                 <div style={{ position: 'relative' }}>
                   <span style={SEARCH_ICON}>
                     <SearchIcon label={'search-icon'} size={'medium'} />
                   </span>
-                  <AsyncSelect
+                  {/* <AsyncSelect
                     cacheOptions
                     defaultOptions
-                    loadOptions={promiseOptions}
+                    loadOptions={loadSuggestedOptions}
                     placeholder={'Search job'}
                     onChange={onSelected}
                     noOptionsMessage={() => 'No results'}
                     isRequired
                     id={'main-async-select-job'}
+                  /> */}
+                  <AsyncPaginate
+                    id={'main-async-select-job'}
+                    cacheOptions
+                    defaultOptions
+                    debounceTimeout={500}
+                    value={searchJob}
+                    placeholder={'Search job'}
+                    loadOptions={wrappedLoadOptions}
+                    noOptionsMessage={() => 'No results'}
+                    onChange={onSelected}
                   />
                 </div>
               </div>
@@ -731,7 +777,7 @@ const AddTrip: React.FC<Props> = observer(() => {
                                       </span>
                                     </div>
                                     <div style={{ paddingLeft: 10 }}>
-                                      <img
+                                      {/* <img
                                         src={`${process.env.API_ENDPOINT}/api/v1/media/file-stream?attachCode=${item.owner?.avatar?.object}`}
                                         // src={images.pinDrop}
                                         style={{
@@ -740,6 +786,11 @@ const AddTrip: React.FC<Props> = observer(() => {
                                           backgroundColor: '#ebeef3',
                                           padding: 2,
                                         }}
+                                        onError={onImageError}
+                                      /> */}
+                                      <Image
+                                        src={`${process.env.API_ENDPOINT}/api/v1/media/file-stream?attachCode=${item.owner?.avatar?.object}`}
+                                        id={item.id}
                                         onError={onImageError}
                                       />
                                     </div>
