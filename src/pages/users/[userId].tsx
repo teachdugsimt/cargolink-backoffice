@@ -3,42 +3,30 @@ import { observer } from 'mobx-react-lite';
 import { navigate } from 'gatsby';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { AxiosResponse } from 'axios';
-import Swal from 'sweetalert2';
-
 import { Button as MaterialButton } from '@material-ui/core';
 import { Icon } from 'react-icons-kit';
 import { ic_person } from 'react-icons-kit/md/ic_person';
 import { camera } from 'react-icons-kit/fa/camera';
-import FilePreviewer from 'react-file-previewer';
-
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
-import Form, { Field, FormFooter } from '@atlaskit/form';
+import { Field } from '@atlaskit/form';
 import Textfield from '@atlaskit/textfield';
 import { fontSize, gridSize } from '@atlaskit/theme/constants';
 import InlineEdit from '@atlaskit/inline-edit';
 import Page, { Grid, GridColumn } from '@atlaskit/page';
+import { EditUserPayload } from '../../services/user-api';
 import Select, { ValueType } from '@atlaskit/select';
-import ModalDialog, { ModalTransition } from '@atlaskit/modal-dialog';
-// import { Checkbox } from '@atlaskit/checkbox';
-
 import { useMst } from '../../stores/root-store';
-import { IUserDTO, DocumentStatus } from '../../stores/user-non-persist-store';
+import { IUserDTO } from '../../stores/user-non-persist-store';
 import { DateFormat } from '../../components/simple-data';
-import { EditUserPayload, EditUserResponse } from '../../services/user-api';
-import { UserApi } from '../../services';
 import { UploadFileResponse } from '../../services/upload-api';
-import UploadButton from '../../components/UploadButton/index';
-import { ListFile } from '../../components/list-file/list-file';
-import AutoCompleteTypeahead from '../../components/auto-complete-typeahead/auto-complete-typeahead';
-import LicensePlate from '../../components/truck/license-plate';
 import TruckDoc from '../../components/truck/truck-doc';
 import { Col, Row } from '../../Layouts/Controller/controller';
 import UserDoc from './user-doc';
 import { UserNonPersistStore } from '../../stores/user-non-persist-store';
-import async from '@atlaskit/select/node_modules/@types/react-select/async';
 import { UploadFilePath } from '../../services/upload-api';
+import { TruckNonPersistStore } from '../../stores/truck-non-persist-store';
+import Swal from 'sweetalert2';
 
 interface Props {
   userId?: number;
@@ -127,23 +115,12 @@ const ReadViewContainer = styled.div`
   word-break: break-word;
 `;
 
-interface AddressProps {
-  district?: string;
-  amphoe?: string;
-  province?: string;
-  zipcode?: number;
-}
-
 const UserDetail: React.FC<Props> = observer((props: any) => {
   const { t } = useTranslation();
   const [previewImage, setPreviewImage] = useState<any>(null);
   const [userData, setUserData] = useState<IUserDTO | null>(null);
-  const { loginStore, uploadFileStore, truckStore } = useMst();
+  const { loginStore, uploadFileStore } = useMst();
   const [files, setFiles] = useState<UploadFileResponse[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [address, setAddress] = useState<AddressProps>({});
-  const [isOpenDocumentAddress, setIsOpenDocumentAddress] = useState<boolean>(false);
-  const [reRender, setreRender] = useState<boolean>(false);
 
   const userId = props.userId;
   type Fields = 'fullName' | 'email' | 'legalType' | 'phoneNumber' | 'attachCode' | 'userType';
@@ -170,8 +147,8 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
     console.log('TRIGGER Patch Profile => ', JSON.parse(JSON.stringify(UserNonPersistStore.data_patch_user)));
   }, [JSON.stringify(UserNonPersistStore.data_patch_user)]);
   useEffect(() => {
-    console.log('TRIGGER truckStore => userTrucks_loading  : ', truckStore.userTrucks_loading);
-  }, [truckStore.userTrucks_loading]);
+    console.log('TRIGGER TruckNonPersistStore => userTrucks_loading  : ', TruckNonPersistStore.userTrucks_loading);
+  }, [TruckNonPersistStore.userTrucks_loading]);
 
   useEffect(() => {
     const tmpProfile = JSON.parse(JSON.stringify(UserNonPersistStore.data_get_user_id_fully));
@@ -202,6 +179,18 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
     }
   };
 
+  useEffect(() => {
+    let tmpErrorPatchUser = JSON.parse(JSON.stringify(UserNonPersistStore.error_patch_user));
+    if (tmpErrorPatchUser) {
+      Swal.fire({
+        icon: 'error',
+        text: tmpErrorPatchUser.includes('Phone number')
+          ? `${t('errorProfile.wrongFormatPhoneNumber')}!`
+          : `${t('errorProfile.someThingWrong')}`,
+      }).then(() => UserNonPersistStore.clearErrorPatchUser());
+    }
+  }, [JSON.stringify(UserNonPersistStore.error_patch_user)]);
+
   const handleSave = (field: Fields, value: any) => {
     const payload: Partial<EditUserPayload> = { [field]: value };
     UserNonPersistStore.patchUser(userId, payload);
@@ -223,22 +212,19 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
     },
   ];
 
-  const statusOptions = [
+  const userTypeOptions: any = [
     {
-      label: t('docStatus:noDocument'),
-      value: DocumentStatus.NO_DOCUMENT,
+      label: t('userTypeGroup.SHIPPER'),
+      value: 'SHIPPER',
+      isSelected: true,
     },
     {
-      label: t('docStatus:waitForVerify'),
-      value: DocumentStatus.WAIT_FOR_VERIFIED,
+      label: t('userTypeGroup.CARRIER'),
+      value: 'CARRIER',
     },
     {
-      label: t('docStatus:verified'),
-      value: DocumentStatus.VERIFIED,
-    },
-    {
-      label: t('docStatus:rejected'),
-      value: DocumentStatus.REJECTED,
+      label: t('userTypeGroup.BOTH'),
+      value: 'BOTH',
     },
   ];
 
@@ -281,7 +267,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
             </ImageFram>
           </GridColumn>
 
-          <GridColumn medium={6}>
+          <GridColumn medium={5}>
             <FieldWrapper>
               <InlineEdit
                 defaultValue={userData.fullName}
@@ -328,6 +314,30 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
             </FieldWrapper>
 
             <FieldWrapper>
+              <DetailLabel>{t('userType')} :</DetailLabel>
+              <InlineEdit<ValueType<OptionType, true>>
+                defaultValue={
+                  userData?.userType ? t(`userTypeGroup.${userData?.userType}`) : t('userTypeGroup.SHIPPER')
+                }
+                editView={(fieldProps) => (
+                  <EditViewContainer>
+                    <Select {...fieldProps} options={userTypeOptions} autoFocus openMenuOnFocus />
+                  </EditViewContainer>
+                )}
+                readView={() => (
+                  <ReadViewContainer data-testid="userTypeField">
+                    {userData?.userType ? t(`userTypeGroup.${userData?.userType}`) : t('userType')}
+                  </ReadViewContainer>
+                )}
+                onConfirm={(value) => {
+                  return handleSave('userType', value.value);
+                }}
+              />
+            </FieldWrapper>
+          </GridColumn>
+
+          <GridColumn medium={5}>
+            <FieldWrapper>
               <DetailLabel>{t('phoneNumber')} :</DetailLabel>
               <InlineEdit
                 defaultValue={userData.phoneNumber}
@@ -362,8 +372,6 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
               />
             </FieldWrapper>
           </GridColumn>
-
-          <GridColumn medium={4}></GridColumn>
         </Grid>
         <div style={{ borderTop: '1px solid #ddd', margin: '30px 0 10px 0' }} />
 

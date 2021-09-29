@@ -1,13 +1,6 @@
 import { flow, types } from 'mobx-state-tree';
 import { TruckApi } from '../services';
-import truckApi, {
-  ITruck,
-  ChangeDocStatusPayload,
-  TruckRequestParams,
-  TrucksByCarrierParams,
-  TrucksListParams,
-  TrucksListResponse,
-} from '../services/truck-api';
+import truckApi, { ITruck, TruckRequestParams, TrucksListParams, TrucksListResponse } from '../services/truck-api';
 
 const AvatarType = types.model({
   object: types.maybeNull(types.string),
@@ -59,23 +52,6 @@ const TruckManagementType = types.model({
   lengthPerPage: types.maybeNull(types.number),
 });
 
-const TruckWithDocument = types.model({
-  ...defaultTruck,
-  document: types.array(
-    types.maybeNull(
-      types.model({
-        attach_code: types.maybeNull(types.string),
-        expire: types.maybeNull(types.number),
-        file_name: types.maybeNull(types.string),
-        status: types.maybeNull(types.string),
-        type: types.maybeNull(types.string),
-        url: types.maybeNull(types.string),
-      }),
-    ),
-  ),
-  document_status: types.maybeNull(types.string),
-});
-
 export interface ITrucksManagement {
   content: (ITruck | ITruckNull)[];
   reRender: boolean;
@@ -85,7 +61,6 @@ export interface ITrucksManagement {
 export const TruckStore = types
   .model('TruckStore', {
     loading: false,
-    userTrucks_loading: types.boolean,
     data_count: types.maybeNull(types.number),
     data_trucks: types.maybeNull(TruckManagementType),
     currentTruck: types.maybeNull(TruckType),
@@ -97,8 +72,6 @@ export const TruckStore = types
         content: types.maybeNull(types.string),
       }),
     ),
-
-    data_truck_carrier: types.maybeNull(types.array(TruckWithDocument)),
   })
   .actions((self) => {
     return {
@@ -202,70 +175,6 @@ export const TruckStore = types
           };
         }
       }),
-
-      updateDocumentStatus: flow(function* updateDocumentStatus(
-        truckId: string,
-        params: ChangeDocStatusPayload,
-        carrierId: string,
-      ) {
-        try {
-          self.loading = true;
-          const response = yield truckApi.changeDocStatus(truckId, params);
-          console.log('Response update truck doc status : ', response);
-          if (response.ok) {
-            yield TruckStore.getTrucksListByCarrierId({ carrierId });
-          }
-          self.loading = false;
-        } catch (error) {
-          self.loading = false;
-        }
-      }),
-
-      getTrucksListByCarrierId: flow(function* getTrucksListByCarrierId(params: TrucksByCarrierParams) {
-        try {
-          self.userTrucks_loading = true;
-
-          const response = yield truckApi.getTruckByCarrierId(params);
-          console.log(response);
-
-          if (response.ok) {
-            const tmpResponse = response.data?.data || [];
-            let tmp: any;
-
-            if (tmpResponse && Array.isArray(tmpResponse) && tmpResponse.length > 0) {
-              tmp = yield Promise.all(
-                tmpResponse.map(async (item: any) => {
-                  if (item.document && typeof item.document == 'object' && Object.keys(item.document).length > 0) {
-                    const listAttachCode = Object.keys(item.document).map((e) => item.document[e]);
-                    const urlList = await truckApi.getLinkDownLoad(listAttachCode);
-                    let tmpItem = JSON.parse(JSON.stringify(item));
-                    const listUrl = JSON.parse(JSON.stringify(urlList));
-                    tmpItem.document = listUrl.data.data || null;
-                    return tmpItem;
-                  } else {
-                    let slot = item;
-                    slot.document = [];
-                    return item;
-                  }
-                }),
-              );
-            }
-
-            console.log('TMP IMPORTATNT !! :: ', tmp);
-
-            self.data_truck_carrier = tmp;
-            // return tmp;
-          } else {
-          }
-          self.userTrucks_loading = false;
-        } catch (error) {
-          self.userTrucks_loading = false;
-          return error;
-        }
-      }),
-      clearListTruckCarrier() {
-        self.data_truck_carrier = null;
-      },
     };
   });
 
