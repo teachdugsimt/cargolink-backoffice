@@ -20,7 +20,6 @@ class UserApi {
   };
   editUser = async (userId: string, payload: Partial<PatchUser>) => {
     const response = await ExcuteApi(`/api/v1/users/${userId}`, payload, 'patch', 6e5, true, true);
-    console.log('Response eedit user :: ', response);
     return response;
   };
   changeDocStatus = async (userId: string, payload: ChangeDocStatusPayload) => {
@@ -98,6 +97,7 @@ export interface PatchUser {
   legalType?: 'INDIVIDUAL' | 'JURISTIC';
   attachCode?: string[];
   url?: string[];
+  documentStatus?: string;
 }
 
 export interface EditUserResponse {

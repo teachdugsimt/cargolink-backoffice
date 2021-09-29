@@ -1,7 +1,6 @@
 // import Reactotron from 'reactotron-react-js'
 import { create } from 'apisauce';
 import Header from './header';
-import { AxiosResponse } from 'axios';
 
 const ExcuteApi = async (
   url,
@@ -12,7 +11,6 @@ const ExcuteApi = async (
   admin_api = false,
   optionsHeader,
 ) => {
-  console.time('ExcuteApi');
   try {
     const api = create(
       await Header(
@@ -38,10 +36,8 @@ const ExcuteApi = async (
     } else if (method == 'delete' || method == 'DELETE') {
       response = await api.delete(url, params);
     }
-    console.timeEnd('ExcuteApi');
     return response;
   } catch (error) {
-    console.timeEnd('ExcuteApi');
     return error;
   }
 };

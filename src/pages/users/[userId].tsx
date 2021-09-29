@@ -138,7 +138,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
   const { t } = useTranslation();
   const [previewImage, setPreviewImage] = useState<any>(null);
   const [userData, setUserData] = useState<IUserDTO | null>(null);
-  const { loginStore, uploadFileStore } = useMst();
+  const { loginStore, uploadFileStore, truckStore } = useMst();
   const [files, setFiles] = useState<UploadFileResponse[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [address, setAddress] = useState<AddressProps>({});
@@ -165,6 +165,13 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
       UserNonPersistStore.clear();
     };
   }, []);
+
+  useEffect(() => {
+    console.log('TRIGGER Patch Profile => ', JSON.parse(JSON.stringify(UserNonPersistStore.data_patch_user)));
+  }, [JSON.stringify(UserNonPersistStore.data_patch_user)]);
+  useEffect(() => {
+    console.log('TRIGGER truckStore => userTrucks_loading  : ', truckStore.userTrucks_loading);
+  }, [truckStore.userTrucks_loading]);
 
   useEffect(() => {
     const tmpProfile = JSON.parse(JSON.stringify(UserNonPersistStore.data_get_user_id_fully));
@@ -373,7 +380,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
             }}
           ></div>
           <Col flex={2}>
-            <TruckDoc carrierId={userData.userId} />
+            <TruckDoc carrierId={userId} />
           </Col>
         </Row>
       </Page>
