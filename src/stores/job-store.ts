@@ -39,7 +39,7 @@ const JobType = types.model({
   priceType: types.maybeNull(types.string),
   tipper: types.maybeNull(types.boolean),
   requiredTruckAmount: types.maybeNull(types.number),
-  createdAt: types.maybeNull(types.string)
+  createdAt: types.maybeNull(types.string),
 });
 
 const JobManagement = types.model({
@@ -48,16 +48,27 @@ const JobManagement = types.model({
   lengthPerPage: types.maybeNull(types.number),
 });
 
+const JobListManagement = types.model({
+  content: types.maybeNull(types.array(JobType)),
+  totalPages: types.maybeNull(types.number),
+});
+
 export interface IJobsManagement {
   content: (IJob | IJobNull)[];
   reRender: boolean;
   lengthPerPage: number | null;
 }
 
+export interface IJobListManagement {
+  content: (IJob | IJobNull)[];
+  totalPages: number | null;
+}
+
 export const JobStore = types
   .model('JobStore', {
     loading: false,
     data_jobs: types.maybeNull(JobManagement),
+    jobList: types.maybeNull(JobListManagement),
     data_count: types.maybeNull(types.number),
     isFirstLoad: true,
     currentJob: types.maybeNull(JobType),
@@ -129,25 +140,67 @@ export const JobStore = types
       }),
       getJobById: flow(function* getJobById(params: IJobRequest) {
         try {
-          self.loading = true
-          self.currentJob = null
+          self.loading = true;
+          self.currentJob = null;
 
-          const response = yield JobApi.getJobById(params)
-          self.loading = false
+          const response = yield JobApi.getJobById(params);
+          self.loading = false;
 
           if (response.ok) {
-            self.currentJob = response.data
+            self.currentJob = response.data;
           } else {
             self.error_response = {
               title: '',
               content: 'Failed to get job ' + params.jobId,
             };
           }
+        } catch (err) {}
+      }),
 
-        } catch (err) {
-
+      getJobsListWithoutEmptyContent: flow(function* getJobsList(params: JobListParams) {
+        self.loading = true;
+        self.jobList = null;
+        self.data_count = null;
+        self.error_response = null;
+        try {
+          const response = yield JobApi.getJobsList(params);
+          console.log('getJobs response :> ', response);
+          if (response && response.ok) {
+            const { data, size, totalElements, totalPages }: JobsListResponse = response.data;
+            self.loading = false;
+            self.data_count = totalElements;
+            const jobs: IJobListManagement = {
+              content: [],
+              totalPages: totalPages,
+            };
+            if (data.length) {
+              jobs.content = data;
+            } else {
+              jobs.content = [];
+            }
+            self.jobList = jobs;
+          } else {
+            self.loading = false;
+            self.jobList = null;
+            self.error_response = {
+              title: response.problem,
+              content: 'GET jobs : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to getJobs :>', error);
+          self.loading = false;
+          self.jobList = null;
+          self.error_response = {
+            title: '',
+            content: 'Failed to get all jobs list',
+          };
         }
-      })
+      }),
+
+      clearJobs: function () {
+        self.jobList = null;
+      },
     };
   });
 

@@ -38,7 +38,7 @@ let initialState = RootModel.create({
     },
     error_login: '',
     data_profile: null,
-    rememberProfile: false
+    rememberProfile: false,
   },
   carrierStore: {
     trucks_carrier: null,
@@ -52,7 +52,12 @@ let initialState = RootModel.create({
     provinces: [],
   },
   userStore: {
-    data_user: null,
+    data_user: {
+      content: [],
+      reRender: false,
+      lengthPerPage: 10,
+    },
+    data_upload: {},
   },
   passwordResetStore: {
     data_password: {
@@ -76,6 +81,7 @@ let initialState = RootModel.create({
   },
   truckStore: {
     loading: false,
+    userTrucks_loading: false,
     error_response: null,
   },
   truckTypesStore: {

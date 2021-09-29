@@ -14,6 +14,29 @@ class TruckApi {
     return response;
   };
 
+  getTruckByCarrierId = async (params: TrucksByCarrierParams) => {
+    const response: AxiosResponse<TrucksListResponse> = await ExcuteApi(
+      `/api/v1/trucks/carrier/${params.carrierId}`,
+      {},
+      'get',
+      6e5,
+      true,
+      true,
+    );
+    return response;
+  };
+  getLinkDownLoad = async (params: string[]) => {
+    const response: AxiosResponse<UrlDownload> = await ExcuteApi(
+      `/api/v1/media/file-by-attach-code`,
+      { url: JSON.stringify(params) },
+      'get',
+      6e5,
+      true,
+      true,
+    );
+    return response;
+  };
+
   getTruckById = async (params: TruckRequestParams) => {
     const response: AxiosResponse<TrucksListResponse> = await ExcuteApi(
       `/api/v1/trucks/${params.truckId}`,
@@ -37,6 +60,14 @@ class TruckApi {
     );
     return response;
   };
+  patchTruck = async (params: PostTruckParams, id: string) => {
+    const response: AxiosResponse<boolean> = await ExcuteApi(`/api/v1/trucks/${id}`, params, 'put', 6e5, true, true);
+    return response;
+  };
+  changeDocStatus = async (userId: string, payload: ChangeDocStatusPayload) => {
+    const response = await ExcuteApi(`/api/v1/trucks/${userId}/doc-status`, payload, 'patch', 6e5, true, true);
+    return response;
+  };
 }
 
 export default new TruckApi();
@@ -48,10 +79,15 @@ export interface TrucksListParams {
   rowsPerPage?: number;
   truckTypes?: string;
   workingZones?: string;
+  searchText?: string;
   registrationNumber?: string;
   stallHeight?: string;
   loadingWeight?: number;
   status?: 0 | 1;
+}
+
+export interface TrucksByCarrierParams {
+  carrierId: string;
 }
 
 export interface TrucksListResponse {
@@ -61,6 +97,10 @@ export interface TrucksListResponse {
   totalPages: number;
   totalElements: number;
   numberOfElements: number;
+}
+
+export interface UrlDownload {
+  uri: string[];
 }
 
 export interface IOwner {
@@ -87,6 +127,8 @@ export interface ITruck {
   quotationNumber: number | null;
   workingZones: IZone[];
   owner: IOwner;
+  document?: object;
+  documentStatus?: string;
 }
 
 export interface IZone {
@@ -107,6 +149,7 @@ export interface PostTruckParams {
   registrationNumber?: string[];
   truckPhotos?: TruckPhotos;
   workingZones?: WorkingZone[];
+  document?: string[] | null;
 }
 
 export interface TruckPhotos {
@@ -123,4 +166,15 @@ export interface WorkingZone {
 
 export interface CreateTruckResponse extends PostTruckParams {
   id: string;
+}
+
+export interface ChangeDocStatusPayload {
+  status: DocumentStatus;
+}
+
+export enum DocumentStatus {
+  NO_DOCUMENT = 'NO_DOCUMENT',
+  WAIT_FOR_VERIFIED = 'WAIT_FOR_VERIFIED',
+  VERIFIED = 'VERIFIED',
+  REJECTED = 'REJECTED',
 }

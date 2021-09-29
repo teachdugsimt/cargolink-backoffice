@@ -2,9 +2,15 @@
 import { create } from 'apisauce';
 import Header from './header';
 
-const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = true, admin_api = false) => {
-  console.time('ExcuteApi');
-  console.log('Params Excute header : ', params);
+const ExcuteApi = async (
+  url,
+  params,
+  method,
+  timeout = 20000,
+  requiredToken = true,
+  admin_api = false,
+  optionsHeader,
+) => {
   try {
     const api = create(
       await Header(
@@ -13,9 +19,9 @@ const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = t
         url.includes('upload') && !url.includes('gen-doc-upload-link') && method == 'post' ? 'upload' : null,
         timeout,
         requiredToken,
+        optionsHeader,
       ),
     );
-
     // process.env.MODE == 'development' && api.addMonitor(Reactotron.apisauce)
 
     let response;
@@ -30,10 +36,8 @@ const ExcuteApi = async (url, params, method, timeout = 20000, requiredToken = t
     } else if (method == 'delete' || method == 'DELETE') {
       response = await api.delete(url, params);
     }
-    console.timeEnd('ExcuteApi');
     return response;
   } catch (error) {
-    console.timeEnd('ExcuteApi');
     return error;
   }
 };

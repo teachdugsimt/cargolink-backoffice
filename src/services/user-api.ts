@@ -9,7 +9,7 @@ class UserApi {
   getUser = async (userId: string) => {
     const response = await ExcuteApi('/api/v1/users/' + userId, null, 'get', 6e5, true, true);
     return response;
-  }
+  };
   getUploadLink = async (userId: string): Promise<AxiosResponse<GetUploadLinkResponse>> => {
     const response = await ExcuteApi(`/api/v1/users/${userId}/gen-doc-upload-link`, {}, 'post', 6e5, true, true);
     return response;
@@ -18,7 +18,7 @@ class UserApi {
     const response = await ExcuteApi(`/api/v1/users`, payload, 'post', 6e5, true, true);
     return response;
   };
-  editUser = async (userId: string, payload: Partial<EditUserPayload>) => {
+  editUser = async (userId: string, payload: Partial<PatchUser>) => {
     const response = await ExcuteApi(`/api/v1/users/${userId}`, payload, 'patch', 6e5, true, true);
     return response;
   };
@@ -28,6 +28,18 @@ class UserApi {
   };
   deleteUser = async (userId: string) => {
     const response = await ExcuteApi(`/api/v1/users/${userId}`, {}, 'delete', 6e5, true, true);
+    return response;
+  };
+  deleteUserDoc = async (userId: string, attachCode: string) => {
+    const response = await ExcuteApi(
+      `/api/v1/users/${userId}/document`,
+      { docId: attachCode },
+      'delete',
+      6e5,
+      true,
+      true,
+    );
+    console.log('Response delete doc : ', response);
     return response;
   };
 }
@@ -61,7 +73,7 @@ export interface CreateUserPayload {
   fullName: string;
   phoneNumber: string;
   email?: string;
-  userType: 0; //? fix 0 for now
+  userType: 'SHIPPER' | 'CARRIER' | 'BOTH'; //? fix 0 for now
   legalType: 'INDIVIDUAL' | 'JURISTIC';
   url?: string[];
 }
@@ -77,9 +89,20 @@ export interface EditUserPayload {
   legalType: 'INDIVIDUAL' | 'JURISTIC';
   attachCode: string[];
 }
+
+export interface PatchUser {
+  name?: string;
+  phoneNumber?: string;
+  email?: string;
+  legalType?: 'INDIVIDUAL' | 'JURISTIC';
+  attachCode?: string[];
+  url?: string[];
+  documentStatus?: string;
+}
+
 export interface EditUserResponse {
   message: string;
-  responseCode: number,
+  responseCode: number;
   data: any;
 }
 

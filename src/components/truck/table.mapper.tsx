@@ -30,7 +30,7 @@ export const createTableHeader = (withWidth: boolean) => {
         key: 'mobileNo',
         content: 'Phone No.',
         isSortable: true,
-        width: '150px'
+        width: '150px',
       },
       {
         owner: 'owner',
@@ -69,6 +69,12 @@ export const createTableHeader = (withWidth: boolean) => {
         shouldTruncate: true,
         isSortable: true,
       },
+      {
+        key: 'id-encode',
+        content: 'ID',
+        shouldTruncate: true,
+        isSortable: true,
+      },
     ],
   };
 };
@@ -79,7 +85,7 @@ function formatPhoneNumber(phoneNumberString: string) {
   var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
   var match = cleaned.match(/^(66|)?(\d{2})(\d{3})(\d{4})$/);
   if (match) {
-    var intlCode = (match[1] ? '+66 ' : '');
+    var intlCode = match[1] ? '+66 ' : '';
     return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
   }
   return phoneNumberString;
@@ -149,6 +155,12 @@ export const createTableRows = async (
         {
           key: truck.createdAt ? momentFormat(truck.createdAt, loginStore.language) : '',
           content: truck.createdAt ? momentFormat(truck.createdAt, loginStore.language) : '',
+        },
+        {
+          key: 'id-encode',
+          content: truck.id || '',
+          width: 0,
+          colSpan: 0,
         },
       ],
     };
