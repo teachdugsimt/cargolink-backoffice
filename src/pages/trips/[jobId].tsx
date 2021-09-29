@@ -259,19 +259,16 @@ interface Props {}
 
 let truckPage: number = 1;
 
-const AddTrip: React.FC<Props> = observer(() => {
+const TripsInfo: React.FC<Props> = observer((props: any) => {
   const { jobStore, truckStore, truckTypesStore, productTypesStore } = useMst();
   const { t } = useTranslation();
   const [state, setState] = useState<any>({
     truckSelected: [],
     trucks: [],
   });
-  const [jobs, setJobs] = useState<Array<JobItemProps>>([]);
-  const [jobDetail, setJobDetail] = useState<any>(null);
   const [truckTypes, setTruckTypes] = useState<MasterTypeProps | any>({});
   const [truckTypeSelectedOption, setTruckTypeSelectedOption] = useState<Array<ITruckTypeSelectedOptionProps>>([]);
   const [productTypes, setProductTypes] = useState<MasterTypeProps | any>({});
-  const [searchJob, setSearchJob] = useState<any>('');
   const [searchTruck, setSearchTruck] = useState<any>('');
   const [isDragStart, setIsDragStart] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState('none');
@@ -282,6 +279,10 @@ const AddTrip: React.FC<Props> = observer(() => {
       truckStore.clearTrucks();
     };
   }, []);
+
+  useEffect(() => {
+    jobStore.getJobById({ jobId: props.jobId });
+  }, [props.jobId]);
 
   useEffect(() => {
     if (!truckTypesStore.data) {
@@ -411,12 +412,6 @@ const AddTrip: React.FC<Props> = observer(() => {
     });
   };
 
-  const onSelected = (val: any) => {
-    setSearchJob(val);
-    const jobDetail = JSON.parse(JSON.stringify(jobStore.jobList?.content)).find((job: any) => job.id === val.value);
-    setJobDetail(jobDetail);
-  };
-
   const onSelectedTruckOptions = (e: any) => {
     setSelectedOption(e.value);
     setSearchTruck('');
@@ -468,29 +463,15 @@ const AddTrip: React.FC<Props> = observer(() => {
         label: `${job.productName} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo}`,
         value: job.id,
       }));
-      setJobs(items);
       return Promise.resolve(items);
     }
     return Promise.resolve([]);
   };
 
-  const loadOptions = async (inputValue: string, loadedOptions: any): Promise<any> => {
-    const response = await filterTruck(inputValue);
-
-    return {
-      options: response,
-      hasMore: false,
-      // additional: {
-      //   page: page + 1,
-      // },
-      cacheUniqs: true,
-    };
-  };
-
-  const wrappedLoadOptions = (...args: any): Promise<any> =>
-    new Promise((resolve) => loadOptions(...args).then((value) => resolve(value)));
-
   console.log('truckStore.loading :>> ', truckStore.loading);
+
+  const jobDetail = jobStore.currentJob ? JSON.parse(JSON.stringify(jobStore.currentJob)) : {};
+  console.log('jobDetail :>> ', jobDetail);
 
   return (
     <Page>
@@ -504,185 +485,161 @@ const AddTrip: React.FC<Props> = observer(() => {
           <GridColumn medium={7}>
             <div style={LEFT_RIGHT_SPACING}>
               <div>
-                <div style={{ position: 'relative' }}>
-                  <span style={SEARCH_ICON}>
-                    <SearchIcon label={'search-icon'} size={'medium'} />
-                  </span>
-                  <AsyncPaginate
-                    id={'main-async-select-job'}
-                    cacheOptions
-                    defaultOptions
-                    debounceTimeout={500}
-                    value={searchJob}
-                    placeholder={'Search job'}
-                    loadOptions={wrappedLoadOptions}
-                    noOptionsMessage={() => 'No results'}
-                    onChange={onSelected}
-                  />
-                </div>
-              </div>
+                <Box style={{ position: 'relative', overflow: 'hidden' }}>
+                  <Collapse
+                    isExpanded
+                    topic={<Header text={'งานที่เลือก'} />}
+                    children={
+                      <Row style={LEFT_RIGHT_SPACING}>
+                        <Col display={'flex'} flex={1} flexWrap={'wrap'}>
+                          <div style={{ width: '100%' }}>
+                            <Detail header={'ชื่อสินค้า'} content={jobDetail?.productName} />
+                          </div>
 
-              {jobDetail && (
-                <div>
-                  <Box style={{ position: 'relative', overflow: 'hidden' }}>
-                    <Collapse
-                      isExpanded
-                      topic={<Header text={'งานที่เลือก'} />}
-                      children={
-                        <Row style={LEFT_RIGHT_SPACING}>
-                          <Col display={'flex'} flex={1} flexWrap={'wrap'}>
-                            <div style={{ width: '100%' }}>
-                              <Detail header={'ชื่อสินค้า'} content={jobDetail.productName} />
-                            </div>
-
-                            <Col flex={1}>
-                              <Detail
-                                header={'ประเภท'}
-                                content={
-                                  productTypes[jobDetail.productTypeId] ??
-                                  (productTypes?.length ? '-' : <Spinner size="medium" />)
-                                }
-                              />
-                            </Col>
-                            <Col flex={1}>
-                              <Detail header={'วันที่'} content={jobDetail.from.dateTime} />
-                            </Col>
-                            <Col flex={1}>
-                              <Detail header={'ชื่อเจ้าของ'} content={jobDetail.owner?.fullName} />
-                            </Col>
-                            <Col flex={1}>
-                              <Detail header={'เบอร์โทรเจ้าของ'} content={jobDetail.owner?.mobileNo} />
-                            </Col>
-
-                            <div style={{ width: '100%' }}>
-                              <Label>{'สถานที่ :'}</Label>
-                              <Location header={'จาก'} content={jobDetail.from?.name} img={'pinDrop'} />
-                              {jobDetail.to?.map((data: any, index: number) => (
-                                <Location
-                                  key={`location-${index}`}
-                                  content={data?.name}
-                                  header={'ถึง'}
-                                  img={'pinDrop2'}
-                                />
-                              ))}
-                            </div>
-
-                            <Box style={VEHICLE_DETAIL_BOX}>
-                              <div style={{ display: 'flex' }}>
-                                <Detail
-                                  header={'ประเภทรถ'}
-                                  content={
-                                    truckTypes[jobDetail.truckType] ??
-                                    (Object.keys(truckTypes)?.length ? '-' : <Spinner size="medium" />)
-                                  }
-                                  style={{ flex: 1 }}
-                                />
-
-                                <Detail
-                                  header={'จำนวนรถที่ต้องการ'}
-                                  content={`${jobDetail.requiredTruckAmount} คัน`}
-                                  style={{ flex: 1, color: '#ffc107' }}
-                                />
-
-                                <Detail
-                                  header={'การลงสินค้า'}
-                                  content={jobDetail.tipper ? 'ดั้มพ์' : 'ไม่ดั้มพ์'}
-                                  style={{ flex: 1 }}
-                                />
-
-                                <Detail header={'คอก'} content={'-'} style={{ flex: 1 }} />
-                              </div>
-                            </Box>
+                          <Col flex={1}>
+                            <Detail
+                              header={'ประเภท'}
+                              content={
+                                productTypes[jobDetail?.productTypeId] ??
+                                (productTypes?.length ? '-' : <Spinner size="medium" />)
+                              }
+                            />
                           </Col>
-                        </Row>
-                      }
-                    />
-                  </Box>
+                          <Col flex={1}>
+                            <Detail header={'วันที่'} content={jobDetail?.from?.dateTime} />
+                          </Col>
+                          <Col flex={1}>
+                            <Detail header={'ชื่อเจ้าของ'} content={jobDetail?.owner?.fullName} />
+                          </Col>
+                          <Col flex={1}>
+                            <Detail header={'เบอร์โทรเจ้าของ'} content={jobDetail?.owner?.mobileNo} />
+                          </Col>
 
-                  <Box style={{ backgroundColor: '#ebeef3', position: 'relative', overflow: 'hidden' }}>
-                    <Collapse
-                      isExpanded
-                      topic={<Header text={'รถที่เลือก'} />}
-                      children={
-                        <div style={isDragStart ? DROP_BOX_SHOW : DROP_BOX_HIDE}>
-                          {isDragStart && !state.truckSelected?.length && (
-                            <div style={DROP_BOX_CONTENT}>
-                              <TruckAnimate />
+                          <div style={{ width: '100%' }}>
+                            <Label>{'สถานที่ :'}</Label>
+                            <Location header={'จาก'} content={jobDetail?.from?.name} img={'pinDrop'} />
+                            {jobDetail?.to?.map((data: any, index: number) => (
+                              <Location
+                                key={`location-${index}`}
+                                content={data?.name}
+                                header={'ถึง'}
+                                img={'pinDrop2'}
+                              />
+                            ))}
+                          </div>
+
+                          <Box style={VEHICLE_DETAIL_BOX}>
+                            <div style={{ display: 'flex' }}>
+                              <Detail
+                                header={'ประเภทรถ'}
+                                content={
+                                  truckTypes[jobDetail?.truckType] ??
+                                  (Object.keys(truckTypes)?.length ? '-' : <Spinner size="medium" />)
+                                }
+                                style={{ flex: 1 }}
+                              />
+
+                              <Detail
+                                header={'จำนวนรถที่ต้องการ'}
+                                content={`${jobDetail?.requiredTruckAmount} คัน`}
+                                style={{ flex: 1, color: '#ffc107' }}
+                              />
+
+                              <Detail
+                                header={'การลงสินค้า'}
+                                content={jobDetail?.tipper ? 'ดั้มพ์' : 'ไม่ดั้มพ์'}
+                                style={{ flex: 1 }}
+                              />
+
+                              <Detail header={'คอก'} content={'-'} style={{ flex: 1 }} />
+                            </div>
+                          </Box>
+                        </Col>
+                      </Row>
+                    }
+                  />
+                </Box>
+
+                <Box style={{ backgroundColor: '#ebeef3', position: 'relative', overflow: 'hidden' }}>
+                  <Collapse
+                    isExpanded
+                    topic={<Header text={'รถที่เลือก'} />}
+                    children={
+                      <div style={isDragStart ? DROP_BOX_SHOW : DROP_BOX_HIDE}>
+                        {isDragStart && !state.truckSelected?.length && (
+                          <div style={DROP_BOX_CONTENT}>
+                            <TruckAnimate />
+                          </div>
+                        )}
+                        <Droppable key={`truck-selected-droppable-1`} droppableId={truckSelectedDroppable.droppableId}>
+                          {(provided: any, snapshot: any) => (
+                            <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
+                              {state[truckSelectedDroppable.listId] &&
+                                state[truckSelectedDroppable.listId].map((item: any, index: number) => (
+                                  <Draggable
+                                    key={`${truckSelectedDroppable.listId}-${item.id}-${index}`}
+                                    draggableId={`${truckSelectedDroppable.listId}-${item.id}-${index}`}
+                                    index={index}
+                                  >
+                                    {(provided: any, snapshot: any) => (
+                                      <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        style={{
+                                          ...getItemStyle(snapshot.isDragging, provided.draggableProps.style),
+                                          display: 'flex',
+                                          paddingTop: 10,
+                                          paddingBottom: 10,
+                                        }}
+                                      >
+                                        <div style={{ flex: 2 }}>
+                                          <Row style={{ marginBottom: 0 }}>
+                                            <div>
+                                              <Value style={{ marginBottom: 0 }}>
+                                                {item.registrationNumber ? item.registrationNumber.join(' / ') : '-'}
+                                              </Value>
+                                            </div>
+                                          </Row>
+                                          <Row style={{ marginBottom: 0 }}>
+                                            <Col flex={1}>
+                                              <Detail
+                                                header={'ประเภท'}
+                                                content={
+                                                  truckTypes[item.truckType] ??
+                                                  (Object.keys(truckTypes)?.length ? '-' : <Spinner size="medium" />)
+                                                }
+                                              />
+                                            </Col>
+                                            <Col flex={1}>
+                                              <Detail header={'ความสูงคอกรถ'} content={item.stallHeight} />
+                                            </Col>
+                                          </Row>
+                                        </div>
+                                        <div style={{ flex: 1, paddingLeft: 15, borderLeft: '1px solid #ebeef3' }}>
+                                          <Label>{'วันที่เรื่มงาน :'}</Label>
+                                          <DatePicker
+                                            defaultValue={new Date().toISOString()}
+                                            dateFormat="DD/MM/YYYY"
+                                            onChange={(date) => console.log('date :>> ', date)}
+                                          />
+                                        </div>
+                                        <span style={TRASH} onClick={() => removeTruck(item.id)}>
+                                          <TrashIcon label={'trash-icon'} size={'medium'} />
+                                        </span>
+                                      </div>
+                                    )}
+                                  </Draggable>
+                                ))}
+                              {provided.placeholder}
                             </div>
                           )}
-                          <Droppable
-                            key={`truck-selected-droppable-1`}
-                            droppableId={truckSelectedDroppable.droppableId}
-                          >
-                            {(provided: any, snapshot: any) => (
-                              <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
-                                {state[truckSelectedDroppable.listId] &&
-                                  state[truckSelectedDroppable.listId].map((item: any, index: number) => (
-                                    <Draggable
-                                      key={`${truckSelectedDroppable.listId}-${item.id}-${index}`}
-                                      draggableId={`${truckSelectedDroppable.listId}-${item.id}-${index}`}
-                                      index={index}
-                                    >
-                                      {(provided: any, snapshot: any) => (
-                                        <div
-                                          ref={provided.innerRef}
-                                          {...provided.draggableProps}
-                                          {...provided.dragHandleProps}
-                                          style={{
-                                            ...getItemStyle(snapshot.isDragging, provided.draggableProps.style),
-                                            display: 'flex',
-                                            paddingTop: 10,
-                                            paddingBottom: 10,
-                                          }}
-                                        >
-                                          <div style={{ flex: 2 }}>
-                                            <Row style={{ marginBottom: 0 }}>
-                                              <div>
-                                                <Value style={{ marginBottom: 0 }}>
-                                                  {item.registrationNumber ? item.registrationNumber.join(' / ') : '-'}
-                                                </Value>
-                                              </div>
-                                            </Row>
-                                            <Row style={{ marginBottom: 0 }}>
-                                              <Col flex={1}>
-                                                <Detail
-                                                  header={'ประเภท'}
-                                                  content={
-                                                    truckTypes[item.truckType] ??
-                                                    (Object.keys(truckTypes)?.length ? '-' : <Spinner size="medium" />)
-                                                  }
-                                                />
-                                              </Col>
-                                              <Col flex={1}>
-                                                <Detail header={'ความสูงคอกรถ'} content={item.stallHeight} />
-                                              </Col>
-                                            </Row>
-                                          </div>
-                                          <div style={{ flex: 1, paddingLeft: 15, borderLeft: '1px solid #ebeef3' }}>
-                                            <Label>{'วันที่เรื่มงาน :'}</Label>
-                                            <DatePicker
-                                              defaultValue={new Date().toISOString()}
-                                              dateFormat="DD/MM/YYYY"
-                                              onChange={(date) => console.log('date :>> ', date)}
-                                            />
-                                          </div>
-                                          <span style={TRASH} onClick={() => removeTruck(item.id)}>
-                                            <TrashIcon label={'trash-icon'} size={'medium'} />
-                                          </span>
-                                        </div>
-                                      )}
-                                    </Draggable>
-                                  ))}
-                                {provided.placeholder}
-                              </div>
-                            )}
-                          </Droppable>
-                        </div>
-                      }
-                    />
-                  </Box>
-                </div>
-              )}
+                        </Droppable>
+                      </div>
+                    }
+                  />
+                </Box>
+              </div>
             </div>
           </GridColumn>
           <GridColumn medium={5}>
@@ -832,7 +789,7 @@ const AddTrip: React.FC<Props> = observer(() => {
   );
 });
 
-export default AddTrip;
+export default TripsInfo;
 
 const Row = styled.div`
   display: flex;
