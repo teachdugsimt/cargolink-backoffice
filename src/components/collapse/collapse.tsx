@@ -17,13 +17,15 @@ const ICON: CSSProperties = {
 };
 
 const Collapse = function AutoCompleteTypeahead(props: CollapseProps) {
-  const { topic, children, isExpanded = false } = props;
+  const { topic, children, isExpanded = false, containerStyle } = props;
 
   const [open, setOpen] = useState(isExpanded);
 
+  const mainStyle = { ...HEADER, ...containerStyle };
+
   return (
     <>
-      <div id="collapse-header" style={HEADER} onClick={() => setOpen(!open)}>
+      <div id="collapse-header" style={mainStyle} onClick={() => setOpen(!open)}>
         <div style={{ flex: '95%' }}>{topic}</div>
         <div style={{ flex: '1' }}>
           <span style={ICON}>
