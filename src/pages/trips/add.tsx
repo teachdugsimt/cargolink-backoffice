@@ -1,4 +1,4 @@
-import React, { useState, useEffect, CSSProperties } from 'react';
+import React, { useState, useEffect, CSSProperties, useCallback, memo } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Form, { Field } from '@atlaskit/form';
 import Textfield from '@atlaskit/textfield';
@@ -9,8 +9,7 @@ import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import { navigate } from 'gatsby';
 import PageHeader from '@atlaskit/page-header';
 import { useTranslation } from 'react-i18next';
-// import Select from 'react-select';
-import { AsyncSelect, OptionsType, OptionType, ValueType } from '@atlaskit/select';
+import { AsyncPaginate } from 'react-select-async-paginate';
 import styled from 'styled-components';
 import Collapse from '../../components/collapse/collapse';
 import images from '../../components/Themes/images';
@@ -22,6 +21,7 @@ import LottieView from 'react-lottie';
 import Spinner from '@atlaskit/spinner';
 import SearchIcon from '@atlaskit/icon/glyph/search';
 import MoreIcon from '@atlaskit/icon/glyph/more';
+import Select from 'react-select';
 
 interface LocationProps {
   header: string;
@@ -101,10 +101,21 @@ const SEARCH_ICON: CSSProperties = {
 
 const LOADING_ICON: CSSProperties = {
   position: 'absolute',
-  right: 9,
-  top: 7,
+  right: 50,
+  top: 5,
   color: '#cfcfcf',
   zIndex: 99,
+};
+
+const TRIANGLE_TOPLEFT: CSSProperties = {
+  width: 120,
+  height: 0,
+  borderTop: '57px solid #ffc107',
+  borderRight: '40px solid transparent',
+  position: 'absolute',
+  clear: 'both',
+  top: 0,
+  left: 0,
 };
 
 const TruckAnimate = () => (
@@ -127,6 +138,34 @@ const Dots = () => (
     width={60}
     height={40}
   />
+);
+
+const Image = memo(
+  ({ src, id, onError }: any) => (
+    <img
+      src={src}
+      style={{
+        width: 35,
+        borderRadius: '50%',
+        backgroundColor: '#ebeef3',
+        padding: 2,
+      }}
+      onError={onError}
+    />
+  ),
+  (prevProps, nextProps) => {
+    if (prevProps.id === nextProps.id) {
+      return true;
+    }
+    return false;
+  },
+);
+
+const Header = ({ text }: any) => (
+  <>
+    <div style={TRIANGLE_TOPLEFT}></div>
+    <h4 style={{ ...LEFT_RIGHT_SPACING, margin: 0, position: 'relative', color: '#fff' }}>{text}</h4>
+  </>
 );
 
 const reorder = (list: [], startIndex: number, endIndex: number): object => {
@@ -201,6 +240,12 @@ interface MasterTypeProps {
   name: string;
 }
 
+interface ITruckTypeSelectedOptionProps {
+  value: string;
+  label: string;
+  isDisabled?: boolean;
+}
+
 interface Props { }
 
 let truckPage: number = 1;
@@ -213,14 +258,14 @@ const AddTrip: React.FC<Props> = observer(() => {
     trucks: [],
   });
   const [jobs, setJobs] = useState<Array<JobItemProps>>([]);
-  // const [jobs, setJobs] = useState<Array<any>>([]);
   const [jobDetail, setJobDetail] = useState<any>(null);
   const [truckTypes, setTruckTypes] = useState<MasterTypeProps | any>({});
+  const [truckTypeSelectedOption, setTruckTypeSelectedOption] = useState<Array<ITruckTypeSelectedOptionProps>>([]);
   const [productTypes, setProductTypes] = useState<MasterTypeProps | any>({});
   const [searchJob, setSearchJob] = useState<any>('');
   const [searchTruck, setSearchTruck] = useState<any>('');
   const [isDragStart, setIsDragStart] = useState<boolean>(false);
-  const [typingTimeout, setTypingTimeout] = useState<any>(0);
+  const [selectedOption, setSelectedOption] = useState('none');
 
   useEffect(() => {
     return () => {
@@ -233,7 +278,14 @@ const AddTrip: React.FC<Props> = observer(() => {
     if (!truckTypesStore.data) {
       truckTypesStore.getTruckTypes();
     } else {
-      const newTruckType = JSON.parse(JSON.stringify(truckTypesStore.data)).reduce(
+      const truckTypeData = JSON.parse(JSON.stringify(truckTypesStore.data));
+      const truckTypeOptions = truckTypeData.map((truckType: any) => ({
+        value: truckType.id.toString(),
+        label: truckType.name,
+      }));
+      setTruckTypeSelectedOption(truckTypeOptions);
+
+      const newTruckType = truckTypeData.reduce(
         (obj: any, item: any) => ({
           ...obj,
           [item['id']]: item.name,
@@ -268,30 +320,6 @@ const AddTrip: React.FC<Props> = observer(() => {
     }
   }, [JSON.stringify(truckStore.truckList)]);
 
-  // useEffect(() => {
-  //   console.log('jobStore.jobList?.content?.length :>> ', jobStore.jobList?.content?.length);
-  //   if (jobStore.jobList?.content?.length) {
-  //     const items = JSON.parse(JSON.stringify(jobStore.jobList?.content)).map((job: any) => ({
-  //       label: `${job.productName} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo}`,
-  //       value: job.id,
-  //     }));
-  //     setJobs(items);
-  //   }
-  // }, [JSON.stringify(jobStore.jobList)]);
-
-  // useEffect(() => {
-  //   let delayDebounceFn: any;
-  //   if (searchJob.length >= 3) {
-  //     delayDebounceFn = setTimeout(() => {
-  //       console.log('Requesting ...');
-  //       jobStore.getJobsList({ page: 1, descending: true, textSearch: searchJob });
-  //     }, 200);
-  //   } else {
-  //     clearTimeout(delayDebounceFn);
-  //   }
-  //   return () => clearTimeout(delayDebounceFn);
-  // }, [searchJob]);
-
   const droppableIds: any = {
     droppable1: 'trucks',
     droppable2: 'truckSelected',
@@ -303,8 +331,6 @@ const AddTrip: React.FC<Props> = observer(() => {
       <BreadcrumbsItem text={'Bulk cargo management'} key="bulk-cargo-management" />
     </Breadcrumbs>
   );
-
-  const Header = ({ text }: any) => <h4 style={{ ...LEFT_RIGHT_SPACING, margin: 0 }}>{text}</h4>;
 
   const getList = (id: string): any => state[droppableIds[id]];
 
@@ -339,23 +365,31 @@ const AddTrip: React.FC<Props> = observer(() => {
     }
   };
 
-  const onChangeValueJob = (value: string) => setSearchJob(value);
-
   const onChangeValueTruck = (e: any) => {
     const value = e.target.value;
     setSearchTruck(value);
   };
 
-  const onSubmitJob = () => {
-    jobStore.getJobsListWithoutEmptyContent({ page: 1, descending: true, textSearch: searchJob });
-  };
-
-  const onSubmitTruck = () => {
+  const onSubmitTruck = (truckTypeId?: number) => {
+    if (!truckTypeId) {
+      const truckOptions = truckTypeSelectedOption;
+      if (truckOptions[truckOptions.length - 1].value.includes('truck-selected-')) {
+        truckOptions.pop();
+      }
+      const value = `truck-selected-${Math.floor(Date.now() / 1000)}`;
+      truckOptions.push({
+        value: value,
+        label: searchTruck,
+        isDisabled: true,
+      });
+      setTruckTypeSelectedOption(truckOptions);
+      setSelectedOption(value);
+    }
     truckStore.clearTrucks();
     truckStore.getTrucksListWithoutEmptyContent({
       page: 1,
       descending: true,
-      truckTypes: JSON.stringify([+searchTruck]),
+      ...(truckTypeId ? { truckTypes: JSON.stringify([truckTypeId]) } : { searchText: searchTruck }),
     });
     truckPage = 1;
   };
@@ -364,13 +398,20 @@ const AddTrip: React.FC<Props> = observer(() => {
     truckStore.getTrucksListWithoutEmptyContent({
       page: ++truckPage,
       descending: true,
-      truckTypes: JSON.stringify([+searchTruck]),
+      searchText: searchTruck,
     });
   };
 
   const onSelected = (val: any) => {
+    setSearchJob(val);
     const jobDetail = JSON.parse(JSON.stringify(jobStore.jobList?.content)).find((job: any) => job.id === val.value);
     setJobDetail(jobDetail);
+  };
+
+  const onSelectedTruckOptions = (e: any) => {
+    setSelectedOption(e.value);
+    setSearchTruck('');
+    onSubmitTruck(+e.value);
   };
 
   const onImageError = (e: any) => {
@@ -396,7 +437,6 @@ const AddTrip: React.FC<Props> = observer(() => {
     droppableId: 'droppable1',
     listId: 'trucks',
     title: 'Search trucks',
-    // droppable: true,
     onChange: onChangeValueTruck,
     onSubmit: onSubmitTruck,
   };
@@ -408,32 +448,38 @@ const AddTrip: React.FC<Props> = observer(() => {
   };
 
   const filterTruck = async (inputValue: string): Promise<any> => {
-    if (inputValue.length < 3 || typingTimeout) {
-      clearTimeout(typingTimeout);
-      setTypingTimeout(0);
+    if (inputValue.length < 3) {
       return [];
     }
 
-    return new Promise((resolve) => {
-      setTimeout(async () => {
-        console.log('Requesting ...');
-        await jobStore.getJobsListWithoutEmptyContent({ page: 1, descending: true, textSearch: inputValue });
-        if (jobStore.jobList?.content?.length) {
-          const items = JSON.parse(JSON.stringify(jobStore.jobList?.content)).map((job: any) => ({
-            label: `${job.productName} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo}`,
-            value: job.id,
-          }));
-          setJobs(items);
-          setTypingTimeout(items);
-          resolve(items);
-        }
-        resolve([]);
-      }, 2000);
-    });
+    console.log('Requesting ...');
+    await jobStore.getJobsListWithoutEmptyContent({ page: 1, descending: true, textSearch: inputValue });
+    if (jobStore.jobList?.content?.length) {
+      const items = JSON.parse(JSON.stringify(jobStore.jobList?.content)).map((job: any) => ({
+        label: `${job.productName} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo}`,
+        value: job.id,
+      }));
+      setJobs(items);
+      return Promise.resolve(items);
+    }
+    return Promise.resolve([]);
   };
 
-  const promiseOptions = (inputValue: string): Promise<any> =>
-    new Promise((resolve) => resolve(filterTruck(inputValue)));
+  const loadOptions = async (inputValue: string, loadedOptions: any): Promise<any> => {
+    const response = await filterTruck(inputValue);
+
+    return {
+      options: response,
+      hasMore: false,
+      // additional: {
+      //   page: page + 1,
+      // },
+      cacheUniqs: true,
+    };
+  };
+
+  const wrappedLoadOptions = (...args: any): Promise<any> =>
+    new Promise((resolve) => loadOptions(...args).then((value) => resolve(value)));
 
   console.log('truckStore.loading :>> ', truckStore.loading);
 
@@ -449,33 +495,27 @@ const AddTrip: React.FC<Props> = observer(() => {
           <GridColumn medium={7}>
             <div style={LEFT_RIGHT_SPACING}>
               <div>
-                {/* <Select
-                  options={jobs}
-                  loadingMessage={() => 'Loading ...'}
-                  noOptionsMessage={() => jobStore.loading ? '<Spinner size="medium" />' : 'Search ดีๆ เดี๋ยวก็เจอ'}
-                  onChange={onSelected}
-                  onInputChange={onChangeValueJob}
-                /> */}
                 <div style={{ position: 'relative' }}>
                   <span style={SEARCH_ICON}>
                     <SearchIcon label={'search-icon'} size={'medium'} />
                   </span>
-                  <AsyncSelect
+                  <AsyncPaginate
+                    id={'main-async-select-job'}
                     cacheOptions
                     defaultOptions
-                    loadOptions={promiseOptions}
+                    debounceTimeout={500}
+                    value={searchJob}
                     placeholder={'Search job'}
-                    onChange={onSelected}
+                    loadOptions={wrappedLoadOptions}
                     noOptionsMessage={() => 'No results'}
-                    isRequired
-                    id={'main-async-select-job'}
+                    onChange={onSelected}
                   />
                 </div>
               </div>
 
               {jobDetail && (
                 <div>
-                  <Box>
+                  <Box style={{ position: 'relative', overflow: 'hidden' }}>
                     <Collapse
                       isExpanded
                       topic={<Header text={'งานที่เลือก'} />}
@@ -546,7 +586,7 @@ const AddTrip: React.FC<Props> = observer(() => {
                     />
                   </Box>
 
-                  <Box style={{ backgroundColor: '#ebeef3' }}>
+                  <Box style={{ backgroundColor: '#ebeef3', position: 'relative', overflow: 'hidden' }}>
                     <Collapse
                       isExpanded
                       topic={<Header text={'รถที่เลือก'} />}
@@ -560,7 +600,6 @@ const AddTrip: React.FC<Props> = observer(() => {
                           <Droppable
                             key={`truck-selected-droppable-1`}
                             droppableId={truckSelectedDroppable.droppableId}
-                          // isDropDisabled={truckSelectedDroppable.droppable}
                           >
                             {(provided: any, snapshot: any) => (
                               <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
@@ -634,7 +673,13 @@ const AddTrip: React.FC<Props> = observer(() => {
             </div>
           </GridColumn>
           <GridColumn medium={5}>
-            <div style={{ ...LEFT_RIGHT_SPACING, maxHeight: 1000, overflowX: 'scroll' }}>
+            <div
+              style={{
+                ...LEFT_RIGHT_SPACING,
+                maxHeight: 1000,
+                ...(state.trucks?.length ? { overflowX: 'scroll' } : undefined),
+              }}
+            >
               <Droppable
                 key={`truck-droppable-1`}
                 droppableId={truckDroppable.droppableId}
@@ -642,7 +687,7 @@ const AddTrip: React.FC<Props> = observer(() => {
               >
                 {(provided: any, snapshot: any) => (
                   <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
-                    <Form onSubmit={truckDroppable.onSubmit}>
+                    <Form onSubmit={() => truckDroppable.onSubmit()}>
                       {({ formProps }: any) => (
                         <form {...formProps} style={{ paddingBottom: 20 }}>
                           <div style={{ position: 'relative' }}>
@@ -651,15 +696,34 @@ const AddTrip: React.FC<Props> = observer(() => {
                             </span>
                             <Field name={truckDroppable.title}>
                               {({ fieldProps }: any) => (
-                                <Textfield
-                                  placeholder={truckDroppable.title}
+                                // <Textfield
+                                //   placeholder={truckDroppable.title}
+                                //   {...fieldProps}
+                                //   style={{ paddingLeft: 40 }}
+                                //   defaultValue={['AAA', 'BBB', 'CCC']}
+                                //   onChange={(e: any) => truckDroppable.onChange(e)}
+                                // />
+                                <Select
                                   {...fieldProps}
-                                  style={{ paddingLeft: 40 }}
-                                  onChange={(e: any) => truckDroppable.onChange(e)}
+                                  // value={() => filterSelectedTruckValue()}
+                                  value={truckTypeSelectedOption.filter((option: any) => {
+                                    return option.value === selectedOption;
+                                  })}
+                                  // value={searchTruck ? {
+                                  //   value: `truck-selected-${Math.floor(Date.now() / 1000)}`,
+                                  //   label: searchTruck
+                                  // } : truckTypeSelectedOption.find((option: any) => {
+                                  //   return option.value === selectedOption;
+                                  // })}
+                                  options={truckTypeSelectedOption}
+                                  onInputChange={(newValue: string) => setSearchTruck(newValue)}
+                                  onChange={(e: any) => onSelectedTruckOptions(e)}
+                                  placeholder={'Search trucks'}
+                                  id={'truck-select-options'}
                                 />
                               )}
                             </Field>
-                            {truckStore.loading && (
+                            {(truckStore.loading || truckTypesStore.loading) && (
                               <span style={LOADING_ICON}>
                                 <Spinner size={'small'} />
                               </span>
@@ -731,7 +795,7 @@ const AddTrip: React.FC<Props> = observer(() => {
                                       </span>
                                     </div>
                                     <div style={{ paddingLeft: 10 }}>
-                                      <img
+                                      {/* <img
                                         src={`${process.env.API_ENDPOINT}/api/v1/media/file-stream?attachCode=${item.owner?.avatar?.object}`}
                                         // src={images.pinDrop}
                                         style={{
@@ -740,6 +804,11 @@ const AddTrip: React.FC<Props> = observer(() => {
                                           backgroundColor: '#ebeef3',
                                           padding: 2,
                                         }}
+                                        onError={onImageError}
+                                      /> */}
+                                      <Image
+                                        src={`${process.env.API_ENDPOINT}/api/v1/media/file-stream?attachCode=${item.owner?.avatar?.object}`}
+                                        id={item.id}
                                         onError={onImageError}
                                       />
                                     </div>
