@@ -44,6 +44,8 @@ const defaultTruck = {
 
 const TruckType = types.model({
   ...defaultTruck,
+  document: types.maybeNull(types.map(types.string)),
+  documentStatus: types.maybeNull(types.string),
 });
 
 const TruckManagementType = types.model({
@@ -58,11 +60,17 @@ export interface ITrucksManagement {
   lengthPerPage: number | null;
 }
 
+export interface ITruckListManagement {
+  content: (ITruck | ITruckNull)[];
+  totalPages: number | null;
+}
+
 export const TruckStore = types
   .model('TruckStore', {
     loading: false,
     data_count: types.maybeNull(types.number),
     data_trucks: types.maybeNull(TruckManagementType),
+    truckList: types.maybeNull(TruckListManagementType),
     currentTruck: types.maybeNull(TruckType),
     isFirstLoad: true,
 

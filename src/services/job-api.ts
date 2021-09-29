@@ -52,6 +52,7 @@ export interface JobListParams {
   truckAmountMax?: number;
   truckType?: string;
   type?: number;
+  textSearch?: string;
 }
 
 export interface IJobRequest {

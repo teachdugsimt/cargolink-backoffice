@@ -72,6 +72,7 @@ function createKey(input: string) {
 }
 
 const transformData = (data: object[]) => {
+  if (!data) return [];
   console.log('Data transform truck:: ', data);
   if (data && Array.isArray(data))
     return data.map((e: any) => ({
