@@ -59,6 +59,11 @@ const TruckManagementType = types.model({
   lengthPerPage: types.maybeNull(types.number),
 });
 
+const TruckListManagementType = types.model({
+  content: types.maybeNull(types.array(TruckType)),
+  totalPages: types.maybeNull(types.number),
+});
+
 const TruckWithDocument = types.model({
   ...defaultTruck,
   document: types.array(
