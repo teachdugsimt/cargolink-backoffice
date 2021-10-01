@@ -202,6 +202,15 @@
   "news": {
     "index": "News & Promotion"
   },
+  "userTypeGroup": {
+    "SHIPPER": "Shipper",
+    "CARRIER": "Carrier",
+    "BOTH": "Both"
+  },
+  "errorProfile": {
+    "wrongFormatPhoneNumber": "Please check your phone number.",
+    "someThingWrong": "Something went wrong, please check data."
+  },
   "allTrucks": "All Trucks",
   "allTypes": "All",
   "allProvinces": "All Provinces",
