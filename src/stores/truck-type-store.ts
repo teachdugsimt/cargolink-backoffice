@@ -42,7 +42,7 @@ export const TruckTypeStore = types
             self.error_response = {
               title: response.problem,
               text: 'GET truck types :' + response.originalError.message,
-            }
+            };
           }
         } catch (error) {
           console.error('Failed to getTruckTypes :>', error);
@@ -50,18 +50,19 @@ export const TruckTypeStore = types
           self.error_response = {
             title: '',
             text: 'Failed to getTruckTypes',
-          }
+          };
         }
         self.loading = false;
       }),
     };
   })
-  .views(self => ({
+  .views((self) => ({
     truckTypeNameById(truckTypeId: number | string) {
-      let trucktype = self.data?.filter(e => e.id == truckTypeId)
+      console.log('SELF data :: ', JSON.parse(JSON.stringify(self.data)));
+      let trucktype = self.data?.filter((e) => e.id == truckTypeId);
       if (!trucktype?.length) {
-        self.getTruckTypes()
+        self.getTruckTypes();
       }
-      return trucktype?.length ? trucktype[0] : null
-    }
+      return trucktype?.length ? trucktype[0] : null;
+    },
   }));

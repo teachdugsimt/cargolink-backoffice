@@ -139,6 +139,8 @@ export const UserNonPersistStore = types
     data_patch_user: types.maybeNull(Profile),
 
     data_get_user_id_fully: types.maybeNull(ProfileFully),
+
+    error_patch_user: types.maybeNull(types.string),
   })
   .actions((self) => {
     return {
@@ -320,12 +322,17 @@ export const UserNonPersistStore = types
             yield UserNonPersistStore.getFullyUserProfile(userId);
             self.data_patch_user = response.data;
           } else {
+            const error = response?.data?.message || 'something went wrong';
+            self.error_patch_user = error;
           }
         } catch (error) {
           self.loading = false;
           return error;
         }
       }),
+      clearErrorPatchUser() {
+        self.error_patch_user = null;
+      },
       updateUserDocument: flow(function* updateUserDocument(userId: string, params: ChangeDocStatusPayload) {
         try {
           self.loading = true;
@@ -459,4 +466,5 @@ export interface IUserNull {
   documentStatus: null;
   legalType: null;
   files: null;
+  error_patch_user: null;
 }

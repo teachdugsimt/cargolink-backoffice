@@ -88,6 +88,7 @@ export interface EditUserPayload {
   email: string;
   legalType: 'INDIVIDUAL' | 'JURISTIC';
   attachCode: string[];
+  userType?: 'SHIPPER' | 'CARRIER' | 'BOTH';
 }
 
 export interface PatchUser {

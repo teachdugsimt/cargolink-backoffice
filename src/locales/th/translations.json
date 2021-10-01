@@ -203,6 +203,15 @@
   "news": {
     "index": "ข่าวและโปรโมชั่น"
   },
+  "userTypeGroup": {
+    "SHIPPER": "ผู้ว่าจ้าง",
+    "CARRIER": "ผู้บริการขนส่ง",
+    "BOTH": "ทั้งคู่"
+  },
+  "errorProfile": {
+    "wrongFormatPhoneNumber": "กรุณาตรวจสอบหมายเลขโทรศัพท์",
+    "someThingWrong": "มีบางอย่างผิดพลาด กรุณาตรวจสอบข้อมูล"
+  },
   "allTrucks": "รถทุกประเภท",
   "allTypes": "ทุกประเภท",
   "allProvinces": "ทุกจังหวัด",
