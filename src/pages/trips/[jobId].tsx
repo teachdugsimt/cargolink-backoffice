@@ -9,7 +9,6 @@ import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import { navigate } from 'gatsby';
 import PageHeader from '@atlaskit/page-header';
 import { useTranslation } from 'react-i18next';
-import { AsyncPaginate } from 'react-select-async-paginate';
 import styled from 'styled-components';
 import Collapse from '../../components/collapse/collapse';
 import images from '../../components/Themes/images';
@@ -78,6 +77,8 @@ const DROP_BOX_HIDE: CSSProperties = {
   transitionProperty: 'all',
   transitionDuration: '0.5s',
   transitionTimingFunction: 'ease',
+  maxHeight: 735,
+  overflowX: 'scroll',
 };
 
 const DROP_BOX_CONTENT: CSSProperties = {
@@ -118,6 +119,12 @@ const TRIANGLE_TOPLEFT: CSSProperties = {
   left: 0,
 };
 
+const NEW_ICON: CSSProperties = {
+  position: 'absolute',
+  top: -14,
+  left: -1,
+};
+
 const TruckAnimate = () => (
   <LottieView
     options={{
@@ -134,6 +141,21 @@ const Dots = () => (
       autoplay: true,
       loop: true,
       animationData: require('../../images/animations/dots-loading.json'),
+    }}
+    width={60}
+    height={40}
+  />
+);
+
+const New = () => (
+  <LottieView
+    options={{
+      autoplay: true,
+      loop: true,
+      animationData: require('../../images/animations/new.json'),
+      rendererSettings: {
+        clearCanvas: true,
+      },
     }}
     width={60}
     height={40}
@@ -211,12 +233,12 @@ const getListStyle = (isDraggingOver: boolean): CSSProperties => ({
 });
 
 const Location = ({ content, header, img }: LocationProps) => (
-  <div style={{ display: 'flex', alignItems: 'baseline' }}>
-    <div style={{ flex: '5%' }}>
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div style={{ flex: '5%', display: 'flex' }}>
       <img src={images[img]} style={{ width: 16, borderRadius: '50%', backgroundColor: '#ebeef3', padding: 2 }} />
     </div>
-    <Value style={{ flex: '10%' }}>{`${header} :`}</Value>
-    <Value style={{ flex: '85%' }}>{content}</Value>
+    <Value style={{ flex: '8%' }}>{`${header} :`}</Value>
+    <Value style={{ flex: '87%' }}>{content}</Value>
   </div>
 );
 
@@ -233,16 +255,6 @@ const DetailSmall = ({ header, content, style = {} }: any) => (
     <ValueSmall>{content}</ValueSmall>
   </div>
 );
-
-interface State {
-  jobs: object;
-  trucks: object;
-}
-
-interface JobItemProps {
-  value: string;
-  label: string;
-}
 
 interface MasterTypeProps {
   id: string;
@@ -283,6 +295,26 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
   useEffect(() => {
     jobStore.getJobById({ jobId: props.jobId });
   }, [props.jobId]);
+
+  useEffect(() => {
+    if (jobStore.currentJob) {
+      const jobDetail = JSON.parse(JSON.stringify(jobStore.currentJob));
+      const trucks: any = [];
+      if (jobDetail?.trips) {
+        const truckList = jobDetail.trips.map((trip: any) => ({ ...trip, old: true }));
+        trucks.push(...truckList);
+      } else if (jobDetail?.quotations) {
+        const truckList = jobDetail.quotations.map((quot: any) => ({ ...quot.truck, old: true }));
+        trucks.push(...truckList);
+      }
+
+      trucks.length &&
+        setState((prev: any) => ({
+          ...prev,
+          truckSelected: trucks,
+        }));
+    }
+  }, [JSON.stringify(jobStore.currentJob)]);
 
   useEffect(() => {
     if (!truckTypesStore.data) {
@@ -338,7 +370,7 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => {}}>
       <BreadcrumbsItem onClick={() => navigate('/trips')} text={t('trip.management')} key="trips-management" />
-      <BreadcrumbsItem text={'Bulk cargo management'} key="bulk-cargo-management" />
+      <BreadcrumbsItem text={t('job.info')} key="job-info" />
     </Breadcrumbs>
   );
 
@@ -451,31 +483,15 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
     title: '',
   };
 
-  const filterTruck = async (inputValue: string): Promise<any> => {
-    if (inputValue.length < 3) {
-      return [];
-    }
-
-    console.log('Requesting ...');
-    await jobStore.getJobsListWithoutEmptyContent({ page: 1, descending: true, textSearch: inputValue });
-    if (jobStore.jobList?.content?.length) {
-      const items = JSON.parse(JSON.stringify(jobStore.jobList?.content)).map((job: any) => ({
-        label: `${job.productName} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo}`,
-        value: job.id,
-      }));
-      return Promise.resolve(items);
-    }
-    return Promise.resolve([]);
-  };
-
   console.log('truckStore.loading :>> ', truckStore.loading);
 
   const jobDetail = jobStore.currentJob ? JSON.parse(JSON.stringify(jobStore.currentJob)) : {};
+  console.log('JSON.parse(JSON.stringify(jobStore.currentJob)) :>> ', JSON.parse(JSON.stringify(jobStore.currentJob)));
   console.log('jobDetail :>> ', jobDetail);
 
   return (
     <Page>
-      <PageHeader breadcrumbs={breadcrumbs}>{'Bulk cargo management'}</PageHeader>
+      <PageHeader breadcrumbs={breadcrumbs}>{t('job.info')}</PageHeader>
       <ButtonGroup>
         <ButtonBack onClick={() => navigate('/trips')}>{t('back')}</ButtonBack>
         <ButtonConfrim>{t('confirm')}</ButtonConfrim>
@@ -485,7 +501,7 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
           <GridColumn medium={7}>
             <div style={LEFT_RIGHT_SPACING}>
               <div>
-                <Box style={{ position: 'relative', overflow: 'hidden' }}>
+                <Box style={{ position: 'relative', overflow: 'hidden', marginTop: 5 }}>
                   <Collapse
                     isExpanded
                     topic={<Header text={'งานที่เลือก'} />}
@@ -541,7 +557,7 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
 
                               <Detail
                                 header={'จำนวนรถที่ต้องการ'}
-                                content={`${jobDetail?.requiredTruckAmount} คัน`}
+                                content={`${jobDetail?.requiredTruckAmount ?? '-'} คัน`}
                                 style={{ flex: 1, color: '#ffc107' }}
                               />
 
@@ -591,8 +607,16 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
                                           display: 'flex',
                                           paddingTop: 10,
                                           paddingBottom: 10,
+                                          overflow: 'visible',
+                                          ...(!item.old ? { border: '2px solid #ffc107' } : undefined),
                                         }}
                                       >
+                                        {!item.old && (
+                                          <div style={NEW_ICON}>
+                                            {/* <New key={item.id} /> */}
+                                            <NewText>{'ใหม่'}</NewText>
+                                          </div>
+                                        )}
                                         <div style={{ flex: 2 }}>
                                           <Row style={{ marginBottom: 0 }}>
                                             <div>
@@ -612,7 +636,7 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
                                               />
                                             </Col>
                                             <Col flex={1}>
-                                              <Detail header={'ความสูงคอกรถ'} content={item.stallHeight} />
+                                              <Detail header={'ความสูงคอกรถ'} content={item.stallHeight ?? '-'} />
                                             </Col>
                                           </Row>
                                         </div>
@@ -625,7 +649,7 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
                                           />
                                         </div>
                                         <span style={TRASH} onClick={() => removeTruck(item.id)}>
-                                          <TrashIcon label={'trash-icon'} size={'medium'} />
+                                          <TrashIcon label={'trash-icon'} size={'small'} />
                                         </span>
                                       </div>
                                     )}
@@ -646,8 +670,8 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
             <div
               style={{
                 ...LEFT_RIGHT_SPACING,
-                maxHeight: 1000,
-                ...(state.trucks?.length ? { overflowX: 'scroll' } : undefined),
+                maxHeight: 1290,
+                ...(state.trucks?.length >= 2 ? { overflowX: 'scroll' } : undefined),
               }}
             >
               <Droppable
@@ -656,7 +680,13 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
                 // isDropDisabled={truckDroppable.droppable}
               >
                 {(provided: any, snapshot: any) => (
-                  <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
+                  <div
+                    ref={provided.innerRef}
+                    style={{
+                      ...getListStyle(snapshot.isDraggingOver),
+                      border: '1px solid #cfcfcf',
+                    }}
+                  >
                     <Form onSubmit={() => truckDroppable.onSubmit()}>
                       {({ formProps }: any) => (
                         <form {...formProps} style={{ paddingBottom: 20 }}>
@@ -731,6 +761,7 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
                                     borderTop: '1px dashed #ebeef3',
                                     margin: 0,
                                     paddingTop: 5,
+                                    paddingBottom: 5,
                                   }}
                                 >
                                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -862,4 +893,12 @@ const ButtonLoadMore = styled(Button)`
   color: #000 !important;
   background-color: #cccccc !important;
   align-items: center;
+`;
+
+const NewText = styled.span`
+  font-size: 10px;
+  padding: 0 10px;
+  background-color: #ffc107;
+  border-radius: 3px;
+  color: #fff;
 `;

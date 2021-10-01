@@ -9,6 +9,7 @@ import TruckApi from './truck-api';
 import TruckTypeApi from './truck-type-api';
 import ProductTypeApi from './product-type-api';
 import RegionApi from './region-api';
+import TripApi from './trip-api';
 
 export {
   LoginApi,
@@ -22,4 +23,5 @@ export {
   TruckTypeApi,
   ProductTypeApi,
   RegionApi,
+  TripApi,
 };

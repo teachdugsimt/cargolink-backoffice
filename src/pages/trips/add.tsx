@@ -22,6 +22,8 @@ import Spinner from '@atlaskit/spinner';
 import SearchIcon from '@atlaskit/icon/glyph/search';
 import MoreIcon from '@atlaskit/icon/glyph/more';
 import Select from 'react-select';
+import { TripStore } from '../../stores/trip-store';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 
 interface LocationProps {
   header: string;
@@ -78,6 +80,8 @@ const DROP_BOX_HIDE: CSSProperties = {
   transitionProperty: 'all',
   transitionDuration: '0.5s',
   transitionTimingFunction: 'ease',
+  maxHeight: 735,
+  overflowX: 'scroll',
 };
 
 const DROP_BOX_CONTENT: CSSProperties = {
@@ -211,12 +215,12 @@ const getListStyle = (isDraggingOver: boolean): CSSProperties => ({
 });
 
 const Location = ({ content, header, img }: LocationProps) => (
-  <div style={{ display: 'flex', alignItems: 'baseline' }}>
-    <div style={{ flex: '5%' }}>
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div style={{ flex: '5%', display: 'flex' }}>
       <img src={images[img]} style={{ width: 16, borderRadius: '50%', backgroundColor: '#ebeef3', padding: 2 }} />
     </div>
-    <Value style={{ flex: '10%' }}>{`${header} :`}</Value>
-    <Value style={{ flex: '85%' }}>{content}</Value>
+    <Value style={{ flex: '8%' }}>{`${header} :`}</Value>
+    <Value style={{ flex: '87%' }}>{content}</Value>
   </div>
 );
 
@@ -275,6 +279,7 @@ const AddTrip: React.FC<Props> = observer(() => {
   const [searchTruck, setSearchTruck] = useState<any>('');
   const [isDragStart, setIsDragStart] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState('none');
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     return () => {
@@ -319,6 +324,14 @@ const AddTrip: React.FC<Props> = observer(() => {
       setProductTypes(newProductType);
     }
   }, [productTypesStore.data]);
+
+  useEffect(() => {
+    if (state.truckSelected.length) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [state.truckSelected]);
 
   useEffect(() => {
     if (truckStore.truckList?.content?.length) {
@@ -456,7 +469,7 @@ const AddTrip: React.FC<Props> = observer(() => {
     title: '',
   };
 
-  const filterTruck = async (inputValue: string): Promise<any> => {
+  const filterJob = async (inputValue: string): Promise<any> => {
     if (inputValue.length < 3) {
       return [];
     }
@@ -475,7 +488,7 @@ const AddTrip: React.FC<Props> = observer(() => {
   };
 
   const loadOptions = async (inputValue: string, loadedOptions: any): Promise<any> => {
-    const response = await filterTruck(inputValue);
+    const response = await filterJob(inputValue);
 
     return {
       options: response,
@@ -490,6 +503,21 @@ const AddTrip: React.FC<Props> = observer(() => {
   const wrappedLoadOptions = (...args: any): Promise<any> =>
     new Promise((resolve) => loadOptions(...args).then((value) => resolve(value)));
 
+  const onSubmitTrip = () => {
+    Swal.fire({
+      icon: 'info',
+      text: `ยืนยันการสร้างทริป!`,
+      showCancelButton: true,
+    }).then((result: SweetAlertResult) => {
+      if (result.isConfirmed) {
+        Swal.fire('Saved!', '', 'success');
+        console.log('jobDetail.id :>> ', jobDetail.id);
+        const truckIds = state.truckSelected.map((truck: any) => truck.id);
+        console.log('truckIds :>> ', truckIds);
+      }
+    });
+  };
+
   console.log('truckStore.loading :>> ', truckStore.loading);
 
   return (
@@ -497,7 +525,9 @@ const AddTrip: React.FC<Props> = observer(() => {
       <PageHeader breadcrumbs={breadcrumbs}>{'Bulk cargo management'}</PageHeader>
       <ButtonGroup>
         <ButtonBack onClick={() => navigate('/trips')}>{t('back')}</ButtonBack>
-        <ButtonConfrim>{t('confirm')}</ButtonConfrim>
+        <ButtonConfrim isDisabled={isDisabled} onClick={onSubmitTrip}>
+          {t('confirm')}
+        </ButtonConfrim>
       </ButtonGroup>
       <DragDropContext onDragEnd={onDragEnd} onBeforeDragStart={() => setIsDragStart(true)}>
         <Grid layout="fluid" spacing="compact">
@@ -580,7 +610,7 @@ const AddTrip: React.FC<Props> = observer(() => {
 
                                 <Detail
                                   header={'จำนวนรถที่ต้องการ'}
-                                  content={`${jobDetail.requiredTruckAmount} คัน`}
+                                  content={`${jobDetail?.requiredTruckAmount ?? '-'} คัน`}
                                   style={{ flex: 1, color: '#ffc107' }}
                                 />
 
@@ -654,7 +684,7 @@ const AddTrip: React.FC<Props> = observer(() => {
                                                 />
                                               </Col>
                                               <Col flex={1}>
-                                                <Detail header={'ความสูงคอกรถ'} content={item.stallHeight} />
+                                                <Detail header={'ความสูงคอกรถ'} content={item.stallHeight ?? '-'} />
                                               </Col>
                                             </Row>
                                           </div>
@@ -689,8 +719,8 @@ const AddTrip: React.FC<Props> = observer(() => {
             <div
               style={{
                 ...LEFT_RIGHT_SPACING,
-                maxHeight: 1000,
-                ...(state.trucks?.length ? { overflowX: 'scroll' } : undefined),
+                maxHeight: 1290,
+                ...(state.trucks?.length >= 2 ? { overflowX: 'scroll' } : undefined),
               }}
             >
               <Droppable
@@ -699,7 +729,13 @@ const AddTrip: React.FC<Props> = observer(() => {
                 // isDropDisabled={truckDroppable.droppable}
               >
                 {(provided: any, snapshot: any) => (
-                  <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
+                  <div
+                    ref={provided.innerRef}
+                    style={{
+                      ...getListStyle(snapshot.isDraggingOver),
+                      border: '1px solid #cfcfcf',
+                    }}
+                  >
                     <Form onSubmit={() => truckDroppable.onSubmit()}>
                       {({ formProps }: any) => (
                         <form {...formProps} style={{ paddingBottom: 20 }}>
@@ -774,6 +810,7 @@ const AddTrip: React.FC<Props> = observer(() => {
                                     borderTop: '1px dashed #ebeef3',
                                     margin: 0,
                                     paddingTop: 5,
+                                    paddingBottom: 5,
                                   }}
                                 >
                                   <div style={{ display: 'flex', alignItems: 'center' }}>
