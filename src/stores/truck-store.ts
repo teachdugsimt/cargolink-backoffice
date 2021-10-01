@@ -1,6 +1,13 @@
 import { flow, types } from 'mobx-state-tree';
 import { TruckApi } from '../services';
-import truckApi, { ITruck, TruckRequestParams, TrucksListParams, TrucksListResponse } from '../services/truck-api';
+import truckApi, {
+  ITruck,
+  ChangeDocStatusPayload,
+  TruckRequestParams,
+  TrucksByCarrierParams,
+  TrucksListParams,
+  TrucksListResponse,
+} from '../services/truck-api';
 
 const AvatarType = types.model({
   object: types.maybeNull(types.string),
@@ -44,8 +51,6 @@ const defaultTruck = {
 
 const TruckType = types.model({
   ...defaultTruck,
-  document: types.maybeNull(types.map(types.string)),
-  documentStatus: types.maybeNull(types.string),
 });
 
 const TruckManagementType = types.model({
@@ -53,17 +58,6 @@ const TruckManagementType = types.model({
   reRender: types.boolean,
   lengthPerPage: types.maybeNull(types.number),
 });
-
-export interface ITrucksManagement {
-  content: (ITruck | ITruckNull)[];
-  reRender: boolean;
-  lengthPerPage: number | null;
-}
-
-export interface ITruckListManagement {
-  content: (ITruck | ITruckNull)[];
-  totalPages: number | null;
-}
 
 const TruckListManagementType = types.model({
   content: types.maybeNull(types.array(TruckType)),
@@ -87,9 +81,21 @@ const TruckWithDocument = types.model({
   document_status: types.maybeNull(types.string),
 });
 
+export interface ITrucksManagement {
+  content: (ITruck | ITruckNull)[];
+  reRender: boolean;
+  lengthPerPage: number | null;
+}
+
+export interface ITruckListManagement {
+  content: (ITruck | ITruckNull)[];
+  totalPages: number | null;
+}
+
 export const TruckStore = types
   .model('TruckStore', {
     loading: false,
+    userTrucks_loading: types.boolean,
     data_count: types.maybeNull(types.number),
     data_trucks: types.maybeNull(TruckManagementType),
     truckList: types.maybeNull(TruckListManagementType),
@@ -102,6 +108,8 @@ export const TruckStore = types
         content: types.maybeNull(types.string),
       }),
     ),
+
+    data_truck_carrier: types.maybeNull(types.array(TruckWithDocument)),
   })
   .actions((self) => {
     return {
@@ -205,8 +213,137 @@ export const TruckStore = types
           };
         }
       }),
+
+      updateDocumentStatus: flow(function* updateDocumentStatus(
+        truckId: string,
+        params: ChangeDocStatusPayload,
+        carrierId: string,
+      ) {
+        try {
+          self.loading = true;
+          const response = yield truckApi.changeDocStatus(truckId, params);
+          console.log('Response update truck doc status : ', response);
+          if (response.ok) {
+            yield TruckStore.getTrucksListByCarrierId({ carrierId });
+          }
+          self.loading = false;
+        } catch (error) {
+          self.loading = false;
+        }
+      }),
+
+      getTrucksListByCarrierId: flow(function* getTrucksListByCarrierId(params: TrucksByCarrierParams) {
+        try {
+          self.userTrucks_loading = true;
+
+          const response = yield truckApi.getTruckByCarrierId(params);
+          console.log(response);
+
+          if (response.ok) {
+            const tmpResponse = response.data?.data || [];
+            let tmp: any;
+
+            if (tmpResponse && Array.isArray(tmpResponse) && tmpResponse.length > 0) {
+              tmp = yield Promise.all(
+                tmpResponse.map(async (item: any) => {
+                  if (item.document && typeof item.document == 'object' && Object.keys(item.document).length > 0) {
+                    const listAttachCode = Object.keys(item.document).map((e) => item.document[e]);
+                    const urlList = await truckApi.getLinkDownLoad(listAttachCode);
+                    let tmpItem = JSON.parse(JSON.stringify(item));
+                    const listUrl = JSON.parse(JSON.stringify(urlList));
+                    tmpItem.document = listUrl.data.data || null;
+                    return tmpItem;
+                  } else {
+                    let slot = item;
+                    slot.document = [];
+                    return item;
+                  }
+                }),
+              );
+            }
+
+            console.log('TMP IMPORTATNT !! :: ', tmp);
+
+            self.data_truck_carrier = tmp;
+            // return tmp;
+          } else {
+          }
+          self.userTrucks_loading = false;
+        } catch (error) {
+          self.userTrucks_loading = false;
+          return error;
+        }
+      }),
+
+      getTrucksListWithoutEmptyContent: flow(function* getTrucksList(params: TrucksListParams) {
+        self.loading = true;
+        self.data_count = null;
+        self.error_response = null;
+        try {
+          const response = yield TruckApi.getTrucksList(params);
+          console.log('getTrucks response :>', response);
+          if (response && response.ok) {
+            const { data, size, totalElements, totalPages }: TrucksListResponse = response.data;
+            self.data_count = totalElements;
+            const trucks: ITruckListManagement = {
+              content: [],
+              totalPages: totalPages,
+            };
+            if (data.length) {
+              const parsedData: ITruck[] = data.map((truck) => {
+                const { loadingWeight, quotationNumber, truckType } = truck;
+                const toNumber = (x: any) => {
+                  if (x == null) return x;
+                  if (isNaN(+x)) throw new Error('this should not be NaN: ' + x);
+                  return +x;
+                };
+                const owner = {
+                  ...truck.owner,
+                  id: toNumber(truck.owner.id),
+                };
+                return {
+                  ...truck,
+                  loadingWeight: toNumber(loadingWeight),
+                  quotationNumber: toNumber(quotationNumber),
+                  truckType: toNumber(truckType),
+                  owner,
+                };
+              });
+              if (self.truckList?.content?.length) {
+                trucks.content = [...JSON.parse(JSON.stringify(self.truckList.content)), ...parsedData];
+              } else {
+                trucks.content = parsedData;
+              }
+            } else {
+              trucks.content = [];
+            }
+            self.loading = false;
+            self.truckList = trucks;
+          } else {
+            self.loading = false;
+            self.truckList = null;
+            self.error_response = {
+              title: response.problem,
+              content: 'GET trucks : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to getTrucks :>', error);
+          self.loading = false;
+          self.truckList = null;
+          self.error_response = {
+            title: '',
+            content: 'Failed to getTrucks',
+          };
+        }
+      }),
+
       clearTrucks: function () {
         self.truckList = null;
+      },
+
+      clearListTruckCarrier() {
+        self.data_truck_carrier = null;
       },
     };
   });
