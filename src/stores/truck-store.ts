@@ -65,6 +65,28 @@ export interface ITruckListManagement {
   totalPages: number | null;
 }
 
+const TruckListManagementType = types.model({
+  content: types.maybeNull(types.array(TruckType)),
+  totalPages: types.maybeNull(types.number),
+});
+
+const TruckWithDocument = types.model({
+  ...defaultTruck,
+  document: types.array(
+    types.maybeNull(
+      types.model({
+        attach_code: types.maybeNull(types.string),
+        expire: types.maybeNull(types.number),
+        file_name: types.maybeNull(types.string),
+        status: types.maybeNull(types.string),
+        type: types.maybeNull(types.string),
+        url: types.maybeNull(types.string),
+      }),
+    ),
+  ),
+  document_status: types.maybeNull(types.string),
+});
+
 export const TruckStore = types
   .model('TruckStore', {
     loading: false,
@@ -183,6 +205,9 @@ export const TruckStore = types
           };
         }
       }),
+      clearTrucks: function () {
+        self.truckList = null;
+      },
     };
   });
 
