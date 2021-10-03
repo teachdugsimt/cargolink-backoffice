@@ -131,7 +131,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
     TransportationStore.getTransportationList({
       page: 1,
       rowsPerPage: 10,
-      ...(searchText ? { searchText } : undefined),
+      ...(searchText ? { where: { fullTextSearch: searchText } } : undefined),
     });
   }, []);
 
@@ -159,7 +159,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
       TransportationStore.getTransportationList({
         page: currentPage,
         rowsPerPage: tmpPagination.size,
-        ...(searchText ? { searchText } : undefined),
+        ...(searchText ? { where: { fullTextSearch: searchText } } : undefined),
       });
     }, 200);
   };
@@ -175,7 +175,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
     TransportationStore.getTransportationList({
       page: 1,
       rowsPerPage: tmpPagination.size,
-      ...(value ? { searchText: value } : undefined),
+      ...(value ? { where: { fullTextSearch: value } } : undefined),
     });
   };
 
