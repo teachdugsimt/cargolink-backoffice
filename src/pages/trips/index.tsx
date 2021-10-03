@@ -11,7 +11,7 @@ import Page from '@atlaskit/page';
 import { observer } from 'mobx-react-lite';
 import { TransportationStore } from '../../stores/transportation-store';
 import SearchForm from '../../components/search-form';
-import { IJob, quotations } from '../../services/transportation-api';
+import { IJob, ITrips, ITruck2 } from '../../services/transportation-api';
 import { IProductType } from '../../services/product-type-api';
 import { findProvince } from '../../utils';
 import { momentFormatDateTime } from '../../components/simple-data';
@@ -53,15 +53,15 @@ const Trip: React.FC<Props> = observer((props: any) => {
   };
 
   const _renderSubTree = (props: any) => {
-    const quotations: quotations[] = props.data.quotations;
-    console.log('Props :: ', quotations);
+    const trips: ITrips[] = props.data.trips;
+    console.log('Props :: ', trips);
 
     return (
       <Rowy style={{ paddingTop: 10, paddingBottom: 10, paddingLeft: 10 }}>
-        {quotations.map((e: quotations, i: number) => {
-          const tmp = e.truck;
-          const { id, truck_type, registration_number }: any = tmp;
-          const parseTruckType = truckTypesStore.truckTypeNameById(truck_type)?.name || 'unknow_truck';
+        {trips.map((e: ITrips, i: number) => {
+          const tmp: ITrips = e;
+          const { id, truckType, registrationNumber, owner }: ITruck2 = tmp.truck;
+          const parseTruckType = truckTypesStore.truckTypeNameById(truckType || 1)?.name || 'unknow_truck';
           return (
             <Coly key={`sub-col-${i}`} breakPoint={{ xs: 12, sm: 12, md: 12, lg: 12 }}>
               <Rowy>
@@ -69,18 +69,24 @@ const Trip: React.FC<Props> = observer((props: any) => {
                   <span>รหัสรถ {id} , </span>
                 </Coly>
                 <Coly breakPoint={{ md: 2, lg: 2 }}>
-                  <span>คุณ {e.fullName} , </span>
+                  <span>เจ้าของรถ {owner?.fullName || ''} , </span>
                 </Coly>
                 <Coly breakPoint={{ md: 2, lg: 2 }}>
                   <span>{parseTruckType} , </span>
                 </Coly>
-                {registration_number && (
+                {registrationNumber && (
                   <Coly breakPoint={{ md: 2, lg: 2 }}>
-                    {registration_number.map((regis: string) => (
-                      <span>{regis}</span>
+                    {registrationNumber.map((regis: string) => (
+                      <span key={regis}>{regis}</span>
                     ))}
                   </Coly>
                 )}
+                <Coly breakPoint={{ md: 2, lg: 2 }}>
+                  <span>ราคา {tmp?.price} , </span>
+                </Coly>
+                <Coly breakPoint={{ md: 2, lg: 2 }}>
+                  <span>สถานะ {tmp?.status} , </span>
+                </Coly>
               </Rowy>
             </Coly>
           );
@@ -90,12 +96,12 @@ const Trip: React.FC<Props> = observer((props: any) => {
   };
 
   function getChildren(parentItem: any) {
-    if (parentItem.quotations) {
+    if (parentItem.trips) {
       return [
         {
           component: (props: any) => _renderSubTree(props),
           id: ++uuid,
-          quotations: parentItem.quotations,
+          trips: parentItem.trips,
         },
       ];
     }
@@ -214,7 +220,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
             productName,
             id,
             price,
-            quotations,
+            trips,
             priceType,
             status,
             productTypeId,
@@ -234,7 +240,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
                   itemId={id}
                   items={children}
                   onExpand={loadTableData}
-                  hasChildren={quotations && quotations.length > 0}
+                  hasChildren={trips && trips.length > 0}
                 >
                   <Cell singleLine>{id}</Cell>
                   <Cell>{productName}</Cell>
