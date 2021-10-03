@@ -7,17 +7,18 @@ const ImageModel = types.model({
 });
 const TruckModel = types.model({
   id: types.maybeNull(types.string),
-  truck_type: types.maybeNull(types.number),
-  loading_weight: types.maybeNull(types.number),
-  stall_height: types.maybeNull(types.string),
-  created_at: types.maybeNull(types.string),
-  updated_at: types.maybeNull(types.string),
-  approve_status: types.maybeNull(types.string),
-  registration_number: types.maybeNull(types.array(types.maybeNull(types.string))),
+  truckType: types.maybeNull(types.number),
+  loadingWeight: types.maybeNull(types.number),
+  stallHeight: types.maybeNull(types.string),
+  approveStatus: types.maybeNull(types.string),
+  registrationNumber: types.maybeNull(types.array(types.maybeNull(types.string))),
   tipper: types.maybeNull(types.boolean),
+  carrierId: types.maybeNull(types.string),
   phoneNumber: types.maybeNull(types.string),
+  createdAt: types.maybeNull(types.string),
+  updatedAt: types.maybeNull(types.string),
   isLiked: types.optional(types.boolean, false),
-  work_zone: types.optional(
+  workZones: types.optional(
     types.array(
       types.model({
         region: types.maybeNull(types.number),
@@ -42,7 +43,7 @@ const TruckModel = types.model({
       ),
     }),
   ),
-  truck_photos: types.maybeNull(
+  truckPhotos: types.maybeNull(
     types.model({
       front: types.maybeNull(types.string),
       back: types.maybeNull(types.string),
@@ -52,21 +53,20 @@ const TruckModel = types.model({
   ),
 });
 
-const Quotation = types.model({
+const Trips = types.model({
   id: types.maybeNull(types.string),
+  price: types.maybeNull(types.number),
+  status: types.maybeNull(types.string),
+  weight: types.maybeNull(types.number),
+  createdAt: types.maybeNull(types.string),
+  createdUser: types.maybeNull(types.string),
+  jobCarrierId: types.maybeNull(types.number),
   truck: types.maybeNull(TruckModel),
-  avatar: types.maybeNull(
-    types.model({
-      object: types.maybeNull(types.string),
-    }),
-  ),
-  fullName: types.maybeNull(types.string),
-  bookingDatetime: types.maybeNull(types.string),
 });
 
 const JobModel = {
   id: types.maybeNull(types.string),
-  userId: types.maybeNull(types.string),
+  userId: types.maybeNull(types.number),
   productTypeId: types.maybeNull(types.number),
   productName: types.maybeNull(types.string),
   truckType: types.maybeNull(types.number),
@@ -120,11 +120,8 @@ const JobModel = {
 const ShipperJob = types.maybeNull(
   types.model({
     ...JobModel,
-    quotations: types.maybeNull(types.array(types.maybeNull(Quotation))),
+    trips: types.maybeNull(types.array(types.maybeNull(Trips))),
     status: types.maybeNull(types.string),
-    requesterType: types.maybeNull(types.string),
-    requesterUserId: types.maybeNull(types.string),
-    accepterUserId: types.maybeNull(types.string),
   }),
 );
 

@@ -1,3 +1,4 @@
+import types from '@atlaskit/dropdown-menu';
 import { AxiosResponse } from 'axios';
 import React from 'react';
 import ExcuteApi from './api-integrations/excute-api';
@@ -39,17 +40,59 @@ export interface IJob {
   from: IFromDestination;
   to: IDestination[];
   owner: IOwner;
-  quotations: quotations[] | null; //? should be changed in future.
-  status: 'WAITING' | 'ACCEPTED' | 'REJECTED';
-  requesterType: 'TRUCK_OWNER' | 'JOB_OWNER';
-  requesterUserId: null | string;
-  accepterUserId: null | string;
+  trips: ITrips[];
+  status: 'NEW' | 'INPROGRESS' | 'CANCELLED' | 'DONE' | 'EXPIRED';
+  tipper: boolean;
   price: number | string;
   priceType: 'PER_TRIP' | 'PER_TON';
-  tipper: boolean;
-  createdAt: string;
+  createdAt: string | null;
   component?: any;
   children?: any;
+}
+
+export interface ITrips {
+  id: string;
+  price: number | null;
+  truck: ITruck2;
+  status: 'OPEN' | 'IN_PROGRESS' | 'DONE' | 'REJECTED';
+  weight: number | null;
+  createdAt: string | null;
+  createdUser: string | null;
+  jobCarrierId: number | null;
+}
+
+export interface ITruck2 {
+  id: string | null;
+  owner: {
+    id: number;
+    email: string | null;
+    avatar: {
+      object: string | null;
+    } | null;
+    fullName: string | null;
+    mobileNo: string | null;
+    companyName: string | null;
+    userId: string | null;
+  } | null;
+  tipper: boolean;
+  carrierId: string | null;
+  createdAt: string | null;
+  truckType: number | null;
+  updatedAt: string | null;
+  workZones: Array<{
+    region: number;
+    province?: number | null;
+  }> | null;
+  stallHeight: string | null;
+  truckPhotos: {
+    front?: { object?: string | null } | null;
+    back?: { object?: string | null } | null;
+    left?: { object?: string | null } | null;
+    right?: { object?: string | null } | null;
+  } | null;
+  approveStatus: 'INACTIVE' | 'ACTIVE';
+  loadingWeight: number | null;
+  registrationNumber: string[] | null;
 }
 
 export interface quotations {
@@ -138,5 +181,17 @@ export interface IOwner {
   avatar: {
     //? infer
     object: string | null;
+  };
+}
+
+export interface TransportationFilter {
+  page: number;
+  rowsPerPage?: number;
+  descending?: boolean;
+  sortBy?: string;
+  where?: {
+    trips?: 'NULL' | 'NOT_NULL';
+    id?: string;
+    fullTextSearch?: string;
   };
 }
