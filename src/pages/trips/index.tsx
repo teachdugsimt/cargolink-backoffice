@@ -24,7 +24,7 @@ import Button from '@atlaskit/button';
 
 let uuid = 0;
 
-interface Props { }
+interface Props {}
 const tableTreeHelper = new TableTreeDataHelper({ key: 'id' });
 
 const Trip: React.FC<Props> = observer((props: any) => {
@@ -150,6 +150,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
   };
 
   const handlePagination = (event: any) => {
+    setitems(null);
     event.persist();
     setTimeout(() => {
       console.log('change page to :: ', event.target?.innerText);
@@ -167,6 +168,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
 
   const [searchText, setsearchText] = useState<string | null>(null);
   const onSearch = (value: string) => {
+    setitems(null);
     console.log('Value :: ', value);
     setsearchText(value);
     const tmpPagination = JSON.parse(JSON.stringify(TransportationStore.pagination));
@@ -205,7 +207,9 @@ const Trip: React.FC<Props> = observer((props: any) => {
 
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <SearchForm onSearch={onSearch} style={{ width: 200 }} />
-        <Button appearance="warning" onClick={() => navigate('/trips/add')}>Add Shipment</Button>
+        <Button appearance="warning" onClick={() => navigate('/trips/add')}>
+          Add Shipment
+        </Button>
       </div>
       <TableTree on>
         <Headers>
@@ -245,7 +249,9 @@ const Trip: React.FC<Props> = observer((props: any) => {
                   onExpand={loadTableData}
                   hasChildren={trips && trips.length > 0}
                 >
-                  <Cell singleLine><Link to={`/trips/${id}`}>{id}</Link></Cell>
+                  <Cell singleLine>
+                    <Link to={`/trips/${id}`}>{id}</Link>
+                  </Cell>
                   <Cell>{productName}</Cell>
                   <Cell>{typeName}</Cell>
                   <Cell>{price}</Cell>
@@ -260,8 +266,9 @@ const Trip: React.FC<Props> = observer((props: any) => {
                         '<No Address>'
                       )}
                       <span className="dot">{to?.length > 1 ? '...' : ''}</span>
-                      <span className="fTime">{`${from?.datetime ? momentFormatDateTime(from?.datetime, loginStore.language) : '-'
-                        }`}</span>
+                      <span className="fTime">{`${
+                        from?.dateTime ? momentFormatDateTime(from?.dateTime, loginStore.language) : '-'
+                      }`}</span>
                       <span className="tTime">
                         {to?.length ? momentFormatDateTime(to[0]?.dateTime, loginStore.language) : '-'}
                       </span>

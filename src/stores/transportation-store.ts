@@ -76,9 +76,9 @@ const JobModel = {
   from: types.maybeNull(
     types.model({
       name: types.maybeNull(types.string),
-      datetime: types.maybeNull(types.string),
-      contact_name: types.maybeNull(types.string),
-      contact_mobile_no: types.maybeNull(types.string),
+      dateTime: types.maybeNull(types.string),
+      contactName: types.maybeNull(types.string),
+      contactMobileNo: types.maybeNull(types.string),
       lat: types.maybeNull(types.number),
       lng: types.maybeNull(types.number),
     }),
