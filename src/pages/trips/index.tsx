@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Children } from 'react';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
-import { navigate } from 'gatsby';
+import { Link, navigate } from 'gatsby';
 import Pagination, { PaginationPropTypes } from '@atlaskit/pagination';
 import { useTranslation } from 'react-i18next';
 import EmptyState from '@atlaskit/empty-state';
@@ -20,10 +20,11 @@ import Rowy from '@paljs/ui/Row';
 import Coly from '@paljs/ui/Col';
 import TableTree, { Cell, Header, Headers, Row, Rows, TableTreeDataHelper } from '@atlaskit/table-tree';
 import { TruckTypeStore } from '../../stores/truck-type-store';
+import Button from '@atlaskit/button';
 
 let uuid = 0;
 
-interface Props {}
+interface Props { }
 const tableTreeHelper = new TableTreeDataHelper({ key: 'id' });
 
 const Trip: React.FC<Props> = observer((props: any) => {
@@ -201,9 +202,11 @@ const Trip: React.FC<Props> = observer((props: any) => {
   return (
     <Page>
       <PageHeader breadcrumbs={breadcrumbs}>{t('trip.management')}</PageHeader>
-      <button onClick={() => navigate('/trips/add')}>ADD TRIP</button>
 
-      <SearchForm onSearch={onSearch} style={{ width: 200 }} />
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <SearchForm onSearch={onSearch} style={{ width: 200 }} />
+        <Button appearance="warning" onClick={() => navigate('/trips/add')}>Add Shipment</Button>
+      </div>
       <TableTree on>
         <Headers>
           <Header width={'15%'}>ID</Header>
@@ -242,7 +245,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
                   onExpand={loadTableData}
                   hasChildren={trips && trips.length > 0}
                 >
-                  <Cell singleLine>{id}</Cell>
+                  <Cell singleLine><Link to={`/trips/${id}`}>{id}</Link></Cell>
                   <Cell>{productName}</Cell>
                   <Cell>{typeName}</Cell>
                   <Cell>{price}</Cell>
@@ -257,9 +260,8 @@ const Trip: React.FC<Props> = observer((props: any) => {
                         '<No Address>'
                       )}
                       <span className="dot">{to?.length > 1 ? '...' : ''}</span>
-                      <span className="fTime">{`${
-                        from?.datetime ? momentFormatDateTime(from?.datetime, loginStore.language) : '-'
-                      }`}</span>
+                      <span className="fTime">{`${from?.datetime ? momentFormatDateTime(from?.datetime, loginStore.language) : '-'
+                        }`}</span>
                       <span className="tTime">
                         {to?.length ? momentFormatDateTime(to[0]?.dateTime, loginStore.language) : '-'}
                       </span>
