@@ -159,9 +159,9 @@ export interface IDestination {
 
 export interface IFromDestination {
   name: string | null;
-  datetime: string | null;
-  contact_name: string | null;
-  contact_mobile_no: string | null;
+  dateTime: string | null;
+  contactName: string | null;
+  contactMobileNo: string | null;
   lat: number;
   lng: number;
 }
