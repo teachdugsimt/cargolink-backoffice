@@ -240,3 +240,12 @@ hr {
 #truck-select-options > div:first-of-type > div:first-of-type {
   margin-left: 30px !important;
 }
+
+#collapse-icon.collapse-show > span:first-of-type > svg:first-of-type {
+  transition: 0.3s;
+}
+
+#collapse-icon.collapse-hide > span:first-of-type > svg:first-of-type {
+  transition: 0.3s;
+  transform: rotateZ(90deg);
+}

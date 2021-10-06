@@ -42,6 +42,84 @@ const JobType = types.model({
   createdAt: types.maybeNull(types.string),
 });
 
+const QuotationType = types.model({
+  id: types.maybeNull(types.string),
+  fullName: types.maybeNull(types.string),
+  avatar: types.maybeNull(AvatarType),
+  truck: types.maybeNull(
+    types.model({
+      id: types.maybeNull(types.string),
+      owner: types.maybeNull(OwnerType),
+      tipper: types.maybeNull(types.boolean),
+      workingZones: types.maybeNull(
+        types.array(
+          types.model({
+            region: types.maybeNull(types.number),
+            province: types.maybeNull(types.number),
+          }),
+        ),
+      ),
+      createdAt: types.maybeNull(types.string),
+      updatedAt: types.maybeNull(types.string),
+      truckType: types.maybeNull(types.number),
+      stallHeight: types.maybeNull(types.string),
+      truckPhotos: types.maybeNull(types.array(types.string)),
+      approveStatus: types.maybeNull(types.string),
+      loadingWeight: types.maybeNull(types.number),
+      registrationNumber: types.maybeNull(types.array(types.string)),
+      phoneNumber: types.maybeNull(types.string),
+    }),
+  ),
+  bookingDatetime: types.maybeNull(types.string),
+});
+
+const TripType = types.model({
+  id: types.maybeNull(types.string),
+  owner: types.maybeNull(OwnerType),
+  price: types.maybeNull(types.number),
+  status: types.maybeNull(types.string),
+  tipper: types.maybeNull(types.boolean),
+  weight: types.maybeNull(types.number),
+  truckId: types.maybeNull(types.string),
+  bookingId: types.maybeNull(types.string),
+  createdAt: types.maybeNull(types.string),
+  priceType: types.maybeNull(types.string),
+  truckType: types.maybeNull(types.number),
+  updatedAt: types.maybeNull(types.string),
+  phoneNumber: types.maybeNull(types.string),
+  stallHeight: types.maybeNull(types.string),
+  workingZones: types.maybeNull(
+    types.array(
+      types.model({
+        region: types.maybeNull(types.number),
+        province: types.maybeNull(types.number),
+      }),
+    ),
+  ),
+  approveStatus: types.maybeNull(types.string),
+  registrationNumber: types.maybeNull(types.array(types.string)),
+});
+
+const JobDetailType = types.model({
+  id: types.maybeNull(types.string),
+  productTypeId: types.maybeNull(types.number),
+  productName: types.maybeNull(types.string),
+  truckType: types.maybeNull(types.string),
+  weight: types.maybeNull(types.number),
+  from: types.maybeNull(DestinationType),
+  to: types.maybeNull(types.array(DestinationType)),
+  owner: types.maybeNull(OwnerType),
+  status: types.maybeNull(types.string),
+  price: types.maybeNull(types.number),
+  priceType: types.maybeNull(types.string),
+  tipper: types.maybeNull(types.boolean),
+  requiredTruckAmount: types.maybeNull(types.number),
+  createdAt: types.maybeNull(types.string),
+  publicAsCgl: types.maybeNull(types.boolean),
+  quotations: types.maybeNull(types.array(QuotationType)),
+  trips: types.maybeNull(types.array(TripType)),
+});
+
 const JobManagement = types.model({
   content: types.maybeNull(types.array(JobType)),
   reRender: types.boolean,
@@ -71,7 +149,7 @@ export const JobStore = types
     jobList: types.maybeNull(JobListManagement),
     data_count: types.maybeNull(types.number),
     isFirstLoad: true,
-    currentJob: types.maybeNull(JobType),
+    currentJob: types.maybeNull(JobDetailType),
     error_response: types.maybeNull(
       types.model({
         title: types.maybeNull(types.string),
@@ -147,6 +225,7 @@ export const JobStore = types
           self.loading = false;
 
           if (response.ok) {
+            console.log('response.data :>> ', response.data);
             self.currentJob = response.data;
           } else {
             self.error_response = {

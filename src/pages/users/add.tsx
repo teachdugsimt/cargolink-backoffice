@@ -44,7 +44,7 @@ interface InputData {
   phoneNumber: string;
   uploadFile?: string;
   email?: string;
-  // userType: string;
+  userType?: string;
 }
 
 const ShowFileName = styled.p`
@@ -101,6 +101,7 @@ const AddUser: React.FC<Props> = observer(() => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneError, setPhoneError] = useState(false);
   const [legalType, setLegalType] = useState<'INDIVIDUAL' | 'JURISTIC'>('INDIVIDUAL');
+  const [userType, setUserType] = useState<'SHIPPER' | 'CARRIER' | 'BOTH'>('SHIPPER');
   const [attachCodes, setAttachCodes] = useState<string[]>([]);
   const [width] = useWindowSize();
 
@@ -118,6 +119,27 @@ const AddUser: React.FC<Props> = observer(() => {
     { name: 'legalType', value: 'JURISTIC', label: t('juristic'), testId: 'juristicItem' },
   ];
 
+  const userTypeOptions: any = [
+    {
+      label: t('userTypeGroup.SHIPPER'),
+      value: 'SHIPPER',
+      testId: 'shipperItem',
+      name: 'shipper',
+    },
+    {
+      label: t('userTypeGroup.CARRIER'),
+      value: 'CARRIER',
+      testId: 'carrierItem',
+      name: 'carrier',
+    },
+    {
+      label: t('userTypeGroup.BOTH'),
+      value: 'BOTH',
+      testId: 'bothItem',
+      name: 'both',
+    },
+  ];
+
   useEffect(() => {
     uploadFileStore.clear();
     return () => {
@@ -130,11 +152,12 @@ const AddUser: React.FC<Props> = observer(() => {
     const payload: CreateUserPayload = {
       fullName: formState.fullName,
       email: formState.email,
-      userType: 'BOTH',
+      userType,
       phoneNumber: `+66${phoneNumber.substr(1)}`,
       legalType,
       url: attachCodes,
     };
+    console.log('Payload :: ', payload);
     const MODAL_TIMEOUT = 1000;
     Swal.fire({
       didOpen: () => {
@@ -234,18 +257,34 @@ const AddUser: React.FC<Props> = observer(() => {
         {({ formProps }) => (
           <form {...formProps} name="add-user" style={{ overflow: 'hidden' }}>
             <div style={groupItemsStyle}>
-              <div>
-                <Field label={t('legalType')} isRequired name="legalType">
-                  {({ fieldProps, error, meta: { valid } }: any) => (
-                    <div id="create-user-legal-type" style={{ display: 'flex', flexDirection: 'row' }}>
-                      <RadioGroup
-                        value={legalType}
-                        options={legalTypeOptions}
-                        onChange={(event: any) => setLegalType(event.target.value)}
-                      />
-                    </div>
-                  )}
-                </Field>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div>
+                  <Field label={t('legalType')} isRequired name="legalType">
+                    {({ fieldProps, error, meta: { valid } }: any) => (
+                      <div id="create-user-legal-type" style={{ display: 'flex', flexDirection: 'row' }}>
+                        <RadioGroup
+                          value={legalType}
+                          options={legalTypeOptions}
+                          onChange={(event: any) => setLegalType(event.target.value)}
+                        />
+                      </div>
+                    )}
+                  </Field>
+                </div>
+
+                <div style={{ paddingLeft: 20 }}>
+                  <Field label={t('userType')} isRequired name="userType">
+                    {({ fieldProps, error, meta: { valid } }: any) => (
+                      <div id="create-user-type" style={{ display: 'flex', flexDirection: 'row' }}>
+                        <RadioGroup
+                          value={userType}
+                          options={userTypeOptions}
+                          onChange={(event: any) => setUserType(event.target.value)}
+                        />
+                      </div>
+                    )}
+                  </Field>
+                </div>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'row' }}>

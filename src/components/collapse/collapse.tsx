@@ -16,7 +16,7 @@ const ICON: CSSProperties = {
   color: '#cfcfcf',
 };
 
-const Collapse = function AutoCompleteTypeahead(props: CollapseProps) {
+const Collapse = function Collapse(props: CollapseProps) {
   const { topic, children, isExpanded = false, containerStyle } = props;
 
   const [open, setOpen] = useState(isExpanded);
@@ -28,7 +28,7 @@ const Collapse = function AutoCompleteTypeahead(props: CollapseProps) {
       <div id="collapse-header" style={mainStyle} onClick={() => setOpen(!open)}>
         <div style={{ flex: '95%' }}>{topic}</div>
         <div style={{ flex: '1' }}>
-          <span style={ICON}>
+          <span id="collapse-icon" className={open ? 'collapse-show' : 'collapse-hide'} style={ICON}>
             <ChevronDownIcon label={'chevron-down'} size={'large'} />
           </span>
         </div>

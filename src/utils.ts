@@ -74,3 +74,13 @@ export const findProvince = (address?: string | null) => {
   const province = list.find((l) => address.includes(l.label));
   return province?.label || address;
 };
+
+export const formatPhoneNumber = (phoneNumberString: string) => {
+  var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+  var match = cleaned.match(/^(66|)?(\d{2})(\d{3})(\d{4})$/);
+  if (match) {
+    var intlCode = match[1] ? '+66 ' : '';
+    return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
+  }
+  return phoneNumberString;
+};
