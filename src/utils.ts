@@ -1,6 +1,6 @@
 import { useState, useLayoutEffect } from 'react';
 import jwt_decode from 'jwt-decode';
-import { provinceListEn, provinceListTh } from './constants/provinces';
+import { provinceListEn, provinceListTh, regionListEn, regionListTh } from './constants/provinces';
 
 export interface IQueryParams {
   [key: string]: string;
@@ -73,6 +73,14 @@ export const findProvince = (address?: string | null) => {
   const list = [...provinceListTh, ...provinceListEn];
   const province = list.find((l) => address.includes(l.label));
   return province?.label || address;
+};
+export const findRegionFromProvince = (address?: string | null) => {
+  if (!address) return null;
+  const list = [...provinceListTh, ...provinceListEn];
+  const province = list.find((l) => address.includes(l.label));
+  console.log('List find province :: ', province);
+  const regionFound = regionListTh.find((re) => re.value == province?.region);
+  return regionFound?.label || address;
 };
 
 export const formatPhoneNumber = (phoneNumberString: string) => {

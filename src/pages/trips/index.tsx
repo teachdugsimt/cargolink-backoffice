@@ -13,7 +13,7 @@ import { TransportationStore } from '../../stores/transportation-store';
 import SearchForm from '../../components/search-form';
 import { IJob, ITrips, ITruck2 } from '../../services/transportation-api';
 import { IProductType } from '../../services/product-type-api';
-import { findProvince } from '../../utils';
+import { findRegionFromProvince } from '../../utils';
 import { momentFormatDateTime } from '../../components/simple-data';
 import * as Paljs from '@paljs/ui';
 import { DynamicTableStateless } from '@atlaskit/dynamic-table';
@@ -21,12 +21,11 @@ import TableTree, { Cell, Header, Headers, Row, Rows, TableTreeDataHelper } from
 import Button from '@atlaskit/button';
 import '../../styles/custom-tbody.css';
 import { ITruckType } from '../../services/truck-type-api';
+import LottieView from 'react-lottie';
 
 let uuid = 0;
 
 const MAIN_COLOR = '#f4f6f9';
-// const HIGHTLIGHT_COLOR = '#fbfbfb'
-const HIGHTLIGHT_COLOR = 'red';
 const BORDER_WIDTH = 2;
 
 const HeaderCrop = {
@@ -86,6 +85,22 @@ const Trip: React.FC<Props> = observer((props: any) => {
   const { masterTypeStore, truckTypesStore, loginStore } = useMst();
   const { pagination, list } = TransportationStore;
   const [itemsss, setitems] = useState<any>(null);
+
+  // const Dots = (data: any) => (<LottieView
+  //   style={{ height: 32, width: 32, backgroundColor: color.backgroundWhite }}
+  //   colorFilters={[{ keypath: 'palette 01', color: data.color }, { keypath: 'palette 02', color: data.color }]}
+  // />)
+  const Dots = (props: any) => (
+    <LottieView
+      options={{
+        autoplay: true,
+        loop: true,
+        animationData: require(`../../images/animations/${props.point}.json`),
+      }}
+      width={30}
+      height={30}
+    />
+  );
 
   useEffect(() => {
     let tmpData = JSON.parse(JSON.stringify(list));
@@ -227,7 +242,6 @@ const Trip: React.FC<Props> = observer((props: any) => {
         console.log('Css Rows :: ', cssRow);
         if (cssRow) {
           cssRow.forEach((el: any) => {
-            // el.style['border-bottom-width'] = '0px';
             el.style.cssText += `width: 100%; maxHeight: 120px; border: 2px solid ${MAIN_COLOR}; margin-top: 15px;
             margin-bottom: 15px; border-radius: 5px`;
           });
@@ -327,13 +341,13 @@ const Trip: React.FC<Props> = observer((props: any) => {
       <TableTree on>
         <Paljs.Col style={HeaderCrop}>
           <Headers>
-            <Header width={'15%'}>ID</Header>
+            <Header width={'13%'}>ID</Header>
             <Header width={'15%'}>Product name</Header>
             <Header width={'15%'}>Product type</Header>
-            <Header width={'15%'}>Price</Header>
+            <Header width={'13%'}>Price</Header>
             <Header width={'11%'}>Price type</Header>
-            <Header width={'32%'}>Route</Header>
-            <Header width={'12%'}>Status</Header>
+            <Header width={'35%'}>Route</Header>
+            <Header width={'11%'}>Status</Header>
           </Headers>
         </Paljs.Col>
         <Rows
@@ -375,20 +389,46 @@ const Trip: React.FC<Props> = observer((props: any) => {
                   <Cell>{priceType}</Cell>
                   <Cell>
                     <Address>
-                      <span className="from">{findProvince(from?.name) || '<No Address>'}</span>
-                      <span className="arrow">{'=>'}</span>
-                      {to?.length ? (
-                        <span className="to">{findProvince(to[0]?.name) || '<No Address>'}</span>
-                      ) : (
-                        '<No Address>'
-                      )}
-                      <span className="dot">{to?.length > 1 ? '...' : ''}</span>
-                      <span className="fTime">{`${
-                        from?.dateTime ? momentFormatDateTime(from?.dateTime, loginStore.language) : '-'
-                      }`}</span>
-                      <span className="tTime">
-                        {to?.length ? momentFormatDateTime(to[0]?.dateTime, loginStore.language) : '-'}
-                      </span>
+                      <div className="container">
+                        <div className="from-root">
+                          <div className="dots">
+                            <Dots point={'loading-point'} />
+                          </div>
+                        </div>
+
+                        <div className="form">
+                          <span className="light-text">
+                            จาก :{' '}
+                            <span style={{ color: 'black' }}>
+                              {findRegionFromProvince(from?.name) || '<No Address>'}
+                            </span>
+                          </span>
+                          <span className="light-text">{`${
+                            from?.dateTime ? momentFormatDateTime(from?.dateTime, loginStore.language) : '-'
+                          }`}</span>
+                        </div>
+                      </div>
+
+                      <div className="container">
+                        <div className="from-root">
+                          <div className="dots">
+                            <Dots point={'delivery-point'} />
+                          </div>
+                        </div>
+                        <div className="form">
+                          <span className="light-text">
+                            ถึง :{' '}
+                            <span style={{ color: 'black' }}>
+                              {findRegionFromProvince(to[0]?.name) || '<No Address>'}
+                            </span>
+                          </span>
+                          <span className="light-text">
+                            {to && Array.isArray(to) && to[0] && to[0].dateTime && to.length
+                              ? momentFormatDateTime(to[0]?.dateTime, loginStore.language)
+                              : '-'}
+                          </span>
+                        </div>
+                      </div>
                     </Address>
                   </Cell>
                   <Cell>{status || '-'}</Cell>
@@ -407,42 +447,38 @@ const Trip: React.FC<Props> = observer((props: any) => {
 });
 export default Trip;
 const Address = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 40px 1fr 40px;
-  grid-template-areas:
-    'from arrow to dot'
-    'fTime arrow tTime dot';
-  gap: 2;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background: red;
 
-  .from {
-    grid-area: from;
-    text-align: right;
+  .from-root {
+    flex-direction: row;
   }
-  .to {
-    grid-area: to;
-    text-align: left;
-  }
-  .fTime {
-    grid-area: fTime;
-    color: #ccc;
-    text-align: right;
-  }
-  .tTime {
-    grid-area: tTime;
-    color: #ccc;
-    text-align: left;
-  }
-  .arrow {
-    grid-area: arrow;
+  .dots {
     display: flex;
+    flex-direction: column;
+    width: 30px;
+    height: 30px;
+    height: 100%;
     justify-content: center;
-    align-items: center;
   }
-  .dot {
-    grid-area: dot;
+
+  .form {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
+    flex-direction: column;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .addr-container {
+    display: flex;
+  }
+
+  .light-text {
+    color: lightgrey;
   }
 `;
