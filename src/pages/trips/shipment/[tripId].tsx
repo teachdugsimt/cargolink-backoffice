@@ -1,6 +1,4 @@
-import React, { useState, useEffect, CSSProperties, useCallback, memo } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import Form, { Field } from '@atlaskit/form';
+import React, { useState, useEffect, CSSProperties } from 'react';
 import Textfield from '@atlaskit/textfield';
 import { useMst } from '../../../stores/root-store';
 import { observer } from 'mobx-react-lite';
@@ -12,14 +10,8 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import Collapse from '../../../components/collapse/collapse';
 import images from '../../../components/Themes/images';
-import ArrowLeftIcon from '@atlaskit/icon/glyph/arrow-left';
-import { DatePicker } from '@atlaskit/datetime-picker';
 import Button from '@atlaskit/button';
-import TrashIcon from '@atlaskit/icon/glyph/trash';
-import LottieView from 'react-lottie';
 import Spinner from '@atlaskit/spinner';
-import SearchIcon from '@atlaskit/icon/glyph/search';
-import MoreIcon from '@atlaskit/icon/glyph/more';
 import Select from 'react-select';
 
 interface LocationProps {
@@ -33,79 +25,12 @@ const LEFT_RIGHT_SPACING: CSSProperties = {
   paddingRight: 10,
 };
 
-const VEHICLE_DETAIL_BOX: CSSProperties = {
+const PRICE_BOX: CSSProperties = {
   backgroundColor: '#fbfbfb',
   width: '100%',
   paddingLeft: 15,
   paddingRight: 15,
-};
-
-const VEHICLE_BACKGROUND_IMGAE: CSSProperties = {
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  right: '-25%',
-  opacity: 0.4,
-  display: 'flex',
-  alignItems: 'baseline',
-};
-
-const TRASH: CSSProperties = {
-  color: '#ff0000',
-  position: 'absolute',
-  right: 0,
-  paddingRight: 15,
-  cursor: 'pointer',
-};
-
-const DROP_BOX_SHOW: CSSProperties = {
-  position: 'relative',
-  marginTop: 15,
-  minHeight: 200,
-  marginLeft: 10,
-  marginRight: 10,
-  marginBottom: 10,
-  border: '1px dashed #cfcfcf',
-  borderRadius: 5,
-  transitionProperty: 'all',
-  transitionDuration: '0.5s',
-  transitionTimingFunction: 'ease',
-};
-
-const DROP_BOX_HIDE: CSSProperties = {
-  minHeight: 0,
-  transitionProperty: 'all',
-  transitionDuration: '0.5s',
-  transitionTimingFunction: 'ease',
-  maxHeight: 735,
-  overflowX: 'scroll',
-};
-
-const DROP_BOX_CONTENT: CSSProperties = {
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0,
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-};
-
-const SEARCH_ICON: CSSProperties = {
-  position: 'absolute',
-  left: 9,
-  top: 7,
-  color: '#cfcfcf',
-  zIndex: 99,
-};
-
-const LOADING_ICON: CSSProperties = {
-  position: 'absolute',
-  right: 50,
-  top: 5,
-  color: '#cfcfcf',
-  zIndex: 99,
+  marginBottom: 15,
 };
 
 const TRIANGLE_TOPLEFT: CSSProperties = {
@@ -119,56 +44,11 @@ const TRIANGLE_TOPLEFT: CSSProperties = {
   left: 0,
 };
 
-const NEW_ICON: CSSProperties = {
-  position: 'absolute',
-  top: -14,
-  left: -1,
+const INPUT_FORM: CSSProperties = {
+  flex: '100%',
+  display: 'flex',
+  marginBottom: 20,
 };
-
-const TruckAnimate = () => (
-  <LottieView
-    options={{
-      autoplay: true,
-      loop: true,
-      animationData: require('../../../images/animations/trruck-loading.json'),
-    }}
-  />
-);
-
-const Dots = () => (
-  <LottieView
-    options={{
-      autoplay: true,
-      loop: true,
-      animationData: require('../../../images/animations/dots-loading.json'),
-    }}
-    width={60}
-    height={40}
-  />
-);
-
-const Image = memo(
-  ({ src, id, onError }: any) => (
-    <img
-      src={src}
-      style={{
-        width: 25,
-        borderRadius: '50%',
-        backgroundColor: '#ebeef3',
-        padding: 2,
-        display: 'flex',
-        alignItems: 'center',
-      }}
-      onError={onError}
-    />
-  ),
-  (prevProps, nextProps) => {
-    if (prevProps.id === nextProps.id) {
-      return true;
-    }
-    return false;
-  },
-);
 
 const Header = ({ text }: any) => (
   <>
@@ -177,48 +57,8 @@ const Header = ({ text }: any) => (
   </>
 );
 
-const reorder = (list: [], startIndex: number, endIndex: number): object => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
-};
-
-const move = (source: any, destination: any, droppableSource: any, droppableDestination: any): {} => {
-  const sourceClone = Array.from(source);
-  const destClone = Array.from(destination);
-  const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-  destClone.splice(droppableDestination.index, 0, removed);
-
-  let result: any = {};
-  result[droppableSource.droppableId] = sourceClone;
-  result[droppableDestination.droppableId] = destClone;
-
-  return result;
-};
-
-const getItemStyle = (isDragging: boolean, draggableStyle: any): CSSProperties => ({
-  userSelect: 'none',
-  padding: '5px 15px',
-  margin: `0 0 15px 0`,
-  borderRadius: 5,
-  position: 'relative',
-  overflow: 'hidden',
-  background: isDragging ? '#ffc107' : '#fff',
-  ...draggableStyle,
-});
-
-const getListStyle = (isDraggingOver: boolean): CSSProperties => ({
-  background: isDraggingOver ? 'lightblue' : '#ebeef3',
-  padding: '15px 15px 5px 15px',
-  margin: '3px',
-  flex: 1,
-  borderRadius: 5,
-});
-
 const Location = ({ content, header, img }: LocationProps) => (
-  <div style={{ display: 'flex', alignItems: 'center' }}>
+  <div style={{ display: 'flex', alignItems: 'baseline' }}>
     <div style={{ flex: '5%', display: 'flex' }}>
       <img src={images[img]} style={{ width: 16, borderRadius: '50%', backgroundColor: '#ebeef3', padding: 2 }} />
     </div>
@@ -234,11 +74,13 @@ const Detail = ({ header, content, style = {} }: any) => (
   </div>
 );
 
-const DetailSmall = ({ header, content, style = {} }: any) => (
-  <div style={style}>
-    <Label style={{ margin: '5px 0' }}>{`${header} :`}</Label>
-    <ValueSmall>{content}</ValueSmall>
-  </div>
+const InputNumber = ({ label, onChange }: any) => (
+  <>
+    <Label style={{ flex: 2 }}>{`${label} :`}</Label>
+    <div style={{ flex: 1 }}>
+      <Textfield placeholder="-" type="number" min="0" onChange={onChange} />
+    </div>
+  </>
 );
 
 interface MasterTypeProps {
@@ -254,21 +96,20 @@ interface ITruckTypeSelectedOptionProps {
 
 interface Props {}
 
-let truckPage: number = 1;
-
-const UpdateTrip: React.FC<Props> = observer((props: any) => {
+const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
   const { jobStore, truckStore, truckTypesStore, productTypesStore } = useMst();
   const { t } = useTranslation();
-  const [state, setState] = useState<any>({
-    truckSelected: [],
-    trucks: [],
-  });
   const [truckTypes, setTruckTypes] = useState<MasterTypeProps | any>({});
   const [truckTypeSelectedOption, setTruckTypeSelectedOption] = useState<Array<ITruckTypeSelectedOptionProps>>([]);
   const [productTypes, setProductTypes] = useState<MasterTypeProps | any>({});
-  const [searchTruck, setSearchTruck] = useState<any>('');
-  const [isDragStart, setIsDragStart] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState('none');
+
+  const breadcrumbs = (
+    <Breadcrumbs onExpand={() => {}}>
+      <BreadcrumbsItem onClick={() => navigate('/trips')} text={t('trip.management')} key="trips-management" />
+      <BreadcrumbsItem text={'Update trip information'} key="job-info" />
+    </Breadcrumbs>
+  );
 
   useEffect(() => {
     return () => {
@@ -280,26 +121,6 @@ const UpdateTrip: React.FC<Props> = observer((props: any) => {
   useEffect(() => {
     // jobStore.getJobById({ jobId: '3K1N5WL0' });
   }, [props.tripId]);
-
-  useEffect(() => {
-    if (jobStore.currentJob) {
-      const jobDetail = JSON.parse(JSON.stringify(jobStore.currentJob));
-      const trucks: any = [];
-      if (jobDetail?.trips) {
-        const truckList = jobDetail.trips.map((trip: any) => ({ ...trip, old: true }));
-        trucks.push(...truckList);
-      } else if (jobDetail?.quotations) {
-        const truckList = jobDetail.quotations.map((quot: any) => ({ ...quot.truck, old: true }));
-        trucks.push(...truckList);
-      }
-
-      trucks.length &&
-        setState((prev: any) => ({
-          ...prev,
-          truckSelected: trucks,
-        }));
-    }
-  }, [JSON.stringify(jobStore.currentJob)]);
 
   useEffect(() => {
     if (!truckTypesStore.data) {
@@ -337,136 +158,6 @@ const UpdateTrip: React.FC<Props> = observer((props: any) => {
       setProductTypes(newProductType);
     }
   }, [productTypesStore.data]);
-
-  useEffect(() => {
-    if (truckStore.truckList?.content?.length) {
-      setState((prev: any) => ({
-        ...prev,
-        trucks: JSON.parse(JSON.stringify(truckStore.truckList?.content)),
-      }));
-    }
-  }, [JSON.stringify(truckStore.truckList)]);
-
-  const droppableIds: any = {
-    droppable1: 'trucks',
-    droppable2: 'truckSelected',
-  };
-
-  const breadcrumbs = (
-    <Breadcrumbs onExpand={() => {}}>
-      <BreadcrumbsItem onClick={() => navigate('/trips')} text={t('trip.management')} key="trips-management" />
-      <BreadcrumbsItem text={t('job.info')} key="job-info" />
-    </Breadcrumbs>
-  );
-
-  const getList = (id: string): any => state[droppableIds[id]];
-
-  const onDragEnd = (result: any) => {
-    setIsDragStart(false);
-    const { source, destination } = result;
-
-    // dropped outside the list
-    if (!destination) {
-      return;
-    }
-
-    if (source.droppableId === destination.droppableId) {
-      const items: object = reorder(getList(source.droppableId), source.index, destination.index);
-
-      let copiedState: any = Object.assign({}, state);
-
-      if (source.droppableId === 'droppable2') {
-        copiedState.truckSelected = items;
-      } else if (source.droppableId === 'droppable1') {
-        copiedState.trucks = items;
-      }
-
-      setState(copiedState);
-    } else {
-      const result: any = move(getList(source.droppableId), getList(destination.droppableId), source, destination);
-
-      setState({
-        trucks: result.droppable1 ? result.droppable1 : state.trucks,
-        truckSelected: result.droppable2 ? result.droppable2 : state.truckSelected,
-      });
-    }
-  };
-
-  const onChangeValueTruck = (e: any) => {
-    const value = e.target.value;
-    setSearchTruck(value);
-  };
-
-  const onSubmitTruck = (truckTypeId?: number) => {
-    if (!truckTypeId) {
-      const truckOptions = truckTypeSelectedOption;
-      if (truckOptions[truckOptions.length - 1].value.includes('truck-selected-')) {
-        truckOptions.pop();
-      }
-      const value = `truck-selected-${Math.floor(Date.now() / 1000)}`;
-      truckOptions.push({
-        value: value,
-        label: searchTruck,
-        isDisabled: true,
-      });
-      setTruckTypeSelectedOption(truckOptions);
-      setSelectedOption(value);
-    }
-    truckStore.clearTrucks();
-    truckStore.getTrucksListWithoutEmptyContent({
-      page: 1,
-      descending: true,
-      ...(truckTypeId ? { truckTypes: JSON.stringify([truckTypeId]) } : { searchText: searchTruck }),
-    });
-    truckPage = 1;
-  };
-
-  const loadMoreTruck = (truckTypeId?: number) => {
-    truckStore.getTrucksListWithoutEmptyContent({
-      page: ++truckPage,
-      descending: true,
-      ...(truckTypeId ? { truckTypes: JSON.stringify([truckTypeId]) } : { searchText: searchTruck }),
-    });
-  };
-
-  const onSelectedTruckOptions = (e: any) => {
-    setSelectedOption(e.value);
-    setSearchTruck('');
-    onSubmitTruck(+e.value);
-  };
-
-  const onImageError = (e: any) => {
-    e.target.onerror = null;
-    e.target.src = images.pinDrop;
-  };
-
-  const removeTruck = (truckId: string) => {
-    console.log('truckId :>> ', truckId);
-    const truckDetail = state.truckSelected.find((truck: any) => truck.id === truckId);
-    const newTruckList = state.trucks;
-    newTruckList.push(truckDetail);
-
-    const removeTruckList = state.truckSelected.filter((truck: any) => truck.id !== truckId);
-
-    setState({
-      trucks: newTruckList,
-      truckSelected: removeTruckList,
-    });
-  };
-
-  const truckDroppable = {
-    droppableId: 'droppable1',
-    listId: 'trucks',
-    title: 'Search trucks',
-    onChange: onChangeValueTruck,
-    onSubmit: onSubmitTruck,
-  };
-
-  const truckSelectedDroppable = {
-    droppableId: 'droppable2',
-    listId: 'truckSelected',
-    title: '',
-  };
 
   console.log('truckStore.loading :>> ', truckStore.loading);
 
@@ -687,12 +378,58 @@ const UpdateTrip: React.FC<Props> = observer((props: any) => {
       },
     ],
   };
+
+  const truckDetail = {
+    id: '9KP9Q3ZR',
+    approveStatus: 'INACTIVE',
+    loadingWeight: 1,
+    registrationNumber: ['GG-wp52'],
+    stallHeight: 'LOW',
+    tipper: false,
+    truckType: 10,
+    createdAt: '2021-09-23T08:13:46.000Z',
+    updatedAt: '2021-09-29T00:23:33.000Z',
+    quotationNumber: '0',
+    workingZones: [
+      {
+        region: 2,
+        province: 46,
+      },
+      {
+        region: 2,
+        province: 47,
+      },
+    ],
+    owner: {
+      id: 612,
+      fullName: 'Art tist zysa',
+      companyName: 'Art tist zysa',
+      email: 'arttistzys@gmail.com',
+      mobileNo: '+66929818252',
+      avatar: {
+        object:
+          '8e4aca19957a4f63469e9145092ba38ddeeb7f1b8ceeebe7b690fa77aac6a89b49d5edaaca619a777c9b10c2a4729ea0e4aba210712c6c2e176ecb460509828a',
+      },
+      userId: 'DLG448ZX',
+    },
+  };
+
+  const bankAccounts = [
+    {
+      label: 'บัญชี 1111111',
+      value: '1',
+    },
+    {
+      label: 'บัญชี 2222222',
+      value: '2',
+    },
+  ];
   console.log('JSON.parse(JSON.stringify(jobStore.currentJob)) :>> ', JSON.parse(JSON.stringify(jobStore.currentJob)));
   console.log('jobDetail :>> ', jobDetail);
 
   return (
     <Page>
-      <PageHeader breadcrumbs={breadcrumbs}>{t('job.info')}</PageHeader>
+      <PageHeader breadcrumbs={breadcrumbs}>{'Update trip information'}</PageHeader>
       <ButtonGroup>
         <ButtonBack onClick={() => navigate('/trips')}>{t('back')}</ButtonBack>
         <ButtonConfrim>{t('confirm')}</ButtonConfrim>
@@ -705,10 +442,10 @@ const UpdateTrip: React.FC<Props> = observer((props: any) => {
               <Box style={{ position: 'relative', overflow: 'hidden', marginTop: 5 }}>
                 <Collapse
                   isExpanded
-                  topic={<Header text={'งานที่เลือก'} />}
+                  topic={<Header text={'รายละเอียดงาน'} />}
                   children={
                     <Row style={LEFT_RIGHT_SPACING}>
-                      <Col display={'flex'} flex={1} flexFlow={'row wrap'}>
+                      <Col display={'flex'} flex={1} flexFlow={'row wrap'} style={{ paddingTop: 15 }}>
                         <Col flex={'0 1 calc(33.33% - 8px)'}>
                           <Detail
                             header={'ประเภท'}
@@ -740,30 +477,79 @@ const UpdateTrip: React.FC<Props> = observer((props: any) => {
                           ))}
                         </div>
 
-                        <Box style={VEHICLE_DETAIL_BOX}>
-                          <div style={{ display: 'flex' }}>
+                        <Label>{'ข้อมูลสินค้า :'}</Label>
+                        <Box style={PRICE_BOX}>
+                          <div style={{ display: 'flex', flexFlow: 'row wrap', padding: 10 }}>
+                            <div style={INPUT_FORM}>
+                              <InputNumber
+                                label={'ราคาต่อตัน'}
+                                onChange={(e: any) => console.log(e.currentTarget.value)}
+                              />
+                            </div>
+
                             <Detail
-                              header={'ประเภทรถ'}
+                              header={'จำนวนเงิน'}
                               content={
-                                truckTypes[jobDetail?.truckType] ??
-                                (Object.keys(truckTypes)?.length ? '-' : <Spinner size="medium" />)
+                                <>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    90
+                                  </ValueSmall>
+                                  <ValueSmall>(น้ำหนักลง) x</ValueSmall>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    200
+                                  </ValueSmall>
+                                  <ValueSmall>(ราคาต่อตัน) =</ValueSmall>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    18,000
+                                  </ValueSmall>
+                                  <ValueSmall>บาท</ValueSmall>
+                                </>
                               }
-                              style={{ flex: 1 }}
+                              style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
                             />
 
                             <Detail
-                              header={'จำนวนรถที่ต้องการ'}
-                              content={`${jobDetail?.requiredTruckAmount ?? '-'} คัน`}
-                              style={{ flex: 1, color: '#ffc107' }}
+                              header={'ค่าธรรมเนียม'}
+                              content={
+                                <>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    18,000
+                                  </ValueSmall>
+                                  <ValueSmall>(จำนวนเงิน) x</ValueSmall>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    1%
+                                  </ValueSmall>
+                                  <ValueSmall>{'='}</ValueSmall>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    180
+                                  </ValueSmall>
+                                  <ValueSmall>บาท</ValueSmall>
+                                </>
+                              }
+                              style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
                             />
 
                             <Detail
-                              header={'การลงสินค้า'}
-                              content={jobDetail?.tipper ? 'ดั้มพ์' : 'ไม่ดั้มพ์'}
-                              style={{ flex: 1 }}
+                              header={'สุทธิ'}
+                              content={
+                                <>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    17,820
+                                  </ValueSmall>
+                                  <ValueSmall>บาท</ValueSmall>
+                                </>
+                              }
+                              style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
                             />
+                          </div>
+                        </Box>
 
-                            <Detail header={'คอก'} content={'-'} style={{ flex: 1 }} />
+                        <Label>{'ข้อมูลการรับเงิน :'}</Label>
+                        <Box style={PRICE_BOX}>
+                          <div style={{ display: 'flex' }}>
+                            <Detail header={'สถานะ'} content={'รับเงินแล้ว'} style={{ flex: 1 }} />
+                            <Detail header={'วันที่วางบิล'} content={'12/10/21'} style={{ flex: 1 }} />
+                            <Detail header={'วันที่รับเงิน'} content={'12/10/21'} style={{ flex: 1 }} />
                           </div>
                         </Box>
                       </Col>
@@ -776,20 +562,141 @@ const UpdateTrip: React.FC<Props> = observer((props: any) => {
         </GridColumn>
 
         <GridColumn medium={6}>
-          <div
-            style={{
-              ...LEFT_RIGHT_SPACING,
-              maxHeight: 1290,
-              ...(state.trucks?.length >= 2 ? { overflowX: 'scroll' } : undefined),
-            }}
-          ></div>
+          <div style={LEFT_RIGHT_SPACING}>
+            <div>
+              <Box style={{ position: 'relative', overflow: 'hidden', marginTop: 5 }}>
+                <Collapse
+                  isExpanded
+                  topic={<Header text={'รายละเอียดรถ'} />}
+                  children={
+                    <Row style={LEFT_RIGHT_SPACING}>
+                      <Col display={'flex'} flex={1} flexFlow={'row wrap'} style={{ paddingTop: 15 }}>
+                        <Col flex={'100%'}>
+                          <h3>{truckDetail.registrationNumber ? truckDetail.registrationNumber.join(' / ') : '-'}</h3>
+                        </Col>
+                        <Col flex={'0 1 calc(50% - 8px)'}>
+                          <Detail header={'พนักงานขับรถ'} content={truckDetail?.owner.fullName} />
+                        </Col>
+                        <Col flex={'0 1 calc(50% - 8px)'}>
+                          <Detail header={'วันที่'} content={jobDetail?.from?.dateTime} />
+                        </Col>
+
+                        <Label>{'ข้อมูลสินค้า'}</Label>
+                        <Box style={PRICE_BOX}>
+                          <div style={{ display: 'flex', flexFlow: 'row wrap', padding: 10 }}>
+                            <div style={INPUT_FORM}>
+                              <InputNumber
+                                label={'น้ำหนักขึ้น'}
+                                onChange={(e: any) => console.log(e.currentTarget.value)}
+                              />
+                            </div>
+
+                            <div style={INPUT_FORM}>
+                              <InputNumber
+                                label={'น้ำหนักลง'}
+                                onChange={(e: any) => console.log(e.currentTarget.value)}
+                              />
+                            </div>
+
+                            <div style={INPUT_FORM}>
+                              <InputNumber
+                                label={'ราคาต่อตัน'}
+                                onChange={(e: any) => console.log(e.currentTarget.value)}
+                              />
+                            </div>
+
+                            <Detail
+                              header={'จำนวนเงิน'}
+                              content={
+                                <>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    90
+                                  </ValueSmall>
+                                  <ValueSmall>(น้ำหนักลง) x</ValueSmall>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    200
+                                  </ValueSmall>
+                                  <ValueSmall>(ราคาต่อตัน) =</ValueSmall>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    18,000
+                                  </ValueSmall>
+                                  <ValueSmall>บาท</ValueSmall>
+                                </>
+                              }
+                              style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
+                            />
+
+                            <Detail
+                              header={'ค่าธรรมเนียม'}
+                              content={
+                                <>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    18,000
+                                  </ValueSmall>
+                                  <ValueSmall>(จำนวนเงิน) x</ValueSmall>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    1%
+                                  </ValueSmall>
+                                  <ValueSmall>{'='}</ValueSmall>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    180
+                                  </ValueSmall>
+                                  <ValueSmall>บาท</ValueSmall>
+                                </>
+                              }
+                              style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
+                            />
+
+                            <Detail
+                              header={'สุทธิ'}
+                              content={
+                                <>
+                                  <ValueSmall color={'#ffc107'} fontSize={16}>
+                                    17,820
+                                  </ValueSmall>
+                                  <ValueSmall>บาท</ValueSmall>
+                                </>
+                              }
+                              style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
+                            />
+                          </div>
+                        </Box>
+
+                        <Label>{'ข้อมูลการจ่ายเงิน :'}</Label>
+                        <Box style={PRICE_BOX}>
+                          <Col display={'flex'} flex={1} flexFlow={'row wrap'} style={{ paddingTop: 15 }}>
+                            <div style={{ flex: '100%', display: 'flex', alignItems: 'center', marginBottom: 20 }}>
+                              <Label style={{ flex: 1 }}>{`${'เลขบัญชี'} :`}</Label>
+                              <div style={{ flex: 2 }}>
+                                <Select
+                                  value={bankAccounts.filter((option: any) => {
+                                    return option.value === selectedOption;
+                                  })}
+                                  options={bankAccounts}
+                                  onChange={(e: any) => setSelectedOption(e.value)}
+                                  placeholder={'ระบุบัญชี'}
+                                  id={'truck-select-bank-account'}
+                                />
+                              </div>
+                            </div>
+                            <Detail header={'วันที่วางบิล'} content={'12/10/21'} style={{ flex: 1 }} />
+                            <Detail header={'วันที่รับเงิน'} content={'12/10/21'} style={{ flex: 1 }} />
+                          </Col>
+                        </Box>
+                      </Col>
+                    </Row>
+                  }
+                />
+              </Box>
+            </div>
+          </div>
         </GridColumn>
       </Grid>
     </Page>
   );
 });
 
-export default UpdateTrip;
+export default UpdateTripInfo;
 
 const Row = styled.div`
   display: flex;
@@ -822,9 +729,10 @@ const Value = styled.p`
   margin: 10px 0 10px 0;
 `;
 
-const ValueSmall = styled.span`
-  font-size: 14px;
-  margin: 5px 0;
+const ValueSmall = styled.span<{ color?: string; fontSize?: number }>`
+  font-size: ${({ fontSize }) => fontSize ?? 13}px;
+  padding: 0 4px;
+  color: ${({ color }) => color ?? '#999'};
 `;
 
 const ButtonGroup = styled.div`

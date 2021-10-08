@@ -21,6 +21,7 @@ import Spinner from '@atlaskit/spinner';
 import SearchIcon from '@atlaskit/icon/glyph/search';
 import MoreIcon from '@atlaskit/icon/glyph/more';
 import Select from 'react-select';
+import { TripStore } from '../../stores/trip-store';
 
 interface LocationProps {
   header: string;
@@ -141,21 +142,6 @@ const Dots = () => (
       autoplay: true,
       loop: true,
       animationData: require('../../images/animations/dots-loading.json'),
-    }}
-    width={60}
-    height={40}
-  />
-);
-
-const New = () => (
-  <LottieView
-    options={{
-      autoplay: true,
-      loop: true,
-      animationData: require('../../images/animations/new.json'),
-      rendererSettings: {
-        clearCanvas: true,
-      },
     }}
     width={60}
     height={40}
@@ -293,12 +279,13 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
   }, []);
 
   useEffect(() => {
-    jobStore.getJobById({ jobId: props.jobId });
+    // jobStore.getJobById({ jobId: props.jobId });
+    TripStore.getJobDetail(props.jobId);
   }, [props.jobId]);
 
   useEffect(() => {
-    if (jobStore.currentJob) {
-      const jobDetail = JSON.parse(JSON.stringify(jobStore.currentJob));
+    if (TripStore.jobDetail) {
+      const jobDetail = JSON.parse(JSON.stringify(TripStore.jobDetail));
       const trucks: any = [];
       if (jobDetail?.trips) {
         const truckList = jobDetail.trips.map((trip: any) => ({ ...trip, old: true }));
@@ -314,7 +301,7 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
           truckSelected: trucks,
         }));
     }
-  }, [JSON.stringify(jobStore.currentJob)]);
+  }, [JSON.stringify(TripStore.jobDetail)]);
 
   useEffect(() => {
     if (!truckTypesStore.data) {
@@ -485,8 +472,8 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
 
   console.log('truckStore.loading :>> ', truckStore.loading);
 
-  const jobDetail = jobStore.currentJob ? JSON.parse(JSON.stringify(jobStore.currentJob)) : {};
-  console.log('JSON.parse(JSON.stringify(jobStore.currentJob)) :>> ', JSON.parse(JSON.stringify(jobStore.currentJob)));
+  const jobDetail = TripStore.jobDetail ? JSON.parse(JSON.stringify(TripStore.jobDetail)) : {};
+  console.log('JSON.parse(JSON.stringify(TripStore.jobDetail)) :>> ', JSON.parse(JSON.stringify(TripStore.jobDetail)));
   console.log('jobDetail :>> ', jobDetail);
 
   return (
