@@ -450,7 +450,6 @@ const Address = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background: red;
 
   .from-root {
     flex-direction: row;
