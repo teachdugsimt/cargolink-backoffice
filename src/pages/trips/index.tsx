@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Children } from 'react';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
-import { navigate } from 'gatsby';
+import { Link, navigate } from 'gatsby';
 import Pagination, { PaginationPropTypes } from '@atlaskit/pagination';
 import { useTranslation } from 'react-i18next';
 import EmptyState from '@atlaskit/empty-state';
@@ -20,6 +20,7 @@ import Rowy from '@paljs/ui/Row';
 import Coly from '@paljs/ui/Col';
 import TableTree, { Cell, Header, Headers, Row, Rows, TableTreeDataHelper } from '@atlaskit/table-tree';
 import { TruckTypeStore } from '../../stores/truck-type-store';
+import Button from '@atlaskit/button';
 
 let uuid = 0;
 
@@ -131,7 +132,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
     TransportationStore.getTransportationList({
       page: 1,
       rowsPerPage: 10,
-      ...(searchText ? { searchText } : undefined),
+      ...(searchText ? { where: { fullTextSearch: searchText } } : undefined),
     });
   }, []);
 
@@ -149,6 +150,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
   };
 
   const handlePagination = (event: any) => {
+    setitems(null);
     event.persist();
     setTimeout(() => {
       console.log('change page to :: ', event.target?.innerText);
@@ -159,13 +161,14 @@ const Trip: React.FC<Props> = observer((props: any) => {
       TransportationStore.getTransportationList({
         page: currentPage,
         rowsPerPage: tmpPagination.size,
-        ...(searchText ? { searchText } : undefined),
+        ...(searchText ? { where: { fullTextSearch: searchText } } : undefined),
       });
     }, 200);
   };
 
   const [searchText, setsearchText] = useState<string | null>(null);
   const onSearch = (value: string) => {
+    setitems(null);
     console.log('Value :: ', value);
     setsearchText(value);
     const tmpPagination = JSON.parse(JSON.stringify(TransportationStore.pagination));
@@ -175,7 +178,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
     TransportationStore.getTransportationList({
       page: 1,
       rowsPerPage: tmpPagination.size,
-      ...(value ? { searchText: value } : undefined),
+      ...(value ? { where: { fullTextSearch: value } } : undefined),
     });
   };
 
@@ -201,9 +204,13 @@ const Trip: React.FC<Props> = observer((props: any) => {
   return (
     <Page>
       <PageHeader breadcrumbs={breadcrumbs}>{t('trip.management')}</PageHeader>
-      <button onClick={() => navigate('/trips/add')}>ADD TRIP</button>
 
-      <SearchForm onSearch={onSearch} style={{ width: 200 }} />
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <SearchForm onSearch={onSearch} style={{ width: 200 }} />
+        <Button appearance="warning" onClick={() => navigate('/trips/add')}>
+          Add Shipment
+        </Button>
+      </div>
       <TableTree on>
         <Headers>
           <Header width={'15%'}>ID</Header>
@@ -242,7 +249,9 @@ const Trip: React.FC<Props> = observer((props: any) => {
                   onExpand={loadTableData}
                   hasChildren={trips && trips.length > 0}
                 >
-                  <Cell singleLine>{id}</Cell>
+                  <Cell singleLine>
+                    <Link to={`/trips/${id}`}>{id}</Link>
+                  </Cell>
                   <Cell>{productName}</Cell>
                   <Cell>{typeName}</Cell>
                   <Cell>{price}</Cell>
@@ -258,7 +267,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
                       )}
                       <span className="dot">{to?.length > 1 ? '...' : ''}</span>
                       <span className="fTime">{`${
-                        from?.datetime ? momentFormatDateTime(from?.datetime, loginStore.language) : '-'
+                        from?.dateTime ? momentFormatDateTime(from?.dateTime, loginStore.language) : '-'
                       }`}</span>
                       <span className="tTime">
                         {to?.length ? momentFormatDateTime(to[0]?.dateTime, loginStore.language) : '-'}

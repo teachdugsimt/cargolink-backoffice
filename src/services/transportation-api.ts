@@ -140,18 +140,12 @@ export interface TransportationParams {
   page: number;
   rowsPerPage?: number;
   descending?: boolean;
-  productName?: string;
-  owner?: string;
-  productType?: string;
-  from?: string; //? name in Thai
-  to?: string; //? name in Thai
-  weight?: number;
-  minWeight?: number;
-  maxWeight?: number;
-  sortBy?: string;
-  where?: any;
-  truckType?: string;
-  searchText?: string;
+  where?: {
+    truckType?: string;
+    fullTextSearch?: string;
+    trips?: 'NULL' | 'NOT_NULL';
+    id?: string;
+  };
 }
 
 export interface IDestination {
@@ -165,9 +159,9 @@ export interface IDestination {
 
 export interface IFromDestination {
   name: string | null;
-  datetime: string | null;
-  contact_name: string | null;
-  contact_mobile_no: string | null;
+  dateTime: string | null;
+  contactName: string | null;
+  contactMobileNo: string | null;
   lat: number;
   lng: number;
 }
