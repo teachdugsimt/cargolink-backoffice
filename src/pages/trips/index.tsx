@@ -15,19 +15,73 @@ import { IJob, ITrips, ITruck2 } from '../../services/transportation-api';
 import { IProductType } from '../../services/product-type-api';
 import { findProvince } from '../../utils';
 import { momentFormatDateTime } from '../../components/simple-data';
-import { formatPhoneNumber } from '../../utils';
-import Rowy from '@paljs/ui/Row';
-import Coly from '@paljs/ui/Col';
+import * as Paljs from '@paljs/ui';
+import { DynamicTableStateless } from '@atlaskit/dynamic-table';
 import TableTree, { Cell, Header, Headers, Row, Rows, TableTreeDataHelper } from '@atlaskit/table-tree';
-import { TruckTypeStore } from '../../stores/truck-type-store';
 import Button from '@atlaskit/button';
+import '../../styles/custom-tbody.css';
+import { ITruckType } from '../../services/truck-type-api';
 
 let uuid = 0;
+
+const MAIN_COLOR = '#f4f6f9';
+// const HIGHTLIGHT_COLOR = '#fbfbfb'
+const HIGHTLIGHT_COLOR = 'red';
+const BORDER_WIDTH = 2;
+
+const HeaderCrop = {
+  backgroundColor: MAIN_COLOR,
+  borderRadius: 7.5,
+  paddingTop: 10,
+  paddingBottom: 10,
+};
+
+function createKey(input: string) {
+  return input ? input.replace(/^(the|a|an)/, '').replace(/\s/g, '') : input;
+}
+const createHead = (withWidth: boolean) => {
+  return {
+    // key: "user_truck_doc",
+    cells: [
+      {
+        key: 'licensePlate',
+        content: <span className="text-padding-left">License Plate</span>,
+        width: withWidth ? 20 : undefined,
+      },
+      {
+        key: 'truckId',
+        content: 'Truck ID',
+        width: withWidth ? 15 : undefined,
+      },
+      {
+        key: 'owner',
+        content: 'Owner',
+        width: withWidth ? 20 : undefined,
+      },
+      {
+        key: 'truckType',
+        content: 'Truck type',
+        width: withWidth ? 30 : undefined,
+      },
+      {
+        key: 'tripStatus',
+        content: 'Trip status',
+        width: withWidth ? 20 : undefined,
+      },
+      {
+        key: 'price',
+        content: 'Price',
+        width: withWidth ? 20 : undefined,
+      },
+    ],
+  };
+};
 
 interface Props {}
 const tableTreeHelper = new TableTreeDataHelper({ key: 'id' });
 
 const Trip: React.FC<Props> = observer((props: any) => {
+  const head = createHead(true);
   const { t } = useTranslation();
   const { masterTypeStore, truckTypesStore, loginStore } = useMst();
   const { pagination, list } = TransportationStore;
@@ -40,59 +94,98 @@ const Trip: React.FC<Props> = observer((props: any) => {
     }
   }, [JSON.stringify(list)]);
 
-  const getHeight = (stallHeight: string | null) => {
-    switch (stallHeight) {
-      case 'HEIGHT':
-        return t('HIGH');
-      case 'MEDIUM':
-        return t('MEDIUM');
-      case 'LOW':
-        return t('LOW');
-      default:
-        return '-';
-    }
+  const generateSubTreeRows = (tripList: ITrips[]) => {
+    const rows = tripList.map((tripItem: ITrips, index: number) => {
+      const { truck } = tripItem;
+      const registrationKey: string = truck?.registrationNumber
+        ? truck.registrationNumber.join(',')
+        : 'registrationNumber';
+      const tripId: string = tripItem?.id || '';
+      const masterTruckData: ITruckType[] | null = JSON.parse(JSON.stringify(truckTypesStore.data));
+
+      setTimeout(() => {
+        const subtreeTableCsss: any = document.querySelector('.sc-ArjOu');
+        const rowsCss: any = document.querySelectorAll('.sc-carGAA');
+        if (subtreeTableCsss) subtreeTableCsss.style.cssText += `border-bottom: 0px;`;
+        if (rowsCss)
+          rowsCss.forEach((eachRow: any, indexRow: number) => {
+            if (indexRow != rowsCss.length - 1) {
+              eachRow.style.cssText += `border-bottom: ${BORDER_WIDTH}px solid ${MAIN_COLOR};`;
+            }
+          });
+      }, 100);
+
+      const truckTypeParse = masterTruckData
+        ? masterTruckData.find((e) => e.id == tripItem?.truck?.truckType)?.name
+        : '';
+      return {
+        key: `row-${index}-${createKey(registrationKey)}`,
+        cells: [
+          {
+            key: `${index}-${createKey(registrationKey)}`,
+            content: (
+              <span className="text-padding-left">
+                {truck?.registrationNumber ? truck.registrationNumber.join(',') : ''}
+              </span>
+            ),
+          },
+          {
+            key: createKey(tripId),
+            content: tripId,
+          },
+          {
+            key: 'owner' + `-${index}`,
+            content: tripItem?.truck?.owner?.fullName || '',
+          },
+          {
+            key: `truck-type-${index}-${truckTypeParse}}`,
+            content: truckTypeParse,
+          },
+          {
+            key: `status-${index}-${createKey(tripItem.status)}`,
+            content: tripItem.status,
+          },
+          {
+            key: `price-trip-${tripItem.price}`,
+            content: tripItem.price,
+          },
+        ],
+      };
+    });
+    return rows;
+  };
+
+  const _renderSubTreeTable = (subItem: ITrips[]) => {
+    return (
+      <Paljs.Col breakPoint={{ xs: 11.6, md: 11.6 }} style={{}}>
+        <Paljs.Col breakPoint={{ xs: 12, md: 12 }} style={{ borderRadius: 2.5 }}>
+          <DynamicTableStateless
+            head={head}
+            rows={generateSubTreeRows(subItem)}
+            isFixedSize
+            onSort={() => console.log('onSort')}
+            onSetPage={() => console.log('onSetPage')}
+          />
+        </Paljs.Col>
+      </Paljs.Col>
+    );
   };
 
   const _renderSubTree = (props: any) => {
     const trips: ITrips[] = props.data.trips;
     console.log('Props :: ', trips);
 
+    const el: any = document.querySelector('#tabletreeitem-3K1N5WL0');
+    if (el)
+      el.style.cssText += ` border-top: ${BORDER_WIDTH}px dashed ${MAIN_COLOR};
+      border-right: ${BORDER_WIDTH}px solid ${MAIN_COLOR};
+      border-bottom: ${BORDER_WIDTH}px solid ${MAIN_COLOR};
+      border-left:   ${BORDER_WIDTH}px solid  ${MAIN_COLOR}; border-radius: 5px`;
+
     return (
-      <Rowy style={{ paddingTop: 10, paddingBottom: 10, paddingLeft: 10 }}>
-        {trips.map((e: ITrips, i: number) => {
-          const tmp: ITrips = e;
-          const { id, truckType, registrationNumber, owner }: ITruck2 = tmp.truck;
-          const parseTruckType = truckTypesStore.truckTypeNameById(truckType || 1)?.name || 'unknow_truck';
-          return (
-            <Coly key={`sub-col-${i}`} breakPoint={{ xs: 12, sm: 12, md: 12, lg: 12 }}>
-              <Rowy>
-                <Coly breakPoint={{ md: 2, lg: 2 }}>
-                  <span>รหัสรถ {id} , </span>
-                </Coly>
-                <Coly breakPoint={{ md: 2, lg: 2 }}>
-                  <span>เจ้าของรถ {owner?.fullName || ''} , </span>
-                </Coly>
-                <Coly breakPoint={{ md: 2, lg: 2 }}>
-                  <span>{parseTruckType} , </span>
-                </Coly>
-                {registrationNumber && (
-                  <Coly breakPoint={{ md: 2, lg: 2 }}>
-                    {registrationNumber.map((regis: string) => (
-                      <span key={regis}>{regis}</span>
-                    ))}
-                  </Coly>
-                )}
-                <Coly breakPoint={{ md: 2, lg: 2 }}>
-                  <span>ราคา {tmp?.price} , </span>
-                </Coly>
-                <Coly breakPoint={{ md: 2, lg: 2 }}>
-                  <span>สถานะ {tmp?.status} , </span>
-                </Coly>
-              </Rowy>
-            </Coly>
-          );
-        })}
-      </Rowy>
+      <Paljs.Row style={{ paddingTop: 5, paddingBottom: 10, marginLeft: 0.5, marginRight: 0.5, paddingRight: 12 }}>
+        {_renderSubTreeTable(trips)}
+      </Paljs.Row>
     );
   };
 
@@ -127,6 +220,26 @@ const Trip: React.FC<Props> = observer((props: any) => {
   }
 
   useEffect(() => {
+    let tmtItemsss = itemsss;
+    if (tmtItemsss) {
+      setTimeout(() => {
+        const cssRow = document.querySelectorAll('.styled__TreeRowContainer-sc-56yt3z-0.dTlZWA');
+        console.log('Css Rows :: ', cssRow);
+        if (cssRow) {
+          cssRow.forEach((el: any) => {
+            // el.style['border-bottom-width'] = '0px';
+            el.style.cssText += `width: 100%; maxHeight: 120px; border: 2px solid ${MAIN_COLOR}; margin-top: 15px;
+            margin-bottom: 15px; border-radius: 5px`;
+          });
+        }
+      }, 500);
+    }
+  }, [JSON.stringify(itemsss)]);
+
+  useEffect(() => {
+    const cssHeader: any = document.querySelector('.styled__HeadersContainer-sc-56yt3z-1');
+    if (cssHeader) cssHeader.style['border-bottom-width'] = '0px';
+
     if (!masterTypeStore.productTypes) masterTypeStore.getProductTypes();
     if (!truckTypesStore.data) truckTypesStore.getTruckTypes();
     TransportationStore.getTransportationList({
@@ -212,15 +325,17 @@ const Trip: React.FC<Props> = observer((props: any) => {
         </Button>
       </div>
       <TableTree on>
-        <Headers>
-          <Header width={'15%'}>ID</Header>
-          <Header width={'15%'}>Product name</Header>
-          <Header width={'15%'}>Product type</Header>
-          <Header width={'15%'}>Price</Header>
-          <Header width={'8%'}>Price type</Header>
-          <Header width={'32%'}>Route</Header>
-          <Header width={'12%'}>Status</Header>
-        </Headers>
+        <Paljs.Col style={HeaderCrop}>
+          <Headers>
+            <Header width={'15%'}>ID</Header>
+            <Header width={'15%'}>Product name</Header>
+            <Header width={'15%'}>Product type</Header>
+            <Header width={'15%'}>Price</Header>
+            <Header width={'11%'}>Price type</Header>
+            <Header width={'32%'}>Route</Header>
+            <Header width={'12%'}>Status</Header>
+          </Headers>
+        </Paljs.Col>
         <Rows
           items={itemsss}
           render={({
@@ -242,6 +357,8 @@ const Trip: React.FC<Props> = observer((props: any) => {
             else
               return (
                 <Row
+                  styles={{ background: 'red', width: '100%', minHeight: 60 }}
+                  style={{ background: 'red', width: '100%', minHeight: 60 }}
                   expandLabel="Expand"
                   collapseLabel="Collapse"
                   itemId={id}
