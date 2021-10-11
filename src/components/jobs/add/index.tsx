@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, CSSProperties } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { useMst } from '../../../stores/root-store';
@@ -23,7 +23,27 @@ import Swal from 'sweetalert2';
 import { AxiosResponse } from 'axios';
 import moment from 'moment';
 import { findProvince } from '../../../utils';
+import SearchIcon from '@atlaskit/icon/glyph/search';
+import { AsyncPaginate } from 'react-select-async-paginate';
+import { TransportationStore } from '../../../stores/transportation-store';
 
+const SEARCH_ICON: CSSProperties = {
+  position: 'absolute',
+  left: 9,
+  top: 7,
+  color: '#cfcfcf',
+  zIndex: 99,
+};
+
+interface JobItemProps {
+  value: string;
+  label: string;
+}
+
+interface MasterTypeProps {
+  id: string;
+  name: string;
+}
 interface SelectValue {
   labal: any;
   value: string;
@@ -52,7 +72,7 @@ const AddJobContainer: React.FC = observer(() => {
   });
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => { }}>
+    <Breadcrumbs onExpand={() => {}}>
       <BreadcrumbsItem onClick={() => navigate('/jobs')} text={t('jobsManagement')} key="jobs-management" />
       <BreadcrumbsItem text={t('addNewJob')} key="job-info" />
     </Breadcrumbs>
@@ -111,20 +131,21 @@ const AddJobContainer: React.FC = observer(() => {
                 const data = (response as AxiosResponse<CreateJobResponse>).data;
                 console.log('add job response', data);
 
-
                 fetch('http://localhost:3000/api/v1/messaging/notification/send', {
                   headers: { 'Content-Type': 'application/json' },
                   method: 'POST',
                   body: JSON.stringify({
-                    "tokens": [
-                      "eDRTel7BTyGk76Yf9_crI4:APA91bGMg21mONjBEw5qjLZwLJ-Vc__iU_sYra05-qaGDbHfTiV8OTYZa6yQFCtD5obJ0Q1jH_EnM1wt4JcAZ3knANC64AWTd6nG7DLv_DrLaD82Wos5W1ARTxIauyHkgcvEInl6ZtBy"
+                    tokens: [
+                      'eDRTel7BTyGk76Yf9_crI4:APA91bGMg21mONjBEw5qjLZwLJ-Vc__iU_sYra05-qaGDbHfTiV8OTYZa6yQFCtD5obJ0Q1jH_EnM1wt4JcAZ3knANC64AWTd6nG7DLv_DrLaD82Wos5W1ARTxIauyHkgcvEInl6ZtBy',
                     ],
-                    "title": "คาร์โก้ลิ้งค์ มีงานที่คุณอาจสนใจ",
-                    "message": `งานขนส่ง ${payload.productName} ~ ${findProvince(payload?.from?.name ?? "-")} => ${findProvince(payload?.to[0]?.name ?? "-")}`
-                  })
+                    title: 'คาร์โก้ลิ้งค์ มีงานที่คุณอาจสนใจ',
+                    message: `งานขนส่ง ${payload.productName} ~ ${findProvince(
+                      payload?.from?.name ?? '-',
+                    )} => ${findProvince(payload?.to[0]?.name ?? '-')}`,
+                  }),
                 })
-                  .then(res => res.json())
-                  .then(json => console.log(json))
+                  .then((res) => res.json())
+                  .then((json) => console.log(json));
 
                 Swal.update({
                   icon: 'success',
@@ -151,14 +172,56 @@ const AddJobContainer: React.FC = observer(() => {
                 text: 'Error while create this job',
               });
             });
-
-
-
-
-
         },
       });
     }
+  };
+  const [searchJob, setSearchJob] = useState<any>('');
+  const [jobs, setJobs] = useState<Array<JobItemProps>>([]);
+  const [jobDetail, setJobDetail] = useState<any>(null);
+  const [productTypes, setProductTypes] = useState<MasterTypeProps | any>({});
+  const filterJob = async (inputValue: string): Promise<any> => {
+    if (inputValue.length < 3) {
+      return [];
+    }
+
+    console.log('Requesting ...');
+    // await jobStore.getJobsListWithoutEmptyContent({ page: 1, descending: true, textSearch: inputValue });
+    await TransportationStore.getTransportationList({
+      page: 1,
+      descending: true,
+      where: { fullTextSearch: inputValue },
+    });
+    if (TransportationStore.list?.length) {
+      const items = JSON.parse(JSON.stringify(TransportationStore.list)).map((job: any) => ({
+        label: `${job.productName} | ${productTypes[job.productTypeId]} | ${job.from.name}, ${job.from.contactName}, ${
+          job.from.contactMobileNo
+        }`,
+        value: job.id,
+      }));
+      setJobs(items);
+      return Promise.resolve(items);
+    }
+    return Promise.resolve([]);
+  };
+  const loadOptions = async (inputValue: string, loadedOptions: any): Promise<any> => {
+    const response = await filterJob(inputValue);
+
+    return {
+      options: response,
+      hasMore: false,
+      // additional: {
+      //   page: page + 1,
+      // },
+      cacheUniqs: true,
+    };
+  };
+  const wrappedLoadOptions = (...args: any): Promise<any> =>
+    new Promise((resolve) => loadOptions(...args).then((value) => resolve(value)));
+  const onSelected = (val: any) => {
+    setSearchJob(val);
+    const jobDetail = JSON.parse(JSON.stringify(TransportationStore.list)).find((job: any) => job.id === val.value);
+    setJobDetail(jobDetail);
   };
 
   return (
@@ -167,6 +230,27 @@ const AddJobContainer: React.FC = observer(() => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <GroupItem>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ position: 'relative' }}>
+                <span style={SEARCH_ICON}>
+                  <SearchIcon label={'search-icon'} size={'medium'} />
+                </span>
+                <AsyncPaginate
+                  id={'main-async-select-job'}
+                  cacheOptions
+                  defaultOptions
+                  debounceTimeout={500}
+                  value={searchJob}
+                  placeholder={'Search job'}
+                  loadOptions={wrappedLoadOptions}
+                  noOptionsMessage={() => 'No results'}
+                  onChange={onSelected}
+                />
+              </div>
+            </div>
+          </div>
+
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <div style={{ flex: 1, marginRight: 10 }}>
               <Field label={t('jobOwner')} name="userId" isRequired>
@@ -405,10 +489,10 @@ const AddJobContainer: React.FC = observer(() => {
             style={
               isDisabled
                 ? {
-                  ...BottomSubmitStyled,
-                  backgroundColor: '#D8D8D8',
-                  border: 'none',
-                }
+                    ...BottomSubmitStyled,
+                    backgroundColor: '#D8D8D8',
+                    border: 'none',
+                  }
                 : BottomSubmitStyled
             }
             testId="submitButton"
