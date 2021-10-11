@@ -72,7 +72,7 @@ const AddJobContainer: React.FC = observer(() => {
   });
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => {}}>
+    <Breadcrumbs onExpand={() => { }}>
       <BreadcrumbsItem onClick={() => navigate('/jobs')} text={t('jobsManagement')} key="jobs-management" />
       <BreadcrumbsItem text={t('addNewJob')} key="job-info" />
     </Breadcrumbs>
@@ -194,9 +194,8 @@ const AddJobContainer: React.FC = observer(() => {
     });
     if (TransportationStore.list?.length) {
       const items = JSON.parse(JSON.stringify(TransportationStore.list)).map((job: any) => ({
-        label: `${job.productName} | ${productTypes[job.productTypeId]} | ${job.from.name}, ${job.from.contactName}, ${
-          job.from.contactMobileNo
-        }`,
+        label: `${job.productName} | ${productTypes[job.productTypeId]} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo
+          }`,
         value: job.id,
       }));
       setJobs(items);
@@ -232,22 +231,28 @@ const AddJobContainer: React.FC = observer(() => {
         <GroupItem>
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <div style={{ flex: 1 }}>
-              <div style={{ position: 'relative' }}>
-                <span style={SEARCH_ICON}>
-                  <SearchIcon label={'search-icon'} size={'medium'} />
-                </span>
-                <AsyncPaginate
-                  id={'main-async-select-job'}
-                  cacheOptions
-                  defaultOptions
-                  debounceTimeout={500}
-                  value={searchJob}
-                  placeholder={'Search job'}
-                  loadOptions={wrappedLoadOptions}
-                  noOptionsMessage={() => 'No results'}
-                  onChange={onSelected}
-                />
-              </div>
+              <Field label={"เป็นงานย่อยของ"} name="parentJobId">
+                {({ fieldProps }: any) => {
+
+                  return (<div style={{ position: 'relative' }}>
+                    <span style={SEARCH_ICON}>
+                      <SearchIcon label={'search-icon'} size={'medium'} />
+                    </span>
+                    <AsyncPaginate
+                      id={'main-async-select-job'}
+                      cacheOptions
+                      defaultOptions
+                      debounceTimeout={500}
+                      value={searchJob}
+                      placeholder={'Search job'}
+                      loadOptions={wrappedLoadOptions}
+                      noOptionsMessage={() => 'No results'}
+                      onChange={onSelected}
+                    />
+                  </div>)
+
+                }}
+              </Field>
             </div>
           </div>
 
@@ -489,10 +494,10 @@ const AddJobContainer: React.FC = observer(() => {
             style={
               isDisabled
                 ? {
-                    ...BottomSubmitStyled,
-                    backgroundColor: '#D8D8D8',
-                    border: 'none',
-                  }
+                  ...BottomSubmitStyled,
+                  backgroundColor: '#D8D8D8',
+                  border: 'none',
+                }
                 : BottomSubmitStyled
             }
             testId="submitButton"
