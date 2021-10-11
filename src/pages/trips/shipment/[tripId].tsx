@@ -83,6 +83,17 @@ const InputNumber = ({ label, onChange }: any) => (
   </>
 );
 
+const currencyFormat = (val?: number): string => {
+  if (!val) return '0';
+  const parmcurrency = {
+    style: 'currency',
+    currency: 'THB',
+    minimumFractionDigits: 0,
+  };
+  const formatter = Intl.NumberFormat('en-US', parmcurrency);
+  return formatter.format(val).replace(parmcurrency.currency, '').trim();
+};
+
 interface MasterTypeProps {
   id: string;
   name: string;
@@ -103,6 +114,12 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
   const [truckTypeSelectedOption, setTruckTypeSelectedOption] = useState<Array<ITruckTypeSelectedOptionProps>>([]);
   const [productTypes, setProductTypes] = useState<MasterTypeProps | any>({});
   const [selectedOption, setSelectedOption] = useState('none');
+  const [weightStart, setWeightStart] = useState<number>(0);
+  const [weightEnd, setWeightEnd] = useState<number>(0);
+  const [shipperPricePerTon, setShipperPricePerTon] = useState<number>(0);
+  const [carrierPricePerTon, setCarrierPricePerTon] = useState<number>(0);
+  const [shipperCalculate, setShipperCalculate] = useState<number>(0);
+  const [carrierCalculate, setCarrierCalculate] = useState<number>(0);
 
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => {}}>
@@ -158,6 +175,12 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
       setProductTypes(newProductType);
     }
   }, [productTypesStore.data]);
+
+  const onCalculateShipperPrice = (e: any) => {
+    const amount = +e.currentTarget.value;
+    setShipperPricePerTon(amount);
+    // const cal = (amount + weightEnd)
+  };
 
   console.log('truckStore.loading :>> ', truckStore.loading);
 
@@ -481,10 +504,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                         <Box style={PRICE_BOX}>
                           <div style={{ display: 'flex', flexFlow: 'row wrap', padding: 10 }}>
                             <div style={INPUT_FORM}>
-                              <InputNumber
-                                label={'ราคาต่อตัน'}
-                                onChange={(e: any) => console.log(e.currentTarget.value)}
-                              />
+                              <InputNumber label={'ราคาต่อตัน'} onChange={onCalculateShipperPrice} />
                             </div>
 
                             <Detail
@@ -492,15 +512,15 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               content={
                                 <>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    90
+                                    {currencyFormat(weightEnd)}
                                   </ValueSmall>
                                   <ValueSmall>(น้ำหนักลง) x</ValueSmall>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    200
+                                    {currencyFormat(shipperPricePerTon)}
                                   </ValueSmall>
                                   <ValueSmall>(ราคาต่อตัน) =</ValueSmall>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    18,000
+                                    {currencyFormat(weightEnd * shipperPricePerTon)}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
                                 </>
@@ -513,7 +533,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               content={
                                 <>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    18,000
+                                    {currencyFormat(weightEnd * shipperPricePerTon)}
                                   </ValueSmall>
                                   <ValueSmall>(จำนวนเงิน) x</ValueSmall>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
@@ -521,7 +541,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                   </ValueSmall>
                                   <ValueSmall>{'='}</ValueSmall>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    180
+                                    {currencyFormat(weightEnd * shipperPricePerTon * 0.01)}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
                                 </>
@@ -534,7 +554,9 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               content={
                                 <>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    17,820
+                                    {currencyFormat(
+                                      weightEnd * shipperPricePerTon - weightEnd * shipperPricePerTon * 0.01,
+                                    )}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
                                 </>
@@ -587,21 +609,21 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <div style={INPUT_FORM}>
                               <InputNumber
                                 label={'น้ำหนักขึ้น'}
-                                onChange={(e: any) => console.log(e.currentTarget.value)}
+                                onChange={(e: any) => setWeightStart(e.currentTarget.value)}
                               />
                             </div>
 
                             <div style={INPUT_FORM}>
                               <InputNumber
                                 label={'น้ำหนักลง'}
-                                onChange={(e: any) => console.log(e.currentTarget.value)}
+                                onChange={(e: any) => setWeightEnd(e.currentTarget.value)}
                               />
                             </div>
 
                             <div style={INPUT_FORM}>
                               <InputNumber
                                 label={'ราคาต่อตัน'}
-                                onChange={(e: any) => console.log(e.currentTarget.value)}
+                                onChange={(e: any) => setCarrierPricePerTon(e.currentTarget.value)}
                               />
                             </div>
 
@@ -610,15 +632,15 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               content={
                                 <>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    90
+                                    {currencyFormat(weightEnd)}
                                   </ValueSmall>
                                   <ValueSmall>(น้ำหนักลง) x</ValueSmall>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    200
+                                    {currencyFormat(carrierPricePerTon)}
                                   </ValueSmall>
                                   <ValueSmall>(ราคาต่อตัน) =</ValueSmall>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    18,000
+                                    {currencyFormat(weightEnd * carrierPricePerTon)}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
                                 </>
@@ -631,7 +653,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               content={
                                 <>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    18,000
+                                    {currencyFormat(weightEnd * carrierPricePerTon)}
                                   </ValueSmall>
                                   <ValueSmall>(จำนวนเงิน) x</ValueSmall>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
@@ -639,7 +661,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                   </ValueSmall>
                                   <ValueSmall>{'='}</ValueSmall>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    180
+                                    {currencyFormat(weightEnd * carrierPricePerTon * 0.01)}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
                                 </>
@@ -652,7 +674,9 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               content={
                                 <>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    17,820
+                                    {currencyFormat(
+                                      weightEnd * carrierPricePerTon - weightEnd * carrierPricePerTon * 0.01,
+                                    )}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
                                 </>
