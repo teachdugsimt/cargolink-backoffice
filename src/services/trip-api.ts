@@ -3,7 +3,12 @@ import ExcuteApi from './api-integrations/excute-api';
 
 class TripApi {
   addTrip = async (params: IPostTruckProps) => {
-    const response: AxiosResponse<any> = await ExcuteApi(`/api/v1/trips/`, params, 'post', 6e5, true, true);
+    const response: any = await ExcuteApi(`/api/v1/trips/`, params, 'post', 6e5, true, true);
+    return response;
+  };
+
+  getTrip = async (params: IPostTruckProps) => {
+    const response: any = await ExcuteApi(`/api/v1/trips/`, params, 'get', 6e5, true, true);
     return response;
   };
 }
