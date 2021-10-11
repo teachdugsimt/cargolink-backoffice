@@ -11,14 +11,6 @@ class TripApi {
     const response: any = await ExcuteApi(`/api/v1/trips/`, params, 'get', 6e5, true, true);
     return response;
   };
-
-  getJobDetail = async (jobId: string) => {
-    const params = {
-      where: { id: jobId },
-    };
-    const response: any = await ExcuteApi(`/api/v1/booking/transportation`, params, 'get', 6e5, true, true);
-    return response;
-  };
 }
 
 export default new TripApi();

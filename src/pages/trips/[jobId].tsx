@@ -21,7 +21,8 @@ import Spinner from '@atlaskit/spinner';
 import SearchIcon from '@atlaskit/icon/glyph/search';
 import MoreIcon from '@atlaskit/icon/glyph/more';
 import Select from 'react-select';
-import { TripStore } from '../../stores/trip-store';
+import { TransportationStore } from '../../stores/transportation-store';
+import moment from 'moment';
 
 interface LocationProps {
   header: string;
@@ -280,20 +281,22 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
 
   useEffect(() => {
     // jobStore.getJobById({ jobId: props.jobId });
-    TripStore.getJobDetail(props.jobId);
+    TransportationStore.getJobDetail(props.jobId);
   }, [props.jobId]);
 
   useEffect(() => {
-    if (TripStore.jobDetail) {
-      const jobDetail = JSON.parse(JSON.stringify(TripStore.jobDetail));
+    if (TransportationStore.jobDetail) {
+      const jobDetail = JSON.parse(JSON.stringify(TransportationStore.jobDetail));
       const trucks: any = [];
       if (jobDetail?.trips) {
-        const truckList = jobDetail.trips.map((trip: any) => ({ ...trip, old: true }));
+        const truckList = jobDetail.trips.map((trip: any) => ({ ...trip.truck, old: true }));
         trucks.push(...truckList);
       } else if (jobDetail?.quotations) {
         const truckList = jobDetail.quotations.map((quot: any) => ({ ...quot.truck, old: true }));
         trucks.push(...truckList);
       }
+
+      console.log('trucks :>> ', trucks);
 
       trucks.length &&
         setState((prev: any) => ({
@@ -301,7 +304,7 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
           truckSelected: trucks,
         }));
     }
-  }, [JSON.stringify(TripStore.jobDetail)]);
+  }, [JSON.stringify(TransportationStore.jobDetail)]);
 
   useEffect(() => {
     if (!truckTypesStore.data) {
@@ -472,8 +475,11 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
 
   console.log('truckStore.loading :>> ', truckStore.loading);
 
-  const jobDetail = TripStore.jobDetail ? JSON.parse(JSON.stringify(TripStore.jobDetail)) : {};
-  console.log('JSON.parse(JSON.stringify(TripStore.jobDetail)) :>> ', JSON.parse(JSON.stringify(TripStore.jobDetail)));
+  const jobDetail = TransportationStore.jobDetail ? JSON.parse(JSON.stringify(TransportationStore.jobDetail)) : {};
+  console.log(
+    'JSON.parse(JSON.stringify(TransportationStore.jobDetail)) :>> ',
+    JSON.parse(JSON.stringify(TransportationStore.jobDetail)),
+  );
   console.log('jobDetail :>> ', jobDetail);
 
   return (
@@ -509,7 +515,12 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
                             />
                           </Col>
                           <Col flex={1}>
-                            <Detail header={'วันที่'} content={jobDetail?.from?.dateTime} />
+                            <Detail
+                              header={'วันที่'}
+                              content={
+                                jobDetail?.loadingDatetime ? moment(jobDetail.loadingDatetime).format('DD/MM/YY') : '-'
+                              }
+                            />
                           </Col>
                           <Col flex={1}>
                             <Detail header={'ชื่อเจ้าของ'} content={jobDetail?.owner?.fullName} />

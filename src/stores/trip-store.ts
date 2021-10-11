@@ -91,11 +91,11 @@ const TripType = types.model({
 
 const JobDetailType = types.model({
   id: types.maybeNull(types.string),
-  userId: types.maybeNull(types.number),
+  userId: types.maybeNull(types.string),
   productTypeId: types.maybeNull(types.number),
   productName: types.maybeNull(types.string),
-  truckType: types.maybeNull(types.number),
-  weight: types.maybeNull(types.string),
+  truckType: types.maybeNull(types.string),
+  weight: types.maybeNull(types.number),
   requiredTruckAmount: types.maybeNull(types.number),
   loadingDatetime: types.maybeNull(types.string),
   from: types.maybeNull(DestinationType),
@@ -103,7 +103,7 @@ const JobDetailType = types.model({
   owner: types.maybeNull(OwnerType),
   trips: types.maybeNull(types.array(TripType)),
   status: types.maybeNull(types.string),
-  price: types.maybeNull(types.number),
+  price: types.maybeNull(types.string),
   priceType: types.maybeNull(types.string),
   tipper: types.maybeNull(types.boolean),
 });
@@ -145,33 +145,6 @@ export const TripStore = types
           self.error_response = {
             title: '',
             content: 'Failed to add',
-          };
-        }
-      }),
-
-      getJobDetail: flow(function* getJobDetail(jobId: string) {
-        self.loading = true;
-        self.error_response = null;
-        try {
-          const response = yield TripApi.getJobDetail(jobId);
-          console.log('getJobDetail response :>> ', response);
-          if (response && response.ok) {
-            const data = response.data.data[0];
-            console.log('data :>> ', data);
-            self.jobDetail = data;
-          } else {
-            self.error_response = {
-              title: response.problem,
-              content: 'GET job detail : ' + response.originalError.message,
-            };
-          }
-          self.loading = false;
-        } catch (err) {
-          console.log('Fail to get job detail :>> ', err);
-          self.loading = false;
-          self.error_response = {
-            title: '',
-            content: 'Failed to get job detail',
           };
         }
       }),

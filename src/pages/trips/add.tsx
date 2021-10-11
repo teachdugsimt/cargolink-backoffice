@@ -22,8 +22,9 @@ import Spinner from '@atlaskit/spinner';
 import SearchIcon from '@atlaskit/icon/glyph/search';
 import MoreIcon from '@atlaskit/icon/glyph/more';
 import Select from 'react-select';
-import { TripStore } from '../../stores/trip-store';
+import { TransportationStore } from '../../stores/transportation-store';
 import Swal, { SweetAlertResult } from 'sweetalert2';
+import moment from 'moment';
 
 interface LocationProps {
   header: string;
@@ -264,7 +265,7 @@ interface Props {}
 let truckPage: number = 1;
 
 const AddTrip: React.FC<Props> = observer(() => {
-  const { jobStore, truckStore, truckTypesStore, productTypesStore } = useMst();
+  const { truckStore, truckTypesStore, productTypesStore } = useMst();
   const { t } = useTranslation();
   const [state, setState] = useState<any>({
     truckSelected: [],
@@ -283,7 +284,7 @@ const AddTrip: React.FC<Props> = observer(() => {
 
   useEffect(() => {
     return () => {
-      jobStore.clearJobs();
+      // jobStore.clearJobs();
       truckStore.clearTrucks();
     };
   }, []);
@@ -426,7 +427,7 @@ const AddTrip: React.FC<Props> = observer(() => {
 
   const onSelected = (val: any) => {
     setSearchJob(val);
-    const jobDetail = JSON.parse(JSON.stringify(jobStore.jobList?.content)).find((job: any) => job.id === val.value);
+    const jobDetail = JSON.parse(JSON.stringify(TransportationStore.list)).find((job: any) => job.id === val.value);
     setJobDetail(jobDetail);
   };
 
@@ -475,10 +476,17 @@ const AddTrip: React.FC<Props> = observer(() => {
     }
 
     console.log('Requesting ...');
-    await jobStore.getJobsListWithoutEmptyContent({ page: 1, descending: true, textSearch: inputValue });
-    if (jobStore.jobList?.content?.length) {
-      const items = JSON.parse(JSON.stringify(jobStore.jobList?.content)).map((job: any) => ({
-        label: `${job.productName} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo}`,
+    // await jobStore.getJobsListWithoutEmptyContent({ page: 1, descending: true, textSearch: inputValue });
+    await TransportationStore.getTransportationList({
+      page: 1,
+      descending: true,
+      where: { fullTextSearch: inputValue },
+    });
+    if (TransportationStore.list?.length) {
+      const items = JSON.parse(JSON.stringify(TransportationStore.list)).map((job: any) => ({
+        label: `${job.productName} | ${productTypes[job.productTypeId]} | ${job.from.name}, ${job.from.contactName}, ${
+          job.from.contactMobileNo
+        }`,
         value: job.id,
       }));
       setJobs(items);
@@ -575,7 +583,14 @@ const AddTrip: React.FC<Props> = observer(() => {
                               />
                             </Col>
                             <Col flex={1}>
-                              <Detail header={'วันที่'} content={jobDetail.from.dateTime} />
+                              <Detail
+                                header={'วันที่'}
+                                content={
+                                  jobDetail?.loadingDatetime
+                                    ? moment(jobDetail.loadingDatetime).format('DD/MM/YY')
+                                    : '-'
+                                }
+                              />
                             </Col>
                             <Col flex={1}>
                               <Detail header={'ชื่อเจ้าของ'} content={jobDetail.owner?.fullName} />

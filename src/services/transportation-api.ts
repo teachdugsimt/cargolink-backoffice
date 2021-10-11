@@ -15,6 +15,18 @@ class TransportationApi {
     );
     return response;
   };
+
+  getTransportationDetailByJobId = async (jobId: string) => {
+    const response: AxiosResponse<IJob> = await ExcuteApi(
+      `/api/v1/booking/transportation/${jobId}`,
+      {},
+      'get',
+      6e5,
+      true,
+      true,
+    );
+    return response;
+  };
 }
 
 export default new TransportationApi();
