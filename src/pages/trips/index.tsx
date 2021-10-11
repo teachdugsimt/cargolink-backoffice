@@ -251,8 +251,11 @@ const Trip: React.FC<Props> = observer((props: any) => {
   }, [JSON.stringify(itemsss)]);
 
   useEffect(() => {
+    //
+    const cssHeaderDiv: any = document.querySelector('.styled__Header-sc-56yt3z-7');
     const cssHeader: any = document.querySelector('.styled__HeadersContainer-sc-56yt3z-1');
     if (cssHeader) cssHeader.style['border-bottom-width'] = '0px';
+    if (cssHeaderDiv) cssHeaderDiv.style.cssText += `padding: 10px 0 0 0`;
 
     if (!masterTypeStore.productTypes) masterTypeStore.getProductTypes();
     if (!truckTypesStore.data) truckTypesStore.getTruckTypes();
@@ -348,6 +351,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
             <Header width={'11%'}>Price type</Header>
             <Header width={'35%'}>Route</Header>
             <Header width={'11%'}>Status</Header>
+            <Header width={'11%'}></Header>
           </Headers>
         </Paljs.Col>
         <Rows
@@ -432,6 +436,9 @@ const Trip: React.FC<Props> = observer((props: any) => {
                     </Address>
                   </Cell>
                   <Cell>{status || '-'}</Cell>
+                  <Cell singleLine>
+                    <Link to={`/trips/shipment/${id}`}>Edit</Link>
+                  </Cell>
                 </Row>
               );
           }}
