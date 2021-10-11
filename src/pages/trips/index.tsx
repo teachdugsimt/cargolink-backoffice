@@ -72,6 +72,11 @@ const createHead = (withWidth: boolean) => {
         content: 'Price',
         width: withWidth ? 20 : undefined,
       },
+      {
+        key: 'edit',
+        content: '',
+        width: withWidth ? 10 : undefined,
+      },
     ],
   };
 };
@@ -163,6 +168,10 @@ const Trip: React.FC<Props> = observer((props: any) => {
           {
             key: `price-trip-${tripItem.price}`,
             content: tripItem.price,
+          },
+          {
+            key: `trips-edit-${tripItem.id}`,
+            content: <Link to={`/trips/shipment/${tripItem.id}`}>Edit</Link>,
           },
         ],
       };
@@ -351,7 +360,6 @@ const Trip: React.FC<Props> = observer((props: any) => {
             <Header width={'11%'}>Price type</Header>
             <Header width={'35%'}>Route</Header>
             <Header width={'11%'}>Status</Header>
-            <Header width={'11%'}></Header>
           </Headers>
         </Paljs.Col>
         <Rows
@@ -436,9 +444,6 @@ const Trip: React.FC<Props> = observer((props: any) => {
                     </Address>
                   </Cell>
                   <Cell>{status || '-'}</Cell>
-                  <Cell singleLine>
-                    <Link to={`/trips/shipment/${id}`}>Edit</Link>
-                  </Cell>
                 </Row>
               );
           }}
