@@ -60,6 +60,7 @@ export interface IJob {
   createdAt: string | null;
   component?: any;
   children?: any;
+  index?: number;
 }
 
 export interface ITrips {

@@ -157,6 +157,7 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
         ...tmpProfile,
         phoneNumber: tmpProfile.phoneNumber ? `0${tmpProfile.phoneNumber.substr(3)}` : null,
       };
+      if (tmpProfile?.avatar) setPreviewImage(tmpProfile.avatar);
       setUserData(user);
     }
   }, [JSON.stringify(UserNonPersistStore.data_get_user_id_fully)]);
@@ -175,6 +176,9 @@ const UserDetail: React.FC<Props> = observer((props: any) => {
     event.preventDefault();
     if (event.target?.files?.length) {
       const previewImg = URL.createObjectURL(event.target.files[0]);
+      console.log(`🚀  ->  previewImg`, previewImg);
+      console.log('Image Pciker :: ', event.target.files[0]);
+      UserNonPersistStore.uploadAvatarProfile('USER_AVATAR/INPROGRESS/', event.target.files[0], userId);
       setPreviewImage(previewImg);
     }
   };
