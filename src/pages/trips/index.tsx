@@ -2,16 +2,15 @@ import React, { useState, useEffect, CSSProperties } from 'react';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import { Link, navigate } from 'gatsby';
-import Pagination, { PaginationPropTypes } from '@atlaskit/pagination';
+import Pagination from '@atlaskit/pagination';
 import { useTranslation } from 'react-i18next';
-import EmptyState from '@atlaskit/empty-state';
 import { useMst } from '../../stores/root-store';
 import styled from 'styled-components';
 import Page from '@atlaskit/page';
 import { observer } from 'mobx-react-lite';
 import { TransportationStore } from '../../stores/transportation-store';
 import SearchForm from '../../components/search-form';
-import { IJob, ITrips, ITruck2, WhereTransportation } from '../../services/transportation-api';
+import { IJob, ITrips, WhereTransportation } from '../../services/transportation-api';
 import { IProductType } from '../../services/product-type-api';
 import { findRegionFromProvince } from '../../utils';
 import { momentFormatDateTime } from '../../components/simple-data';
@@ -139,7 +138,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
     }
   }, [JSON.stringify(list)]);
 
-  const generateSubTreeRows = (tripList: ITrips[]) => {
+  const generateSubTreeRows = (tripList: ITrips[], parentItem: IJob) => {
     const rows = tripList.map((tripItem: ITrips, index: number) => {
       const { truck } = tripItem;
       const registrationKey: string = truck?.registrationNumber
@@ -204,13 +203,13 @@ const Trip: React.FC<Props> = observer((props: any) => {
     return rows;
   };
 
-  const _renderSubTreeTable = (subItem: ITrips[]) => {
+  const _renderSubTreeTable = (subItem: ITrips[], parentItem: IJob) => {
     return (
       <Paljs.Col breakPoint={{ xs: 11.6, md: 11.6 }} style={{}}>
         <Paljs.Col breakPoint={{ xs: 12, md: 12 }} style={{ borderRadius: 2.5 }}>
           <DynamicTableStateless
             head={head}
-            rows={generateSubTreeRows(subItem)}
+            rows={generateSubTreeRows(subItem, parentItem)}
             isFixedSize
             onSort={() => console.log('onSort')}
             onSetPage={() => console.log('onSetPage')}
@@ -237,7 +236,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
 
     return (
       <Paljs.Row style={{ paddingTop: 5, paddingBottom: 10, marginLeft: 0.5, marginRight: 0.5, paddingRight: 12 }}>
-        {_renderSubTreeTable(trips)}
+        {_renderSubTreeTable(trips, parentItem)}
       </Paljs.Row>
     );
   };
@@ -272,16 +271,44 @@ const Trip: React.FC<Props> = observer((props: any) => {
     return;
   }
 
+  // const _checkingExpandLastRow = () => {
+  //   const tmpLastRow: IJob = itemsss[itemsss.length - 1]
+  //   console.log("Tmp last Row itemss :: ", tmpLastRow)
+  //   const tdTruckIdRowsElement = document.querySelectorAll(".sc-jcwofb.IFsN")
+  //   if (tdTruckIdRowsElement && tmpLastRow && tmpLastRow.trips && Array.isArray(tmpLastRow.trips)) {
+  //     let result = false
+  //     let cnt = 0
+  //     Array.from(tdTruckIdRowsElement).forEach((e: any, i: number) => {
+  //       const slotTruckId = (e.innerText).toString()
+  //       console.log("Element sub table tree TD :: ", slotTruckId)
+  //       let tmpTripSlot = tmpLastRow.trips.find(tripy => tripy.truck.id == slotTruckId)
+  //       console.log("Tmp Trip SLOT :: ", tmpTripSlot)
+  //       // if (tmpLastRow.trips.find(tripy => tripy?.truck?.id && tripy.truck.id == slotTruckId)) cnt++
+  //     })
+  //     console.log("CNT HERE :: ", cnt)
+  //     return result;
+  //   }
+  //   else return false
+  // }
+
   useEffect(() => {
     let tmtItemsss = itemsss;
     if (tmtItemsss) {
       setTimeout(() => {
         const cssRow = document.querySelectorAll('.styled__TreeRowContainer-sc-56yt3z-0.dTlZWA');
         console.log('Css Rows :: ', cssRow);
+        // _checkingExpandLastRow()
         if (cssRow) {
-          cssRow.forEach((el: any) => {
-            el.style.cssText += `width: 100%; maxHeight: 120px; border: 2px solid ${MAIN_COLOR}; margin-top: 15px;
-            margin-bottom: 15px; border-radius: 5px`;
+          cssRow.forEach((el: any, i: number) => {
+            el.style.cssText += `width: 100%; maxHeight: 120px;
+            border-left: 2px solid ${MAIN_COLOR};
+            border-right: 2px solid ${MAIN_COLOR};
+            border-top: 2px solid ${MAIN_COLOR};
+            border-bottom: 0px solid white;
+            border-radius: 5px`;
+            if (i == 0) el.style.cssText += ` margin-top: 15px; `;
+            else if (i != cssRow.length - 1) el.style.cssText += ``;
+            else el.style.cssText += `border-bottom: 2px solid ${MAIN_COLOR};`;
           });
         }
       }, 500);
@@ -434,23 +461,6 @@ const Trip: React.FC<Props> = observer((props: any) => {
             const productType = products.length && products.find((prod) => prod.id === productTypeId);
             const typeName = productType ? productType.name : '';
 
-            // let tmpCssExpandButton: any
-            // setTimeout(() => {
-            //   const expandsButtonCss = document.querySelectorAll('.css-sifhiz-ButtonBase')
-            //   console.log(`🚀  ->  expandsButtonCss`, expandsButtonCss);
-            //   console.log("INDEX HEHRE :: ", index)
-            //   if (expandsButtonCss) {
-            //     expandsButtonCss.forEach((e: any, i: number) => {
-            //       if (index == i) {
-            //         console.log("Match Css Button !!!")
-            //         tmpCssExpandButton = e
-            //         // e.style.cssText += `display: none;`
-            //       }
-            //     })
-            //   }
-            //   console.log("TMP CSS EXPAND BUTTON :: => ", tmpCssExpandButton)
-            // }, 1000);
-
             if (CustomComponent) return <CustomComponent />;
             else
               return (
@@ -527,7 +537,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
         />
       </TableTree>
       {itemsss && (
-        <div>
+        <div style={{ marginTop: 10 }}>
           <Pagination defaultSelectedIndex={currentPage - 1} pages={pages} onChange={handlePagination} />
         </div>
       )}
