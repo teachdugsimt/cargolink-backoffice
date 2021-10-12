@@ -78,7 +78,6 @@ export const findRegionFromProvince = (address?: string | null) => {
   if (!address) return null;
   const list = [...provinceListTh, ...provinceListEn];
   const province = list.find((l) => address.includes(l.label));
-  console.log('List find province :: ', province);
   const regionFound = regionListTh.find((re) => re.value == province?.region);
   return regionFound?.label || address;
 };

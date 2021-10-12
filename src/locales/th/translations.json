@@ -225,5 +225,6 @@
   "createTruckErrorByUser": "ข้อมูลไม่ถูกต้อง โปรดตรวจสอบข้อมูลใหม่",
   "createJobSuccess": "สร้างการจัดการรถบรรทุกแล้ว",
   "createJobErrorByUser": "ข้อมูลไม่ถูกต้อง โปรดตรวจสอบข้อมูลใหม่",
-  "NO_DOCUMENT": "ไม่มีเอกสาร"
+  "NO_DOCUMENT": "ไม่มีเอกสาร",
+  "see": "ดู"
 }
