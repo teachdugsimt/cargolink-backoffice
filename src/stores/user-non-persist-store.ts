@@ -233,6 +233,37 @@ export const UserNonPersistStore = types
         }
       }),
 
+      uploadAvatarProfile: flow(function* uploadAvatarProfile(path: UploadFilePath, file: File, userId: string) {
+        self.loading = true;
+        self.error_response = null;
+
+        try {
+          const response = yield uploadApi.upload(path, file);
+          console.log('Upload avatar response :> ', response);
+          if (response && response.ok) {
+            const { data } = response;
+            yield userApi.editUser(userId, { avatar: data.attachCode });
+            yield UserNonPersistStore.getFullyUserProfile(userId);
+            self.loading = false;
+            self.data_upload = data;
+            self.error_response = null;
+          } else {
+            self.loading = false;
+            self.error_response = {
+              title: response.problem,
+              content: 'POST image : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to request upload images store :> ', error);
+          self.loading = false;
+          self.error_response = {
+            title: '',
+            content: 'Failed to request upload images store',
+          };
+        }
+      }),
+
       uploadImage: flow(function* uploadImage(path: UploadFilePath, file: File, userId: string) {
         self.loading = true;
         self.error_response = null;
@@ -358,20 +389,27 @@ export const UserNonPersistStore = types
           if (response.ok) {
             console.log('Get User by id : ', response);
 
-            if (response.data.files && response.data.files.length > 0) {
-              const responseLink = yield truckApi.getLinkDownLoad(response.data.files);
+            if ((response.data.files && response.data.files.length > 0) || response.data.avatar) {
+              const responseLink = yield truckApi.getLinkDownLoad(
+                [...(response.data?.files ?? []), response.data.avatar].filter((e) => e),
+              );
+              console.log('Response get download link :: ', responseLink);
               if (responseLink.ok) {
                 let tmpLinkResponse = responseLink.data.data || [];
-                let tmpFileList = tmpLinkResponse.map((e: any) => {
-                  return {
-                    fileName: e.file_name,
-                    url: e.url,
-                    type: e.file_name.split('.')[1] || '',
-                    attachCode: e.attach_code,
-                  };
-                });
+                let tmpFileList = tmpLinkResponse
+                  .filter((e: any) => !e.type.includes('USER_AVATAR'))
+                  .map((e: any) => {
+                    return {
+                      fileName: e.file_name,
+                      url: e.url,
+                      type: e.file_name.split('.')[1] || '',
+                      attachCode: e.attach_code,
+                    };
+                  });
                 let tmpProfile = response.data;
                 tmpProfile.files = tmpFileList;
+                const tmpAvater = tmpLinkResponse.find((e: any) => e.type.includes('USER_AVATAR'));
+                if (tmpAvater) tmpProfile.avatar = tmpAvater?.url || '';
                 console.log('TMP FULLY PROFILE :: ', tmpProfile);
                 self.data_get_user_id_fully = tmpProfile;
               }

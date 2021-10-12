@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Children } from 'react';
+import React, { useState, useEffect, CSSProperties } from 'react';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import { Link, navigate } from 'gatsby';
@@ -75,7 +75,7 @@ const createHead = (withWidth: boolean) => {
       {
         key: 'edit',
         content: '',
-        width: withWidth ? 10 : undefined,
+        width: withWidth ? 6 : undefined,
       },
     ],
   };
@@ -107,10 +107,21 @@ const Trip: React.FC<Props> = observer((props: any) => {
     />
   );
 
+  const addIndexToRowsData = (arr: IJob[]) => {
+    if (!arr) return [];
+    else {
+      let tmp = arr.map((e, i) => {
+        return { ...e, index: i };
+      });
+      console.log();
+      return tmp;
+    }
+  };
+
   useEffect(() => {
     let tmpData = JSON.parse(JSON.stringify(list));
     if (tmpData) {
-      setitems(tableTreeHelper.updateItems(tmpData, itemsss, undefined));
+      setitems(tableTreeHelper.updateItems(addIndexToRowsData(tmpData), itemsss, undefined));
     }
   }, [JSON.stringify(list)]);
 
@@ -195,7 +206,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
     );
   };
 
-  const _renderSubTree = (props: any) => {
+  const _renderSubTree = (props: any, parentItem: IJob) => {
     const trips: ITrips[] = props.data.trips;
     console.log('Props :: ', trips);
 
@@ -217,7 +228,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
     if (parentItem.trips) {
       return [
         {
-          component: (props: any) => _renderSubTree(props),
+          component: (props: any) => _renderSubTree(props, parentItem),
           id: ++uuid,
           trips: parentItem.trips,
         },
@@ -283,7 +294,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
     if (parentItem && parentItem != null) {
       getData(parentItem).then((items) => {
         console.log('ITEMS :: ', items);
-        if (items) setitems(tableTreeHelper.updateItems(items, itemsss, parentItem));
+        if (items) setitems(tableTreeHelper.updateItems(addIndexToRowsData(items), itemsss, parentItem));
       });
     }
   };
@@ -340,6 +351,9 @@ const Trip: React.FC<Props> = observer((props: any) => {
   let products: IProductType[] = [];
   if (masterTypeStore.productTypes) products = JSON.parse(JSON.stringify(masterTypeStore.productTypes));
   console.log('ITTEMSSS :: ', itemsss);
+
+  const newNode = document.createElement('p');
+
   return (
     <Page>
       <PageHeader breadcrumbs={breadcrumbs}>{t('trip.management')}</PageHeader>
@@ -354,12 +368,13 @@ const Trip: React.FC<Props> = observer((props: any) => {
         <Paljs.Col style={HeaderCrop}>
           <Headers>
             <Header width={'13%'}>ID</Header>
-            <Header width={'15%'}>Product name</Header>
-            <Header width={'15%'}>Product type</Header>
-            <Header width={'13%'}>Price</Header>
-            <Header width={'11%'}>Price type</Header>
+            <Header width={'10%'}>Product name</Header>
+            <Header width={'10%'}>Product type</Header>
+            <Header width={'10%'}>Price</Header>
+            <Header width={'10%'}>Price type</Header>
             <Header width={'35%'}>Route</Header>
-            <Header width={'11%'}>Status</Header>
+            <Header width={'10%'}>Status</Header>
+            <Header width={'5%'}> </Header>
           </Headers>
         </Paljs.Col>
         <Rows
@@ -375,16 +390,33 @@ const Trip: React.FC<Props> = observer((props: any) => {
             from,
             to,
             children,
+            index,
             component: CustomComponent,
           }: IJob) => {
             const productType = products.length && products.find((prod) => prod.id === productTypeId);
             const typeName = productType ? productType.name : '';
+
+            // let tmpCssExpandButton: any
+            // setTimeout(() => {
+            //   const expandsButtonCss = document.querySelectorAll('.css-sifhiz-ButtonBase')
+            //   console.log(`🚀  ->  expandsButtonCss`, expandsButtonCss);
+            //   console.log("INDEX HEHRE :: ", index)
+            //   if (expandsButtonCss) {
+            //     expandsButtonCss.forEach((e: any, i: number) => {
+            //       if (index == i) {
+            //         console.log("Match Css Button !!!")
+            //         tmpCssExpandButton = e
+            //         // e.style.cssText += `display: none;`
+            //       }
+            //     })
+            //   }
+            //   console.log("TMP CSS EXPAND BUTTON :: => ", tmpCssExpandButton)
+            // }, 1000);
+
             if (CustomComponent) return <CustomComponent />;
             else
               return (
                 <Row
-                  styles={{ background: 'red', width: '100%', minHeight: 60 }}
-                  style={{ background: 'red', width: '100%', minHeight: 60 }}
                   expandLabel="Expand"
                   collapseLabel="Collapse"
                   itemId={id}
@@ -392,9 +424,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
                   onExpand={loadTableData}
                   hasChildren={trips && trips.length > 0}
                 >
-                  <Cell singleLine>
-                    <Link to={`/trips/${id}`}>{id}</Link>
-                  </Cell>
+                  <Cell singleLine>{id}</Cell>
                   <Cell>{productName}</Cell>
                   <Cell>{typeName}</Cell>
                   <Cell>{price}</Cell>
@@ -444,6 +474,13 @@ const Trip: React.FC<Props> = observer((props: any) => {
                     </Address>
                   </Cell>
                   <Cell>{status || '-'}</Cell>
+                  <Cell style={{ marginRight: 5 }}>
+                    <Link to={`/trips/${id}`}>
+                      <div className="see-list-trip">
+                        <span className="see-list-span">{t('see')}</span>
+                      </div>
+                    </Link>
+                  </Cell>
                 </Row>
               );
           }}
