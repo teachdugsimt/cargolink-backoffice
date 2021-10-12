@@ -27,6 +27,18 @@ let uuid = 0;
 
 const MAIN_COLOR = '#f4f6f9';
 const BORDER_WIDTH = 2;
+const PADDING_LEFT1: CSSProperties = {
+  paddingLeft: 1.5,
+};
+const PADDING_LEFT_12: CSSProperties = {
+  paddingLeft: 12.5,
+};
+const PADDING_LEFT_10: CSSProperties = {
+  paddingLeft: 10,
+};
+const PADDING_LEFT_25: CSSProperties = {
+  paddingLeft: 25,
+};
 
 const HeaderCrop = {
   backgroundColor: MAIN_COLOR,
@@ -210,12 +222,16 @@ const Trip: React.FC<Props> = observer((props: any) => {
     const trips: ITrips[] = props.data.trips;
     console.log('Props :: ', trips);
 
-    const el: any = document.querySelector('#tabletreeitem-3K1N5WL0');
+    // const el: any = document.querySelector('#tabletreeitem-3K1N5WL0');
+    const el: any = document.querySelectorAll(`[id^='tabletreeitem-']`);
+    console.log('EL ele   :: ', el);
     if (el)
-      el.style.cssText += ` border-top: ${BORDER_WIDTH}px dashed ${MAIN_COLOR};
+      el.forEach((e: any) => {
+        e.style.cssText += ` border-top: ${BORDER_WIDTH}px dashed ${MAIN_COLOR};
       border-right: ${BORDER_WIDTH}px solid ${MAIN_COLOR};
       border-bottom: ${BORDER_WIDTH}px solid ${MAIN_COLOR};
       border-left:   ${BORDER_WIDTH}px solid  ${MAIN_COLOR}; border-radius: 5px`;
+      });
 
     return (
       <Paljs.Row style={{ paddingTop: 5, paddingBottom: 10, marginLeft: 0.5, marginRight: 0.5, paddingRight: 12 }}>
@@ -272,6 +288,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
 
   useEffect(() => {
     //
+    console.log('Component Did mount Pagination :: ', JSON.parse(JSON.stringify(pagination)));
     const cssHeaderDiv: any = document.querySelector('.styled__Header-sc-56yt3z-7');
     const cssHeader: any = document.querySelector('.styled__HeadersContainer-sc-56yt3z-1');
     if (cssHeader) cssHeader.style['border-bottom-width'] = '0px';
@@ -279,11 +296,16 @@ const Trip: React.FC<Props> = observer((props: any) => {
 
     if (!masterTypeStore.productTypes) masterTypeStore.getProductTypes();
     if (!truckTypesStore.data) truckTypesStore.getTruckTypes();
+
     TransportationStore.getTransportationList({
-      page: 1,
+      page: pagination.currentPage || 1,
       rowsPerPage: 10,
       ...(searchText ? { where: { fullTextSearch: searchText } } : undefined),
     });
+
+    return () => {
+      console.log('Component Will UNmount !! => ', JSON.parse(JSON.stringify(pagination)));
+    };
   }, []);
 
   const loadTableData = (parentItem?: any) => {
@@ -367,13 +389,27 @@ const Trip: React.FC<Props> = observer((props: any) => {
       <TableTree on>
         <Paljs.Col style={HeaderCrop}>
           <Headers>
-            <Header width={'13%'}>ID</Header>
-            <Header width={'10%'}>Product name</Header>
-            <Header width={'10%'}>Product type</Header>
-            <Header width={'10%'}>Price</Header>
-            <Header width={'10%'}>Price type</Header>
-            <Header width={'35%'}>Route</Header>
-            <Header width={'10%'}>Status</Header>
+            <Header width={'15%'} style={PADDING_LEFT_12}>
+              ID
+            </Header>
+            <Header width={'10%'} style={PADDING_LEFT1}>
+              Product name
+            </Header>
+            <Header width={'10%'} style={PADDING_LEFT1}>
+              Product type
+            </Header>
+            <Header width={'10%'} style={PADDING_LEFT1}>
+              Price
+            </Header>
+            <Header width={'10%'} style={PADDING_LEFT1}>
+              Price type
+            </Header>
+            <Header width={'30%'} style={PADDING_LEFT1}>
+              Route
+            </Header>
+            <Header width={'10%'} style={PADDING_LEFT1}>
+              Status
+            </Header>
             <Header width={'5%'}> </Header>
           </Headers>
         </Paljs.Col>
@@ -424,12 +460,14 @@ const Trip: React.FC<Props> = observer((props: any) => {
                   onExpand={loadTableData}
                   hasChildren={trips && trips.length > 0}
                 >
-                  <Cell singleLine>{id}</Cell>
-                  <Cell>{productName}</Cell>
-                  <Cell>{typeName}</Cell>
-                  <Cell>{price}</Cell>
-                  <Cell>{priceType}</Cell>
-                  <Cell>
+                  <Cell singleLine style={PADDING_LEFT_25}>
+                    {id}
+                  </Cell>
+                  <Cell style={PADDING_LEFT_10}>{productName}</Cell>
+                  <Cell style={PADDING_LEFT_10}>{typeName}</Cell>
+                  <Cell style={PADDING_LEFT_10}>{price}</Cell>
+                  <Cell style={PADDING_LEFT_10}>{priceType}</Cell>
+                  <Cell style={PADDING_LEFT_10}>
                     <Address>
                       <div className="container">
                         <div className="from-root">
@@ -473,8 +511,8 @@ const Trip: React.FC<Props> = observer((props: any) => {
                       </div>
                     </Address>
                   </Cell>
-                  <Cell>{status || '-'}</Cell>
-                  <Cell style={{ marginRight: 5 }}>
+                  <Cell style={PADDING_LEFT_10}>{status || '-'}</Cell>
+                  <Cell style={PADDING_LEFT_10}>
                     <Link to={`/trips/${id}`}>
                       <div className="see-list-trip">
                         <span className="see-list-span">{t('see')}</span>
