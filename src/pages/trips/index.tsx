@@ -11,7 +11,7 @@ import Page from '@atlaskit/page';
 import { observer } from 'mobx-react-lite';
 import { TransportationStore } from '../../stores/transportation-store';
 import SearchForm from '../../components/search-form';
-import { IJob, ITrips, ITruck2 } from '../../services/transportation-api';
+import { IJob, ITrips, ITruck2, WhereTransportation } from '../../services/transportation-api';
 import { IProductType } from '../../services/product-type-api';
 import { findRegionFromProvince } from '../../utils';
 import { momentFormatDateTime } from '../../components/simple-data';
@@ -102,6 +102,8 @@ const Trip: React.FC<Props> = observer((props: any) => {
   const { masterTypeStore, truckTypesStore, loginStore } = useMst();
   const { pagination, list } = TransportationStore;
   const [itemsss, setitems] = useState<any>(null);
+
+  const normalFilter: WhereTransportation = { trips: 'NOT_NULL' };
 
   // const Dots = (data: any) => (<LottieView
   //   style={{ height: 32, width: 32, backgroundColor: color.backgroundWhite }}
@@ -300,7 +302,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
     TransportationStore.getTransportationList({
       page: pagination.currentPage || 1,
       rowsPerPage: 10,
-      ...(searchText ? { where: { fullTextSearch: searchText } } : undefined),
+      ...(searchText ? { where: { fullTextSearch: searchText, ...normalFilter } } : { where: normalFilter }),
     });
 
     return () => {
@@ -333,7 +335,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
       TransportationStore.getTransportationList({
         page: currentPage,
         rowsPerPage: tmpPagination.size,
-        ...(searchText ? { where: { fullTextSearch: searchText } } : undefined),
+        ...(searchText ? { where: { fullTextSearch: searchText, ...normalFilter } } : { where: normalFilter }),
       });
     }, 200);
   };
@@ -350,7 +352,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
     TransportationStore.getTransportationList({
       page: 1,
       rowsPerPage: tmpPagination.size,
-      ...(value ? { where: { fullTextSearch: value } } : undefined),
+      ...(value ? { where: { fullTextSearch: value, ...normalFilter } } : { where: normalFilter }),
     });
   };
 
