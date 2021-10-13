@@ -150,8 +150,9 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
 
   useEffect(() => {
     return () => {
-      jobStore.clearJobs();
-      truckStore.clearTrucks();
+      // jobStore.clearJobs();
+      // truckStore.clearTrucks();
+      TripStore.clearTriipDetail();
     };
   }, []);
 

@@ -318,6 +318,10 @@ export const TripStore = types
           };
         }
       }),
+
+      clearTriipDetail: function () {
+        self.tripDetail = null;
+      },
     };
   })
   .create({

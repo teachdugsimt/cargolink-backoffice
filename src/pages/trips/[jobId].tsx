@@ -291,8 +291,9 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
 
   useEffect(() => {
     return () => {
-      jobStore.clearJobs();
-      truckStore.clearTrucks();
+      // jobStore.clearJobs();
+      // truckStore.clearTrucks();
+      TransportationStore.clearJobDetail();
     };
   }, []);
 
@@ -552,16 +553,12 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
     TripStore.updateJobTrip(props.jobId, {
       trucks: truckSelected,
     });
-    // navigate('/trips');
+    navigate('/trips');
   };
 
   console.log('truckStore.loading :>> ', truckStore.loading);
 
   const jobDetail = TransportationStore.jobDetail ? JSON.parse(JSON.stringify(TransportationStore.jobDetail)) : {};
-  console.log(
-    'JSON.parse(JSON.stringify(TransportationStore.jobDetail)) :>> ',
-    JSON.parse(JSON.stringify(TransportationStore.jobDetail)),
-  );
   console.log('jobDetail :>> ', jobDetail);
 
   if (TransportationStore.error_response) {
@@ -731,12 +728,13 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
                                           <DatePicker
                                             defaultValue={item?.startDate || undefined}
                                             dateFormat="DD/MM/YYYY"
-                                            onChange={(date) =>
+                                            onChange={(date) => {
+                                              setIsDisabled(false);
                                               setDateSelected((prevState: any) => ({
                                                 ...prevState,
                                                 [item.id]: date,
-                                              }))
-                                            }
+                                              }));
+                                            }}
                                           />
                                         </div>
                                         <span style={TRASH} onClick={() => removeTrip(item.id, item.tripId)}>

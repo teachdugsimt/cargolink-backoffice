@@ -292,6 +292,10 @@ export const TransportationStore = types
           };
         }
       }),
+
+      clearJobDetail: function () {
+        self.jobDetail = null;
+      },
     };
   })
   .create({
