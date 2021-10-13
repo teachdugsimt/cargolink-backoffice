@@ -188,7 +188,7 @@ export const TripStore = types
         self.data_count = null;
         self.error_response = null;
         try {
-          const response = yield TripApi.addTrip(data);
+          const response = yield TripApi.addBulkTrip(data);
           console.log('add response :>', response);
           if (response && response.ok) {
             const data = response.data;
