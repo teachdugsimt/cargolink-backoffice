@@ -94,6 +94,7 @@ export interface EditUserPayload {
 export interface PatchUser {
   name?: string;
   phoneNumber?: string;
+  avatar?: string;
   email?: string;
   legalType?: 'INDIVIDUAL' | 'JURISTIC';
   attachCode?: string[];
