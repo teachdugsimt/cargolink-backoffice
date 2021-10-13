@@ -23,6 +23,8 @@ import MoreIcon from '@atlaskit/icon/glyph/more';
 import Select from 'react-select';
 import { TransportationStore } from '../../stores/transportation-store';
 import moment from 'moment';
+import { TripStore } from '../../stores/trip-store';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 
 interface LocationProps {
   header: string;
@@ -243,6 +245,17 @@ const DetailSmall = ({ header, content, style = {} }: any) => (
   </div>
 );
 
+const compareArray = (array1: any[], array2: any[]): boolean => {
+  const array2Sorted = array2.slice().sort();
+  return (
+    array1.length === array2.length &&
+    array1
+      .slice()
+      .sort()
+      .every((value, index) => value === array2Sorted[index])
+  );
+};
+
 interface MasterTypeProps {
   id: string;
   name: string;
@@ -271,6 +284,10 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
   const [searchTruck, setSearchTruck] = useState<any>('');
   const [isDragStart, setIsDragStart] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState('none');
+  const [dateSelected, setDateSelected] = useState<any>({});
+  const [originalTruckIds, setOriginalTruckIds] = useState<any[]>([]);
+  const [newTruckIds, setNewTruckIds] = useState<any[]>([]);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     return () => {
@@ -281,28 +298,46 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
 
   useEffect(() => {
     // jobStore.getJobById({ jobId: props.jobId });
-    TransportationStore.getJobDetail(props.jobId);
+    TransportationStore.getJobDetail(props.jobId, { isDeleted: false });
   }, [props.jobId]);
 
   useEffect(() => {
     if (TransportationStore.jobDetail) {
       const jobDetail = JSON.parse(JSON.stringify(TransportationStore.jobDetail));
+      const trips = jobDetail.trips;
       const trucks: any = [];
-      if (jobDetail?.trips) {
-        const truckList = jobDetail.trips.map((trip: any) => ({ ...trip.truck, old: true }));
+      if (trips && trips?.length) {
+        const truckList = trips.map((trip: any) => ({
+          ...trip.truck,
+          tripId: trip.id,
+          old: true,
+          startDate: trip.startDate,
+        }));
         trucks.push(...truckList);
       } else if (jobDetail?.quotations) {
-        const truckList = jobDetail.quotations.map((quot: any) => ({ ...quot.truck, old: true }));
+        const truckList = jobDetail.quotations.map((quot: any) => ({ ...quot.truck, tripId: quot.id, old: true }));
         trucks.push(...truckList);
       }
 
       console.log('trucks :>> ', trucks);
 
-      trucks.length &&
-        setState((prev: any) => ({
-          ...prev,
-          truckSelected: trucks,
-        }));
+      if (trucks && trucks?.length) {
+        const startDate: any = {};
+        const truckIds: any[] = [];
+        trucks.forEach((truck: any) => {
+          startDate[truck.id] = truck.startDate;
+          truckIds.push(truck.id);
+        });
+        setDateSelected(startDate);
+
+        setOriginalTruckIds(truckIds);
+        setNewTruckIds(truckIds);
+      }
+
+      setState((prev: any) => ({
+        ...prev,
+        truckSelected: trucks,
+      }));
     }
   }, [JSON.stringify(TransportationStore.jobDetail)]);
 
@@ -352,6 +387,23 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
     }
   }, [JSON.stringify(truckStore.truckList)]);
 
+  useEffect(() => {
+    if (state.truckSelected?.length) {
+      // setIsDisabled(compareArray())
+      const tripIds: any[] = [];
+      state.truckSelected.forEach((truck: any) => tripIds.push(truck.id));
+      setNewTruckIds(tripIds);
+    } else {
+      setNewTruckIds([]);
+    }
+  }, [JSON.stringify(state.truckSelected)]);
+
+  useEffect(() => {
+    if (newTruckIds.length) {
+      setIsDisabled(compareArray(originalTruckIds, newTruckIds));
+    }
+  }, [JSON.stringify(newTruckIds)]);
+
   const droppableIds: any = {
     droppable1: 'trucks',
     droppable2: 'truckSelected',
@@ -389,6 +441,7 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
       setState(copiedState);
     } else {
       const result: any = move(getList(source.droppableId), getList(destination.droppableId), source, destination);
+      console.log('result :>> ', result);
 
       setState({
         trucks: result.droppable1 ? result.droppable1 : state.trucks,
@@ -445,9 +498,7 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
     e.target.src = images.pinDrop;
   };
 
-  const removeTruck = (truckId: string) => {
-    console.log('truckId :>> ', truckId);
-    const truckDetail = state.truckSelected.find((truck: any) => truck.id === truckId);
+  const setNewTripOnDroppable = (truckId: string, truckDetail: any[]): void => {
     const newTruckList = state.trucks;
     newTruckList.push(truckDetail);
 
@@ -457,6 +508,25 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
       trucks: newTruckList,
       truckSelected: removeTruckList,
     });
+  };
+
+  const removeTrip = (truckId: string, tripId: string) => {
+    const truckDetail = state.truckSelected.find((truck: any) => truck.id === truckId);
+    if (truckDetail.old) {
+      Swal.fire({
+        icon: 'warning',
+        text: `ยืนยันการลบทริป!`,
+        showCancelButton: true,
+      }).then((result: SweetAlertResult) => {
+        if (result.isConfirmed) {
+          Swal.fire('Deleted!', '', 'success');
+          TripStore.delete(tripId);
+          setNewTripOnDroppable(truckId, truckDetail);
+        }
+      });
+    } else {
+      setNewTripOnDroppable(truckId, truckDetail);
+    }
   };
 
   const truckDroppable = {
@@ -473,6 +543,18 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
     title: '',
   };
 
+  const onSubmit = (): void => {
+    const truckSelected = state.truckSelected.map((truck: any) => ({
+      id: truck.id,
+      startDate: dateSelected[truck.id] ?? moment(new Date()).format('YYYY-MM-DD'),
+    }));
+    console.log('truckSelected :>> ', truckSelected);
+    TripStore.updateJobTrip(props.jobId, {
+      trucks: truckSelected,
+    });
+    // navigate('/trips');
+  };
+
   console.log('truckStore.loading :>> ', truckStore.loading);
 
   const jobDetail = TransportationStore.jobDetail ? JSON.parse(JSON.stringify(TransportationStore.jobDetail)) : {};
@@ -482,12 +564,18 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
   );
   console.log('jobDetail :>> ', jobDetail);
 
+  if (TransportationStore.error_response) {
+    return <h1>{TransportationStore.error_response.content}</h1>;
+  }
+
   return (
     <Page>
       <PageHeader breadcrumbs={breadcrumbs}>{t('job.info')}</PageHeader>
       <ButtonGroup>
         <ButtonBack onClick={() => navigate('/trips')}>{t('back')}</ButtonBack>
-        <ButtonConfrim>{t('confirm')}</ButtonConfrim>
+        <ButtonConfrim onClick={onSubmit} isDisabled={isDisabled || !newTruckIds.length ? true : false}>
+          {t('confirm')}
+        </ButtonConfrim>
       </ButtonGroup>
       <DragDropContext onDragEnd={onDragEnd} onBeforeDragStart={() => setIsDragStart(true)}>
         <Grid layout="fluid" spacing="compact">
@@ -641,12 +729,17 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
                                         <div style={{ flex: 1, paddingLeft: 15, borderLeft: '1px solid #ebeef3' }}>
                                           <Label>{'วันที่เรื่มงาน :'}</Label>
                                           <DatePicker
-                                            defaultValue={new Date().toISOString()}
+                                            defaultValue={item?.startDate || undefined}
                                             dateFormat="DD/MM/YYYY"
-                                            onChange={(date) => console.log('date :>> ', date)}
+                                            onChange={(date) =>
+                                              setDateSelected((prevState: any) => ({
+                                                ...prevState,
+                                                [item.id]: date,
+                                              }))
+                                            }
                                           />
                                         </div>
-                                        <span style={TRASH} onClick={() => removeTruck(item.id)}>
+                                        <span style={TRASH} onClick={() => removeTrip(item.id, item.tripId)}>
                                           <TrashIcon label={'trash-icon'} size={'small'} />
                                         </span>
                                       </div>

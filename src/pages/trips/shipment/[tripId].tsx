@@ -13,6 +13,8 @@ import images from '../../../components/Themes/images';
 import Button from '@atlaskit/button';
 import Spinner from '@atlaskit/spinner';
 import Select from 'react-select';
+import { TripStore } from '../../../stores/trip-store';
+import { DatePicker } from '@atlaskit/datetime-picker';
 
 interface LocationProps {
   header: string;
@@ -70,15 +72,15 @@ const Location = ({ content, header, img }: LocationProps) => (
 const Detail = ({ header, content, style = {} }: any) => (
   <div style={style}>
     <Label>{`${header} :`}</Label>
-    <Value>{content}</Value>
+    {typeof content === 'string' ? <Value>{content}</Value> : content}
   </div>
 );
 
-const InputNumber = ({ label, onChange }: any) => (
+const InputNumber = (args: any) => (
   <>
-    <Label style={{ flex: 2 }}>{`${label} :`}</Label>
+    <Label style={{ flex: 2 }}>{`${args.label ?? ''} :`}</Label>
     <div style={{ flex: 1 }}>
-      <Textfield placeholder="-" type="number" min="0" onChange={onChange} />
+      <Textfield placeholder="-" type="number" min="0" {...args} />
     </div>
   </>
 );
@@ -105,21 +107,37 @@ interface ITruckTypeSelectedOptionProps {
   isDisabled?: boolean;
 }
 
+type SelectedShipperPaymentStatusOption = 'PAYMENT_DUE' | 'PAID' | 'VOID' | 'none' | undefined;
+
+type SelectedCarrierPaymentStatusOption = 'PAID' | 'AWAITING' | 'APPROVED' | 'REJECTED' | 'ISSUED' | 'none' | undefined;
+
 interface Props {}
 
 const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
   const { jobStore, truckStore, truckTypesStore, productTypesStore } = useMst();
   const { t } = useTranslation();
+  const [jobDetail, setJobDetail] = useState<any>({});
+  const [truckDetail, setTruckDetail] = useState<any>({});
+  const [bankAccounts, setBankAccounts] = useState<any[]>([]);
   const [truckTypes, setTruckTypes] = useState<MasterTypeProps | any>({});
   const [truckTypeSelectedOption, setTruckTypeSelectedOption] = useState<Array<ITruckTypeSelectedOptionProps>>([]);
   const [productTypes, setProductTypes] = useState<MasterTypeProps | any>({});
-  const [selectedOption, setSelectedOption] = useState('none');
+  const [selectedBankAccount, setSelectedBankAccount] = useState<string>('none');
+  const [selectedShipperPaymentStatus, setSelectedShipperPaymentStatus] = useState<SelectedShipperPaymentStatusOption>(
+    'none',
+  );
+  const [selectedCarrierPaymentStatus, setSelectedCarrierPaymentStatus] = useState<SelectedCarrierPaymentStatusOption>(
+    'none',
+  );
   const [weightStart, setWeightStart] = useState<number>(0);
   const [weightEnd, setWeightEnd] = useState<number>(0);
   const [shipperPricePerTon, setShipperPricePerTon] = useState<number>(0);
   const [carrierPricePerTon, setCarrierPricePerTon] = useState<number>(0);
-  const [shipperCalculate, setShipperCalculate] = useState<number>(0);
-  const [carrierCalculate, setCarrierCalculate] = useState<number>(0);
+  const [shipperFeePercentage, setShipperFeePercentage] = useState<number>(1);
+  const [carrierFeePercentage, setCarrierFeePercentage] = useState<number>(1);
+  const [shipperBillStartDate, setShipperBillStartDate] = useState<string | undefined>();
+  const [shipperPaymentRecieveDate, setShipperPaymentRecieveDate] = useState<string | undefined>();
+  const [carrierPaymentDate, setCarrierPaymentDate] = useState<string | undefined>();
 
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => {}}>
@@ -127,6 +145,8 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
       <BreadcrumbsItem text={'Update trip information'} key="job-info" />
     </Breadcrumbs>
   );
+
+  console.log('weightStart :>> ', weightStart);
 
   useEffect(() => {
     return () => {
@@ -137,7 +157,46 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
 
   useEffect(() => {
     // jobStore.getJobById({ jobId: '3K1N5WL0' });
+    TripStore.getTripDetail(props.tripId);
   }, [props.tripId]);
+
+  useEffect(() => {
+    if (TripStore.tripDetail) {
+      const tripDetail = JSON.parse(JSON.stringify(TripStore.tripDetail));
+      setJobDetail(tripDetail.job);
+      setTruckDetail(tripDetail.truck);
+      const bankAccountData =
+        tripDetail?.bankAccount?.map((acc: any) => ({
+          value: acc.id,
+          label: `${acc.accountNo} / ${acc.accountName} / ${acc.bankName}`,
+        })) ?? [];
+      setBankAccounts(bankAccountData);
+
+      if (tripDetail.job?.payment) {
+        tripDetail.job.payment?.pricePerTon && setShipperPricePerTon(+tripDetail.job.payment.pricePerTon);
+        tripDetail.job.payment?.feePercentage && setShipperFeePercentage(+tripDetail.job.payment.feePercentage);
+        tripDetail.job.payment?.paymentStatus && setSelectedShipperPaymentStatus(tripDetail.job.payment.paymentStatus);
+        tripDetail.job.payment?.billStartDate && setShipperBillStartDate(tripDetail.job.payment.billStartDate);
+        tripDetail.job.payment?.paymentDate && setShipperPaymentRecieveDate(tripDetail.job.payment.paymentDate);
+      }
+
+      if (tripDetail.truck?.payment) {
+        tripDetail.truck.payment?.pricePerTon && setCarrierPricePerTon(+tripDetail.truck.payment.pricePerTon);
+        tripDetail.truck.payment?.feePercentage && setCarrierFeePercentage(+tripDetail.truck.payment.feePercentage);
+        tripDetail.truck.payment?.paymentStatus &&
+          setSelectedCarrierPaymentStatus(tripDetail.truck.payment.paymentStatus);
+        tripDetail.truck.payment?.paymentDate && setCarrierPaymentDate(tripDetail.truck.payment.paymentDate);
+      }
+
+      if (tripDetail?.weightStart) {
+        setWeightStart(+tripDetail.weightStart);
+      }
+
+      if (tripDetail?.weightEnd) {
+        setWeightEnd(+tripDetail.weightEnd);
+      }
+    }
+  }, [JSON.stringify(TripStore.tripDetail)]);
 
   useEffect(() => {
     if (!truckTypesStore.data) {
@@ -182,287 +241,81 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
     // const cal = (amount + weightEnd)
   };
 
-  console.log('truckStore.loading :>> ', truckStore.loading);
-
-  // const jobDetail = jobStore.currentJob ? JSON.parse(JSON.stringify(jobStore.currentJob)) : {};
-  const jobDetail = {
-    id: '3K1N5WL0',
-    productTypeId: 8,
-    productName: 'Tum Machine 1',
-    truckType: '1',
-    weight: 0,
-    requiredTruckAmount: 0,
-    publicAsCgl: false,
-    from: {
-      name: '1048 ถ. เพชรเกษม ตำบลสนามจันทร์ อำเภอเมืองนครปฐม นครปฐม 73000 ประเทศไทย',
-      dateTime: '18-07-2021 15:30',
-      contactName: 'tum',
-      contactMobileNo: '0978884444',
-      lat: '13.808213008243886',
-      lng: '100.05329774692655',
-    },
-    to: [
-      {
-        name: '2 ซ. เพชรบุรี 47 แยก 10 แขวง บางกะปิ เขตห้วยขวาง กรุงเทพมหานคร 10310 ประเทศไทย',
-        dateTime: '19-07-2021 14:30',
-        contactName: 'art',
-        contactMobileNo: '0989998888',
-        lat: '13.748751027827597',
-        lng: '100.58322547003627',
-      },
-    ],
-    owner: {
-      id: 678,
-      fullName: 'Tum',
-      companyName: 'Tum',
-      email: '',
-      mobileNo: '+66822451306',
-      avatar: {
-        object: '',
-      },
-      userId: 'GL5O0EZ6',
-    },
-    status: 'NEW',
-    price: 900,
-    priceType: 'PER_TRIP',
-    tipper: false,
-    trips: [
-      {
-        id: '15Z3XLPG',
-        owner: {
-          id: 680,
-          email: null,
-          avatar: {
-            object:
-              '07915b70bd545e137bfb0e06042fdee4fffc9479999449a785612fdf45b3e216195dc9d495ba475b9d35e26694839fae6ead73cdea33f88c40b1add477709985',
-          },
-          fullName: 'แอนดรูว์ ทรานสปอร์ต 22',
-          mobileNo: '+66815722022',
-          companyName: 'แอนดรูว์ ทรานสปอร์ต 22',
-          userId: '4LN7YEKY',
-        },
-        price: 900,
-        status: 'OPEN',
-        tipper: false,
-        weight: 1,
-        truckId: 'EZQWEEZ1',
-        bookingId: '',
-        createdAt: '2021-09-21T16:08:51',
-        priceType: null,
-        truckType: 6,
-        updatedAt: '2021-09-21T16:08:51',
-        phoneNumber: '+66815722022',
-        stallHeight: 'LOW',
-        workingZones: [
-          {
-            region: 1,
-            province: 3,
-          },
-          {
-            region: 1,
-            province: 6,
-          },
-          {
-            region: 1,
-            province: 5,
-          },
-        ],
-        approveStatus: 'INACTIVE',
-        registrationNumber: ['กข 1234'],
-      },
-      {
-        id: '2NZO6K47',
-        owner: {
-          id: 680,
-          email: null,
-          avatar: {
-            object:
-              '07915b70bd545e137bfb0e06042fdee4fffc9479999449a785612fdf45b3e216195dc9d495ba475b9d35e26694839fae6ead73cdea33f88c40b1add477709985',
-          },
-          fullName: 'แอนดรูว์ ทรานสปอร์ต 22',
-          mobileNo: '+66815722022',
-          companyName: 'แอนดรูว์ ทรานสปอร์ต 22',
-          userId: '4LN7YEKY',
-        },
-        price: 900,
-        status: 'OPEN',
-        tipper: false,
-        weight: 1,
-        truckId: 'MK7EDELQ',
-        bookingId: '',
-        createdAt: '2021-09-21T16:10:00',
-        priceType: null,
-        truckType: 1,
-        updatedAt: '2021-09-21T16:10:00',
-        phoneNumber: '+66815722022',
-        stallHeight: 'LOW',
-        workingZones: [
-          {
-            region: 1,
-            province: 10,
-          },
-        ],
-        approveStatus: 'INACTIVE',
-        registrationNumber: ['112234'],
-      },
-      {
-        id: 'G4ZWYKMP',
-        owner: {
-          id: 548,
-          email: 'sorn84913@gmail.com',
-          avatar: {
-            object: null,
-          },
-          fullName: 'คุณศร  พัทลุง',
-          mobileNo: '+66926910336',
-          companyName: 'คุณศร  พัทลุง',
-          userId: 'R3K047Z9',
-        },
-        price: 650,
-        status: 'IN_PROGRESS',
-        tipper: false,
-        weight: 0.2,
-        truckId: '2NZO9YK4',
-        bookingId: '15Z3XLPG',
-        createdAt: '2021-07-16T07:07:48',
-        priceType: 'PER_TRIP',
-        truckType: 2,
-        updatedAt: '2021-07-22T19:15:26',
-        phoneNumber: '+66926910336',
-        stallHeight: 'LOW',
-        workingZones: [],
-        approveStatus: 'INACTIVE',
-        registrationNumber: ['TEST-art6'],
-      },
-      {
-        id: '23K16L0J',
-        owner: {
-          id: 684,
-          email: 'test-sylvia-art-001@gmail.com',
-          avatar: {
-            object:
-              'a7a9e3a1bfab45cdf65783b23326ddf68384faed15a00b718d7fffff5f1d6406a69c9281a5fef8aa8500ef7a08d02a6f0420f039fd6ecc1df6d3ff918bd84adb',
-          },
-          fullName: 'Sylvia Artzyy',
-          mobileNo: '+66814592283',
-          companyName: 'Sylvia Artzyy',
-          userId: 'DLG498ZX',
-        },
-        price: 900,
-        status: 'OPEN',
-        tipper: false,
-        weight: 1,
-        truckId: '2NZO1YZ4',
-        bookingId: '',
-        createdAt: '2021-09-15T11:32:58',
-        priceType: null,
-        truckType: 5,
-        updatedAt: '2021-09-29T02:27:06',
-        phoneNumber: '+66814592283',
-        stallHeight: 'LOW',
-        workingZones: [],
-        approveStatus: 'INACTIVE',
-        registrationNumber: ['ฟก-5222', 'หจ-3344'],
-      },
-    ],
-    quotations: [
-      {
-        id: '15Z3XLPG',
-        fullName: 'คุณศร  พัทลุง',
-        avatar: {
-          object: null,
-        },
-        truck: {
-          id: '2NZO9YK4',
-          owner: {
-            id: 548,
-            email: 'sorn84913@gmail.com',
-            avatar: {
-              object: null,
-            },
-            fullName: 'คุณศร  พัทลุง',
-            mobileNo: '+66926910336',
-            companyName: 'คุณศร  พัทลุง',
-            userId: 'R3K047Z9',
-          },
-          tipper: false,
-          workingZones: [],
-          createdAt: '16-07-2021 07:07',
-          updatedAt: '22-07-2021 19:15',
-          truckType: 2,
-          stallHeight: 'LOW',
-          truckPhotos: null,
-          approveStatus: 'INACTIVE',
-          loadingWeight: 1,
-          registrationNumber: ['TEST-art6'],
-          phoneNumber: '+66926910336',
-        },
-        bookingDatetime: '18-07-2021 15:30',
-      },
-    ],
+  const onSubmiit = (): void => {
+    const data = {
+      shipperPricePerTon: +shipperPricePerTon,
+      shipperPaymentStatus: selectedShipperPaymentStatus === 'none' ? undefined : selectedShipperPaymentStatus,
+      shipperBillStartDate: shipperBillStartDate,
+      shipperPaymentDate: shipperPaymentRecieveDate,
+      weightStart: +weightStart,
+      weightEnd: +weightEnd,
+      carrierPricePerTon: +carrierPricePerTon,
+      bankAccountId: selectedBankAccount === 'none' ? undefined : selectedBankAccount,
+      carrierPaymentStatus: selectedCarrierPaymentStatus === 'none' ? undefined : selectedCarrierPaymentStatus,
+      carrierPaymentDate: carrierPaymentDate,
+    };
+    console.log('data :>> ', data);
+    TripStore.update(props.tripId, data);
+    navigate('/trips');
   };
 
-  const truckDetail = {
-    id: '9KP9Q3ZR',
-    approveStatus: 'INACTIVE',
-    loadingWeight: 1,
-    registrationNumber: ['GG-wp52'],
-    stallHeight: 'LOW',
-    tipper: false,
-    truckType: 10,
-    createdAt: '2021-09-23T08:13:46.000Z',
-    updatedAt: '2021-09-29T00:23:33.000Z',
-    quotationNumber: '0',
-    workingZones: [
-      {
-        region: 2,
-        province: 46,
-      },
-      {
-        region: 2,
-        province: 47,
-      },
-    ],
-    owner: {
-      id: 612,
-      fullName: 'Art tist zysa',
-      companyName: 'Art tist zysa',
-      email: 'arttistzys@gmail.com',
-      mobileNo: '+66929818252',
-      avatar: {
-        object:
-          '8e4aca19957a4f63469e9145092ba38ddeeb7f1b8ceeebe7b690fa77aac6a89b49d5edaaca619a777c9b10c2a4729ea0e4aba210712c6c2e176ecb460509828a',
-      },
-      userId: 'DLG448ZX',
-    },
-  };
-
-  const bankAccounts = [
+  const shipperPaymentOptions = [
     {
-      label: 'บัญชี 1111111',
-      value: '1',
+      value: 'PAYMENT_DUE',
+      label: 'รอเก็บเงิน',
     },
     {
-      label: 'บัญชี 2222222',
-      value: '2',
+      value: 'PAID',
+      label: 'เก็บเงินแล้ว',
+    },
+    {
+      value: 'VOID',
+      label: 'ยกเลิก',
     },
   ];
-  console.log('JSON.parse(JSON.stringify(jobStore.currentJob)) :>> ', JSON.parse(JSON.stringify(jobStore.currentJob)));
-  console.log('jobDetail :>> ', jobDetail);
+
+  const carrierPaymentOptions = [
+    {
+      value: 'AWAITING',
+      label: 'รออนุมัติ',
+    },
+    {
+      value: 'APPROVED',
+      label: 'อนุมัติ',
+    },
+    {
+      value: 'REJECTED',
+      label: 'ไม่อนุมัติ',
+    },
+    {
+      value: 'ISSUED',
+      label: 'ดำเนินการแล้ว',
+    },
+    {
+      value: 'PAID',
+      label: 'ชำระเงินแล้ว',
+    },
+  ];
+
+  console.log('truckStore.loading :>> ', truckStore.loading);
+
+  if (TripStore.error_response) {
+    return <h1>{TripStore.error_response.content}</h1>;
+  }
 
   return (
     <Page>
       <PageHeader breadcrumbs={breadcrumbs}>{'Update trip information'}</PageHeader>
       <ButtonGroup>
         <ButtonBack onClick={() => navigate('/trips')}>{t('back')}</ButtonBack>
-        <ButtonConfrim>{t('confirm')}</ButtonConfrim>
+        <ButtonConfrim onClick={onSubmiit}>{t('confirm')}</ButtonConfrim>
       </ButtonGroup>
 
       <Grid layout="fluid" spacing="compact">
         <GridColumn medium={6}>
           <div style={LEFT_RIGHT_SPACING}>
             <div>
-              <Box style={{ position: 'relative', overflow: 'hidden', marginTop: 5 }}>
+              <Box style={{ position: 'relative', marginTop: 5 }}>
                 <Collapse
                   isExpanded
                   topic={<Header text={'รายละเอียดงาน'} />}
@@ -504,13 +357,17 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                         <Box style={PRICE_BOX}>
                           <div style={{ display: 'flex', flexFlow: 'row wrap', padding: 10 }}>
                             <div style={INPUT_FORM}>
-                              <InputNumber label={'ราคาต่อตัน'} onChange={onCalculateShipperPrice} />
+                              <InputNumber
+                                label={'ราคาต่อตัน'}
+                                value={shipperPricePerTon || undefined}
+                                onChange={onCalculateShipperPrice}
+                              />
                             </div>
 
                             <Detail
                               header={'จำนวนเงิน'}
                               content={
-                                <>
+                                <Value>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
                                     {currencyFormat(weightEnd)}
                                   </ValueSmall>
@@ -523,7 +380,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                     {currencyFormat(weightEnd * shipperPricePerTon)}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
-                                </>
+                                </Value>
                               }
                               style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
                             />
@@ -531,20 +388,20 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <Detail
                               header={'ค่าธรรมเนียม'}
                               content={
-                                <>
+                                <Value>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
                                     {currencyFormat(weightEnd * shipperPricePerTon)}
                                   </ValueSmall>
                                   <ValueSmall>(จำนวนเงิน) x</ValueSmall>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    1%
+                                    {`${shipperFeePercentage}%`}
                                   </ValueSmall>
                                   <ValueSmall>{'='}</ValueSmall>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    {currencyFormat(weightEnd * shipperPricePerTon * 0.01)}
+                                    {currencyFormat(weightEnd * shipperPricePerTon * (shipperFeePercentage / 100))}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
-                                </>
+                                </Value>
                               }
                               style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
                             />
@@ -552,14 +409,15 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <Detail
                               header={'สุทธิ'}
                               content={
-                                <>
+                                <Value>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
                                     {currencyFormat(
-                                      weightEnd * shipperPricePerTon - weightEnd * shipperPricePerTon * 0.01,
+                                      weightEnd * shipperPricePerTon -
+                                        weightEnd * shipperPricePerTon * (shipperFeePercentage / 100),
                                     )}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
-                                </>
+                                </Value>
                               }
                               style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
                             />
@@ -567,11 +425,49 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                         </Box>
 
                         <Label>{'ข้อมูลการรับเงิน :'}</Label>
-                        <Box style={PRICE_BOX}>
+                        <Box style={{ ...PRICE_BOX, paddingBottom: 30 }}>
                           <div style={{ display: 'flex' }}>
-                            <Detail header={'สถานะ'} content={'รับเงินแล้ว'} style={{ flex: 1 }} />
-                            <Detail header={'วันที่วางบิล'} content={'12/10/21'} style={{ flex: 1 }} />
-                            <Detail header={'วันที่รับเงิน'} content={'12/10/21'} style={{ flex: 1 }} />
+                            <Col style={{ paddingRight: 10 }}>
+                              <Detail
+                                header={'สถานะ'}
+                                content={
+                                  <Select
+                                    menuPlacement={'auto'}
+                                    value={shipperPaymentOptions.filter((option: any) => {
+                                      return option.value === selectedShipperPaymentStatus;
+                                    })}
+                                    options={shipperPaymentOptions}
+                                    onChange={(e: any) => setSelectedShipperPaymentStatus(e.value)}
+                                    placeholder={'-'}
+                                    id={'job-select-payment-status'}
+                                  />
+                                }
+                              />
+                            </Col>
+                            <Col style={{ padding: '0 10px' }}>
+                              <Detail
+                                header={'วันที่วางบิล'}
+                                content={
+                                  <DatePicker
+                                    defaultValue={shipperBillStartDate || undefined}
+                                    dateFormat="DD/MM/YYYY"
+                                    onChange={(date) => setShipperBillStartDate(date)}
+                                  />
+                                }
+                              />
+                            </Col>
+                            <Col style={{ paddingLeft: 10 }}>
+                              <Detail
+                                header={'วันที่รับเงิน'}
+                                content={
+                                  <DatePicker
+                                    defaultValue={shipperPaymentRecieveDate || undefined}
+                                    dateFormat="DD/MM/YYYY"
+                                    onChange={(date) => setShipperPaymentRecieveDate(date)}
+                                  />
+                                }
+                              />
+                            </Col>
                           </div>
                         </Box>
                       </Col>
@@ -586,7 +482,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
         <GridColumn medium={6}>
           <div style={LEFT_RIGHT_SPACING}>
             <div>
-              <Box style={{ position: 'relative', overflow: 'hidden', marginTop: 5 }}>
+              <Box style={{ position: 'relative', marginTop: 5 }}>
                 <Collapse
                   isExpanded
                   topic={<Header text={'รายละเอียดรถ'} />}
@@ -597,7 +493,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                           <h3>{truckDetail.registrationNumber ? truckDetail.registrationNumber.join(' / ') : '-'}</h3>
                         </Col>
                         <Col flex={'0 1 calc(50% - 8px)'}>
-                          <Detail header={'พนักงานขับรถ'} content={truckDetail?.owner.fullName} />
+                          <Detail header={'พนักงานขับรถ'} content={truckDetail?.owner?.fullName} />
                         </Col>
                         <Col flex={'0 1 calc(50% - 8px)'}>
                           <Detail header={'วันที่'} content={jobDetail?.from?.dateTime} />
@@ -609,6 +505,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <div style={INPUT_FORM}>
                               <InputNumber
                                 label={'น้ำหนักขึ้น'}
+                                value={weightStart || undefined}
                                 onChange={(e: any) => setWeightStart(e.currentTarget.value)}
                               />
                             </div>
@@ -616,6 +513,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <div style={INPUT_FORM}>
                               <InputNumber
                                 label={'น้ำหนักลง'}
+                                value={weightEnd || undefined}
                                 onChange={(e: any) => setWeightEnd(e.currentTarget.value)}
                               />
                             </div>
@@ -623,6 +521,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <div style={INPUT_FORM}>
                               <InputNumber
                                 label={'ราคาต่อตัน'}
+                                value={carrierPricePerTon || undefined}
                                 onChange={(e: any) => setCarrierPricePerTon(e.currentTarget.value)}
                               />
                             </div>
@@ -630,7 +529,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <Detail
                               header={'จำนวนเงิน'}
                               content={
-                                <>
+                                <Value>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
                                     {currencyFormat(weightEnd)}
                                   </ValueSmall>
@@ -643,7 +542,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                     {currencyFormat(weightEnd * carrierPricePerTon)}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
-                                </>
+                                </Value>
                               }
                               style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
                             />
@@ -651,20 +550,20 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <Detail
                               header={'ค่าธรรมเนียม'}
                               content={
-                                <>
+                                <Value>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
                                     {currencyFormat(weightEnd * carrierPricePerTon)}
                                   </ValueSmall>
                                   <ValueSmall>(จำนวนเงิน) x</ValueSmall>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    1%
+                                    {`${carrierFeePercentage}%`}
                                   </ValueSmall>
                                   <ValueSmall>{'='}</ValueSmall>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    {currencyFormat(weightEnd * carrierPricePerTon * 0.01)}
+                                    {currencyFormat(weightEnd * carrierPricePerTon * (carrierFeePercentage / 100))}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
-                                </>
+                                </Value>
                               }
                               style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
                             />
@@ -672,14 +571,15 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <Detail
                               header={'สุทธิ'}
                               content={
-                                <>
+                                <Value>
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
                                     {currencyFormat(
-                                      weightEnd * carrierPricePerTon - weightEnd * carrierPricePerTon * 0.01,
+                                      weightEnd * carrierPricePerTon -
+                                        weightEnd * carrierPricePerTon * (carrierFeePercentage / 100),
                                     )}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
-                                </>
+                                </Value>
                               }
                               style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
                             />
@@ -687,24 +587,59 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                         </Box>
 
                         <Label>{'ข้อมูลการจ่ายเงิน :'}</Label>
-                        <Box style={PRICE_BOX}>
+                        <Box style={{ ...PRICE_BOX, paddingBottom: 30 }}>
                           <Col display={'flex'} flex={1} flexFlow={'row wrap'} style={{ paddingTop: 15 }}>
                             <div style={{ flex: '100%', display: 'flex', alignItems: 'center', marginBottom: 20 }}>
                               <Label style={{ flex: 1 }}>{`${'เลขบัญชี'} :`}</Label>
                               <div style={{ flex: 2 }}>
                                 <Select
                                   value={bankAccounts.filter((option: any) => {
-                                    return option.value === selectedOption;
+                                    return option.value === selectedBankAccount;
                                   })}
                                   options={bankAccounts}
-                                  onChange={(e: any) => setSelectedOption(e.value)}
+                                  onChange={(e: any) => setSelectedBankAccount(e.value)}
                                   placeholder={'ระบุบัญชี'}
                                   id={'truck-select-bank-account'}
                                 />
                               </div>
                             </div>
-                            <Detail header={'วันที่วางบิล'} content={'12/10/21'} style={{ flex: 1 }} />
-                            <Detail header={'วันที่รับเงิน'} content={'12/10/21'} style={{ flex: 1 }} />
+                            <Col style={{ paddingRight: 10 }}>
+                              <Detail
+                                header={'สถานะการจ่าย'}
+                                content={
+                                  <Select
+                                    menuPlacement={'auto'}
+                                    value={carrierPaymentOptions.filter((option: any) => {
+                                      return option.value === selectedCarrierPaymentStatus;
+                                    })}
+                                    options={carrierPaymentOptions}
+                                    onChange={(e: any) => setSelectedCarrierPaymentStatus(e.value)}
+                                    placeholder={'-'}
+                                    id={'truck-select-payment-status'}
+                                  />
+                                }
+                              />
+                            </Col>
+                            <Col style={{ paddingLeft: 10 }}>
+                              <Detail
+                                header={'วันที่'}
+                                content={
+                                  carrierPaymentDate ? (
+                                    <DatePicker
+                                      defaultValue={carrierPaymentDate}
+                                      dateFormat="DD/MM/YYYY"
+                                      onChange={(date) => setCarrierPaymentDate(date)}
+                                    />
+                                  ) : (
+                                    <DatePicker
+                                      defaultValue={undefined}
+                                      dateFormat="DD/MM/YYYY"
+                                      onChange={(date) => setCarrierPaymentDate(date)}
+                                    />
+                                  )
+                                }
+                              />
+                            </Col>
                           </Col>
                         </Box>
                       </Col>
