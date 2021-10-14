@@ -62,6 +62,8 @@ const Trips = types.model({
   createdUser: types.maybeNull(types.string),
   jobCarrierId: types.maybeNull(types.number),
   truck: types.maybeNull(TruckModel),
+  startDate: types.maybeNull(types.string),
+  isDeleted: types.maybeNull(types.boolean),
 });
 
 const JobModel = {
@@ -181,6 +183,8 @@ const TripType = types.model({
       phoneNumber: types.maybeNull(types.string),
     }),
   ),
+  startDate: types.maybeNull(types.string),
+  isDeleted: types.maybeNull(types.boolean),
   status: types.maybeNull(types.string),
   weight: types.maybeNull(types.number),
   createdAt: types.maybeNull(types.string),

@@ -153,12 +153,14 @@ export interface TransportationParams {
   page: number;
   rowsPerPage?: number;
   descending?: boolean;
-  where?: {
-    truckType?: string;
-    fullTextSearch?: string;
-    trips?: 'NULL' | 'NOT_NULL';
-    id?: string;
-  };
+  where?: WhereTransportation;
+}
+
+export interface WhereTransportation {
+  truckType?: string;
+  fullTextSearch?: string;
+  trips?: 'NULL' | 'NOT_NULL';
+  id?: string;
 }
 
 export interface IDestination {

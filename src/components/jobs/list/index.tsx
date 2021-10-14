@@ -26,17 +26,32 @@ const INITIAL_API_PARAMS = {
   page: 1,
   descending: true,
 };
+const MAIN_COLOR: string = '#c4c4c4';
+const extendRows = (rows: Array<RowType>, onClick: (e: React.MouseEvent, rowIndex: number) => void) => {
+  setTimeout(() => {
+    const cssTable: any = document.querySelector('.sc-jJMGHv');
+    console.log('Css Table :: ', cssTable);
+    if (cssTable) cssTable.style.cssText += `padding: 20px !important;`;
 
-const extendRows = (
-  rows: Array<RowType>,
-  onClick: (e: React.MouseEvent, rowIndex: number) => void,
-) => {
+    const cssTr = cssTable.querySelectorAll('.sc-carGAA');
+    if (cssTr)
+      cssTr.forEach((e: any, i: number) => {
+        e.style.cssText += `border-bottom: 2px solid ${MAIN_COLOR}; padding: 20px !important;`;
+
+        const cssTd: any = e.querySelectorAll('.sc-jcwofb');
+        if (cssTd) {
+          cssTd.forEach((td: any) => {
+            td.style.cssText += `padding: 20px !important;`;
+          });
+        }
+      });
+  }, 250);
+
   return rows.map((row, index) => ({
     ...row,
     onClick: (e: React.MouseEvent) => onClick(e, index),
   }));
 };
-
 
 const JobContainer: React.FC = observer(() => {
   const { t } = useTranslation();
@@ -80,7 +95,7 @@ const JobContainer: React.FC = observer(() => {
   };
 
   const onProductTypeSearch = (productTypeId: string) => {
-    const value = isNaN(+productTypeId) ? undefined : JSON.stringify([productTypeId])
+    const value = isNaN(+productTypeId) ? undefined : JSON.stringify([productTypeId]);
     fireSearch({
       ...searchValue,
       productType: value,
@@ -93,7 +108,7 @@ const JobContainer: React.FC = observer(() => {
       ...searchValue,
       from: value,
     });
-  }
+  };
 
   const fireSearch = (searchParams: JobListParams) => {
     setPage(searchParams.page);
@@ -121,8 +136,8 @@ const JobContainer: React.FC = observer(() => {
       icon: 'error',
       title: title || '',
       text: content || '',
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     jobStore.getJobsList(INITIAL_API_PARAMS);
@@ -161,8 +176,8 @@ const JobContainer: React.FC = observer(() => {
   );
 
   const onRowClick = (e: React.MouseEvent, rowIndex: number) => {
-    navigate('/jobs/' + rows[rowIndex].cells[0].content)
-  }
+    navigate('/jobs/' + rows[rowIndex].cells[0].content);
+  };
 
   return (
     <div>
@@ -191,7 +206,8 @@ const JobContainer: React.FC = observer(() => {
             maxWidth="200px"
             includeNone={true}
             placeholder={t('allProvinces')}
-            onSelect={onProvinceSearch} />
+            onSelect={onProvinceSearch}
+          />
         </FiltersGroup>
         <span>{`${t('resultsFound')}: ${jobStore.data_count || 0}`}</span>
         <TableWrapper>
