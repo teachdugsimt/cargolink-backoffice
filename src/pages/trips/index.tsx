@@ -21,6 +21,7 @@ import Button from '@atlaskit/button';
 import '../../styles/custom-tbody.css';
 import { ITruckType } from '../../services/truck-type-api';
 import LottieView from 'react-lottie';
+import items from '../../Layouts/menu-item';
 
 let uuid = 0;
 
@@ -91,9 +92,10 @@ const createHead = (withWidth: boolean) => {
     ],
   };
 };
-
 interface Props {}
 const tableTreeHelper = new TableTreeDataHelper({ key: 'id' });
+
+let expandList: string[] = [];
 
 const Trip: React.FC<Props> = observer((props: any) => {
   const head = createHead(true);
@@ -157,6 +159,18 @@ const Trip: React.FC<Props> = observer((props: any) => {
               eachRow.style.cssText += `border-bottom: ${BORDER_WIDTH}px solid ${MAIN_COLOR};`;
             }
           });
+
+        setTimeout(() => {
+          const cssRow = document.querySelectorAll('.styled__TreeRowContainer-sc-56yt3z-0.dTlZWA');
+          if (cssRow) {
+            cssRow.forEach((el: any, index: number) => {
+              const lastSlot = itemsss[itemsss.length - 1];
+              if (index == itemsss.length - 1 && parentItem.id == lastSlot.id) {
+                el.style.cssText += `border-bottom: 0px solid ${MAIN_COLOR};`;
+              }
+            });
+          }
+        }, 300);
       }, 100);
 
       const truckTypeParse = masterTruckData
@@ -243,6 +257,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
 
   function getChildren(parentItem: any) {
     if (parentItem.trips) {
+      expandList.push(parentItem.id);
       return [
         {
           component: (props: any) => _renderSubTree(props, parentItem),
@@ -271,35 +286,16 @@ const Trip: React.FC<Props> = observer((props: any) => {
     return;
   }
 
-  // const _checkingExpandLastRow = () => {
-  //   const tmpLastRow: IJob = itemsss[itemsss.length - 1]
-  //   console.log("Tmp last Row itemss :: ", tmpLastRow)
-  //   const tdTruckIdRowsElement = document.querySelectorAll(".sc-jcwofb.IFsN")
-  //   if (tdTruckIdRowsElement && tmpLastRow && tmpLastRow.trips && Array.isArray(tmpLastRow.trips)) {
-  //     let result = false
-  //     let cnt = 0
-  //     Array.from(tdTruckIdRowsElement).forEach((e: any, i: number) => {
-  //       const slotTruckId = (e.innerText).toString()
-  //       console.log("Element sub table tree TD :: ", slotTruckId)
-  //       let tmpTripSlot = tmpLastRow.trips.find(tripy => tripy.truck.id == slotTruckId)
-  //       console.log("Tmp Trip SLOT :: ", tmpTripSlot)
-  //       // if (tmpLastRow.trips.find(tripy => tripy?.truck?.id && tripy.truck.id == slotTruckId)) cnt++
-  //     })
-  //     console.log("CNT HERE :: ", cnt)
-  //     return result;
-  //   }
-  //   else return false
-  // }
-
   useEffect(() => {
     let tmtItemsss = itemsss;
     if (tmtItemsss) {
       setTimeout(() => {
         const cssRow = document.querySelectorAll('.styled__TreeRowContainer-sc-56yt3z-0.dTlZWA');
-        console.log('Css Rows :: ', cssRow);
-        // _checkingExpandLastRow()
+        console.log('UseEffect Expand list => ', expandList);
         if (cssRow) {
+          const lastSlot = itemsss[itemsss.length - 1];
           cssRow.forEach((el: any, i: number) => {
+            const lastRowIsExpand = expandList.find((exl) => exl == lastSlot.id);
             el.style.cssText += `width: 100%; maxHeight: 120px;
             border-left: 2px solid ${MAIN_COLOR};
             border-right: 2px solid ${MAIN_COLOR};
@@ -308,7 +304,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
             border-radius: 5px`;
             if (i == 0) el.style.cssText += ` margin-top: 15px; `;
             else if (i != cssRow.length - 1) el.style.cssText += ``;
-            else el.style.cssText += `border-bottom: 2px solid ${MAIN_COLOR};`;
+            else el.style.cssText += `border-bottom: ${lastRowIsExpand ? 0 : 2}px solid ${MAIN_COLOR};`;
           });
         }
       }, 500);
@@ -470,6 +466,25 @@ const Trip: React.FC<Props> = observer((props: any) => {
                   itemId={id}
                   items={children}
                   onExpand={loadTableData}
+                  onCollapse={(ee: any) => {
+                    const findLastRowIsExpand = expandList.find((item) => item == ee.id);
+                    if (findLastRowIsExpand) {
+                      expandList.forEach((item: any, index: number) => {
+                        if (item == ee.id) expandList.splice(index, 1);
+                      });
+                    }
+                    const lastSlot: IJob | null = itemsss[itemsss.length - 1];
+                    if (ee && lastSlot && ee?.id == lastSlot?.id) {
+                      const cssRow = document.querySelectorAll('.styled__TreeRowContainer-sc-56yt3z-0.dTlZWA');
+                      if (cssRow) {
+                        cssRow.forEach((el: any, index: number) => {
+                          if (index == itemsss.length - 1) {
+                            el.style.cssText += `border-bottom: 2px solid ${MAIN_COLOR};`;
+                          }
+                        });
+                      }
+                    }
+                  }}
                   hasChildren={trips && trips.length > 0}
                 >
                   <Cell singleLine style={PADDING_LEFT_25}>
