@@ -16,10 +16,10 @@ class TransportationApi {
     return response;
   };
 
-  getTransportationDetailByJobId = async (jobId: string) => {
+  getTransportationDetailByJobId = async (jobId: string, params?: ITripDetailProps) => {
     const response: AxiosResponse<IJob> = await ExcuteApi(
       `/api/v1/booking/transportation/${jobId}`,
-      {},
+      params,
       'get',
       6e5,
       true,
@@ -203,4 +203,8 @@ export interface TransportationFilter {
     id?: string;
     fullTextSearch?: string;
   };
+}
+
+export interface ITripDetailProps {
+  isDeleted?: boolean | null;
 }
