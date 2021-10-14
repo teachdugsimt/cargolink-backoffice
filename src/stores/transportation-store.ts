@@ -1,6 +1,9 @@
 import { types, flow, cast } from 'mobx-state-tree';
-import TransportationApi from '../services/transportation-api';
-import { TransportationResponse, TransportationParams } from '../services/transportation-api';
+import TransportationApi, {
+  TransportationResponse,
+  TransportationParams,
+  ITripDetailProps,
+} from '../services/transportation-api';
 
 const ImageModel = types.model({
   object: types.maybeNull(types.string),
@@ -62,6 +65,8 @@ const Trips = types.model({
   createdUser: types.maybeNull(types.string),
   jobCarrierId: types.maybeNull(types.number),
   truck: types.maybeNull(TruckModel),
+  startDate: types.maybeNull(types.string),
+  isDeleted: types.maybeNull(types.boolean),
 });
 
 const JobModel = {
@@ -174,18 +179,29 @@ const TripType = types.model({
       updatedAt: types.maybeNull(types.string),
       truckType: types.maybeNull(types.number),
       stallHeight: types.maybeNull(types.string),
-      truckPhotos: types.maybeNull(types.array(types.string)),
+      truckPhotos: types.maybeNull(
+        types.model({
+          back: types.maybeNull(types.string),
+          front: types.maybeNull(types.string),
+          left: types.maybeNull(types.string),
+          right: types.maybeNull(types.string),
+        }),
+      ),
       approveStatus: types.maybeNull(types.string),
       loadingWeight: types.maybeNull(types.number),
       registrationNumber: types.maybeNull(types.array(types.string)),
       phoneNumber: types.maybeNull(types.string),
     }),
   ),
+  startDate: types.maybeNull(types.string),
+  isDeleted: types.maybeNull(types.boolean),
   status: types.maybeNull(types.string),
   weight: types.maybeNull(types.number),
   createdAt: types.maybeNull(types.string),
   createdUser: types.maybeNull(types.string),
   jobCarrierId: types.maybeNull(types.number),
+  isDeleted: types.maybeNull(types.boolean),
+  startDate: types.maybeNull(types.string),
 });
 
 const JobDetailType = types.model({
@@ -254,11 +270,11 @@ export const TransportationStore = types
         self.pagination = params;
       },
 
-      getJobDetail: flow(function* getJobDetail(jobId: string) {
+      getJobDetail: flow(function* getJobDetail(jobId: string, filter?: ITripDetailProps) {
         self.loading = true;
         self.error_response = null;
         try {
-          const response = yield TransportationApi.getTransportationDetailByJobId(jobId);
+          const response = yield TransportationApi.getTransportationDetailByJobId(jobId, filter);
           console.log('getJobDetail response :>> ', response);
           if (response && response.ok) {
             const data = response.data;
@@ -280,6 +296,10 @@ export const TransportationStore = types
           };
         }
       }),
+
+      clearJobDetail: function () {
+        self.jobDetail = null;
+      },
     };
   })
   .create({

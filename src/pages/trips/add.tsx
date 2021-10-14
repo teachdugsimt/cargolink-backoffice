@@ -25,6 +25,7 @@ import Select from 'react-select';
 import { TransportationStore } from '../../stores/transportation-store';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import moment from 'moment';
+import { TripStore } from '../../stores/trip-store';
 
 interface LocationProps {
   header: string;
@@ -281,6 +282,7 @@ const AddTrip: React.FC<Props> = observer(() => {
   const [isDragStart, setIsDragStart] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState('none');
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const [dateSelected, setDateSelected] = useState<any>({});
 
   useEffect(() => {
     return () => {
@@ -520,8 +522,17 @@ const AddTrip: React.FC<Props> = observer(() => {
       if (result.isConfirmed) {
         Swal.fire('Saved!', '', 'success');
         console.log('jobDetail.id :>> ', jobDetail.id);
-        const truckIds = state.truckSelected.map((truck: any) => truck.id);
-        console.log('truckIds :>> ', truckIds);
+        const truckSelected = state.truckSelected.map((truck: any) => ({
+          id: truck.id,
+          startDate: dateSelected[truck.id] ?? moment(new Date()).format('YYYY-MM-DD'),
+        }));
+        console.log('truckSelected :>> ', truckSelected);
+        console.log('dateSelected :>> ', dateSelected);
+        TripStore.add({
+          jobId: jobDetail.id,
+          trucks: truckSelected,
+        });
+        navigate('/trips');
       }
     });
   };
@@ -708,7 +719,13 @@ const AddTrip: React.FC<Props> = observer(() => {
                                             <DatePicker
                                               defaultValue={new Date().toISOString()}
                                               dateFormat="DD/MM/YYYY"
-                                              onChange={(date) => console.log('date :>> ', date)}
+                                              // onChange={(date) => console.log('date :>> ', date)}
+                                              onChange={(date) =>
+                                                setDateSelected((prevState: any) => ({
+                                                  ...prevState,
+                                                  [item.id]: date,
+                                                }))
+                                              }
                                             />
                                           </div>
                                           <span style={TRASH} onClick={() => removeTruck(item.id)}>

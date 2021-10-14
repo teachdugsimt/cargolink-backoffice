@@ -16,7 +16,6 @@ import TruckTypesSelector from '../../dropdowns/truckType.selector';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import ProvincesSelector from '../../dropdowns/province';
-
 const DEFAULT_API_PARAMS: TrucksListParams = {
   page: 1,
   descending: true,
@@ -27,7 +26,28 @@ enum TruckFilterState {
   ALL = -1,
 }
 
+const MAIN_COLOR: string = '#c4c4c4';
+
 const extendRows = (rows: Array<RowType>, onClick: (e: React.MouseEvent, rowIndex: number) => void) => {
+  setTimeout(() => {
+    const cssTable: any = document.querySelector('.sc-jJMGHv');
+    console.log('Css Table :: ', cssTable);
+    if (cssTable) cssTable.style.cssText += `padding: 20px !important;`;
+
+    const cssTr = cssTable.querySelectorAll('.sc-carGAA');
+    if (cssTr)
+      cssTr.forEach((e: any, i: number) => {
+        e.style.cssText += `border-bottom: 2px solid ${MAIN_COLOR}; padding: 20px !important;`;
+
+        const cssTd: any = e.querySelectorAll('.sc-jcwofb');
+        if (cssTd) {
+          cssTd.forEach((td: any) => {
+            td.style.cssText += `padding: 20px !important;`;
+          });
+        }
+      });
+  }, 250);
+
   return rows.map((row, index) => ({
     ...row,
     onClick: (e: React.MouseEvent) => onClick(e, index),

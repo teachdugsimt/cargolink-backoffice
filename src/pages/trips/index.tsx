@@ -2,16 +2,15 @@ import React, { useState, useEffect, CSSProperties } from 'react';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import { Link, navigate } from 'gatsby';
-import Pagination, { PaginationPropTypes } from '@atlaskit/pagination';
+import Pagination from '@atlaskit/pagination';
 import { useTranslation } from 'react-i18next';
-import EmptyState from '@atlaskit/empty-state';
 import { useMst } from '../../stores/root-store';
 import styled from 'styled-components';
 import Page from '@atlaskit/page';
 import { observer } from 'mobx-react-lite';
 import { TransportationStore } from '../../stores/transportation-store';
 import SearchForm from '../../components/search-form';
-import { IJob, ITrips, ITruck2 } from '../../services/transportation-api';
+import { IJob, ITrips, WhereTransportation } from '../../services/transportation-api';
 import { IProductType } from '../../services/product-type-api';
 import { findRegionFromProvince } from '../../utils';
 import { momentFormatDateTime } from '../../components/simple-data';
@@ -27,6 +26,18 @@ let uuid = 0;
 
 const MAIN_COLOR = '#f4f6f9';
 const BORDER_WIDTH = 2;
+const PADDING_LEFT1: CSSProperties = {
+  paddingLeft: 1.5,
+};
+const PADDING_LEFT_12: CSSProperties = {
+  paddingLeft: 12.5,
+};
+const PADDING_LEFT_10: CSSProperties = {
+  paddingLeft: 10,
+};
+const PADDING_LEFT_25: CSSProperties = {
+  paddingLeft: 25,
+};
 
 const HeaderCrop = {
   backgroundColor: MAIN_COLOR,
@@ -91,6 +102,8 @@ const Trip: React.FC<Props> = observer((props: any) => {
   const { pagination, list } = TransportationStore;
   const [itemsss, setitems] = useState<any>(null);
 
+  const normalFilter: WhereTransportation = { trips: 'NOT_NULL' };
+
   // const Dots = (data: any) => (<LottieView
   //   style={{ height: 32, width: 32, backgroundColor: color.backgroundWhite }}
   //   colorFilters={[{ keypath: 'palette 01', color: data.color }, { keypath: 'palette 02', color: data.color }]}
@@ -125,7 +138,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
     }
   }, [JSON.stringify(list)]);
 
-  const generateSubTreeRows = (tripList: ITrips[]) => {
+  const generateSubTreeRows = (tripList: ITrips[], parentItem: IJob) => {
     const rows = tripList.map((tripItem: ITrips, index: number) => {
       const { truck } = tripItem;
       const registrationKey: string = truck?.registrationNumber
@@ -190,13 +203,13 @@ const Trip: React.FC<Props> = observer((props: any) => {
     return rows;
   };
 
-  const _renderSubTreeTable = (subItem: ITrips[]) => {
+  const _renderSubTreeTable = (subItem: ITrips[], parentItem: IJob) => {
     return (
       <Paljs.Col breakPoint={{ xs: 11.6, md: 11.6 }} style={{}}>
         <Paljs.Col breakPoint={{ xs: 12, md: 12 }} style={{ borderRadius: 2.5 }}>
           <DynamicTableStateless
             head={head}
-            rows={generateSubTreeRows(subItem)}
+            rows={generateSubTreeRows(subItem, parentItem)}
             isFixedSize
             onSort={() => console.log('onSort')}
             onSetPage={() => console.log('onSetPage')}
@@ -210,16 +223,20 @@ const Trip: React.FC<Props> = observer((props: any) => {
     const trips: ITrips[] = props.data.trips;
     console.log('Props :: ', trips);
 
-    const el: any = document.querySelector('#tabletreeitem-3K1N5WL0');
+    // const el: any = document.querySelector('#tabletreeitem-3K1N5WL0');
+    const el: any = document.querySelectorAll(`[id^='tabletreeitem-']`);
+    console.log('EL ele   :: ', el);
     if (el)
-      el.style.cssText += ` border-top: ${BORDER_WIDTH}px dashed ${MAIN_COLOR};
+      el.forEach((e: any) => {
+        e.style.cssText += ` border-top: ${BORDER_WIDTH}px dashed ${MAIN_COLOR};
       border-right: ${BORDER_WIDTH}px solid ${MAIN_COLOR};
       border-bottom: ${BORDER_WIDTH}px solid ${MAIN_COLOR};
       border-left:   ${BORDER_WIDTH}px solid  ${MAIN_COLOR}; border-radius: 5px`;
+      });
 
     return (
       <Paljs.Row style={{ paddingTop: 5, paddingBottom: 10, marginLeft: 0.5, marginRight: 0.5, paddingRight: 12 }}>
-        {_renderSubTreeTable(trips)}
+        {_renderSubTreeTable(trips, parentItem)}
       </Paljs.Row>
     );
   };
@@ -254,16 +271,44 @@ const Trip: React.FC<Props> = observer((props: any) => {
     return;
   }
 
+  // const _checkingExpandLastRow = () => {
+  //   const tmpLastRow: IJob = itemsss[itemsss.length - 1]
+  //   console.log("Tmp last Row itemss :: ", tmpLastRow)
+  //   const tdTruckIdRowsElement = document.querySelectorAll(".sc-jcwofb.IFsN")
+  //   if (tdTruckIdRowsElement && tmpLastRow && tmpLastRow.trips && Array.isArray(tmpLastRow.trips)) {
+  //     let result = false
+  //     let cnt = 0
+  //     Array.from(tdTruckIdRowsElement).forEach((e: any, i: number) => {
+  //       const slotTruckId = (e.innerText).toString()
+  //       console.log("Element sub table tree TD :: ", slotTruckId)
+  //       let tmpTripSlot = tmpLastRow.trips.find(tripy => tripy.truck.id == slotTruckId)
+  //       console.log("Tmp Trip SLOT :: ", tmpTripSlot)
+  //       // if (tmpLastRow.trips.find(tripy => tripy?.truck?.id && tripy.truck.id == slotTruckId)) cnt++
+  //     })
+  //     console.log("CNT HERE :: ", cnt)
+  //     return result;
+  //   }
+  //   else return false
+  // }
+
   useEffect(() => {
     let tmtItemsss = itemsss;
     if (tmtItemsss) {
       setTimeout(() => {
         const cssRow = document.querySelectorAll('.styled__TreeRowContainer-sc-56yt3z-0.dTlZWA');
         console.log('Css Rows :: ', cssRow);
+        // _checkingExpandLastRow()
         if (cssRow) {
-          cssRow.forEach((el: any) => {
-            el.style.cssText += `width: 100%; maxHeight: 120px; border: 2px solid ${MAIN_COLOR}; margin-top: 15px;
-            margin-bottom: 15px; border-radius: 5px`;
+          cssRow.forEach((el: any, i: number) => {
+            el.style.cssText += `width: 100%; maxHeight: 120px;
+            border-left: 2px solid ${MAIN_COLOR};
+            border-right: 2px solid ${MAIN_COLOR};
+            border-top: 2px solid ${MAIN_COLOR};
+            border-bottom: 0px solid white;
+            border-radius: 5px`;
+            if (i == 0) el.style.cssText += ` margin-top: 15px; `;
+            else if (i != cssRow.length - 1) el.style.cssText += ``;
+            else el.style.cssText += `border-bottom: 2px solid ${MAIN_COLOR};`;
           });
         }
       }, 500);
@@ -272,6 +317,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
 
   useEffect(() => {
     //
+    console.log('Component Did mount Pagination :: ', JSON.parse(JSON.stringify(pagination)));
     const cssHeaderDiv: any = document.querySelector('.styled__Header-sc-56yt3z-7');
     const cssHeader: any = document.querySelector('.styled__HeadersContainer-sc-56yt3z-1');
     if (cssHeader) cssHeader.style['border-bottom-width'] = '0px';
@@ -279,11 +325,16 @@ const Trip: React.FC<Props> = observer((props: any) => {
 
     if (!masterTypeStore.productTypes) masterTypeStore.getProductTypes();
     if (!truckTypesStore.data) truckTypesStore.getTruckTypes();
+
     TransportationStore.getTransportationList({
-      page: 1,
+      page: pagination.currentPage || 1,
       rowsPerPage: 10,
-      ...(searchText ? { where: { fullTextSearch: searchText } } : undefined),
+      ...(searchText ? { where: { fullTextSearch: searchText, ...normalFilter } } : { where: normalFilter }),
     });
+
+    return () => {
+      console.log('Component Will UNmount !! => ', JSON.parse(JSON.stringify(pagination)));
+    };
   }, []);
 
   const loadTableData = (parentItem?: any) => {
@@ -311,7 +362,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
       TransportationStore.getTransportationList({
         page: currentPage,
         rowsPerPage: tmpPagination.size,
-        ...(searchText ? { where: { fullTextSearch: searchText } } : undefined),
+        ...(searchText ? { where: { fullTextSearch: searchText, ...normalFilter } } : { where: normalFilter }),
       });
     }, 200);
   };
@@ -328,7 +379,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
     TransportationStore.getTransportationList({
       page: 1,
       rowsPerPage: tmpPagination.size,
-      ...(value ? { where: { fullTextSearch: value } } : undefined),
+      ...(value ? { where: { fullTextSearch: value, ...normalFilter } } : { where: normalFilter }),
     });
   };
 
@@ -367,13 +418,27 @@ const Trip: React.FC<Props> = observer((props: any) => {
       <TableTree on>
         <Paljs.Col style={HeaderCrop}>
           <Headers>
-            <Header width={'13%'}>ID</Header>
-            <Header width={'10%'}>Product name</Header>
-            <Header width={'10%'}>Product type</Header>
-            <Header width={'10%'}>Price</Header>
-            <Header width={'10%'}>Price type</Header>
-            <Header width={'35%'}>Route</Header>
-            <Header width={'10%'}>Status</Header>
+            <Header width={'15%'} style={PADDING_LEFT_12}>
+              ID
+            </Header>
+            <Header width={'10%'} style={PADDING_LEFT1}>
+              Product name
+            </Header>
+            <Header width={'10%'} style={PADDING_LEFT1}>
+              Product type
+            </Header>
+            <Header width={'10%'} style={PADDING_LEFT1}>
+              Price
+            </Header>
+            <Header width={'10%'} style={PADDING_LEFT1}>
+              Price type
+            </Header>
+            <Header width={'30%'} style={PADDING_LEFT1}>
+              Route
+            </Header>
+            <Header width={'10%'} style={PADDING_LEFT1}>
+              Status
+            </Header>
             <Header width={'5%'}> </Header>
           </Headers>
         </Paljs.Col>
@@ -396,23 +461,6 @@ const Trip: React.FC<Props> = observer((props: any) => {
             const productType = products.length && products.find((prod) => prod.id === productTypeId);
             const typeName = productType ? productType.name : '';
 
-            // let tmpCssExpandButton: any
-            // setTimeout(() => {
-            //   const expandsButtonCss = document.querySelectorAll('.css-sifhiz-ButtonBase')
-            //   console.log(`🚀  ->  expandsButtonCss`, expandsButtonCss);
-            //   console.log("INDEX HEHRE :: ", index)
-            //   if (expandsButtonCss) {
-            //     expandsButtonCss.forEach((e: any, i: number) => {
-            //       if (index == i) {
-            //         console.log("Match Css Button !!!")
-            //         tmpCssExpandButton = e
-            //         // e.style.cssText += `display: none;`
-            //       }
-            //     })
-            //   }
-            //   console.log("TMP CSS EXPAND BUTTON :: => ", tmpCssExpandButton)
-            // }, 1000);
-
             if (CustomComponent) return <CustomComponent />;
             else
               return (
@@ -424,12 +472,14 @@ const Trip: React.FC<Props> = observer((props: any) => {
                   onExpand={loadTableData}
                   hasChildren={trips && trips.length > 0}
                 >
-                  <Cell singleLine>{id}</Cell>
-                  <Cell>{productName}</Cell>
-                  <Cell>{typeName}</Cell>
-                  <Cell>{price}</Cell>
-                  <Cell>{priceType}</Cell>
-                  <Cell>
+                  <Cell singleLine style={PADDING_LEFT_25}>
+                    {id}
+                  </Cell>
+                  <Cell style={PADDING_LEFT_10}>{productName}</Cell>
+                  <Cell style={PADDING_LEFT_10}>{typeName}</Cell>
+                  <Cell style={PADDING_LEFT_10}>{price}</Cell>
+                  <Cell style={PADDING_LEFT_10}>{priceType}</Cell>
+                  <Cell style={PADDING_LEFT_10}>
                     <Address>
                       <div className="container">
                         <div className="from-root">
@@ -473,8 +523,8 @@ const Trip: React.FC<Props> = observer((props: any) => {
                       </div>
                     </Address>
                   </Cell>
-                  <Cell>{status || '-'}</Cell>
-                  <Cell style={{ marginRight: 5 }}>
+                  <Cell style={PADDING_LEFT_10}>{status || '-'}</Cell>
+                  <Cell style={PADDING_LEFT_10}>
                     <Link to={`/trips/${id}`}>
                       <div className="see-list-trip">
                         <span className="see-list-span">{t('see')}</span>
@@ -487,7 +537,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
         />
       </TableTree>
       {itemsss && (
-        <div>
+        <div style={{ marginTop: 10 }}>
           <Pagination defaultSelectedIndex={currentPage - 1} pages={pages} onChange={handlePagination} />
         </div>
       )}

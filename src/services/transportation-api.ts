@@ -16,10 +16,10 @@ class TransportationApi {
     return response;
   };
 
-  getTransportationDetailByJobId = async (jobId: string) => {
+  getTransportationDetailByJobId = async (jobId: string, params?: ITripDetailProps) => {
     const response: AxiosResponse<IJob> = await ExcuteApi(
       `/api/v1/booking/transportation/${jobId}`,
-      {},
+      params,
       'get',
       6e5,
       true,
@@ -153,12 +153,14 @@ export interface TransportationParams {
   page: number;
   rowsPerPage?: number;
   descending?: boolean;
-  where?: {
-    truckType?: string;
-    fullTextSearch?: string;
-    trips?: 'NULL' | 'NOT_NULL';
-    id?: string;
-  };
+  where?: WhereTransportation;
+}
+
+export interface WhereTransportation {
+  truckType?: string;
+  fullTextSearch?: string;
+  trips?: 'NULL' | 'NOT_NULL';
+  id?: string;
 }
 
 export interface IDestination {
@@ -201,4 +203,8 @@ export interface TransportationFilter {
     id?: string;
     fullTextSearch?: string;
   };
+}
+
+export interface ITripDetailProps {
+  isDeleted?: boolean | null;
 }

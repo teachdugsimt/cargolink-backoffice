@@ -71,3 +71,6 @@ yarn.lock
 .idea
 
 package-lock.json
+
+# Sonar Scanner
+.scannerwork/

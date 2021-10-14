@@ -17,11 +17,12 @@ import Swal from 'sweetalert2';
 
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
-import Button from '@atlaskit/button'
+import Button from '@atlaskit/button';
 import AddCircleIcon from '@atlaskit/icon/glyph/add-circle';
 
-interface Props { }
+interface Props {}
 
+const MAIN_COLOR: string = '#c4c4c4';
 const MultipleRole: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
   const { userStore, loginStore } = useMst();
@@ -57,10 +58,10 @@ const MultipleRole: React.FC<Props> = observer(() => {
           });
       },
     });
-  }
+  };
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => { }}>
+    <Breadcrumbs onExpand={() => {}}>
       <BreadcrumbsItem text={t('userManagement')} key="user-management" />
     </Breadcrumbs>
   );
@@ -69,7 +70,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
     const options = { page: 1, descending: true };
     setSearchValue(options);
     userStore.getUsers(options);
-  }
+  };
 
   useEffect(() => {
     setInitialSortingAndPage();
@@ -95,18 +96,36 @@ const MultipleRole: React.FC<Props> = observer(() => {
     if (data_user?.content) {
       const translateTel = (data: any) => {
         if (!data || !data.length) return data;
-        return data.map(d => {
+        return data.map((d) => {
           let { phoneNumber } = d;
           if (phoneNumber && phoneNumber.startsWith('+66')) phoneNumber = `0${phoneNumber.substr(3)}`;
           return {
             ...d,
             phoneNumber,
-          }
+          };
         });
       };
       const content = translateTel(data_user.content);
       const rows = createRow(content, loginStore.language, t, deleteUser);
       setRowData(rows);
+      setTimeout(() => {
+        const cssTable: any = document.querySelector('.sc-jJMGHv');
+        console.log('Css Table :: ', cssTable);
+        if (cssTable) cssTable.style.cssText += `padding: 20px !important;`;
+
+        const cssTr = cssTable.querySelectorAll('.sc-carGAA');
+        if (cssTr)
+          cssTr.forEach((e: any, i: number) => {
+            e.style.cssText += `border-bottom: 2px solid ${MAIN_COLOR}; padding: 20px !important;`;
+
+            const cssTd: any = e.querySelectorAll('.sc-jcwofb');
+            if (cssTd) {
+              cssTd.forEach((td: any) => {
+                td.style.cssText += `padding: 20px !important;`;
+              });
+            }
+          });
+      }, 250);
       const rowLen = data_user?.lengthPerPage;
       rowLen != null && setRowLength(rowLen);
     }
@@ -131,13 +150,13 @@ const MultipleRole: React.FC<Props> = observer(() => {
           ...search,
           jobCount: parseInt(value, 10),
           truckCount: parseInt(value, 10),
-        }
+        };
       }
       if (date.isValid()) {
         search = {
           ...search,
           registerDate: moment(value).format('YYYY-MM-DD'),
-        }
+        };
       }
       setPage(1);
       setSearchValue(search);
@@ -168,13 +187,10 @@ const MultipleRole: React.FC<Props> = observer(() => {
   //   })
   // };
 
-
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-        <PageHeader breadcrumbs={breadcrumbs}>
-          {t('userManagement')}
-        </PageHeader>
+        <PageHeader breadcrumbs={breadcrumbs}>{t('userManagement')}</PageHeader>
         {/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}> */}
         <div style={{ marginTop: 38 }}>
           <Button
@@ -194,7 +210,6 @@ const MultipleRole: React.FC<Props> = observer(() => {
 
       <SearchForm onSearch={(value: any) => onSearch(value)} />
       {/* </div> */}
-
 
       <span>{`${t('resultsFound')}: ${userStore.data_count || 0}`}</span>
       <DynamicTable
@@ -226,7 +241,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
           userStore.getUsers(search);
         }}
       />
-    </div >
+    </div>
   );
 });
 export default MultipleRole;
