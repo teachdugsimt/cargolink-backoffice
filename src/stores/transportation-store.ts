@@ -20,15 +20,17 @@ const TruckModel = types.model({
   phoneNumber: types.maybeNull(types.string),
   createdAt: types.maybeNull(types.string),
   updatedAt: types.maybeNull(types.string),
-  isLiked: types.optional(types.boolean, false),
-  workZones: types.optional(
-    types.array(
-      types.model({
-        region: types.maybeNull(types.number),
-        province: types.maybeNull(types.number),
-      }),
+  isLiked: types.maybeNull(types.boolean),
+  workZones: types.maybeNull(
+    types.optional(
+      types.array(
+        types.model({
+          region: types.maybeNull(types.number),
+          province: types.maybeNull(types.number),
+        }),
+      ),
+      [],
     ),
-    [],
   ),
   owner: types.maybeNull(
     types.model({
@@ -253,6 +255,13 @@ export const TransportationStore = types
               tmpPagination.totalPages = totalPages;
               self.pagination = tmpPagination;
             }
+
+            // const tmpDataList = data.map((e: any) => {
+            //   let slot: any = e
+            //   if (!slot.trips[0].id)
+            //     delete slot.trips
+            //   return slot
+            // })
 
             self.list = data;
           } else {
