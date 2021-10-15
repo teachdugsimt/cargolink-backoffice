@@ -157,6 +157,7 @@ const Image = memo(
       src={src}
       style={{
         width: 25,
+        height: 25,
         borderRadius: '50%',
         backgroundColor: '#ebeef3',
         padding: 2,
@@ -726,7 +727,7 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
                                         <div style={{ flex: 1, paddingLeft: 15, borderLeft: '1px solid #ebeef3' }}>
                                           <Label>{'วันที่เรื่มงาน :'}</Label>
                                           <DatePicker
-                                            defaultValue={item?.startDate || undefined}
+                                            defaultValue={item?.startDate || ''}
                                             dateFormat="DD/MM/YYYY"
                                             onChange={(date) => {
                                               setIsDisabled(false);

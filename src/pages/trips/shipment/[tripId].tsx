@@ -15,6 +15,8 @@ import Spinner from '@atlaskit/spinner';
 import Select from 'react-select';
 import { TripStore } from '../../../stores/trip-store';
 import { DatePicker } from '@atlaskit/datetime-picker';
+import CurrencyInput from '../../../components/currency-input/currency-input';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 
 interface LocationProps {
   header: string;
@@ -80,7 +82,7 @@ const InputNumber = (args: any) => (
   <>
     <Label style={{ flex: 2 }}>{`${args.label ?? ''} :`}</Label>
     <div style={{ flex: 1 }}>
-      <Textfield placeholder="-" type="number" min="0" {...args} />
+      <CurrencyInput placeholder="-" type="number" min="0" {...args} />
     </div>
   </>
 );
@@ -243,21 +245,30 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
   };
 
   const onSubmiit = (): void => {
-    const data = {
-      shipperPricePerTon: +shipperPricePerTon,
-      shipperPaymentStatus: selectedShipperPaymentStatus === 'none' ? undefined : selectedShipperPaymentStatus,
-      shipperBillStartDate: shipperBillStartDate,
-      shipperPaymentDate: shipperPaymentRecieveDate,
-      weightStart: +weightStart,
-      weightEnd: +weightEnd,
-      carrierPricePerTon: +carrierPricePerTon,
-      bankAccountId: selectedBankAccount === 'none' ? undefined : selectedBankAccount,
-      carrierPaymentStatus: selectedCarrierPaymentStatus === 'none' ? undefined : selectedCarrierPaymentStatus,
-      carrierPaymentDate: carrierPaymentDate,
-    };
-    console.log('data :>> ', data);
-    TripStore.update(props.tripId, data);
-    navigate('/trips');
+    Swal.fire({
+      icon: 'warning',
+      text: `ยืนยันการแก้ไขทริป!`,
+      showCancelButton: true,
+    }).then((result: SweetAlertResult) => {
+      if (result.isConfirmed) {
+        Swal.fire('แก้ไขทริปสำเร็จ!', '', 'success');
+        const data = {
+          shipperPricePerTon: +shipperPricePerTon,
+          shipperPaymentStatus: selectedShipperPaymentStatus === 'none' ? undefined : selectedShipperPaymentStatus,
+          shipperBillStartDate: shipperBillStartDate,
+          shipperPaymentDate: shipperPaymentRecieveDate,
+          weightStart: +weightStart,
+          weightEnd: +weightEnd,
+          carrierPricePerTon: +carrierPricePerTon,
+          bankAccountId: selectedBankAccount === 'none' ? undefined : selectedBankAccount,
+          carrierPaymentStatus: selectedCarrierPaymentStatus === 'none' ? undefined : selectedCarrierPaymentStatus,
+          carrierPaymentDate: carrierPaymentDate,
+        };
+        console.log('data :>> ', data);
+        TripStore.update(props.tripId, data);
+        // navigate('/trips');
+      }
+    });
   };
 
   const shipperPaymentOptions = [
@@ -360,7 +371,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <div style={INPUT_FORM}>
                               <InputNumber
                                 label={'ราคาต่อตัน'}
-                                value={shipperPricePerTon || undefined}
+                                value={shipperPricePerTon || ''}
                                 onChange={onCalculateShipperPrice}
                               />
                             </div>
@@ -450,7 +461,8 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                 header={'วันที่วางบิล'}
                                 content={
                                   <DatePicker
-                                    defaultValue={shipperBillStartDate || undefined}
+                                    defaultValue={shipperBillStartDate}
+                                    value={shipperBillStartDate}
                                     dateFormat="DD/MM/YYYY"
                                     onChange={(date) => setShipperBillStartDate(date)}
                                   />
@@ -462,7 +474,8 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                 header={'วันที่รับเงิน'}
                                 content={
                                   <DatePicker
-                                    defaultValue={shipperPaymentRecieveDate || undefined}
+                                    defaultValue={shipperPaymentRecieveDate}
+                                    value={shipperPaymentRecieveDate}
                                     dateFormat="DD/MM/YYYY"
                                     onChange={(date) => setShipperPaymentRecieveDate(date)}
                                   />
@@ -506,7 +519,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <div style={INPUT_FORM}>
                               <InputNumber
                                 label={'น้ำหนักขึ้น'}
-                                value={weightStart || undefined}
+                                value={weightStart || ''}
                                 onChange={(e: any) => setWeightStart(e.currentTarget.value)}
                               />
                             </div>
@@ -514,7 +527,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <div style={INPUT_FORM}>
                               <InputNumber
                                 label={'น้ำหนักลง'}
-                                value={weightEnd || undefined}
+                                value={weightEnd || ''}
                                 onChange={(e: any) => setWeightEnd(e.currentTarget.value)}
                               />
                             </div>
@@ -522,7 +535,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                             <div style={INPUT_FORM}>
                               <InputNumber
                                 label={'ราคาต่อตัน'}
-                                value={carrierPricePerTon || undefined}
+                                value={carrierPricePerTon || ''}
                                 onChange={(e: any) => setCarrierPricePerTon(e.currentTarget.value)}
                               />
                             </div>
@@ -625,19 +638,12 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               <Detail
                                 header={'วันที่'}
                                 content={
-                                  carrierPaymentDate ? (
-                                    <DatePicker
-                                      defaultValue={carrierPaymentDate}
-                                      dateFormat="DD/MM/YYYY"
-                                      onChange={(date) => setCarrierPaymentDate(date)}
-                                    />
-                                  ) : (
-                                    <DatePicker
-                                      defaultValue={undefined}
-                                      dateFormat="DD/MM/YYYY"
-                                      onChange={(date) => setCarrierPaymentDate(date)}
-                                    />
-                                  )
+                                  <DatePicker
+                                    defaultValue={carrierPaymentDate}
+                                    value={carrierPaymentDate}
+                                    dateFormat="DD/MM/YYYY"
+                                    onChange={(date) => setCarrierPaymentDate(date)}
+                                  />
                                 }
                               />
                             </Col>

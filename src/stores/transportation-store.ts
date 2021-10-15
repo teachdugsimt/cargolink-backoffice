@@ -200,8 +200,6 @@ const TripType = types.model({
   createdAt: types.maybeNull(types.string),
   createdUser: types.maybeNull(types.string),
   jobCarrierId: types.maybeNull(types.number),
-  isDeleted: types.maybeNull(types.boolean),
-  startDate: types.maybeNull(types.string),
 });
 
 const JobDetailType = types.model({

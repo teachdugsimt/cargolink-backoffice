@@ -1,5 +1,4 @@
-import { CSSProperties } from 'react';
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 
 export interface CollapseProps {
   containerStyle?: CSSProperties;
