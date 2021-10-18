@@ -113,7 +113,7 @@ type SelectedShipperPaymentStatusOption = 'PAYMENT_DUE' | 'PAID' | 'VOID' | 'non
 
 type SelectedCarrierPaymentStatusOption = 'PAID' | 'AWAITING' | 'APPROVED' | 'REJECTED' | 'ISSUED' | 'none' | undefined;
 
-interface Props {}
+interface Props { }
 
 const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
   const { jobStore, truckStore, truckTypesStore, productTypesStore } = useMst();
@@ -142,7 +142,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
   const [carrierPaymentDate, setCarrierPaymentDate] = useState<string | undefined>();
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => {}}>
+    <Breadcrumbs onExpand={() => { }}>
       <BreadcrumbsItem onClick={() => navigate('/trips')} text={t('trip.management')} key="trips-management" />
       <BreadcrumbsItem text={'Update trip information'} key="job-info" />
     </Breadcrumbs>
@@ -425,7 +425,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
                                     {currencyFormat(
                                       weightEnd * shipperPricePerTon -
-                                        weightEnd * shipperPricePerTon * (shipperFeePercentage / 100),
+                                      weightEnd * shipperPricePerTon * (shipperFeePercentage / 100),
                                     )}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
@@ -520,6 +520,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               <InputNumber
                                 label={'น้ำหนักขึ้น'}
                                 value={weightStart || ''}
+                                unit={'ตัน'}
                                 onChange={(e: any) => setWeightStart(e.currentTarget.value)}
                               />
                             </div>
@@ -528,6 +529,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               <InputNumber
                                 label={'น้ำหนักลง'}
                                 value={weightEnd || ''}
+                                unit={'ตัน'}
                                 onChange={(e: any) => setWeightEnd(e.currentTarget.value)}
                               />
                             </div>
@@ -589,7 +591,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
                                     {currencyFormat(
                                       weightEnd * carrierPricePerTon -
-                                        weightEnd * carrierPricePerTon * (carrierFeePercentage / 100),
+                                      weightEnd * carrierPricePerTon * (carrierFeePercentage / 100),
                                     )}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
