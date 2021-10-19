@@ -2,6 +2,7 @@ import { types, flow, cast } from 'mobx-state-tree';
 import TransportationApi, {
   TransportationResponse,
   TransportationParams,
+  SearchJobParams,
   ITripDetailProps,
 } from '../services/transportation-api';
 
@@ -124,6 +125,48 @@ const JobModel = {
   createdAt: types.maybeNull(types.string),
 };
 
+const MinimalJobModel = types.model({
+  id: types.maybeNull(types.string),
+  productTypeId: types.maybeNull(types.number),
+  productName: types.maybeNull(types.string),
+  truckType: types.maybeNull(types.string),
+  weight: types.maybeNull(types.string),
+  requiredTruckAmount: types.maybeNull(types.number),
+  status: types.maybeNull(types.string),
+  price: types.maybeNull(types.string),
+  priceType: types.maybeNull(types.string),
+  tipper: types.maybeNull(types.boolean),
+  isDeleted: types.maybeNull(types.boolean),
+  publicAsCgl: types.maybeNull(types.boolean),
+  family: types.maybeNull(types.model({
+    parent: types.maybeNull(types.number),
+    child: types.maybeNull(types.array(types.maybeNull(types.number)))
+  })),
+  createdAt: types.maybeNull(types.string),
+  from: types.maybeNull(
+    types.model({
+      name: types.maybeNull(types.string),
+      dateTime: types.maybeNull(types.string),
+      contactName: types.maybeNull(types.string),
+      contactMobileNo: types.maybeNull(types.string),
+      lat: types.maybeNull(types.number),
+      lng: types.maybeNull(types.number),
+    }),
+  ),
+  to: types.maybeNull(
+    types.array(
+      types.model({
+        name: types.maybeNull(types.string),
+        dateTime: types.maybeNull(types.string),
+        contactName: types.maybeNull(types.string),
+        contactMobileNo: types.maybeNull(types.string),
+        lat: types.maybeNull(types.string),
+        lng: types.maybeNull(types.string),
+      }),
+    ),
+  ),
+})
+
 const ShipperJob = types.maybeNull(
   types.model({
     ...JobModel,
@@ -236,6 +279,7 @@ export const TransportationStore = types
         content: types.maybeNull(types.string),
       }),
     ),
+    search_list: types.maybeNull(types.array(types.maybeNull(MinimalJobModel))),
   })
   .actions((self) => {
     return {
@@ -253,13 +297,6 @@ export const TransportationStore = types
               tmpPagination.totalPages = totalPages;
               self.pagination = tmpPagination;
             }
-
-            // const tmpDataList = data.map((e: any) => {
-            //   let slot: any = e
-            //   if (!slot.trips[0].id)
-            //     delete slot.trips
-            //   return slot
-            // })
 
             self.list = data;
           } else {
@@ -307,6 +344,27 @@ export const TransportationStore = types
       clearJobDetail: function () {
         self.jobDetail = null;
       },
+
+
+      searchJob: flow(function* searchJob(params: SearchJobParams) {
+        self.loading = true;
+        try {
+          const response = yield TransportationApi.searchJob(params);
+          console.log('get Search Job response :> ', response);
+          if (response && response.ok) {
+            const { data }: TransportationResponse = response.data;
+            self.search_list = data || [];
+          } else {
+            const errorMsg: string = response?.data?.message || 'something wrong';
+            self.error = errorMsg;
+            self.loading = false;
+          }
+        } catch (error) {
+          console.error('Failed to get Search Job :>', error);
+          self.loading = false;
+          self.error = JSON.stringify(error);
+        }
+      }),
     };
   })
   .create({
@@ -319,6 +377,7 @@ export const TransportationStore = types
       totalPages: 0,
       currentPage: 1,
     },
+    search_list: null,
   });
 
 export interface Pagination {

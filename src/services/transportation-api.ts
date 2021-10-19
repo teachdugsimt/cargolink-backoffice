@@ -27,11 +27,32 @@ class TransportationApi {
     );
     return response;
   };
+
+  searchJob = async (params: TransportationParams) => {
+    const response: AxiosResponse<IJob> = await ExcuteApi(
+      `/api/v1/jobs/search`,
+      params,
+      'get',
+      6e5,
+      true,
+      true,
+    );
+    return response;
+  };
 }
 
 export default new TransportationApi();
 
 export interface TransportationResponse {
+  data: IJob[];
+  currentPage: number;
+  numberOfElements: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
+
+export interface SearchJobResponse {
   data: IJob[];
   currentPage: number;
   numberOfElements: number;
@@ -154,6 +175,14 @@ export interface TransportationParams {
   rowsPerPage?: number;
   descending?: boolean;
   where?: WhereTransportation;
+}
+export interface SearchJobParams {
+  page: number;
+  rowsPerPage?: number;
+  descending?: boolean;
+  where?: WhereTransportation;
+  searchText?: string;
+
 }
 
 export interface WhereTransportation {
