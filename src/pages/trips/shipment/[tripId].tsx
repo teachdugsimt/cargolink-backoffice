@@ -464,6 +464,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                     defaultValue={shipperBillStartDate}
                                     value={shipperBillStartDate}
                                     dateFormat="DD/MM/YYYY"
+                                    placeholder={'-'}
                                     onChange={(date) => setShipperBillStartDate(date)}
                                   />
                                 }
@@ -477,6 +478,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                     defaultValue={shipperPaymentRecieveDate}
                                     value={shipperPaymentRecieveDate}
                                     dateFormat="DD/MM/YYYY"
+                                    placeholder={'-'}
                                     onChange={(date) => setShipperPaymentRecieveDate(date)}
                                   />
                                 }
@@ -644,6 +646,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                     defaultValue={carrierPaymentDate}
                                     value={carrierPaymentDate}
                                     dateFormat="DD/MM/YYYY"
+                                    placeholder={'-'}
                                     onChange={(date) => setCarrierPaymentDate(date)}
                                   />
                                 }
