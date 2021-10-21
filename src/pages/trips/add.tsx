@@ -152,6 +152,7 @@ const Image = memo(
       src={src}
       style={{
         width: 25,
+        height: 25,
         borderRadius: '50%',
         backgroundColor: '#ebeef3',
         padding: 2,
@@ -261,7 +262,7 @@ interface ITruckTypeSelectedOptionProps {
   isDisabled?: boolean;
 }
 
-interface Props {}
+interface Props { }
 
 let truckPage: number = 1;
 
@@ -351,7 +352,7 @@ const AddTrip: React.FC<Props> = observer(() => {
   };
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => {}}>
+    <Breadcrumbs onExpand={() => { }}>
       <BreadcrumbsItem onClick={() => navigate('/trips')} text={t('trip.management')} key="trips-management" />
       <BreadcrumbsItem text={'Bulk cargo management'} key="bulk-cargo-management" />
     </Breadcrumbs>
@@ -486,9 +487,8 @@ const AddTrip: React.FC<Props> = observer(() => {
     });
     if (TransportationStore.list?.length) {
       const items = JSON.parse(JSON.stringify(TransportationStore.list)).map((job: any) => ({
-        label: `${job.productName} | ${productTypes[job.productTypeId]} | ${job.from.name}, ${job.from.contactName}, ${
-          job.from.contactMobileNo
-        }`,
+        label: `${job.productName} | ${productTypes[job.productTypeId]} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo
+          }`,
         value: job.id,
       }));
       setJobs(items);
@@ -758,7 +758,7 @@ const AddTrip: React.FC<Props> = observer(() => {
               <Droppable
                 key={`truck-droppable-1`}
                 droppableId={truckDroppable.droppableId}
-                // isDropDisabled={truckDroppable.droppable}
+              // isDropDisabled={truckDroppable.droppable}
               >
                 {(provided: any, snapshot: any) => (
                   <div

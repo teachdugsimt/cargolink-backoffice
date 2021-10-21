@@ -17,6 +17,7 @@ import { TripStore } from '../../../stores/trip-store';
 import { DatePicker } from '@atlaskit/datetime-picker';
 import CurrencyInput from '../../../components/currency-input/currency-input';
 import Swal, { SweetAlertResult } from 'sweetalert2';
+import { IUpdateTripProps } from '../../../services/trip-api';
 
 interface LocationProps {
   header: string;
@@ -113,7 +114,9 @@ type SelectedShipperPaymentStatusOption = 'PAYMENT_DUE' | 'PAID' | 'VOID' | 'non
 
 type SelectedCarrierPaymentStatusOption = 'PAID' | 'AWAITING' | 'APPROVED' | 'REJECTED' | 'ISSUED' | 'none' | undefined;
 
-interface Props {}
+type TripStatusOptions = 'WAITING' | 'IN_TRANSIT' | 'DONE' | undefined
+
+interface Props { }
 
 const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
   const { jobStore, truckStore, truckTypesStore, productTypesStore } = useMst();
@@ -140,9 +143,10 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
   const [shipperBillStartDate, setShipperBillStartDate] = useState<string | undefined>();
   const [shipperPaymentRecieveDate, setShipperPaymentRecieveDate] = useState<string | undefined>();
   const [carrierPaymentDate, setCarrierPaymentDate] = useState<string | undefined>();
+  const [selectedTripStatus, setSelectedTripStatus] = useState<TripStatusOptions>();
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => {}}>
+    <Breadcrumbs onExpand={() => { }}>
       <BreadcrumbsItem onClick={() => navigate('/trips')} text={t('trip.management')} key="trips-management" />
       <BreadcrumbsItem text={'Update trip information'} key="job-info" />
     </Breadcrumbs>
@@ -174,6 +178,17 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
           label: `${acc.accountNo} / ${acc.accountName} / ${acc.bankName}`,
         })) ?? [];
       setBankAccounts(bankAccountData);
+
+      if (tripDetail?.status) {
+        let tripStatus = tripDetail.status;
+        if (tripStatus === 'OPEN') {
+          tripStatus = 'WAITING'
+        } else if (tripStatus === 'IN_PROGRESS') {
+          tripStatus = 'IN_TRANSIT'
+        }
+        console.log('tripStatus :>> ', tripStatus);
+        setSelectedTripStatus(tripStatus);
+      }
 
       if (tripDetail.job?.payment) {
         tripDetail.job.payment?.pricePerTon && setShipperPricePerTon(+tripDetail.job.payment.pricePerTon);
@@ -252,7 +267,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
     }).then((result: SweetAlertResult) => {
       if (result.isConfirmed) {
         Swal.fire('แก้ไขทริปสำเร็จ!', '', 'success');
-        const data = {
+        const data: IUpdateTripProps = {
           shipperPricePerTon: +shipperPricePerTon,
           shipperPaymentStatus: selectedShipperPaymentStatus === 'none' ? undefined : selectedShipperPaymentStatus,
           shipperBillStartDate: shipperBillStartDate,
@@ -264,6 +279,13 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
           carrierPaymentStatus: selectedCarrierPaymentStatus === 'none' ? undefined : selectedCarrierPaymentStatus,
           carrierPaymentDate: carrierPaymentDate,
         };
+        if (selectedTripStatus === 'WAITING') {
+          data.status = 'OPEN'
+        } else if (selectedTripStatus === 'IN_TRANSIT') {
+          data.status = 'IN_PROGRESS'
+        } else if (selectedTripStatus === 'DONE') {
+          data.status = 'DONE'
+        }
         console.log('data :>> ', data);
         TripStore.update(props.tripId, data);
         // navigate('/trips');
@@ -308,6 +330,21 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
       label: 'ชำระเงินแล้ว',
     },
   ];
+
+  const tripStatusOptions = [
+    {
+      value: 'WAITING',
+      label: 'รอเริ่มงาน',
+    },
+    {
+      value: 'IN_TRANSIT',
+      label: 'กำลังขนส่ง',
+    },
+    {
+      value: 'DONE',
+      label: 'เสร็จสิ้น',
+    },
+  ]
 
   console.log('truckStore.loading :>> ', truckStore.loading);
 
@@ -425,7 +462,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
                                     {currencyFormat(
                                       weightEnd * shipperPricePerTon -
-                                        weightEnd * shipperPricePerTon * (shipperFeePercentage / 100),
+                                      weightEnd * shipperPricePerTon * (shipperFeePercentage / 100),
                                     )}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
@@ -464,6 +501,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                     defaultValue={shipperBillStartDate}
                                     value={shipperBillStartDate}
                                     dateFormat="DD/MM/YYYY"
+                                    placeholder={'-'}
                                     onChange={(date) => setShipperBillStartDate(date)}
                                   />
                                 }
@@ -477,6 +515,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                     defaultValue={shipperPaymentRecieveDate}
                                     value={shipperPaymentRecieveDate}
                                     dateFormat="DD/MM/YYYY"
+                                    placeholder={'-'}
                                     onChange={(date) => setShipperPaymentRecieveDate(date)}
                                   />
                                 }
@@ -503,8 +542,22 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                   children={
                     <Row style={LEFT_RIGHT_SPACING}>
                       <Col display={'flex'} flex={1} flexFlow={'row wrap'} style={{ paddingTop: 15 }}>
-                        <Col flex={'100%'}>
-                          <h3>{truckDetail.registrationNumber ? truckDetail.registrationNumber.join(' / ') : '-'}</h3>
+                        <Col flex={'100%'} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <h3 style={{ flex: 2 }}>
+                            {truckDetail.registrationNumber ? truckDetail.registrationNumber.join(' / ') : '-'}
+                          </h3>
+                          <div style={{ flex: 1 }}>
+                            <Select
+                              value={tripStatusOptions.filter((option: any) => {
+                                return option.value === selectedTripStatus;
+                              })}
+                              menuPlacement={'auto'}
+                              options={tripStatusOptions}
+                              onChange={(e: any) => setSelectedTripStatus(e.value)}
+                              placeholder={'เลือกสถานะ'}
+                              id={'trip-select-status'}
+                            />
+                          </div>
                         </Col>
                         <Col flex={'0 1 calc(50% - 8px)'}>
                           <Detail header={'พนักงานขับรถ'} content={truckDetail?.owner?.fullName} />
@@ -520,6 +573,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               <InputNumber
                                 label={'น้ำหนักขึ้น'}
                                 value={weightStart || ''}
+                                unit={'ตัน'}
                                 onChange={(e: any) => setWeightStart(e.currentTarget.value)}
                               />
                             </div>
@@ -528,6 +582,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               <InputNumber
                                 label={'น้ำหนักลง'}
                                 value={weightEnd || ''}
+                                unit={'ตัน'}
                                 onChange={(e: any) => setWeightEnd(e.currentTarget.value)}
                               />
                             </div>
@@ -589,7 +644,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                   <ValueSmall color={'#ffc107'} fontSize={16}>
                                     {currencyFormat(
                                       weightEnd * carrierPricePerTon -
-                                        weightEnd * carrierPricePerTon * (carrierFeePercentage / 100),
+                                      weightEnd * carrierPricePerTon * (carrierFeePercentage / 100),
                                     )}
                                   </ValueSmall>
                                   <ValueSmall>บาท</ValueSmall>
@@ -642,6 +697,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                                     defaultValue={carrierPaymentDate}
                                     value={carrierPaymentDate}
                                     dateFormat="DD/MM/YYYY"
+                                    placeholder={'-'}
                                     onChange={(date) => setCarrierPaymentDate(date)}
                                   />
                                 }

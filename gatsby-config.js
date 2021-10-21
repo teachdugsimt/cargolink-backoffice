@@ -62,8 +62,8 @@ module.exports = {
       },
       __key: "pages",
     },
-    'gatsby-transformer-sharp',
-    'gatsby-plugin-sharp',
+    // 'gatsby-transformer-sharp',
+    // 'gatsby-plugin-sharp',
     // {
     //   resolve: 'gatsby-plugin-manifest',
     //   options: {
