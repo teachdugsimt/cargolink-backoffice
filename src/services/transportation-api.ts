@@ -74,6 +74,7 @@ export interface IJob {
   to: IDestination[];
   owner: IOwner;
   trips: ITrips[];
+  updatedAt: string;
   status: 'NEW' | 'INPROGRESS' | 'CANCELLED' | 'DONE' | 'EXPIRED';
   tipper: boolean;
   price: number | string;

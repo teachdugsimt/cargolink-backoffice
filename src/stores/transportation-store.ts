@@ -171,6 +171,7 @@ const ShipperJob = types.maybeNull(
   types.model({
     ...JobModel,
     trips: types.maybeNull(types.array(types.maybeNull(Trips))),
+    updatedAt: types.maybeNull(types.string),
     status: types.maybeNull(types.string),
   }),
 );
