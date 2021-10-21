@@ -111,6 +111,7 @@ const TripDetailType = types.model({
   id: types.maybeNull(types.string),
   weightStart: types.maybeNull(types.string),
   weightEnd: types.maybeNull(types.string),
+  status: types.maybeNull(types.string),
   bankAccount: types.array(
     types.model({
       id: types.maybeNull(types.string),

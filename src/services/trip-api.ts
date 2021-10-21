@@ -62,4 +62,6 @@ export interface IUpdateTripProps {
   bankAccountId?: string;
   carrierPaymentStatus?: 'PAID' | 'AWAITING' | 'APPROVED' | 'REJECTED' | 'ISSUED';
   carrierPaymentDate?: string;
+
+  status?: "REJECTED" | "DONE" | "OPEN" | "IN_PROGRESS"
 }
