@@ -2,9 +2,20 @@ import { AxiosResponse } from 'axios';
 import ExcuteApi from './api-integrations/excute-api';
 
 class RegionApi {
-  getProvincesList = async () => {
+  getProvincesList = async (params: ParamsProvince) => {
     const response: AxiosResponse<ProvincesListResponse> = await ExcuteApi(
       `/api/v1/master-data/province`,
+      params ?? {},
+      'get',
+      6e5,
+      false,
+      true,
+    );
+    return response;
+  };
+  getRegionList = async () => {
+    const response: AxiosResponse<ProvincesListResponse> = await ExcuteApi(
+      `/api/v1/master-data/zone`,
       {},
       'get',
       6e5,
@@ -25,3 +36,8 @@ export interface Province {
 }
 
 export type ProvincesListResponse = Province[];
+
+export interface ParamsProvince {
+  regionId?: number
+  descending?: boolean
+}

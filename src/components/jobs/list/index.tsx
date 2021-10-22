@@ -26,11 +26,11 @@ const INITIAL_API_PARAMS = {
   page: 1,
   descending: true,
 };
-const MAIN_COLOR: string = '#c4c4c4';
+const MAIN_COLOR: string = '#f4f6f9';
 const extendRows = (rows: Array<RowType>, onClick: (e: React.MouseEvent, rowIndex: number) => void) => {
   setTimeout(() => {
     const cssTable: any = document.querySelector('.sc-jJMGHv');
-    console.log('Css Table :: ', cssTable);
+    // console.log('Css Table :: ', cssTable);
     if (cssTable) {
       cssTable.style.cssText += `padding: 20px !important;`;
     }
@@ -61,7 +61,7 @@ const extendRows = (rows: Array<RowType>, onClick: (e: React.MouseEvent, rowInde
 
 const JobContainer: React.FC = observer(() => {
   const { t } = useTranslation();
-  const { jobStore, loginStore, masterTypeStore } = useMst();
+  const { jobStore, loginStore, masterTypeStore, versatileStore } = useMst();
   const [rows, setRows] = useState<any[]>([]);
   const [productTypes, setProductTypes] = useState<IProductType[]>([]);
   const [submit, setSubmit] = useState(false);
@@ -147,8 +147,10 @@ const JobContainer: React.FC = observer(() => {
 
   useEffect(() => {
     jobStore.getJobsList(INITIAL_API_PARAMS);
-    masterTypeStore.getProductTypes();
+    // masterTypeStore.getProductTypes();
     setSearchValue(INITIAL_API_PARAMS);
+    if (!versatileStore.province) versatileStore.getProvince()
+    if (!versatileStore.list_product_type) versatileStore.findProductType()
   }, []);
 
   useEffect(() => {
@@ -156,11 +158,11 @@ const JobContainer: React.FC = observer(() => {
       const { title, content } = jobStore.error_response;
       fireError(title, content);
     }
-    if (masterTypeStore.error_response) {
-      const { title, content } = masterTypeStore.error_response;
-      fireError(title, content);
+    if (versatileStore.product_type_error) {
+      const product_error = versatileStore.product_type_error;
+      fireError("Product type failure", product_error);
     }
-  }, [jobStore.error_response, masterTypeStore.error_response]);
+  }, [jobStore.error_response, versatileStore.product_type_error]);
 
   useEffect(() => {
     const jobsData: IJobsManagement | null = JSON.parse(JSON.stringify(jobStore.data_jobs));
@@ -171,9 +173,9 @@ const JobContainer: React.FC = observer(() => {
   }, [jobStore.data_jobs, jobStore.data_jobs?.reRender, jobStore.data_jobs?.content?.length, productTypes]);
 
   useEffect(() => {
-    const { loading, productTypes } = masterTypeStore;
-    if (!loading && productTypes?.length != null) setProductTypes(productTypes as IProductType[]);
-  }, [masterTypeStore.productTypes]);
+    const { product_type_loading, list_product_type_pure } = versatileStore;
+    if (!product_type_loading && list_product_type_pure?.length != null) setProductTypes(list_product_type_pure as IProductType[]);
+  }, [versatileStore.list_product_type_pure]);
 
   const breadcrumbs = (
     <Breadcrumbs>

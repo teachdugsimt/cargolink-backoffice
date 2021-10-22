@@ -2,10 +2,10 @@ import { AxiosResponse } from 'axios';
 import ExcuteApi from './api-integrations/excute-api';
 
 class TruckTypeApi {
-  getTruckTypes = async (language = 'en') => {
+  getTruckTypes = async () => {
     const response: AxiosResponse<TruckTypesResponse> = await ExcuteApi(
       `/api/v1/master-data/truck-type`,
-      { language },
+      {},
       'get',
       6e5,
       false,

@@ -13,6 +13,7 @@ import { JobStore } from './job-store';
 import { TruckStore } from './truck-store';
 import { TruckTypeStore } from './truck-type-store';
 import { ProductTypeStore } from './product-type-store';
+import { VersatileStore } from './versatile-store';
 
 const RootModel = types.model({
   loginStore: LoginStore,
@@ -27,6 +28,7 @@ const RootModel = types.model({
   truckStore: TruckStore,
   truckTypesStore: TruckTypeStore,
   productTypesStore: ProductTypeStore,
+  versatileStore: VersatileStore
 });
 
 let initialState = RootModel.create({
@@ -92,6 +94,24 @@ let initialState = RootModel.create({
     loading: false,
     error_response: null,
   },
+  versatileStore: {
+    list: null,
+    list_loading: false,
+    error: '',
+
+    region: null,
+    loading_region: false,
+    error_region: '',
+
+    province: null,
+    loading_province: false,
+    error_province: '',
+
+    list_product_type: null,
+    list_product_type_pure: null,
+    product_type_loading: false,
+    product_type_error: '',
+  }
 });
 
 if (typeof window !== 'undefined') {

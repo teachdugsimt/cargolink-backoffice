@@ -26,12 +26,12 @@ enum TruckFilterState {
   ALL = -1,
 }
 
-const MAIN_COLOR: string = '#c4c4c4';
+const MAIN_COLOR: string = '#f4f6f9';
 
 const extendRows = (rows: Array<RowType>, onClick: (e: React.MouseEvent, rowIndex: number) => void) => {
   setTimeout(() => {
     const cssTable: any = document.querySelector('.sc-jJMGHv');
-    console.log('Css Table :: ', cssTable);
+    // console.log('Css Table :: ', cssTable);
     if (cssTable) cssTable.style.cssText += `padding: 20px !important;`;
 
     let cssTbody: any = document.querySelector('tbody');
@@ -60,7 +60,7 @@ const extendRows = (rows: Array<RowType>, onClick: (e: React.MouseEvent, rowInde
 
 const TrucksListComponent: React.FC = observer(() => {
   const { t } = useTranslation();
-  const { loginStore, truckStore } = useMst();
+  const { loginStore, truckStore, versatileStore } = useMst();
   const [rowData, setRowData] = useState<any[]>([]);
   const [page, setPage] = useState(DEFAULT_API_PARAMS.page);
   const [submit, setSubmit] = useState(false);
@@ -143,6 +143,9 @@ const TrucksListComponent: React.FC = observer(() => {
   useEffect(() => {
     truckStore.getTrucksList(searchValue);
     setSearchValue(DEFAULT_API_PARAMS);
+    console.log("Did mount versatile store :: ", JSON.parse(JSON.stringify(versatileStore)))
+    if (!versatileStore.list || !versatileStore.listDropdown) versatileStore.find()
+    if (!versatileStore.province) versatileStore.getProvince()
   }, []);
 
   useEffect(() => {
@@ -172,6 +175,7 @@ const TrucksListComponent: React.FC = observer(() => {
   const onRowClick = (e: React.MouseEvent, rowIndex: number) => {
     navigate('/vehicles/' + rowData[rowIndex].cells[7].content);
   };
+
   return (
     <div>
       <HeaderGroup>
