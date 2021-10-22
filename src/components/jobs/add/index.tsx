@@ -116,6 +116,7 @@ const AddJobContainer: React.FC = observer(() => {
         }),
         platform: 0, // 0 = website, 1 = mobile
         userId: formState?.userId,
+        ...(jobDetail ? { family: { parent: jobDetail.id, child: null } } : undefined)
       };
 
       const MODAL_TIMEOUT = 1000;
@@ -130,22 +131,6 @@ const AddJobContainer: React.FC = observer(() => {
                 Swal.hideLoading();
                 const data = (response as AxiosResponse<CreateJobResponse>).data;
                 console.log('add job response', data);
-
-                fetch('http://localhost:3000/api/v1/messaging/notification/send', {
-                  headers: { 'Content-Type': 'application/json' },
-                  method: 'POST',
-                  body: JSON.stringify({
-                    tokens: [
-                      'eDRTel7BTyGk76Yf9_crI4:APA91bGMg21mONjBEw5qjLZwLJ-Vc__iU_sYra05-qaGDbHfTiV8OTYZa6yQFCtD5obJ0Q1jH_EnM1wt4JcAZ3knANC64AWTd6nG7DLv_DrLaD82Wos5W1ARTxIauyHkgcvEInl6ZtBy',
-                    ],
-                    title: 'คาร์โก้ลิ้งค์ มีงานที่คุณอาจสนใจ',
-                    message: `งานขนส่ง ${payload.productName} ~ ${findProvince(
-                      payload?.from?.name ?? '-',
-                    )} => ${findProvince(payload?.to[0]?.name ?? '-')}`,
-                  }),
-                })
-                  .then((res) => res.json())
-                  .then((json) => console.log(json));
 
                 Swal.update({
                   icon: 'success',
@@ -187,13 +172,13 @@ const AddJobContainer: React.FC = observer(() => {
 
     console.log('Requesting ...');
     // await jobStore.getJobsListWithoutEmptyContent({ page: 1, descending: true, textSearch: inputValue });
-    await TransportationStore.getTransportationList({
+    await TransportationStore.searchJob({
       page: 1,
       descending: true,
-      where: { fullTextSearch: inputValue },
+      searchText: inputValue,
     });
-    if (TransportationStore.list?.length) {
-      const items = JSON.parse(JSON.stringify(TransportationStore.list)).map((job: any) => ({
+    if (TransportationStore.search_list?.length) {
+      const items = JSON.parse(JSON.stringify(TransportationStore.search_list)).map((job: any) => ({
         label: `${job.productName} | ${productTypes[job.productTypeId]} | ${job.from.name}, ${job.from.contactName}, ${job.from.contactMobileNo
           }`,
         value: job.id,
@@ -219,9 +204,11 @@ const AddJobContainer: React.FC = observer(() => {
     new Promise((resolve) => loadOptions(...args).then((value) => resolve(value)));
   const onSelected = (val: any) => {
     setSearchJob(val);
-    const jobDetail = JSON.parse(JSON.stringify(TransportationStore.list)).find((job: any) => job.id === val.value);
+    const jobDetail = JSON.parse(JSON.stringify(TransportationStore.search_list)).find((job: any) => job.id === val.value);
     setJobDetail(jobDetail);
   };
+
+  console.log("Job detail on select :: ", jobDetail)
 
   return (
     <div>

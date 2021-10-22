@@ -34,12 +34,16 @@ const extendRows = (rows: Array<RowType>, onClick: (e: React.MouseEvent, rowInde
     console.log('Css Table :: ', cssTable);
     if (cssTable) cssTable.style.cssText += `padding: 20px !important;`;
 
-    const cssTr = cssTable.querySelectorAll('.sc-carGAA');
+    let cssTbody: any = document.querySelector('tbody');
+    let cssTr: any
+    if (cssTbody)
+      cssTr = cssTbody.querySelectorAll('tr');
+    // const cssTr = cssTable.querySelectorAll('.sc-carGAA');
     if (cssTr)
       cssTr.forEach((e: any, i: number) => {
         e.style.cssText += `border-bottom: 2px solid ${MAIN_COLOR}; padding: 20px !important;`;
 
-        const cssTd: any = e.querySelectorAll('.sc-jcwofb');
+        const cssTd: any = e.querySelectorAll('td');
         if (cssTd) {
           cssTd.forEach((td: any) => {
             td.style.cssText += `padding: 20px !important;`;

@@ -31,14 +31,20 @@ const extendRows = (rows: Array<RowType>, onClick: (e: React.MouseEvent, rowInde
   setTimeout(() => {
     const cssTable: any = document.querySelector('.sc-jJMGHv');
     console.log('Css Table :: ', cssTable);
-    if (cssTable) cssTable.style.cssText += `padding: 20px !important;`;
+    if (cssTable) {
+      cssTable.style.cssText += `padding: 20px !important;`;
+    }
+    let cssTbody: any = document.querySelector('tbody');
+    let cssTr: any
+    if (cssTbody)
+      cssTr = cssTbody.querySelectorAll('tr');
 
-    const cssTr = cssTable.querySelectorAll('.sc-carGAA');
+    console.log("CSS TBODY :: ", cssTr)
     if (cssTr)
       cssTr.forEach((e: any, i: number) => {
         e.style.cssText += `border-bottom: 2px solid ${MAIN_COLOR}; padding: 20px !important;`;
 
-        const cssTd: any = e.querySelectorAll('.sc-jcwofb');
+        const cssTd: any = e.querySelectorAll('td');
         if (cssTd) {
           cssTd.forEach((td: any) => {
             td.style.cssText += `padding: 20px !important;`;
