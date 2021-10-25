@@ -110,7 +110,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
       setRowData(rows);
       setTimeout(() => {
         const cssTable: any = document.querySelector('.sc-jJMGHv');
-        console.log('Css Table :: ', cssTable);
+        // console.log('Css Table :: ', cssTable);
         if (cssTable) cssTable.style.cssText += `padding: 20px !important;`;
 
         const cssTr = cssTable.querySelectorAll('.sc-carGAA');

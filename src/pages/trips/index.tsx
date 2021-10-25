@@ -92,7 +92,7 @@ const createHead = (withWidth: boolean) => {
     ],
   };
 };
-interface Props {}
+interface Props { }
 const tableTreeHelper = new TableTreeDataHelper({ key: 'id' });
 
 let expandList: string[] = [];
@@ -201,11 +201,11 @@ const Trip: React.FC<Props> = observer((props: any) => {
           },
           {
             key: `status-${index}-${createKey(tripItem.status)}`,
-            content: tripItem.status,
+            content: <span>{tripItem?.status ? t(tripItem.status) : "-"}</span>,
           },
           {
             key: `price-trip-${tripItem.price}`,
-            content: tripItem.price,
+            content: tripItem.price || "-",
           },
           {
             key: `trips-edit-${tripItem.id}`,
@@ -505,14 +505,13 @@ const Trip: React.FC<Props> = observer((props: any) => {
 
                         <div className="form">
                           <span className="light-text">
-                            จาก :{' '}
+                            {t('from')} :{' '}
                             <span style={{ color: 'black' }}>
                               {findRegionFromProvince(from?.name) || '<No Address>'}
                             </span>
                           </span>
-                          <span className="light-text">{`${
-                            from?.dateTime ? momentFormatDateTime(from?.dateTime, loginStore.language) : '-'
-                          }`}</span>
+                          <span className="light-text">{`${from?.dateTime ? momentFormatDateTime(from?.dateTime, loginStore.language) : '-'
+                            }`}</span>
                         </div>
                       </div>
 
@@ -524,7 +523,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
                         </div>
                         <div className="form">
                           <span className="light-text">
-                            ถึง :{' '}
+                            {t("to")} :{' '}
                             <span style={{ color: 'black' }}>
                               {findRegionFromProvince(to[0]?.name) || '<No Address>'}
                             </span>
@@ -538,7 +537,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
                       </div>
                     </Address>
                   </Cell>
-                  <Cell style={PADDING_LEFT_10}>{status || '-'}</Cell>
+                  <Cell style={PADDING_LEFT_10}>{status ? t(status) : '-'}</Cell>
                   <Cell style={PADDING_LEFT_10}>
                     <Link to={`/trips/${id}`}>
                       <div className="see-list-trip">

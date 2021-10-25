@@ -2,10 +2,10 @@ import { AxiosResponse } from 'axios';
 import ExcuteApi from './api-integrations/excute-api';
 
 class ProductTypeApi {
-  getProductTypes = async (language = 'en') => {
+  getProductTypes = async () => {
     const response: AxiosResponse<ProductTypesResponse> = await ExcuteApi(
       `/api/v1/master-data/product-type`,
-      { language },
+      {},
       'get',
       6e5,
       false,

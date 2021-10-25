@@ -112,6 +112,10 @@ export interface PostJobParams {
   to?: IDestination[];
   platform?: number;
   userId?: string;
+  family?: {
+    parent: string | null;
+    child: string[] | null
+  } | null
 }
 
 export interface CreateJobResponse {
