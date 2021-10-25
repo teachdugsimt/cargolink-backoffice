@@ -1,4 +1,4 @@
-import React, { useState, useEffect, CSSProperties } from 'react';
+import React, { useState, useEffect, CSSProperties, useCallback, ChangeEvent } from 'react';
 import Textfield from '@atlaskit/textfield';
 import { useMst } from '../../../stores/root-store';
 import { observer } from 'mobx-react-lite';
@@ -18,6 +18,7 @@ import { DatePicker } from '@atlaskit/datetime-picker';
 import CurrencyInput from '../../../components/currency-input/currency-input';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import { IUpdateTripProps } from '../../../services/trip-api';
+import { Checkbox } from '@atlaskit/checkbox';
 
 interface LocationProps {
   header: string;
@@ -99,6 +100,14 @@ const currencyFormat = (val?: number): string => {
   return formatter.format(val).replace(parmcurrency.currency, '').trim();
 };
 
+const CheckboxVat = (arg: any) => (
+  <div style={{ marginTop: -5, marginLeft: -5, paddingRight: 5 }}>
+    <Checkbox
+      {...arg}
+    />
+  </div>
+)
+
 interface MasterTypeProps {
   id: string;
   name: string;
@@ -144,11 +153,13 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
   const [shipperPaymentRecieveDate, setShipperPaymentRecieveDate] = useState<string | undefined>();
   const [carrierPaymentDate, setCarrierPaymentDate] = useState<string | undefined>();
   const [selectedTripStatus, setSelectedTripStatus] = useState<TripStatusOptions>();
+  const [isCheckedVatShipper, setIsCheckedVatShipper] = useState<boolean>(true);
+  const [isCheckedVatCarrier, setIsCheckedVatCarrier] = useState<boolean>(true);
 
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => { }}>
       <BreadcrumbsItem onClick={() => navigate('/trips')} text={t('trip.management')} key="trips-management" />
-      <BreadcrumbsItem text={'Update trip information'} key="job-info" />
+      <BreadcrumbsItem text={'แก้ไขข้อมูลการวิ่งงาน'} key="job-info" />
     </Breadcrumbs>
   );
 
@@ -192,7 +203,10 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
 
       if (tripDetail.job?.payment) {
         tripDetail.job.payment?.pricePerTon && setShipperPricePerTon(+tripDetail.job.payment.pricePerTon);
-        tripDetail.job.payment?.feePercentage && setShipperFeePercentage(+tripDetail.job.payment.feePercentage);
+        if (tripDetail.job.payment?.feePercentage) {
+          setShipperFeePercentage(+tripDetail.job.payment.feePercentage);
+          setIsCheckedVatShipper(+tripDetail.job.payment.feePercentage ? true : false);
+        }
         tripDetail.job.payment?.paymentStatus && setSelectedShipperPaymentStatus(tripDetail.job.payment.paymentStatus);
         tripDetail.job.payment?.billStartDate && setShipperBillStartDate(tripDetail.job.payment.billStartDate);
         tripDetail.job.payment?.paymentDate && setShipperPaymentRecieveDate(tripDetail.job.payment.paymentDate);
@@ -200,7 +214,10 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
 
       if (tripDetail.truck?.payment) {
         tripDetail.truck.payment?.pricePerTon && setCarrierPricePerTon(+tripDetail.truck.payment.pricePerTon);
-        tripDetail.truck.payment?.feePercentage && setCarrierFeePercentage(+tripDetail.truck.payment.feePercentage);
+        if (tripDetail.truck.payment?.feePercentage) {
+          setCarrierFeePercentage(+tripDetail.truck.payment.feePercentage);
+          setIsCheckedVatCarrier(+tripDetail.truck.payment.feePercentage ? true : false)
+        }
         tripDetail.truck.payment?.paymentStatus &&
           setSelectedCarrierPaymentStatus(tripDetail.truck.payment.paymentStatus);
         tripDetail.truck.payment?.paymentDate && setCarrierPaymentDate(tripDetail.truck.payment.paymentDate);
@@ -259,6 +276,18 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
     // const cal = (amount + weightEnd)
   };
 
+  const onChangeVatCarrier = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    console.log('event.target.checked :>> ', event.target.checked);
+    setIsCheckedVatCarrier((current) => !current);
+    setCarrierFeePercentage(event.target.checked ? 1 : 0);
+  }, []);
+
+  const onChangeVatShipper = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    console.log('event.target.checked :>> ', event.target.checked);
+    setIsCheckedVatShipper((current) => !current);
+    setShipperFeePercentage(event.target.checked ? 1 : 0);
+  }, []);
+
   const onSubmiit = (): void => {
     Swal.fire({
       icon: 'warning',
@@ -278,6 +307,8 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
           bankAccountId: selectedBankAccount === 'none' ? undefined : selectedBankAccount,
           carrierPaymentStatus: selectedCarrierPaymentStatus === 'none' ? undefined : selectedCarrierPaymentStatus,
           carrierPaymentDate: carrierPaymentDate,
+          isVatShipper: isCheckedVatShipper,
+          isVatCarrier: isCheckedVatCarrier
         };
         if (selectedTripStatus === 'WAITING') {
           data.status = 'OPEN'
@@ -354,7 +385,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
 
   return (
     <Page>
-      <PageHeader breadcrumbs={breadcrumbs}>{'Update trip information'}</PageHeader>
+      <PageHeader breadcrumbs={breadcrumbs}>{'แก้ไขข้อมูลการวิ่งงาน'}</PageHeader>
       <ButtonGroup>
         <ButtonBack onClick={() => navigate('/trips')}>{t('back')}</ButtonBack>
         <ButtonConfrim onClick={onSubmiit}>{t('confirm')}</ButtonConfrim>
@@ -434,26 +465,36 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
                             />
 
-                            <Detail
-                              header={'ค่าธรรมเนียม'}
-                              content={
-                                <Value>
-                                  <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    {currencyFormat(weightEnd * shipperPricePerTon)}
-                                  </ValueSmall>
-                                  <ValueSmall>(จำนวนเงิน) x</ValueSmall>
-                                  <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    {`${shipperFeePercentage}%`}
-                                  </ValueSmall>
-                                  <ValueSmall>{'='}</ValueSmall>
-                                  <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    {currencyFormat(weightEnd * shipperPricePerTon * (shipperFeePercentage / 100))}
-                                  </ValueSmall>
-                                  <ValueSmall>บาท</ValueSmall>
-                                </Value>
-                              }
-                              style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
-                            />
+                            <div style={{ display: 'flex', flex: '100%', alignItems: 'center' }}>
+                              <CheckboxVat
+                                isChecked={isCheckedVatShipper}
+                                value={1}
+                                lab
+                                onChange={onChangeVatShipper}
+                                name="checkbox-vat-shipper"
+                                testId="cb-vat-shipper"
+                              />
+                              <Detail
+                                header={'ค่าธรรมเนียม'}
+                                content={
+                                  <Value>
+                                    <ValueSmall color={'#ffc107'} fontSize={16}>
+                                      {currencyFormat(weightEnd * shipperPricePerTon)}
+                                    </ValueSmall>
+                                    <ValueSmall>(จำนวนเงิน) x</ValueSmall>
+                                    <ValueSmall color={'#ffc107'} fontSize={16}>
+                                      {`${shipperFeePercentage}%`}
+                                    </ValueSmall>
+                                    <ValueSmall>{'='}</ValueSmall>
+                                    <ValueSmall color={'#ffc107'} fontSize={16}>
+                                      {currencyFormat(weightEnd * shipperPricePerTon * (shipperFeePercentage / 100))}
+                                    </ValueSmall>
+                                    <ValueSmall>บาท</ValueSmall>
+                                  </Value>
+                                }
+                                style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
+                              />
+                            </div>
 
                             <Detail
                               header={'สุทธิ'}
@@ -560,10 +601,10 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                           </div>
                         </Col>
                         <Col flex={'0 1 calc(50% - 8px)'}>
-                          <Detail header={'พนักงานขับรถ'} content={truckDetail?.owner?.fullName} />
+                          <Detail header={'ผู้ให้บริการ'} content={truckDetail?.owner?.fullName} />
                         </Col>
                         <Col flex={'0 1 calc(50% - 8px)'}>
-                          <Detail header={'วันที่'} content={jobDetail?.from?.dateTime} />
+                          <Detail header={'วันที่'} content={TripStore.tripDetail?.startDate} />
                         </Col>
 
                         <Label>{'ข้อมูลสินค้า'}</Label>
@@ -616,26 +657,36 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
                               style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
                             />
 
-                            <Detail
-                              header={'ค่าธรรมเนียม'}
-                              content={
-                                <Value>
-                                  <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    {currencyFormat(weightEnd * carrierPricePerTon)}
-                                  </ValueSmall>
-                                  <ValueSmall>(จำนวนเงิน) x</ValueSmall>
-                                  <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    {`${carrierFeePercentage}%`}
-                                  </ValueSmall>
-                                  <ValueSmall>{'='}</ValueSmall>
-                                  <ValueSmall color={'#ffc107'} fontSize={16}>
-                                    {currencyFormat(weightEnd * carrierPricePerTon * (carrierFeePercentage / 100))}
-                                  </ValueSmall>
-                                  <ValueSmall>บาท</ValueSmall>
-                                </Value>
-                              }
-                              style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
-                            />
+                            <div style={{ display: 'flex', flex: '100%', alignItems: 'center' }}>
+                              <CheckboxVat
+                                isChecked={isCheckedVatCarrier}
+                                value={1}
+                                lab
+                                onChange={onChangeVatCarrier}
+                                name="checkbox-vat-carrier"
+                                testId="cb-vat-carrier"
+                              />
+                              <Detail
+                                header={'ค่าธรรมเนียม'}
+                                content={
+                                  <Value>
+                                    <ValueSmall color={'#ffc107'} fontSize={16}>
+                                      {currencyFormat(weightEnd * carrierPricePerTon)}
+                                    </ValueSmall>
+                                    <ValueSmall>(จำนวนเงิน) x</ValueSmall>
+                                    <ValueSmall color={'#ffc107'} fontSize={16}>
+                                      {`${carrierFeePercentage}%`}
+                                    </ValueSmall>
+                                    <ValueSmall>{'='}</ValueSmall>
+                                    <ValueSmall color={'#ffc107'} fontSize={16}>
+                                      {currencyFormat(weightEnd * carrierPricePerTon * (carrierFeePercentage / 100))}
+                                    </ValueSmall>
+                                    <ValueSmall>บาท</ValueSmall>
+                                  </Value>
+                                }
+                                style={{ flex: '100%', display: 'flex', justifyContent: 'space-between' }}
+                              />
+                            </div>
 
                             <Detail
                               header={'สุทธิ'}

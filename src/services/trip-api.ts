@@ -64,4 +64,6 @@ export interface IUpdateTripProps {
   carrierPaymentDate?: string;
 
   status?: "REJECTED" | "DONE" | "OPEN" | "IN_PROGRESS"
+  isVatShipper?: boolean
+  isVatCarrier?: boolean
 }
