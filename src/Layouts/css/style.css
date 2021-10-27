@@ -249,3 +249,7 @@ hr {
   transition: 0.3s;
   transform: rotateZ(90deg);
 }
+
+div > div > table > tbody > tr > td {
+  font-size: 14px !important;
+}

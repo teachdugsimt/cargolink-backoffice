@@ -52,6 +52,11 @@ export const breakPoints = {
   xxxl: 1600,
 };
 
+const provinceMore = [
+  { label: 'Krung Thep Maha Nakhon', value: 1, region: 1 },
+  { label: 'Samut Prakan', value: 2, region: 1 },
+]
+
 interface TokenData {
   [x: string]: string;
 }
@@ -70,13 +75,13 @@ export const toFirstLetterUpperCase = (str: string) => {
 
 export const findProvince = (address?: string | null) => {
   if (!address) return null;
-  const list = [...provinceListTh, ...provinceListEn];
+  const list = [...provinceListTh, ...provinceListEn, ...provinceMore];
   const province = list.find((l) => address.includes(l.label));
   return province?.label || address;
 };
 export const findRegionFromProvince = (address?: string | null) => {
   if (!address) return null;
-  const list = [...provinceListTh, ...provinceListEn];
+  const list = [...provinceListTh, ...provinceListEn, ...provinceMore];
   const province = list.find((l) => address.includes(l.label));
   const regionFound = regionListTh.find((re) => re.value == province?.region);
   return regionFound?.label || address;
