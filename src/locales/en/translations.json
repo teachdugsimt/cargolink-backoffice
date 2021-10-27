@@ -30,6 +30,8 @@
   "addNewTruck": "ADD NEW TRUCK",
   "addNewAccount": "ADD NEW ACCOUNT",
   "addNewJob": "ADD NEW JOB",
+  "notification": "Notification",
+  "sendNotification": "send notification",
   "addDataCar": "Add vehicle information",
   "carOwner": "Vehicle Owner",
   "fieldCarOwner": "This field vehicle owner is required",

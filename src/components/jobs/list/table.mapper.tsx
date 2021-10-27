@@ -7,6 +7,7 @@ import { TFunction } from 'i18next';
 import { IProductType } from '../../../services/product-type-api';
 import { findProvince } from '../../../utils';
 import moment from 'moment'
+import { LoadingButton } from '@atlaskit/button';
 
 export const sortable: any = {
   id: true, //! Note that: DESC = true, ASC = fasle
@@ -73,6 +74,10 @@ export const createTableHeader = () => ({
       shouldTruncate: true,
       isSortable: true,
     },
+    {
+      key: 'notification',
+      content: 'Notification',
+    },
   ],
 });
 
@@ -96,6 +101,9 @@ export const createTableRows = (
   language: string,
   t: TFunction,
   onDetail: (id: string) => any,
+  onSendNotification: (jobId: string) => any,
+  tmpNotificationJobId: string | null,
+  loadingNotification: boolean,
 ) => {
   return jobs.map((job, index) => {
     const productType = products.length && products.find((prod) => prod.id === job.productTypeId);
@@ -171,10 +179,22 @@ export const createTableRows = (
           key: t(status),
           content: t(status),
         },
+        {
+          key: t("notification"),
+          content: <LoadingButton
+            spacing="compact"
+            testId="sendNotiButton"
+            isLoading={tmpNotificationJobId == job.id && loadingNotification}
+            appearance="primary"
+            onClick={() => onSendNotification(job.id || '')} sizes={'small'}>
+            {t("sendNotification")}
+          </LoadingButton>,
+        },
       ],
     };
   });
 };
+
 
 const Address = styled.div`
   display: grid;

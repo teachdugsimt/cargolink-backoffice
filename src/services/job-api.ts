@@ -22,6 +22,17 @@ class JobApi {
     );
     return response;
   };
+  sendNotification = async (params: string) => {
+    const response: AxiosResponse<boolean> = await ExcuteApi(
+      `/api/v1/jobs/notification/${params}`,
+      {},
+      'post',
+      6e5,
+      true,
+      true,
+    );
+    return response;
+  };
 }
 
 export default new JobApi();
