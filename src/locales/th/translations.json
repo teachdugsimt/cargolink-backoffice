@@ -30,6 +30,8 @@
   "addNewTruck": "เพิ่มรถบรรทุกใหม่",
   "addNewAccount": "เพิ่มบัญชีใหม่",
   "addNewJob": "เพิ่มงานใหม่",
+  "notification": "แจ้งเตือน",
+  "sendNotification": "ส่งแจ้งเตือน",
   "typeCar": "ประเภทรถที่ต้องการ",
   "fieldTypeCar": "ต้องระบุประเภทรถที่ต้องการในฟิลด์นี้",
   "desiredVehicle": "รถที่ต้องการ",

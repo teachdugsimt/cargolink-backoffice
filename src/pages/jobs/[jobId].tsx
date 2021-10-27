@@ -12,6 +12,8 @@ import UserProfile from '../../components/user-management/widgets/profile';
 import ProductWidget from '../../components/products/widgets/product';
 import TruckWidget from '../../components/truck/widgets/truck';
 import RouteWidget from '../../components/route/widgets/route';
+import { LoadingButton } from '@atlaskit/button';
+
 
 import styled from 'styled-components';
 
@@ -25,7 +27,7 @@ const JobItem = observer((props: any) => {
     console.log(props.jobId);
 
     jobStore.getJobById({ jobId: props.jobId });
-    return () => {};
+    return () => { };
   }, []);
 
   const breadcrumbs = (
@@ -40,6 +42,20 @@ const JobItem = observer((props: any) => {
   return (
     <>
       <PageHeader breadcrumbs={breadcrumbs}>{t('job.info')}</PageHeader>
+      <Grid layout="fluid" spacing="compact">
+        <GridColumn medium={12}>
+          <LoadingButton
+            style={{ width: '100%', marginBottom: 20 }}
+            spacing="compact"
+            testId="sendNotiButton"
+            isLoading={jobStore.tmpNotificationJobId == props.jobId && jobStore.notificationLoading}
+            appearance="primary"
+            onClick={() => jobStore.sendNotification(props.jobId)} sizes={'small'}>
+            {t("sendNotification")}
+          </LoadingButton>
+        </GridColumn>
+      </Grid>
+
       <Grid layout="fluid" spacing="compact">
         <GridColumn medium={6}>
           <UserProfile
@@ -75,7 +91,7 @@ const JobItem = observer((props: any) => {
 export default JobItem;
 
 const Box = styled.div`
-  background-color: #eee;
-  padding: 15px;
-  margin-bottom: 20px;
-`;
+      background-color: #eee;
+      padding: 15px;
+      margin-bottom: 20px;
+      `;

@@ -303,11 +303,13 @@ export const TransportationStore = types
           } else {
             const errorMsg: string = response?.data?.message || 'something wrong';
             self.error = errorMsg;
+            self.list = [];
             self.loading = false;
           }
         } catch (error) {
           console.error('Failed to get Transportation list :>', error);
           self.loading = false;
+          self.list = [];
           self.error = JSON.stringify(error);
         }
       }),

@@ -221,6 +221,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
         tripDetail.truck.payment?.paymentStatus &&
           setSelectedCarrierPaymentStatus(tripDetail.truck.payment.paymentStatus);
         tripDetail.truck.payment?.paymentDate && setCarrierPaymentDate(tripDetail.truck.payment.paymentDate);
+        tripDetail.truck.payment?.bankAccountId && setSelectedBankAccount(tripDetail.truck.payment.bankAccountId);
       }
 
       if (tripDetail?.weightStart) {

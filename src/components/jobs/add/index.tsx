@@ -51,7 +51,7 @@ interface SelectValue {
 
 const AddJobContainer: React.FC = observer(() => {
   const { t } = useTranslation();
-  const { loginStore } = useMst();
+  const { loginStore, versatileStore } = useMst();
   const [dumps, setDumps] = useState<SelectValue[]>([]);
   const [pickup, setPickup] = useState<any>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -207,6 +207,10 @@ const AddJobContainer: React.FC = observer(() => {
     const jobDetail = JSON.parse(JSON.stringify(TransportationStore.search_list)).find((job: any) => job.id === val.value);
     setJobDetail(jobDetail);
   };
+
+  useEffect(() => {
+    if (!versatileStore.list || !versatileStore.listDropdown) versatileStore.find()
+  }, [])
 
   console.log("Job detail on select :: ", jobDetail)
 
