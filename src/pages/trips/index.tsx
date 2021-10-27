@@ -82,12 +82,12 @@ const createHead = (withWidth: boolean) => {
       {
         key: 'price',
         content: 'Price',
-        width: withWidth ? 20 : undefined,
+        width: withWidth ? 17 : undefined,
       },
       {
         key: 'edit',
         content: '',
-        width: withWidth ? 6 : undefined,
+        width: withWidth ? 8 : undefined,
       },
     ],
   };
@@ -209,7 +209,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
           },
           {
             key: `trips-edit-${tripItem.id}`,
-            content: <Link to={`/trips/shipment/${tripItem.id}`}>Edit</Link>,
+            content: <Link to={`/trips/shipment/${tripItem.id}`}>{t('edit')}</Link>,
           },
         ],
       };
@@ -414,7 +414,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
       <TableTree on>
         <Paljs.Col style={HeaderCrop}>
           <Headers>
-            <Header width={'15%'} style={PADDING_LEFT_12}>
+            <Header width={'13%'} style={PADDING_LEFT_12}>
               ID
             </Header>
             <Header width={'10%'} style={PADDING_LEFT1}>
@@ -435,7 +435,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
             <Header width={'10%'} style={PADDING_LEFT1}>
               Status
             </Header>
-            <Header width={'5%'}> </Header>
+            <Header width={'8%'}> </Header>
           </Headers>
         </Paljs.Col>
         <Rows
@@ -541,7 +541,7 @@ const Trip: React.FC<Props> = observer((props: any) => {
                   <Cell style={PADDING_LEFT_10}>
                     <Link to={`/trips/${id}`}>
                       <div className="see-list-trip">
-                        <span className="see-list-span">{t('see')}</span>
+                        <span className="see-list-span">{t('edit')}</span>
                       </div>
                     </Link>
                   </Cell>
