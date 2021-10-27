@@ -1,4 +1,6 @@
 {
+  "action": "Action",
+  "edit": "แก้ไข",
   "loginSubtitle": "เข้าสู่ระบบด้วยอีเมลของคุณ",
   "phoneNumber": "เบอร์โทรศัพท์",
   "email": "อีเมล",
