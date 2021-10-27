@@ -6,7 +6,8 @@ import { trash } from 'react-icons-kit/fa/trash';
 import styled from 'styled-components';
 
 const Text = styled.div`
-  180px  margin: 0;
+  font-size: 14px;
+  margin: 0;
   text-overflow: ellipsis;
   overflow: hidden;
   width: 180px;
