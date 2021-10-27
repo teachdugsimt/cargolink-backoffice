@@ -156,6 +156,10 @@ export const JobStore = types
         content: types.maybeNull(types.string),
       }),
     ),
+    tmpNotificationJobId: types.maybeNull(types.string),
+    notificationLoading: types.boolean,
+    notificationData: types.boolean,
+    errorNotification: types.maybeNull(types.string)
   })
   .actions((self) => {
     return {
@@ -280,6 +284,26 @@ export const JobStore = types
       clearJobs: function () {
         self.jobList = null;
       },
+
+
+
+      sendNotification: flow(function* sendNotification(params: string) {
+        try {
+          self.notificationLoading = true;
+          self.tmpNotificationJobId = params
+          const response = yield JobApi.sendNotification(params);
+          console.log("Response send Notification :: ", response)
+          self.notificationLoading = false;
+          if (response.ok) {
+            self.notificationData = response.data;
+          } else {
+            self.errorNotification = 'Failed to notification job ' + params
+          }
+        } catch (err) {
+          self.notificationLoading = false;
+          self.notificationData = false;
+        }
+      }),
     };
   });
 
