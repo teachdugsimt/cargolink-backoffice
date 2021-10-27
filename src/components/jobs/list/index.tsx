@@ -52,10 +52,10 @@ const extendRows = (rows: Array<RowType>, onClick: (e: React.MouseEvent, rowInde
         }
       });
   }, 250);
-
+  console.log("ROWS :: ", rows)
   return rows.map((row, index) => ({
     ...row,
-    onClick: (e: React.MouseEvent) => onClick(e, index),
+    // onClick: (e: React.MouseEvent) => onClick(e, index),
   }));
 };
 
@@ -89,6 +89,7 @@ const JobContainer: React.FC = observer(() => {
         owner: value,
         from: value,
         to: value,
+        textSearch: value
       };
       if (!isNaN(+value)) {
         searchParams = {
@@ -177,7 +178,7 @@ const JobContainer: React.FC = observer(() => {
       const rows = createTableRows(jobsData.content, productTypes, loginStore.language, t, onDetail, onSendNotification, jobStore.tmpNotificationJobId, jobStore.notificationLoading);
       setRows(rows);
     }
-  }, [jobStore.data_jobs, jobStore.data_jobs?.reRender, jobStore.data_jobs?.content?.length, productTypes]);
+  }, [jobStore.data_jobs, jobStore.data_jobs?.reRender, jobStore.data_jobs?.content?.length, productTypes, jobStore.notificationLoading]);
 
   useEffect(() => {
     const { product_type_loading, list_product_type_pure } = versatileStore;

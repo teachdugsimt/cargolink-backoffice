@@ -45,7 +45,7 @@ const JobItem = observer((props: any) => {
       <Grid layout="fluid" spacing="compact">
         <GridColumn medium={12}>
           <LoadingButton
-            style={{ width: '100%', marginBottom: 20 }}
+            style={{ width: '20%', marginBottom: 20 }}
             spacing="compact"
             testId="sendNotiButton"
             isLoading={jobStore.tmpNotificationJobId == props.jobId && jobStore.notificationLoading}

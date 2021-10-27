@@ -1,4 +1,6 @@
 {
+  "action": "Action",
+  "edit": "Edit",
   "loginSubtitle": "Login with your email",
   "phoneNumber": "Phone Number",
   "email": "Email",

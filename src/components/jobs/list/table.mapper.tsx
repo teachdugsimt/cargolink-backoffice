@@ -8,6 +8,7 @@ import { IProductType } from '../../../services/product-type-api';
 import { findProvince } from '../../../utils';
 import moment from 'moment'
 import { LoadingButton } from '@atlaskit/button';
+import { Link } from 'gatsby';
 
 export const sortable: any = {
   id: true, //! Note that: DESC = true, ASC = fasle
@@ -74,10 +75,7 @@ export const createTableHeader = () => ({
       shouldTruncate: true,
       isSortable: true,
     },
-    {
-      key: 'notification',
-      content: 'Notification',
-    },
+
   ],
 });
 
@@ -189,6 +187,10 @@ export const createTableRows = (
             onClick={() => onSendNotification(job.id || '')} sizes={'small'}>
             {t("sendNotification")}
           </LoadingButton>,
+        },
+        {
+          key: t('edit'),
+          content: <Link to={'/jobs/' + job.id}>{t('edit')}</Link>
         },
       ],
     };
