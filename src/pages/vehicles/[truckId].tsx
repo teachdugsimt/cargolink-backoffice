@@ -22,6 +22,12 @@ const TruckInfo = observer((props: any) => {
     truckStore.getTruckById({ truckId: props.truckId });
   }, []);
 
+  useEffect(() => {
+    let tmpCurrentTruck = JSON.parse(JSON.stringify(truckStore.currentTruck))
+    console.log(`🚀  ->  tmpCurrentTruck`, tmpCurrentTruck);
+  }, [truckStore.currentTruck])
+
+
   const breadcrumbs = (
     <Breadcrumbs>
       <BreadcrumbsItem onClick={() => navigate('/vehicles')} text={t('vehicle.management')} key="vehicle-management" />
@@ -37,6 +43,7 @@ const TruckInfo = observer((props: any) => {
             title={currentTruck?.id}
             truckType={currentTruck?.truckType}
             tipper={currentTruck?.tipper}
+            stallHeight={currentTruck?.stallHeight}
             // truckAmount={currentTruck?.requiredTruckAmount}
             loadingWeight={currentTruck?.loadingWeight}
             registrationNumber={currentTruck?.registrationNumber}
@@ -44,7 +51,7 @@ const TruckInfo = observer((props: any) => {
         </GridColumn>
 
         <GridColumn medium={6}>
-          <TruckGalleryWidget truckPhotos={currentTruck?.truckPhotos} />
+          <TruckGalleryWidget truckPhotos={currentTruck?.truckPhotos} id={currentTruck?.id}/>
         </GridColumn>
       </Grid>
     </>

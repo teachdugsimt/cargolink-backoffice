@@ -1,4 +1,4 @@
-import truckApi, { ITruck, TrucksByCarrierParams, ChangeDocStatusPayload } from '../services/truck-api';
+import truckApi, { ITruck, TrucksByCarrierParams, ChangeDocStatusPayload, PatchTruckImgParams } from '../services/truck-api';
 import { types, flow } from 'mobx-state-tree';
 import uploadApi from '../services/upload-api';
 import { UploadFilePath } from '../services/upload-api';
@@ -87,16 +87,18 @@ const TruckWithDocument = types.model({
   document_status: types.maybeNull(types.string),
 });
 
+const modelError = types.maybeNull(
+  types.model({
+    title: types.maybeNull(types.string),
+    content: types.maybeNull(types.string),
+  }),
+)
+
 export const TruckNonPersistStore = types
   .model('TruckStore', {
     loading: false,
     data_patch_truck: types.maybeNull(types.model({})),
-    error_response: types.maybeNull(
-      types.model({
-        title: types.maybeNull(types.string),
-        content: types.maybeNull(types.string),
-      }),
-    ),
+    error_response: modelError,
 
     loading_truck: false,
     data_truck_user: types.maybeNull(TruckManagementType),
@@ -106,6 +108,11 @@ export const TruckNonPersistStore = types
     userTrucks_loading: types.boolean,
     data_truck_carrier: types.maybeNull(types.array(TruckWithDocument)),
     tmp_truck_id: types.maybeNull(types.string),
+
+    loading_img: types.boolean,
+    data_patch_img: types.boolean,
+    error_patch_img: modelError,
+    tmp_position_upload: types.maybeNull(types.string)
   })
   .actions((self) => {
     return {
@@ -156,95 +163,6 @@ export const TruckNonPersistStore = types
       clearCacheTruckDocument() {
         self.data_patch_truck = null;
       },
-
-      // getTrucksListByCarrierId: flow(function* getTrucksListByCarrierId(
-      //   params: TrucksListParams,
-      //   userId: TrucksByCarrierParams,
-      // ) {
-      //   try {
-      //     self.loading_truck = true;
-
-      //     const response = yield truckApi.getTruckByCarrierId(userId);
-      //     console.log('Get Truck list by carrier id : ', response);
-
-      //     if (response.ok) {
-      //       const tmpResponse = response.data?.data || [];
-      //       let tmp: any;
-      //       if (tmpResponse && Array.isArray(tmpResponse) && tmpResponse.length > 0) {
-      //         tmp = yield Promise.all(
-      //           tmpResponse.map(async (item: any) => {
-      //             if (item.document && typeof item.document == 'object' && Object.keys(item.document).length > 0) {
-      //               const listAttachCode = Object.keys(item.document).map((e) => item.document[e]);
-      //               const urlList = await truckApi.getLinkDownLoad(listAttachCode);
-      //               let tmpItem = JSON.parse(JSON.stringify(item));
-      //               const listUrl = JSON.parse(JSON.stringify(urlList));
-      //               tmpItem.document = listUrl.data.data || null;
-      //               return tmpItem;
-      //             } else return item;
-      //           }),
-      //         );
-      //       }
-      //       console.log('TMP IMPORTATNT !! :: ', tmp);
-      //       const newResopnse = response.data;
-      //       newResopnse.data = tmp;
-
-      //       const { data, size, totalElements, totalPages }: TrucksListResponse = newResopnse;
-      //       self.data_count = totalElements;
-      //       const currentPage = params?.page || 1;
-      //       const trucks: ITrucksManagement = {
-      //         content: [],
-      //         reRender: true,
-      //         lengthPerPage: size,
-      //       };
-      //       if (!self.isFirstLoad) trucks.reRender = !!!self.data_truck_user?.reRender;
-      //       if (data.length) {
-      //         const parsedData: ITruck[] = data.map((truck) => {
-      //           const { loadingWeight, quotationNumber, truckType } = truck;
-      //           const toNumber = (x: any) => {
-      //             if (x == null) return x;
-      //             if (isNaN(+x)) throw new Error('this should not be NaN: ' + x);
-      //             return +x;
-      //           };
-      //           const owner = {
-      //             ...truck.owner,
-      //             id: toNumber(truck.owner.id),
-      //           };
-      //           const result: ITruck = {
-      //             ...truck,
-      //             loadingWeight: toNumber(loadingWeight),
-      //             quotationNumber: toNumber(quotationNumber),
-      //             truckType: toNumber(truckType),
-      //             owner,
-      //           };
-      //           return result;
-      //         });
-      //         const emptyContent: ITruckNull = Object.keys(data[0]).reduce(
-      //           (object: ITruckNull, curr: string) => ({
-      //             ...object,
-      //             [curr]: null,
-      //           }),
-      //           {},
-      //         );
-      //         if (self.isFirstLoad) self.isFirstLoad = false;
-      //         const pagesBeforeContent = currentPage - 1;
-      //         const emptyContentsBeforeFirstItem = pagesBeforeContent * size;
-      //         const pagesAfterContent = totalPages - currentPage;
-      //         const emptyContentsAfterLastItem = pagesAfterContent * size;
-      //         trucks.content = [
-      //           ...Array(emptyContentsBeforeFirstItem).fill(emptyContent),
-      //           ...parsedData,
-      //           ...Array(emptyContentsAfterLastItem).fill(emptyContent),
-      //         ];
-      //       } else trucks.content = [];
-      //       self.data_truck_user = trucks;
-
-      //       self.loading_truck = false;
-      //     } else {
-      //     }
-      //   } catch (error) {
-      //     return error;
-      //   }
-      // }),
 
       setTmpTruckIdForLoadingButt(truckId: string) {
         self.tmp_truck_id = truckId;
@@ -318,6 +236,67 @@ export const TruckNonPersistStore = types
       clearListTruckCarrier() {
         self.data_truck_carrier = null;
       },
+
+
+
+
+
+
+      uploadVehicleImage: flow(function* uploadVehicleImage(path: UploadFilePath | null, file: File | null,
+        position: 'front' | 'back' | 'left' | 'right',
+        status: 'REPLACE' | 'NEW' | 'NO_CHANGE' | 'DELETE',
+        truckId: string) {
+
+        self.tmp_position_upload = position
+        self.loading_img = true;
+        self.error_patch_img = null;
+        try {
+
+          const response = path && file ? yield uploadApi.upload(path, file) : { ok: true, data: null };
+          console.log('Upload file response :> ', response);
+          if (response && response.ok) {
+            const { data } = response;
+            let updateObject: any = {
+              truckPhotos: {}
+            };
+            updateObject.truckPhotos[position] = {
+              url: data && data.attachCode ? data.attachCode : null,
+              action: status
+            }
+            console.log("Update Img object :: ", updateObject)
+
+            const responseUpdateTruck = yield truckApi.patchTruck(updateObject, truckId);
+            console.log('Response put truck :: ', responseUpdateTruck);
+            if (responseUpdateTruck.ok) {
+              self.data_patch_img = responseUpdateTruck.data;
+            } else {
+              self.loading_img = false;
+              self.error_patch_img = {
+                title: responseUpdateTruck.problem,
+                content: 'Update truck : ' + responseUpdateTruck.originalError.message,
+              };
+            }
+
+            self.loading_img = false;
+            self.error_patch_img = null;
+          } else {
+            self.loading_img = false;
+            self.error_patch_img = {
+              title: response.problem,
+              content: 'POST image : ' + response.originalError.message,
+            };
+          }
+
+
+        } catch (error) {
+          console.error('Failed to request upload images store :> ', error);
+          self.loading_img = false;
+          self.error_patch_img = {
+            title: '',
+            content: 'Failed to request upload images store',
+          };
+        }
+      }),
     };
   })
   .create({
@@ -330,6 +309,11 @@ export const TruckNonPersistStore = types
     userTrucks_loading: false,
     data_truck_carrier: null,
     tmp_truck_id: null,
+
+    loading_img: false,
+    data_patch_img: false,
+    error_patch_img: null,
+    tmp_position_upload: null,
   });
 
 export interface ITrucksManagement {
