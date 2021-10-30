@@ -44,6 +44,7 @@
   "stall": "Stall",
   "sale": "Sale",
   "amount": "Amount",
+  "ton": "ton",
   "pleaseselect": "Please select",
   "fieldTruckType": "This field truck type is required",
   "truckAmount": "Required Truck Amount",
