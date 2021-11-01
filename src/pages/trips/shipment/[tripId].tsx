@@ -839,18 +839,3 @@ const ButtonConfrim = styled(Button)`
     background: #fff !important;
   }
 `;
-
-const ButtonLoadMore = styled(Button)`
-  border: 1px solid #cccccc !important;
-  color: #000 !important;
-  background-color: #cccccc !important;
-  align-items: center;
-`;
-
-const NewText = styled.span`
-  font-size: 10px;
-  padding: 0 10px;
-  background-color: #ffc107;
-  border-radius: 3px;
-  color: #fff;
-`;

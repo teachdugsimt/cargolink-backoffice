@@ -35,9 +35,11 @@ const PADDING_LEFT_12: CSSProperties = {
 };
 const PADDING_LEFT_10: CSSProperties = {
   paddingLeft: 10,
+  fontSize: 14
 };
 const PADDING_LEFT_25: CSSProperties = {
   paddingLeft: 25,
+  fontSize: 14
 };
 
 const HeaderCrop = {
