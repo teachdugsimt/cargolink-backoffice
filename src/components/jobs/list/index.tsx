@@ -24,7 +24,7 @@ import Row from '@paljs/ui/Row';
 
 const INITIAL_API_PARAMS = {
   page: 1,
-  descending: true,
+  // descending: true,
 };
 const MAIN_COLOR: string = '#f4f6f9';
 const extendRows = (rows: Array<RowType>, onClick: (e: React.MouseEvent, rowIndex: number) => void) => {

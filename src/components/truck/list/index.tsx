@@ -54,7 +54,7 @@ const extendRows = (rows: Array<RowType>, onClick: (e: React.MouseEvent, rowInde
 
   return rows.map((row, index) => ({
     ...row,
-    onClick: (e: React.MouseEvent) => onClick(e, index),
+    // onClick: (e: React.MouseEvent) => onClick(e, index),
   }));
 };
 

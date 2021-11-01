@@ -11,6 +11,7 @@ import { momentFormat } from '../simple-data';
 import { TFunction } from 'i18next';
 import { ITruckType } from '../../services/truck-type-api';
 import { TruckTypeApi } from '../../services';
+import { Link } from 'gatsby';
 
 export const Sortable = {
   id: true, //! Note that: DESC = true, ASC = false
@@ -74,6 +75,11 @@ export const createTableHeader = (withWidth: boolean) => {
         content: 'ID',
         shouldTruncate: true,
         isSortable: true,
+      },
+      {
+        key: 'edit',
+        content: 'Edit',
+        shouldTruncate: true,
       },
     ],
   };
@@ -161,6 +167,10 @@ export const createTableRows = async (
           content: truck.id || '',
           width: 0,
           colSpan: 0,
+        },
+        {
+          key: 'edit-cel',
+          content: <Link to={'/vehicles/' + truck.id}>{t('edit')}</Link>,
         },
       ],
     };

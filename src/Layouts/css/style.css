@@ -253,3 +253,7 @@ hr {
 div > div > table > tbody > tr > td {
   font-size: 14px !important;
 }
+
+.vertical-timeline-date-bottom-element {
+  padding: 0 10px 10px 10px !important;
+}

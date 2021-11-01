@@ -1,6 +1,8 @@
 import { types, flow } from 'mobx-state-tree';
 import { JobApi } from '../services';
-import { IDestination, IJob, IJobRequest, JobListParams, JobsListResponse } from '../services/job-api';
+import { IDestination, IJob, IJobRequest, JobListParams, JobsListResponse, PostJobParams } from '../services/job-api';
+import moment from 'moment';
+import { convertDateTHtoGlobal } from '../utils';
 
 const DestinationType = types.model({
   name: types.maybeNull(types.string),
@@ -230,14 +232,24 @@ export const JobStore = types
 
           if (response.ok) {
             console.log('response.data :>> ', response.data);
-            self.currentJob = response.data;
+            const data = response.data;
+            if (data?.from?.dateTime) {
+              data.from.dateTime = convertDateTHtoGlobal(data.from.dateTime);
+            }
+            if (data?.to?.length) {
+              data.to = data.to.map((attr: any) => ({
+                ...attr,
+                dateTime: attr.dateTime ? convertDateTHtoGlobal(attr.dateTime) : null
+              }));
+            }
+            self.currentJob = data;
           } else {
             self.error_response = {
               title: '',
               content: 'Failed to get job ' + params.jobId,
             };
           }
-        } catch (err) {}
+        } catch (err) { }
       }),
 
       getJobsListWithoutEmptyContent: flow(function* getJobsList(params: JobListParams) {
@@ -285,8 +297,6 @@ export const JobStore = types
         self.jobList = null;
       },
 
-
-
       sendNotification: flow(function* sendNotification(params: string) {
         try {
           self.notificationLoading = true;
@@ -304,6 +314,39 @@ export const JobStore = types
           self.notificationData = false;
         }
       }),
+
+      updateJob: flow(function* updateJob(id: string, data: PostJobParams) {
+        try {
+          self.loading = true;
+          self.currentJob = { ...self.currentJob, ...data };
+          const response = yield JobApi.updateJobById(id, data);
+          console.log("Response send Notification :: ", response)
+          self.notificationLoading = false;
+          if (response.ok) {
+            console.log('response.data :>> ', response.data);
+          } else {
+            self.error_response = {
+              title: response.problem,
+              content: 'Update jobs : ' + response.originalError.message,
+            };
+          }
+          self.loading = false
+        } catch (err) {
+          self.loading = false;
+          self.error_response = {
+            title: '',
+            content: 'Failed to update job',
+          };
+        }
+      }),
+
+      clearJobDetail: function () {
+        self.currentJob = null;
+      },
+
+      setJobDetail: function (data: PostJobParams) {
+        self.currentJob = { ...self.currentJob, ...data };
+      },
     };
   });
 

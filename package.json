@@ -2,7 +2,7 @@
   "name": "cgl-backoffice",
   "private": true,
   "description": "Backoffice for CargoLink",
-  "version": "0.6.8",
+  "version": "0.7.0",
   "author": "Katanyoo Ubalee",
   "dependencies": {
     "@atlaskit/atlassian-navigation": "^1.0.0",
@@ -156,6 +156,7 @@
     "@types/react-dom": "16.9.8",
     "@types/react-helmet": "6.1.0",
     "@types/react-select": "3.0.22",
+    "@types/react-vertical-timeline-component": "^3.3.1",
     "@types/styled-components": "^5.1.14",
     "@types/theme-ui": "^0.3.7",
     "@typescript-eslint/eslint-plugin": "4.4.1",

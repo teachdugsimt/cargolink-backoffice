@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { DateTimePicker as DTP } from '@atlaskit/datetime-picker';
 
 interface DateTimePickerProps {
   initialValue?: string;
   initialIsOpen?: boolean;
   locale?: string;
+  style?: CSSProperties;
   onChange?: (value: string) => any;
 }
 
@@ -20,7 +21,7 @@ class DateTimePicker extends React.Component<DateTimePickerProps, DateTimePicker
   };
 
   recentlySelected = false;
-  recSelTimeoutId: number | null = null;
+  recSelTimeoutId: NodeJS.Timeout | null = null;
 
   componentDidUpdate(prevProps: DateTimePickerProps, prevState: DateTimePickerState) {
     if (prevState.value != this.state.value && this.props.onChange != null) this.props.onChange(this.state.value);
