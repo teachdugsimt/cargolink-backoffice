@@ -33,6 +33,10 @@ class JobApi {
     );
     return response;
   };
+
+  updateJobById = async (id: string, data: Partial<PostJobParams>): Promise<any> => {
+    return ExcuteApi(`/api/v1/jobs/${id}`, data, 'patch', 6e5, true, true);
+  };
 }
 
 export default new JobApi();

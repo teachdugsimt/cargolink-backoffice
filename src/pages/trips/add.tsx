@@ -33,6 +33,11 @@ interface LocationProps {
   img: 'pinDrop' | 'pinDrop2';
 }
 
+interface HeaderProps {
+  text: string
+  img: 'box' | 'truck'
+}
+
 const LEFT_RIGHT_SPACING: CSSProperties = {
   paddingLeft: 10,
   paddingRight: 10,
@@ -170,11 +175,12 @@ const Image = memo(
   },
 );
 
-const Header = ({ text }: any) => (
-  <>
-    <div style={TRIANGLE_TOPLEFT}></div>
-    <h4 style={{ ...LEFT_RIGHT_SPACING, margin: 0, position: 'relative', color: '#fff' }}>{text}</h4>
-  </>
+const Header = ({ text, img }: HeaderProps) => (
+  <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12, paddingLeft: 8 }}>
+    {/* <div style={TRIANGLE_TOPLEFT}></div> */}
+    <img src={images[img]} style={{ width: 35, height: 35 }} />
+    <h4 style={{ ...LEFT_RIGHT_SPACING, margin: 0, position: 'relative' }}>{text}</h4>
+  </div>
 );
 
 const reorder = (list: [], startIndex: number, endIndex: number): object => {
@@ -576,7 +582,7 @@ const AddTrip: React.FC<Props> = observer(() => {
                   <Box style={{ position: 'relative', overflow: 'hidden' }}>
                     <Collapse
                       isExpanded
-                      topic={<Header text={'งานที่เลือก'} />}
+                      topic={<Header text={'งานที่เลือก'} img={'box'} />}
                       children={
                         <Row style={LEFT_RIGHT_SPACING}>
                           <Col display={'flex'} flex={1} flexWrap={'wrap'}>
@@ -658,7 +664,7 @@ const AddTrip: React.FC<Props> = observer(() => {
                   <Box style={{ backgroundColor: '#ebeef3', position: 'relative', overflow: 'hidden' }}>
                     <Collapse
                       isExpanded
-                      topic={<Header text={'รถที่เลือก'} />}
+                      topic={<Header text={'รถที่เลือก'} img={'truck'} />}
                       children={
                         <div style={isDragStart ? DROP_BOX_SHOW : DROP_BOX_HIDE}>
                           {isDragStart && !state.truckSelected?.length && (

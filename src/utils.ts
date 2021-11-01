@@ -1,6 +1,7 @@
 import { useState, useLayoutEffect } from 'react';
 import jwt_decode from 'jwt-decode';
 import { provinceListEn, provinceListTh, regionListEn, regionListTh } from './constants/provinces';
+import moment from 'moment';
 
 export interface IQueryParams {
   [key: string]: string;
@@ -96,3 +97,5 @@ export const formatPhoneNumber = (phoneNumberString: string) => {
   }
   return phoneNumberString;
 };
+
+export const convertDateTHtoGlobal = (date: string) => moment(date, 'DD-MM-YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
