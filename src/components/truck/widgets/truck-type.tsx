@@ -39,7 +39,7 @@ const TruckTypeWidget = observer((props: TruckTypeWidgetProps) => {
 
 
   useEffect(() => {
-    if (props.truckTypeId && !truckTypeName) {
+    if (props.truckTypeId) {
       const truckType = truckTypesStore.truckTypeNameById(props.truckTypeId)
       setTruckTypeName(truckType?.name || '')
     }

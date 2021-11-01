@@ -38,10 +38,9 @@ const ProductTypeWidget = observer((props: ProductTypeWidgetProps) => {
   }, []);
 
   useEffect(() => {
-    if (props.productTypeId && !productTypeName) {
-      console.log('props.productTypeId && !productTypeName')
-      const truckType = productTypesStore.productTypeNameById(props.productTypeId)
-      setProductTypeName(truckType?.name || '')
+    if (props.productTypeId) {
+      const productType = productTypesStore.productTypeNameById(props.productTypeId)
+      setProductTypeName(productType?.name || '')
     }
   }, [props.productTypeId])
 
