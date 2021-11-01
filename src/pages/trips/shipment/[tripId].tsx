@@ -26,6 +26,11 @@ interface LocationProps {
   img: 'pinDrop' | 'pinDrop2';
 }
 
+interface HeaderProps {
+  text: string
+  img: 'box' | 'truck'
+}
+
 const LEFT_RIGHT_SPACING: CSSProperties = {
   paddingLeft: 10,
   paddingRight: 10,
@@ -56,11 +61,12 @@ const INPUT_FORM: CSSProperties = {
   marginBottom: 20,
 };
 
-const Header = ({ text }: any) => (
-  <>
-    <div style={TRIANGLE_TOPLEFT}></div>
-    <h4 style={{ ...LEFT_RIGHT_SPACING, margin: 0, position: 'relative', color: '#fff' }}>{text}</h4>
-  </>
+const Header = ({ text, img }: HeaderProps) => (
+  <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12, paddingLeft: 8 }}>
+    {/* <div style={TRIANGLE_TOPLEFT}></div> */}
+    <img src={images[img]} style={{ width: 35, height: 35 }} />
+    <h4 style={{ ...LEFT_RIGHT_SPACING, margin: 0, position: 'relative' }}>{text}</h4>
+  </div>
 );
 
 const Location = ({ content, header, img }: LocationProps) => (
@@ -289,7 +295,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
     setShipperFeePercentage(event.target.checked ? 1 : 0);
   }, []);
 
-  const onSubmiit = (): void => {
+  const onSubmit = (): void => {
     Swal.fire({
       icon: 'warning',
       text: `ยืนยันการแก้ไขทริป!`,
@@ -389,7 +395,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
       <PageHeader breadcrumbs={breadcrumbs}>{'แก้ไขข้อมูลการวิ่งงาน'}</PageHeader>
       <ButtonGroup>
         <ButtonBack onClick={() => navigate('/trips')}>{t('back')}</ButtonBack>
-        <ButtonConfrim onClick={onSubmiit}>{t('confirm')}</ButtonConfrim>
+        <ButtonConfrim onClick={onSubmit}>{t('confirm')}</ButtonConfrim>
       </ButtonGroup>
 
       <Grid layout="fluid" spacing="compact">
@@ -399,7 +405,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
               <Box style={{ position: 'relative', marginTop: 5 }}>
                 <Collapse
                   isExpanded
-                  topic={<Header text={'รายละเอียดงาน'} />}
+                  topic={<Header text={'รายละเอียดงาน'} img={'box'} />}
                   children={
                     <Row style={LEFT_RIGHT_SPACING}>
                       <Col display={'flex'} flex={1} flexFlow={'row wrap'} style={{ paddingTop: 15 }}>
@@ -580,7 +586,7 @@ const UpdateTripInfo: React.FC<Props> = observer((props: any) => {
               <Box style={{ position: 'relative', marginTop: 5 }}>
                 <Collapse
                   isExpanded
-                  topic={<Header text={'รายละเอียดรถ'} />}
+                  topic={<Header text={'รายละเอียดรถ'} img={'truck'} />}
                   children={
                     <Row style={LEFT_RIGHT_SPACING}>
                       <Col display={'flex'} flex={1} flexFlow={'row wrap'} style={{ paddingTop: 15 }}>

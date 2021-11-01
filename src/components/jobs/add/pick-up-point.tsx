@@ -16,9 +16,24 @@ import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-goo
 interface PickUpPointProp {
   pickup: { from: any; to: any[] };
   setPickup: (value: { from: any; to: any[] }) => void;
+  disableOperator?: boolean;
+  transportData?: {
+    operator: {
+      label: string;
+      value: string;
+    },
+    location?: {
+      lat?: number;
+      lng?: number;
+    },
+    dateTime?: string;
+    name?: string;
+    contactName?: string;
+    contactMobileNo?: string;
+  }
 }
 
-const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) => {
+const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, disableOperator, transportData, setPickup }) => {
   const { t } = useTranslation();
   const { loginStore } = useMst();
   const [transport, setTransport] = useState<any>({
@@ -28,6 +43,19 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
   const [isAdd, setIsAdd] = useState(false);
   const [addressLabel, setAddressLabel] = useState('');
   const [addressLocation, setAddressLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isReload, setIsReload] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (transportData) {
+      setTransport(transportData);
+    }
+  }, [])
+
+  useEffect(() => {
+    if (transportData) {
+      setIsReload(true);
+    }
+  }, [transportData])
 
   const onSubmit = () => {
     // console.log('form submitted pickup point', transport);
@@ -63,6 +91,7 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
                     { label: 'ลง', value: 'DOWN' },
                   ]}
                   {...fieldProps}
+                  isDisabled={disableOperator}
                   defaultValue={{ label: 'ขึ้น', value: 'UP' }}
                   value={transport?.operator}
                   onChange={(e: any) => setTransport({ ...transport, operator: e })}
@@ -75,12 +104,19 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
           <Field label={t('dateTime')} name="dateTime" isRequired>
             {({ fieldProps }: any) => (
               <Fragment>
-                <DateTimePicker
+                {isReload && <DateTimePicker
+                  {...fieldProps}
+                  value={transport.dateTime}
+                  initialValue={transport?.dateTime}
+                  onChange={(e: any) => setTransport({ ...transport, dateTime: e })}
+                  locale={loginStore.language}
+                />}
+                {!isReload && <DateTimePicker
                   {...fieldProps}
                   value={transport?.dateTime}
                   onChange={(e: any) => setTransport({ ...transport, dateTime: e })}
                   locale={loginStore.language}
-                />
+                />}
               </Fragment>
             )}
           </Field>
@@ -169,7 +205,7 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ flex: 1, marginRight: 10 }}>
-          <Field label={t('consigneeName')} name="contactMobileNo">
+          <Field label={t('consigneeName')} name="contactMobileName">
             {({ fieldProps }: any) => (
               <Fragment>
                 <Textfield
@@ -204,10 +240,10 @@ const PickUpPoint: React.FC<PickUpPointProp> = observer(({ pickup, setPickup }) 
           style={
             isDisabled
               ? {
-                  ...BottomSubmitStyled,
-                  backgroundColor: '#D8D8D8',
-                  border: 'none',
-                }
+                ...BottomSubmitStyled,
+                backgroundColor: '#D8D8D8',
+                border: 'none',
+              }
               : BottomSubmitStyled
           }
           testId="pickupSubmitButton"

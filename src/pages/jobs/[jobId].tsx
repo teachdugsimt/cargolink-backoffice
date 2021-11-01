@@ -11,11 +11,10 @@ import { Grid, GridColumn } from '@atlaskit/page';
 import UserProfile from '../../components/user-management/widgets/profile';
 import ProductWidget from '../../components/products/widgets/product';
 import TruckWidget from '../../components/truck/widgets/truck';
-import RouteWidget from '../../components/route/widgets/route';
+import RouteEditWidget from '../../components/route/widgets/route-edit';
 import { LoadingButton } from '@atlaskit/button';
-
-
 import styled from 'styled-components';
+import { PostJobParams } from '../../services/job-api';
 
 const JobItem = observer((props: any) => {
   const { t } = useTranslation();
@@ -27,8 +26,15 @@ const JobItem = observer((props: any) => {
     console.log(props.jobId);
 
     jobStore.getJobById({ jobId: props.jobId });
-    return () => { };
+    return () => {
+      jobStore.clearJobDetail();
+    };
   }, []);
+
+  const onSubmit = (data: Partial<PostJobParams | any>): void => {
+    console.log('data :>> ', data);
+    jobStore.updateJob(props.jobId, data);
+  }
 
   const breadcrumbs = (
     <Breadcrumbs>
@@ -70,6 +76,7 @@ const JobItem = observer((props: any) => {
             price={currentJob?.price}
             priceType={currentJob?.priceType}
             weight={currentJob?.weight}
+            onSubmit={onSubmit}
           />
           <hr />
           <TruckWidget
@@ -77,11 +84,17 @@ const JobItem = observer((props: any) => {
             truckType={currentJob?.truckType}
             tipper={currentJob?.tipper}
             truckAmount={currentJob?.requiredTruckAmount}
+            onSubmit={onSubmit}
           />
         </GridColumn>
 
         <GridColumn medium={6}>
-          <RouteWidget from={currentJob?.from} to={currentJob?.to} status={currentJob?.status} />
+          <RouteEditWidget
+            from={currentJob?.from}
+            to={currentJob?.to}
+            status={currentJob?.status}
+            onSubmit={onSubmit}
+          />
         </GridColumn>
       </Grid>
     </>
