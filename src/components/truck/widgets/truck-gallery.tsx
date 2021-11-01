@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useMst } from '../../../stores/root-store'
 import { Gallery, Item } from 'react-photoswipe-gallery'
 import styled from 'styled-components';
 
-import { Icon } from 'react-icons-kit'
-import { images } from 'react-icons-kit/icomoon/images'
 import mediaApi from '../../../services/media-api';
+import UploadVehicleSlot, { DeleteVehicleImageButton, ReplaceVehicleImageButton } from './upload-vehicle-slott';
+import { UploadFilePath } from '../../../services/upload-api';
+import { TruckNonPersistStore } from '../../../stores/truck-non-persist-store';
 
 interface TruckGalleryWidgetProps {
+  id: string
   truckPhotos?: {
     front: string | null
     back: string | null
@@ -16,9 +18,9 @@ interface TruckGalleryWidgetProps {
     right: string | null
   } | null | undefined
 }
-
+const IMG_HEIGHT: number = 130
 const TruckGalleryWidget = observer((props: TruckGalleryWidgetProps) => {
-
+  const { truckStore } = useMst()
   const [frontImage, setFrontImage] = useState('')
   const [backImage, setBackImage] = useState('')
   const [leftImage, setLeftImage] = useState('')
@@ -77,82 +79,93 @@ const TruckGalleryWidget = observer((props: TruckGalleryWidgetProps) => {
     )
   }, [props.truckPhotos])
 
-  // useEffect(() => {
-  // const truckType = truckTypesStore.truckTypeNameById(props.truckPhotos)
-  // setTruckTypeName(truckType?.name || '')
-  // }, [truckTypesStore.data])
+  type positionType = 'left' | 'right' | 'front' | 'back'
+  type actionType = 'REPLACE' | 'NEW' | 'NO_CHANGE' | 'DELETE'
+
+  const onUploadDocument = (event: any, position: positionType, action: actionType) => {
+    console.log(`🚀  ->  action`, action);
+    console.log(`🚀  ->  position`, position);
+    event.persist();
+    setTimeout(() => {
+      let fileObject = event?.target?.files[0] || undefined;
+      if (fileObject) {
+        console.log("HAHAH Pick file success :: ", fileObject)
+        const realPath = position == 'front' ? UploadFilePath.VEHICLE_IMAGE_FRONT :
+          position == 'back' ? UploadFilePath.VEHICLE_IMAGE_BACK :
+            position == 'left' ? UploadFilePath.VEHICLE_IMAGE_LEFT :
+              UploadFilePath.VEHICLE_IMAGE_RIGHT
+        TruckNonPersistStore.uploadVehicleImage(realPath, fileObject, position, action, props.id).then(() =>
+          truckStore.getTruckById({ truckId: props.id })
+        );
+      }
+    }, 200);
+  }
+
+  const onDeleteImage = (position: positionType, action: actionType) => {
+    console.log("On delete position :: ", position, action)
+    TruckNonPersistStore.uploadVehicleImage(null, null, position, action, props.id).then(() =>
+      truckStore.getTruckById({ truckId: props.id })
+    );
+  }
+
+  const _renderSlotImage = (position: positionType, imageUri: string | null | undefined) => {
+    if (imageUri)
+      return <Item
+        original={imageUri}
+        width="1024"
+        height="768"
+      >
+        {({ ref, open }) => (
+          <>
+            <Row>
+              <DeleteVehicleImageButton containerStyles={{ backgroundColor: 'transparent' }}
+                position={position} action={"DELETE"} onClick={onDeleteImage} />
+            </Row>
+            <img style={{ width: 150, height: IMG_HEIGHT, objectFit: 'contain' }}
+              key={position + "-image"}
+              id={'id-' + position + "-image"}
+              ref={ref}
+              onClick={open}
+              src={imageUri} />
+          </>
+        )}
+      </Item>
+    else
+      return <>
+        <UploadVehicleSlot
+          isLoading={TruckNonPersistStore.tmp_position_upload == position
+            && TruckNonPersistStore.loading_img}
+          position={position}
+          action={"NEW"}
+          onChange={onUploadDocument}
+          containerStyles={{ backgroundColor: 'transparent' }}
+        />
+      </>
+  }
 
   return <Gallery>
     <ImageWrapper>
       <ImageItem>
         <ImageThumb>
-          {leftImage ? <Item
-            original={leftImage}
-            width="1024"
-            height="768"
-          >
-            {({ ref, open }) => (
-              <img style={{ width: 150, height: 130, objectFit: 'contain' }}
-                ref={ref} onClick={open}
-                src={leftImage} />
-            )}
-          </Item> :
-            <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
-          }
+          {_renderSlotImage('left', leftImage)}
         </ImageThumb>
         <ImageLabel>ซ้าย</ImageLabel>
       </ImageItem>
       <ImageItem>
         <ImageThumb>
-          {rightImage ? <Item
-            original={rightImage}
-            width="1024"
-            height="768"
-          >
-            {({ ref, open }) => (
-              <img style={{ width: 150, height: 130, objectFit: 'contain' }}
-                ref={ref} onClick={open}
-                src={rightImage} />
-            )}
-          </Item> :
-            <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
-          }
+          {_renderSlotImage('right', rightImage)}
         </ImageThumb>
         <ImageLabel>ขวา</ImageLabel>
       </ImageItem>
       <ImageItem>
         <ImageThumb>
-          {frontImage ? <Item
-            original={frontImage}
-            width="1024"
-            height="768"
-          >
-            {({ ref, open }) => (
-              <img style={{ width: 150, height: 130, objectFit: 'contain' }}
-                ref={ref} onClick={open}
-                src={frontImage} />
-            )}
-          </Item> :
-            <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
-          }
+          {_renderSlotImage('front', frontImage)}
         </ImageThumb>
         <ImageLabel>หน้า</ImageLabel>
       </ImageItem>
       <ImageItem>
         <ImageThumb>
-          {backImage ? <Item
-            original={backImage}
-            width="1024"
-            height="768"
-          >
-            {({ ref, open }) => (
-              <img style={{ width: 150, height: 130, objectFit: 'contain' }}
-                ref={ref} onClick={open}
-                src={backImage} />
-            )}
-          </Item> :
-            <Icon icon={images} style={{ color: 'lightgray' }} size={40} />
-          }
+          {_renderSlotImage('back', backImage)}
         </ImageThumb>
         <ImageLabel>หลัง</ImageLabel>
       </ImageItem>
@@ -191,3 +204,9 @@ const ImageLabel = styled.span`
   color: gray;
   height: 20px;
 `;
+
+const Row = styled.div`
+  position: absolute;
+  margin-top: -${IMG_HEIGHT + 20}px;
+  margin-right: -${IMG_HEIGHT + 30}px;
+`

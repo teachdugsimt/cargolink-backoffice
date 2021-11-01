@@ -10,7 +10,7 @@ import PageHeader from '@atlaskit/page-header';
 import { Grid, GridColumn } from '@atlaskit/page';
 import UserProfile from '../../components/user-management/widgets/profile';
 import ProductWidget from '../../components/products/widgets/product';
-import TruckWidget from '../../components/truck/widgets/truck';
+import TruckWidget from '../../components/truck/widgets/truck-detail';
 import RouteEditWidget from '../../components/route/widgets/route-edit';
 import { LoadingButton } from '@atlaskit/button';
 import styled from 'styled-components';

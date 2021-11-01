@@ -64,6 +64,10 @@ class TruckApi {
     const response: AxiosResponse<boolean> = await ExcuteApi(`/api/v1/trucks/${id}`, params, 'put', 6e5, true, true);
     return response;
   };
+  patchTruckImg = async (params: PatchTruckImgParams, id: string) => {
+    const response: AxiosResponse<boolean> = await ExcuteApi(`/api/v1/trucks/${id}`, params, 'put', 6e5, true, true);
+    return response;
+  };
   changeDocStatus = async (userId: string, payload: ChangeDocStatusPayload) => {
     const response = await ExcuteApi(`/api/v1/trucks/${userId}/doc-status`, payload, 'patch', 6e5, true, true);
     return response;
@@ -150,6 +154,20 @@ export interface PostTruckParams {
   truckPhotos?: TruckPhotos;
   workingZones?: WorkingZone[];
   document?: string[] | null;
+}
+
+export interface PatchTruckImgParams {
+  truckPhotos?: {
+    front?: PhotoTruck | null | undefined
+    back?: PhotoTruck | null | undefined
+    left?: PhotoTruck | null | undefined
+    right?: PhotoTruck | null | undefined
+  }
+}
+
+export interface PhotoTruck {
+  url?: string | null | undefined
+  action?: 'REPLACE' | 'NEW' | 'NO_CHANGE' | 'DELETE'
 }
 
 export interface TruckPhotos {

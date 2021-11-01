@@ -29,13 +29,6 @@ const TruckTypeWidget = observer((props: TruckTypeWidgetProps) => {
   const [truckTypeOptions, setTruckTypeOptions] = useState<OptionType[]>([]);
 
   useEffect(() => {
-    if (props.truckTypeId && !truckTypeName) {
-      const truckType = truckTypesStore.truckTypeNameById(props.truckTypeId)
-      setTruckTypeName(truckType?.name || '')
-    }
-  }, [props.truckTypeId])
-
-  useEffect(() => {
     if (!truckTypesStore.data?.length) {
       truckTypesStore.getTruckTypes();
     }
@@ -44,16 +37,22 @@ const TruckTypeWidget = observer((props: TruckTypeWidgetProps) => {
     }
   }, []);
 
+
   useEffect(() => {
-    if (truckTypesStore.data?.length) {
+    if (props.truckTypeId && !truckTypeName) {
       const truckType = truckTypesStore.truckTypeNameById(props.truckTypeId)
       setTruckTypeName(truckType?.name || '')
+    }
+  }, [props.truckTypeId])
+
+  useEffect(() => {
+    if (truckTypesStore.data?.length) {
       setTruckTypeOptions(truckTypesStore.data?.map((prod: any) => ({
         label: prod.name,
         value: prod.id.toString()
       })))
     }
-  }, [props.truckTypeId, truckTypesStore.data?.length])
+  }, [truckTypesStore.data?.length])
 
   // useEffect(() => {
   //   const truckType = truckTypesStore.truckTypeNameById(props.truckTypeId)

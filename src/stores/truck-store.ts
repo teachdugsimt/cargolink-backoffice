@@ -7,6 +7,7 @@ import truckApi, {
   TrucksByCarrierParams,
   TrucksListParams,
   TrucksListResponse,
+  PostTruckParams,
 } from '../services/truck-api';
 
 const AvatarType = types.model({
@@ -196,7 +197,7 @@ export const TruckStore = types
           self.loading = true;
           self.currentTruck = null;
           const response = yield truckApi.getTruckById(params);
-          console.log(response);
+          console.log("Get truck ID : ",response);
           if (response.ok) {
             self.currentTruck = response.data.data;
           } else {
@@ -226,6 +227,18 @@ export const TruckStore = types
           if (response.ok) {
             yield TruckStore.getTrucksListByCarrierId({ carrierId });
           }
+          self.loading = false;
+        } catch (error) {
+          self.loading = false;
+        }
+      }),
+
+      patchTruck: flow(function* patchTruck(params: PostTruckParams, truckId: string) {
+        try {
+          self.loading = true;
+          const response = yield truckApi.patchTruck(params, truckId);
+          console.log('Response patch truckStore : ', response);
+          // if (response.ok) yield TruckStore.getTruckById({ truckId })
           self.loading = false;
         } catch (error) {
           self.loading = false;

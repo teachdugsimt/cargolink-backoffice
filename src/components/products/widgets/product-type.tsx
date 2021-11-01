@@ -32,18 +32,27 @@ const ProductTypeWidget = observer((props: ProductTypeWidgetProps) => {
     if (!productTypesStore.data?.length) {
       productTypesStore.getProductTypes();
     }
+    return () => {
+      setProductTypeName('')
+    }
   }, []);
 
   useEffect(() => {
+    if (props.productTypeId && !productTypeName) {
+      console.log('props.productTypeId && !productTypeName')
+      const truckType = productTypesStore.productTypeNameById(props.productTypeId)
+      setProductTypeName(truckType?.name || '')
+    }
+  }, [props.productTypeId])
+
+  useEffect(() => {
     if (productTypesStore.data?.length) {
-      const productType = productTypesStore.productTypeNameById(props.productTypeId)
-      setProductTypeName(productType?.name || '')
       setProductTypeOptions(productTypesStore.data?.map((prod: any) => ({
         label: prod.name,
         value: prod.id.toString()
       })))
     }
-  }, [props.productTypeId, productTypesStore.data?.length])
+  }, [productTypesStore.data?.length])
 
   // useEffect(() => {
   //   const productType = productTypesStore.productTypeNameById(props.productTypeId)
