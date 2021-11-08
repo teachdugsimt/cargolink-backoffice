@@ -69,14 +69,14 @@ const JobView = observer((props: any) => {
     <>
       <PageHeader breadcrumbs={breadcrumbs}>{t('job.info')}</PageHeader>
       <h1>JOB VIEW</h1>
-      {lineProfile?.pictureUrl && <img src={lineProfile?.pictureUrl} style={{ width: 50, height: 50, borderRadius: 25 }} />}
+      {/* {lineProfile?.pictureUrl && <img src={lineProfile?.pictureUrl} style={{ width: 50, height: 50, borderRadius: 25 }} />}
       <div style={{ display: 'flex', flexDirection: 'column', flex: 1, marginBottom: 20 }}>
         <span>userId : {lineProfile?.userId || "-"}</span>
         <span>displayName : {lineProfile?.displayName || "-"}</span>
         <span>statusMessage : {lineProfile?.statusMessage || "-"}</span>
         <span>email : {lineProfile?.email || '-'}</span>
         <span>Full profile : {lineProfile ? JSON.stringify(lineProfile) : "-"}</span>
-      </div>
+      </div> */}
 
       <Grid layout="fluid" spacing="compact">
         <GridColumn medium={12}>
