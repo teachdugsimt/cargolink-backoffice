@@ -24,6 +24,7 @@ import Row from '@paljs/ui/Row';
 
 const INITIAL_API_PARAMS = {
   page: 1,
+  includeExpireJob: true,
   // descending: true,
 };
 const MAIN_COLOR: string = '#f4f6f9';
@@ -106,6 +107,7 @@ const JobContainer: React.FC = observer(() => {
     fireSearch({
       ...searchValue,
       productType: value,
+      includeExpireJob: true,
     });
   };
 
@@ -114,6 +116,7 @@ const JobContainer: React.FC = observer(() => {
     fireSearch({
       ...searchValue,
       from: value,
+      includeExpireJob: true,
     });
   };
 
