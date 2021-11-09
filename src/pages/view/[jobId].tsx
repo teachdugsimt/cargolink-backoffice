@@ -13,7 +13,7 @@ import ProductWidget from '../../components/products/widgets/product';
 import TruckWidget from '../../components/truck/widgets/truck';
 import RouteWidget from '../../components/route/widgets/route';
 import { LoadingButton } from '@atlaskit/button';
-import liff from "@line/liff"
+// import liff from "@line/liff"
 import styled from 'styled-components';
 
 interface LineProfile {
@@ -33,25 +33,25 @@ const JobView = observer((props: any) => {
 
   const [lineProfile, setlineProfile] = useState<LineProfile>({})
 
-  const getUserProfile = async () => {
-    const profile = await liff.getProfile()
-    setlineProfile(profile)
-    console.log("Line profile :: ", profile)
-  }
+  // const getUserProfile = async () => {
+  //   const profile = await liff.getProfile()
+  //   setlineProfile(profile)
+  //   console.log("Line profile :: ", profile)
+  // }
 
-  const InitialLineLiff = async () => {
-    liff.ready.then(() => {
-      if (liff.isInClient()) {
-        getUserProfile()
-      }
-    })
-    await liff.init({ liffId: "1656270808-MA5RQ8gL" })
-  }
+  // const InitialLineLiff = async () => {
+  //   liff.ready.then(() => {
+  //     if (liff.isInClient()) {
+  //       getUserProfile()
+  //     }
+  //   })
+  //   await liff.init({ liffId: "1656270808-MA5RQ8gL" })
+  // }
 
   useEffect(() => {
     console.log(props.jobId);
     if (!versatileStore.list || !versatileStore.listDropdown) versatileStore.find()
-    InitialLineLiff()
+    // InitialLineLiff()
     jobStore.getJobById({ jobId: props.jobId || "DLG9J8KX" });
     return () => { };
   }, []);
@@ -69,7 +69,7 @@ const JobView = observer((props: any) => {
     <>
       <PageHeader breadcrumbs={breadcrumbs}>{t('job.info')}</PageHeader>
       <h1>JOB VIEW</h1>
-      {lineProfile?.pictureUrl && <img src={lineProfile?.pictureUrl} style={{ width: 50, height: 50, borderRadius: 25 }} />}
+      {/* {lineProfile?.pictureUrl && <img src={lineProfile?.pictureUrl} style={{ width: 50, height: 50, borderRadius: 25 }} />}
       <div style={{ display: 'flex', flexDirection: 'column', flex: 1, marginBottom: 20 }}>
         <span>userId : {lineProfile?.userId || "-"}</span>
         <span>displayName : {lineProfile?.displayName || "-"}</span>
@@ -77,7 +77,7 @@ const JobView = observer((props: any) => {
         <span>email : {lineProfile?.email || '-'}</span>
         <span>Full profile : {lineProfile ? JSON.stringify(lineProfile) : "-"}</span>
         <span>jobId : {props.jobId || "-"}</span>
-      </div>
+      </div> */}
 
       <Grid layout="fluid" spacing="compact">
         <GridColumn medium={12}>
