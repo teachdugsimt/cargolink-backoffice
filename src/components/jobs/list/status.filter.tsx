@@ -5,9 +5,9 @@ import Dropdown from '../../dropdowns/generic';
 
 export enum JobStatus {
   ALL = 0,
-  OPEN = 1,
-  INPROGRESS = 3,
-  COMPLETED = 7,
+  OPEN = "NEW",
+  INPROGRESS = "INPROGRESS",
+  COMPLETED = "DONE",
 }
 interface JobStatusFilterProps {
   t: TFunction;

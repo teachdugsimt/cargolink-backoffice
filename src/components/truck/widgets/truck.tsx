@@ -109,12 +109,14 @@ const TruckWidget = observer((props: TruckWidgetProps) => {
     }
   }
 
-
+  const getTruckTypeGroup = async () => {
+    await versatileStore.find()
+  }
 
   useEffect(() => {
-    if (typeof truckType == 'string' || typeof truckType == 'number')
-      _getStallHeightList(truckType, 'boolean')
-    if (!versatileStore.list || !versatileStore.listDropdown) versatileStore.find()
+    if (!versatileStore.list || !versatileStore.listDropdown) getTruckTypeGroup()
+      if (typeof truckType == 'string' || typeof truckType == 'number')
+        _getStallHeightList(truckType, 'boolean')
   }, []);
 
   console.log("Tipper props :: ", tipper)

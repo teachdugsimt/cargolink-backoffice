@@ -68,6 +68,7 @@ export interface JobListParams {
   truckType?: string;
   type?: number;
   textSearch?: string;
+  includeExpireJob?: boolean;
 }
 
 export interface IJobRequest {
