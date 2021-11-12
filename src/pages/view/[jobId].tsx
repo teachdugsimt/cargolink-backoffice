@@ -2,19 +2,44 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react-lite';
 import { useMst } from '../../stores/root-store';
-
-import { navigate } from 'gatsby';
-
-import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
-import PageHeader from '@atlaskit/page-header';
 import { Grid, GridColumn } from '@atlaskit/page';
-import UserProfile from '../../components/user-management/widgets/profile';
-import ProductWidget from '../../components/products/widgets/product';
+import ProductShowWidget from '../../components/products/widgets/product-only-show';
 import TruckWidget from '../../components/truck/widgets/truck';
 import RouteWidget from '../../components/route/widgets/route';
-import { LoadingButton } from '@atlaskit/button';
-// import liff from "@line/liff"
+import { useLiff } from 'react-liff';
 import styled from 'styled-components';
+import { LoadingButton } from '@atlaskit/button';
+import { color } from '../../theme';
+import { JobViewStore } from '../../stores/job-view-store';
+import { Icon } from 'react-icons-kit'
+import { phone } from 'react-icons-kit/icomoon/phone'
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import TruckShowWidget from '../../components/truck/widgets/truck-onlyshow';
+import Row from '@paljs/ui/Row';
+import Col from '@paljs/ui/Col';
+import { CreateUserLineLiff } from '../../services/user-api';
+import { CSSProperties } from '@theme-ui/css';
+
+const TEXT_BUTT_STYLE: CSSProperties = {
+  display: 'flex',
+  flex: 1,
+  height: 40,
+  alignItems: 'center', justifyContent: 'center'
+}
+
+const BUTT_STYLE: CSSProperties = {
+  width: '100%',
+  backgroundColor: color.primary,
+  margin: '0px 0px 20px 0px', height: 40
+}
+
+const SUBMIT_BUTT: CSSProperties = {
+  width: '100%',
+  height: 40,
+  marginTop: 20,
+  marginBottom: 20,
+  backgroundColor: color.primary
+}
 
 interface LineProfile {
   userId?: string | undefined
@@ -28,47 +53,95 @@ interface LineProfile {
 const JobView = observer((props: any) => {
   const { t } = useTranslation();
   const { jobStore, versatileStore } = useMst();
-
   const { currentJob } = jobStore;
 
+  const { error, liff, isLoggedIn, ready } = useLiff();
   const [lineProfile, setlineProfile] = useState<LineProfile>({})
+  const [showForm, setShowForm] = useState<boolean>(false)
+  const { register, handleSubmit, errors, control } = useForm({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    defaultValues: {
+      name: null,
+      phoneNumber: null,
+    },
+  });
 
-  // const getUserProfile = async () => {
-  //   const profile = await liff.getProfile()
-  //   setlineProfile(profile)
-  //   console.log("Line profile :: ", profile)
-  // }
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    (async () => {
+      const profile = await liff.getProfile();
+      setlineProfile(profile);
+    })();
+  }, [liff, isLoggedIn]);
 
-  // const InitialLineLiff = async () => {
-  //   liff.ready.then(() => {
-  //     if (liff.isInClient()) {
-  //       getUserProfile()
-  //     }
-  //   })
-  //   await liff.init({ liffId: "1656270808-MA5RQ8gL" })
-  // }
+  const getTruckTypeGroup = async () => {
+    await versatileStore.find()
+  }
 
   useEffect(() => {
     console.log(props.jobId);
-    if (!versatileStore.list || !versatileStore.listDropdown) versatileStore.find()
-    // InitialLineLiff()
+    if (!versatileStore.list || !versatileStore.listDropdown) getTruckTypeGroup()
+
     jobStore.getJobById({ jobId: props.jobId || "DLG9J8KX" });
-    return () => { };
+    return () => {
+      setShowForm(false)
+      JobViewStore.clearCheckLine()
+      JobViewStore.clearSaveUser()
+      JobViewStore.clearError()
+    };
   }, []);
 
-  const breadcrumbs = (
-    <Breadcrumbs>
-      <BreadcrumbsItem onClick={() => navigate('/jobs')} text={t('job.management')} key="job-management" />
-      <BreadcrumbsItem text={t('job.info')} key="job-info" />
-    </Breadcrumbs>
-  );
+  const telCargolink = () => {
+    let cssTel: any = document.querySelector("#trigger-phone")
+    if (cssTel) cssTel.click()
+  }
+
+  const _bookingJob = async () => {
+    await JobViewStore.checkLineAccount({
+      lineId: lineProfile?.userId || "",
+      jobId: props.jobId
+    })
+
+    let dataCheckingLine = JobViewStore.checkLine
+    if (dataCheckingLine?.isCall == true) {
+      JobViewStore.clearCheckLine()
+      telCargolink()
+    } else {
+      // no this line in DB
+      setShowForm(true)
+    }
+
+  }
+  const onSubmit = (data: { name?: string | null, phoneNumber?: string | null }) => {
+    console.log("ON submit data :: ", data)
+
+    let finalData: CreateUserLineLiff = {
+      fullName: data?.name || "-",
+      phoneNumber: (data?.phoneNumber ? ("+66" + data?.phoneNumber.substring(1)) : "-") || "-",
+      jobId: props.jobId,
+      lineId: lineProfile?.userId || "-"
+    }
+    JobViewStore.createUserWithLine(finalData)
+  }
+
+  useEffect(() => {
+    let tmpSaveUser = JobViewStore.saveUser
+    if (tmpSaveUser) {
+      JobViewStore.clearSaveUser()
+      telCargolink()
+    }
+  }, [JSON.stringify(JobViewStore.saveUser)])
 
   console.log('currentJob :> ', JSON.parse(JSON.stringify(currentJob)));
 
+  const Required = <span style={{ color: '#FF3D71' }}>*</span>;
+
+  const formValue = control.getValues()
+
   return (
     <>
-      <PageHeader breadcrumbs={breadcrumbs}>{t('job.info')}</PageHeader>
-      <h1>JOB VIEW</h1>
+      {/* <PageHeader breadcrumbs={breadcrumbs}>{t('job.info')}</PageHeader> */}
       {/* {lineProfile?.pictureUrl && <img src={lineProfile?.pictureUrl} style={{ width: 50, height: 50, borderRadius: 25 }} />}
       <div style={{ display: 'flex', flexDirection: 'column', flex: 1, marginBottom: 20 }}>
         <span>userId : {lineProfile?.userId || "-"}</span>
@@ -80,14 +153,101 @@ const JobView = observer((props: any) => {
       </div> */}
 
       <Grid layout="fluid" spacing="compact">
+
+        {lineProfile && lineProfile?.userId && <GridColumn medium={12}>
+          {!showForm && <><LoadingButton
+            style={BUTT_STYLE}
+            spacing="compact"
+            testId="uploadButton"
+            isLoading={JobViewStore.loading}
+            appearance="primary"
+            iconBefore={<Icon size={22} icon={phone} />}
+            isDisabled={lineProfile?.userId && props.jobId ? false : true}
+            onClick={_bookingJob}
+          >
+            <div style={TEXT_BUTT_STYLE}>
+              <span style={{ color: color.black }}>{t("job.bookJob")}</span>
+            </div>
+          </LoadingButton>
+            <a id="trigger-phone" href={`tel:${JobViewStore.phoneNumber}`}></a>
+          </>}
+          {showForm && <>
+            <form onSubmit={handleSubmit(onSubmit)} className="form-add-data">
+              <Row>
+                <Col breakPoint={{ xs: 12, lg: 12 }}>
+                  <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+                    <p>
+                      {t('fullName')} {Required}
+                    </p>
+                    <input
+                      id="name"
+                      className="new-input-component"
+                      name="name"
+                      type="text"
+                      style={{
+                        borderColor: errors.name ? '#ff3d71' : '',
+                      }}
+                      ref={register({ required: true })}
+                      aria-invalid={errors.name ? 'true' : 'false'}
+                    />
+                    {errors.name && (
+                      <span id="fieldName" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                        {t('errorProfile.inputName')}
+                      </span>
+                    )}
+                  </Col>
+
+                  <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+                    <p>
+                      {t('contactNumber')} {Required}
+                    </p>
+                    <input
+                      id="phoneNumber"
+                      className="new-input-component"
+                      name="phoneNumber"
+                      type="text"
+                      style={{
+                        borderColor: errors.phoneNumber ? '#ff3d71' : '',
+                      }}
+                      ref={register({ required: true, pattern: /^\(?([0]{1})\)?([0-9]{8,10})$/ })}
+                      aria-invalid={errors.phoneNumber ? 'true' : 'false'}
+                    />
+                    {errors.phoneNumber && (
+                      <span id="fieldPhoneNumber" style={{ color: '#ff3d71', marginLeft: 10, fontSize: '0.7375rem' }} role="alert">
+                        {t('errorProfile.inputPhoneNumber')}
+                      </span>
+                    )}
+                  </Col>
+                  <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
+                    <LoadingButton
+                      style={SUBMIT_BUTT}
+                      spacing="compact"
+                      testId="submit-form-line"
+                      isLoading={JobViewStore.loading}
+                      appearance="primary"
+                      isDisabled={formValue?.name && formValue?.phoneNumber ? false : true}
+                      onClick={handleSubmit(onSubmit)}
+                    >
+                      <div style={TEXT_BUTT_STYLE}>
+                        <span style={{ color: color.black }}>{t("submit")}</span>
+                      </div>
+                    </LoadingButton>
+                    <a id="trigger-phone" href={`tel:${JobViewStore.phoneNumber}`}></a>
+                  </Col>
+                </Col>
+              </Row>
+            </form>
+          </>}
+        </GridColumn>}
+
         <GridColumn medium={12}>
-          <UserProfile
+          {/* <UserProfile
             fullname={currentJob?.owner?.fullName}
             telno={currentJob?.owner?.mobileNo}
             email={currentJob?.owner?.email}
-          />
-          <hr />
-          <ProductWidget
+          /> */}
+          {/* <hr /> */}
+          <ProductShowWidget
             productName={currentJob?.productName}
             productType={currentJob?.productTypeId}
             price={currentJob?.price}
@@ -95,7 +255,7 @@ const JobView = observer((props: any) => {
             weight={currentJob?.weight}
           />
           <hr />
-          <TruckWidget
+          <TruckShowWidget
             title={'รถที่ต้องการ'}
             truckType={currentJob?.truckType}
             tipper={currentJob?.tipper}
@@ -104,7 +264,7 @@ const JobView = observer((props: any) => {
         </GridColumn>
 
         <GridColumn medium={12}>
-          <RouteWidget from={currentJob?.from} to={currentJob?.to} status={currentJob?.status} />
+          <RouteWidget from={currentJob?.from} to={currentJob?.to} status={currentJob?.status} disabled={true} />
         </GridColumn>
       </Grid>
     </>
@@ -118,3 +278,43 @@ const Box = styled.div`
       padding: 15px;
       margin-bottom: 20px;
       `;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

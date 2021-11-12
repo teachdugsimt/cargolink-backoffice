@@ -5,9 +5,8 @@ import { observer } from 'mobx-react-lite';
 import { useMst } from '../stores/root-store';
 import { navigate } from 'gatsby';
 import { useTranslation } from 'react-i18next/';
-
 const ParentLayout = observer(({ pageContext, children, location }) => {
-
+  console.log('PROPS::> LOCATION parent layout :: ', location)
   const { loginStore } = useMst();
   const { i18n } = useTranslation();
   const token = loginStore.data_signin.accessToken
@@ -24,29 +23,44 @@ const ParentLayout = observer(({ pageContext, children, location }) => {
     if (currentLanguage != loginStore.language) i18n.changeLanguage(loginStore.language);
   }, [loginStore.language]);
 
-  if (token && token.length) {
-    // IS LOGGED IN
-    if (pageContext.layout == 'auth') {
-      if (typeof window !== `undefined`) {
-        navigate('/dashboard')
-      }
-      return <></>
-    } else if (pageContext.layout == 'doc') {
-      return <WhiteLayout>{children}</WhiteLayout>
-    } else {
-      return <PrimaryLayout location={location}>
-        {children}
-      </PrimaryLayout>
+  if (location?.search && location.search != "" && location.search.includes("liff")) {
+    const queryString: string = decodeURIComponent(location.search).replace("?liff.state=", "");
+    console.log(`🚀  ->  queryString`, queryString);
+    if (typeof window !== `undefined`) {
+      navigate(queryString)
     }
-  } else {
-    // IS NOT LOGGED IN
-    if (!['auth', 'doc'].includes(pageContext.layout)) {
-      if (typeof window !== `undefined`) {
-        navigate('/auth/login')
+    return <></>
+  }
+
+  else if ((!location.search || location.search == '') && location?.pathname.includes("view/")) {
+    return <WhiteLayout>{children}</WhiteLayout>
+  }
+
+  else {
+    if (token && token.length) {
+      // IS LOGGED IN
+      if (pageContext.layout == 'auth') {
+        if (typeof window !== `undefined`) {
+          navigate('/dashboard')
+        }
+        return <></>
+      } else if (pageContext.layout == 'doc') {
+        return <WhiteLayout>{children}</WhiteLayout>
+      } else {
+        return <PrimaryLayout location={location}>
+          {children}
+        </PrimaryLayout>
       }
-      return <></>
     } else {
-      return <WhiteLayout>{children}</WhiteLayout>
+      // IS NOT LOGGED IN
+      if (!['auth', 'doc'].includes(pageContext.layout)) {
+        if (typeof window !== `undefined`) {
+          navigate('/auth/login')
+        }
+        return <></>
+      } else {
+        return <WhiteLayout>{children}</WhiteLayout>
+      }
     }
   }
 })

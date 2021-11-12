@@ -52,12 +52,12 @@ export const createTableHeader = (withWidth: boolean) => {
         shouldTruncate: true,
         isSortable: true,
       },
-      {
-        key: 'workingZones',
-        content: 'Working Zones',
-        shouldTruncate: true,
-        isSortable: true,
-      },
+      // {
+      //   key: 'workingZones',
+      //   content: 'Working Zones',
+      //   shouldTruncate: true,
+      //   isSortable: true,
+      // },
       {
         key: 'registrationNumber',
         content: 'Truck plate number',
@@ -150,10 +150,10 @@ export const createTableRows = async (
           key: truck.stallHeight ? truck.stallHeight : '',
           content: stallHeight,
         },
-        {
-          key: zones ? zones.join('') : '',
-          content: zones ? zones.join(', ') : '-',
-        },
+        // {
+        //   key: zones ? zones.join('') : '',
+        //   content: zones ? zones.join(', ') : '-',
+        // },
         {
           key: truck.registrationNumber ? truck.registrationNumber.join('') : '',
           content: truck.registrationNumber ? truck.registrationNumber.join(', ') : '',

@@ -20,6 +20,7 @@ interface TruckWidgetProps {
   loadingWeight?: string | number | null | undefined
   registrationNumber?: Array<string> | null | undefined
   stallHeight?: string | null | undefined
+  disabled?: boolean
 }
 
 interface OptionType {
@@ -115,8 +116,8 @@ const TruckWidget = observer((props: TruckWidgetProps) => {
 
   useEffect(() => {
     if (!versatileStore.list || !versatileStore.listDropdown) getTruckTypeGroup()
-      if (typeof truckType == 'string' || typeof truckType == 'number')
-        _getStallHeightList(truckType, 'boolean')
+    // if (typeof truckType == 'string' || typeof truckType == 'number')
+    //   _getStallHeightList(truckType, 'boolean')
   }, []);
 
   console.log("Tipper props :: ", tipper)
@@ -134,7 +135,11 @@ const TruckWidget = observer((props: TruckWidgetProps) => {
 
   useEffect(() => {
     let tmpTruckOptions = JSON.parse(JSON.stringify(versatileStore.listDropdown))
-    if (tmpTruckOptions) setOptionsTruckTypes(tmpTruckOptions)
+    if (tmpTruckOptions) {
+      setOptionsTruckTypes(tmpTruckOptions)
+      if (typeof truckType == 'string' || typeof truckType == 'number')
+        _getStallHeightList(truckType, 'boolean')
+    }
   }, [JSON.stringify(versatileStore.listDropdown)])
 
   const handleSave = async (field: Fields, value: any) => {
@@ -153,11 +158,15 @@ const TruckWidget = observer((props: TruckWidgetProps) => {
   if (truckType)
     truckName = truckTypesStore.truckTypeNameById(truckType)
 
+  const tmpListTruckType = JSON.parse(JSON.stringify(versatileStore.list))
+  let stallHeightList: any
+  if (tmpListTruckType) {
+    stallHeightList = truckType ? null : _getStallHeightList(truckType, 'array')
 
-  let stallHeightList: any = truckType ? null : _getStallHeightList(truckType, 'array')
-  if (typeof truckType == 'number' || typeof truckType == 'string') {
-    console.log("Can select stall height :: ", truckReqHeight.includes(+truckType))
-    stallHeightList = _getStallHeightList(truckType, 'array')
+    if (typeof truckType == 'number' || typeof truckType == 'string') {
+      console.log("Can select stall height :: ", truckReqHeight.includes(+truckType))
+      stallHeightList = _getStallHeightList(truckType, 'array')
+    }
   }
   console.log("Stall height :: ", stallHeight)
   console.log("Stall height options :: ", stallHeightList)
@@ -201,7 +210,7 @@ const TruckWidget = observer((props: TruckWidgetProps) => {
             editView={(fieldProps) => (
               <EditViewContainer>
                 <Select {...fieldProps} isDisabled={typeof truckType == 'string' || typeof truckType == 'number' ?
-                  (!truckReqHeight.includes(+truckType) ? true : false) : false} options={stallHeightList} autoFocus openMenuOnFocus />
+                  (!truckReqHeight.includes(+truckType) ? true : false) : false} options={stallHeightList || []} autoFocus openMenuOnFocus />
               </EditViewContainer>
             )}
             readView={() => (

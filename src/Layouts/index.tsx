@@ -4,6 +4,10 @@ import { withTrans } from '../i18n/withTrans';
 import { Provider, rootStore } from '../stores/root-store';
 import '../Layouts/css/style.css';
 import ParentLayout from './parent-layout';
+import { LiffProvider } from 'react-liff';
+
+const liffId = process.env.LIFF_ID || "1656270808-MA5RQ8gL";
+const stubEnabled = false;
 
 const getDefaultTheme = (): DefaultTheme['name'] => {
   if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
@@ -32,12 +36,14 @@ const LayoutPage: React.FC<{
   }, []);
 
   return (
-    <Provider value={rootStore}>
-      {/* <ThemeProvider theme={themes(theme, dir)}> */}
-      {/* <EmptyLayout children={children} pageContext={pageContext} custom404={custom404} /> */}
-      {/* </ThemeProvider> */}
-      <ParentLayout pageContext={pageContext} location={location}>{children}</ParentLayout>
-    </Provider>
+    <LiffProvider liffId={liffId} stubEnabled={stubEnabled}>
+      <Provider value={rootStore}>
+        {/* <ThemeProvider theme={themes(theme, dir)}> */}
+        {/* <EmptyLayout children={children} pageContext={pageContext} custom404={custom404} /> */}
+        {/* </ThemeProvider> */}
+        <ParentLayout pageContext={pageContext} location={location}>{children}</ParentLayout>
+      </Provider>
+    </LiffProvider>
   );
 };
 
