@@ -8,7 +8,7 @@ import Textfield from '@atlaskit/textfield';
 import SearchIcon from '@atlaskit/icon/glyph/search';
 interface SearchProps {
   // data: any;
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
   onSearch: (value: string) => void;
 }
 

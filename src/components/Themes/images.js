@@ -54,7 +54,9 @@ const images = {
   compass: require('../../images/icons/compass.png'),
 
   homeSearch: require('../../images/icons/search.png'),
-  calculator: require('../../images/icons/calculator.png')
+  calculator: require('../../images/icons/calculator.png'),
+
+  lineOA: require('../../images/line-oa.svg'),
 };
 
 export default images;

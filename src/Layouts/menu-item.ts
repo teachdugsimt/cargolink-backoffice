@@ -45,6 +45,12 @@ const items: MenuItemType[] = [
     link: { to: '/users' },
   },
   {
+    title_th: 'ประวัติการโทร',
+    title_en: 'Call history',
+    icon: 'phone-call',
+    link: { to: '/call-history' },
+  },
+  {
     title_th: 'ข่าวและโปรโมชั่น',
     title_en: 'News & Promotion',
     icon: 'promote',
