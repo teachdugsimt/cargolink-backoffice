@@ -183,3 +183,4 @@
       "pre-commit": "pretty-quick --pattern \"**/*.*(js|jsx|tsx|ts)\" --staged"
     }
   }
+}
