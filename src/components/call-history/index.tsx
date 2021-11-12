@@ -149,7 +149,7 @@ const CallHistoryContainer: React.FC<Props> = observer(() => {
               <ModalTitle>{'จุดขึ้นลงสินค้า'}</ModalTitle>
             </ModalHeader> */}
             <ModalBody>
-              <JobDetailScreen jobId={jobId} />
+              <JobDetailScreen jobId={jobId} isDisableBreadcrumb />
             </ModalBody>
             <ModalFooter>
               {``}

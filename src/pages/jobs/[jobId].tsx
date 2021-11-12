@@ -38,8 +38,10 @@ const JobItem = observer((props: any) => {
 
   const breadcrumbs = (
     <Breadcrumbs>
-      <BreadcrumbsItem onClick={() => navigate('/jobs')} text={t('job.management')} key="job-management" />
-      <BreadcrumbsItem text={t('job.info')} key="job-info" />
+      {props.isDisableBreadcrumb ? null : <>
+        <BreadcrumbsItem onClick={() => navigate('/jobs')} text={t('job.management')} key="job-management" />
+        <BreadcrumbsItem text={t('job.info')} key="job-info" />
+      </>}
     </Breadcrumbs>
   );
 
