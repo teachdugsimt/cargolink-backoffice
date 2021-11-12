@@ -26,10 +26,11 @@ interface RouteWidgetProps {
   to: Array<DeliverPoint> | null | undefined;
   status: string | null | undefined;
   setTo?: (value: Array<DeliverPoint> | null | undefined) => void;
+  disabled?: boolean
 }
 
 function RouteWidget(props: RouteWidgetProps) {
-  const { from, to, status, setTo } = props;
+  const { from, to, status, setTo, disabled } = props;
   const { t } = useTranslation();
 
   return (
@@ -51,12 +52,12 @@ function RouteWidget(props: RouteWidgetProps) {
       </Row>
       <Row>
         <Col flex={1}>
-          <VerticalTimeline animate={true} layout={'1-column-left'}>
+          <VerticalTimeline animate={false} layout={'1-column-left'}>
             <VerticalTimelineElement
               className="vertical-timeline-element--work"
               contentStyle={{ background: '#018ECE88', color: '#000' }}
               contentArrowStyle={{ borderRight: '7px solid #018ECE88' }}
-              date={moment(from?.dateTime).format('lll')}
+              date={from?.dateTime ? moment(from?.dateTime).format('lll') : "-"}
               iconStyle={{ background: '#018ECE88', color: '#000' }}
               icon={<span>ขึ้น</span>}
             >
@@ -64,9 +65,9 @@ function RouteWidget(props: RouteWidgetProps) {
                 <Address>{from?.name}</Address>
               </Row>
               <Row>
-                <span style={{ fontSize: 12 }}>{from?.location?.lat}, {from?.location?.lng}</span>
+                <span style={{ fontSize: 12 }}>{(from?.location?.lat || from?.lat) || "-"}, {(from?.location?.lng || from?.lng) || "-"}</span>
               </Row>
-              <Row>
+              {/* <Row>
                 <Icon icon={userCircleO} size={15} />
                 <Col flex={1} style={{ marginLeft: 10, fontSize: 13 }}>
                   {from?.contactName || '-'}
@@ -77,7 +78,7 @@ function RouteWidget(props: RouteWidgetProps) {
                 <Col flex={1} style={{ marginLeft: 10, fontSize: 13 }}>
                   {from?.contactMobileNo || '-'}
                 </Col>
-              </Row>
+              </Row> */}
             </VerticalTimelineElement>
 
             {to?.map((e: any, index: number) => {
@@ -86,11 +87,11 @@ function RouteWidget(props: RouteWidgetProps) {
                   className="vertical-timeline-element--work"
                   contentStyle={{ background: '#FC544C88', color: '#000' }}
                   contentArrowStyle={{ borderRight: '7px solid #FC544C88' }}
-                  date={moment(e.dateTime).format('lll')}
+                  date={e.dateTime ? moment(e.dateTime).format('lll') : "-"}
                   iconStyle={{ background: '#FC544C88', color: '#000' }}
                   icon={<span>ลง</span>}
                 >
-                  {status === 'NEW' && (
+                  {status === 'NEW' && disabled != true && (
                     <Row style={{ position: 'absolute', top: 0, right: 5 }}>
                       <Button
                         type="button"
@@ -109,9 +110,9 @@ function RouteWidget(props: RouteWidgetProps) {
                     <Address>{e.name}</Address>
                   </Row>
                   <Row>
-                    <span style={{ fontSize: 12 }}>{e?.location?.lat}, {e?.location?.lng}</span>
+                    <span style={{ fontSize: 12 }}>{(e?.location?.lat || e?.lat) || "-"}, {(e?.location?.lng || e?.lng) || "-"}</span>
                   </Row>
-                  <Row>
+                  {/* <Row>
                     <Icon icon={userCircleO} size={15} />
                     <Col flex={1} style={{ marginLeft: 10, fontSize: 13 }}>
                       {e?.contactName || '-'}
@@ -122,7 +123,7 @@ function RouteWidget(props: RouteWidgetProps) {
                     <Col flex={1} style={{ marginLeft: 10, fontSize: 13 }}>
                       {e?.contactMobileNo || '-'}
                     </Col>
-                  </Row>
+                  </Row> */}
                 </VerticalTimelineElement>
               );
             })}
