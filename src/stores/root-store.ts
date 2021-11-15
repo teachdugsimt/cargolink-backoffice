@@ -133,10 +133,14 @@ if (typeof window !== 'undefined') {
 
 export const rootStore = initialState;
 
-onSnapshot(rootStore, (snapshot) => {
-  console.log('Snapshot: ', snapshot);
-  localStorage.setItem('rootState', JSON.stringify(snapshot));
-});
+if (typeof window !== 'undefined') {
+  onSnapshot(rootStore, (snapshot) => {
+    console.log('Snapshot: ', snapshot);
+    localStorage.setItem('rootState', JSON.stringify(snapshot));
+  });
+} else {
+  console.log('we are running on the serve (trigger on Snapshot)');
+}
 
 export type RootInstance = Instance<typeof RootModel>;
 const RootStoreContext = createContext<null | RootInstance>(null);

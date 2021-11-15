@@ -20,6 +20,8 @@ import Col from '@paljs/ui/Col';
 import { CreateUserLineLiff } from '../../services/user-api';
 import { CSSProperties } from '@theme-ui/css';
 
+const BUTT_CONTAINER: CSSProperties = { display: 'flex', justifyContent: 'center', marginLeft: -10 }
+
 const TEXT_BUTT_STYLE: CSSProperties = {
   display: 'flex',
   flex: 1,
@@ -28,13 +30,13 @@ const TEXT_BUTT_STYLE: CSSProperties = {
 }
 
 const BUTT_STYLE: CSSProperties = {
-  width: '100%',
+  width: '50%',
   backgroundColor: color.primary,
   margin: '0px 0px 20px 0px', height: 40
 }
 
 const SUBMIT_BUTT: CSSProperties = {
-  width: '100%',
+  width: '90%',
   height: 40,
   marginTop: 20,
   marginBottom: 20,
@@ -116,6 +118,13 @@ const JobView = observer((props: any) => {
   const onSubmit = (data: { name?: string | null, phoneNumber?: string | null }) => {
     console.log("ON submit data :: ", data)
 
+    let input: any = document.querySelector("#name")
+    let phone: any = document.querySelector("#phoneNumber")
+    if (input) input.blur();
+    if (phone) phone.blur();
+
+
+
     let finalData: CreateUserLineLiff = {
       fullName: data?.name || "-",
       phoneNumber: (data?.phoneNumber ? ("+66" + data?.phoneNumber.substring(1)) : "-") || "-",
@@ -129,6 +138,7 @@ const JobView = observer((props: any) => {
     let tmpSaveUser = JobViewStore.saveUser
     if (tmpSaveUser) {
       JobViewStore.clearSaveUser()
+      setShowForm(false)
       telCargolink()
     }
   }, [JSON.stringify(JobViewStore.saveUser)])
@@ -155,13 +165,13 @@ const JobView = observer((props: any) => {
       <Grid layout="fluid" spacing="compact">
 
         {lineProfile && lineProfile?.userId && <GridColumn medium={12}>
-          {!showForm && <><LoadingButton
+          {!showForm && <Col breakPoint={{ xs: 12, lg: 12 }} style={BUTT_CONTAINER}><LoadingButton
             style={BUTT_STYLE}
             spacing="compact"
             testId="uploadButton"
             isLoading={JobViewStore.loading}
             appearance="primary"
-            iconBefore={<Icon size={22} icon={phone} />}
+            iconBefore={<Icon size={22} icon={phone} style={{ color: color.black }} />}
             isDisabled={lineProfile?.userId && props.jobId ? false : true}
             onClick={_bookingJob}
           >
@@ -170,9 +180,9 @@ const JobView = observer((props: any) => {
             </div>
           </LoadingButton>
             <a id="trigger-phone" href={`tel:${JobViewStore.phoneNumber}`}></a>
-          </>}
+          </Col>}
           {showForm && <>
-            <form onSubmit={handleSubmit(onSubmit)} className="form-add-data">
+            <form onSubmit={handleSubmit(onSubmit)} className="form-add-data" style={{ marginLeft: -12.5 }}>
               <Row>
                 <Col breakPoint={{ xs: 12, lg: 12 }}>
                   <Col breakPoint={{ xs: 12, sm: 6, md: 6 }}>
@@ -185,7 +195,7 @@ const JobView = observer((props: any) => {
                       name="name"
                       type="text"
                       style={{
-                        borderColor: errors.name ? '#ff3d71' : '',
+                        borderColor: errors.name ? '#ff3d71' : '', width: '90%'
                       }}
                       ref={register({ required: true })}
                       aria-invalid={errors.name ? 'true' : 'false'}
@@ -207,7 +217,7 @@ const JobView = observer((props: any) => {
                       name="phoneNumber"
                       type="text"
                       style={{
-                        borderColor: errors.phoneNumber ? '#ff3d71' : '',
+                        borderColor: errors.phoneNumber ? '#ff3d71' : '', width: '90%'
                       }}
                       ref={register({ required: true, pattern: /^\(?([0]{1})\)?([0-9]{8,10})$/ })}
                       aria-invalid={errors.phoneNumber ? 'true' : 'false'}
