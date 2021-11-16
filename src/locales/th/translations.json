@@ -20,6 +20,7 @@
   "userManagement": "ผู้ใช้งาน",
   "jobsManagement": "จัดการงาน",
   "trucksManagement": "จัดการรถบรรทุก",
+  "callHistoryManagement": "ประวัติการโทร",
   "truckstype": "ประเภทรถบรรทุก",
   "truckRegion": "ประเภทรถบรรทุกในแต่ละภูมิภาค",
   "JobsRegion": "งานทั้งหมด",
