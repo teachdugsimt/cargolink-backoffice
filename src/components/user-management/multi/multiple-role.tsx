@@ -20,9 +20,10 @@ import PageHeader from '@atlaskit/page-header';
 import Button from '@atlaskit/button';
 import AddCircleIcon from '@atlaskit/icon/glyph/add-circle';
 
-interface Props {}
+interface Props { }
 
-const MAIN_COLOR: string = '#c4c4c4';
+// const MAIN_COLOR: string = '#c4c4c4';
+const MAIN_COLOR: string = '#f4f6f9';
 const MultipleRole: React.FC<Props> = observer(() => {
   const { t } = useTranslation();
   const { userStore, loginStore } = useMst();
@@ -61,7 +62,7 @@ const MultipleRole: React.FC<Props> = observer(() => {
   };
 
   const breadcrumbs = (
-    <Breadcrumbs onExpand={() => {}}>
+    <Breadcrumbs onExpand={() => { }}>
       <BreadcrumbsItem text={t('userManagement')} key="user-management" />
     </Breadcrumbs>
   );
@@ -91,6 +92,26 @@ const MultipleRole: React.FC<Props> = observer(() => {
     }
   }, [userStore.error_response]);
 
+  const addRowLiner = () => {
+    setTimeout(() => {
+      const cssBody: any = document.querySelectorAll('[data-testid="userTable--body"]');
+      console.log(`🚀  ->  cssBody`, cssBody);
+      if (cssBody) {
+        const cssTable: any = cssBody[0].querySelectorAll("tr")
+        if (cssTable) {
+          cssTable.forEach((e: any) => {
+            e.style.cssText += `border-bottom: 2px solid ${MAIN_COLOR}; padding: 20px 0px 20px 2.5px !important;`;
+            const cssTd: any = e.querySelectorAll('td');
+            if (cssTd)
+              cssTd.forEach((td: any) => {
+                td.style.cssText += `padding: 20px 0px 20px 2.5px  !important;`;
+              })
+          })
+        }
+      }
+    }, 250);
+  }
+
   useEffect(() => {
     const data_user = JSON.parse(JSON.stringify(userStore.data_user));
     if (data_user?.content) {
@@ -108,24 +129,25 @@ const MultipleRole: React.FC<Props> = observer(() => {
       const content = translateTel(data_user.content);
       const rows = createRow(content, loginStore.language, t, deleteUser);
       setRowData(rows);
-      setTimeout(() => {
-        const cssTable: any = document.querySelector('.sc-jJMGHv');
-        // console.log('Css Table :: ', cssTable);
-        if (cssTable) cssTable.style.cssText += `padding: 20px !important;`;
+      addRowLiner()
+      // setTimeout(() => {
+      //   const cssTable: any = document.querySelector('.sc-jJMGHv');
+      //   // console.log('Css Table :: ', cssTable);
+      //   if (cssTable) cssTable.style.cssText += `padding: 20px !important;`;
 
-        const cssTr = cssTable.querySelectorAll('.sc-carGAA');
-        if (cssTr)
-          cssTr.forEach((e: any, i: number) => {
-            e.style.cssText += `border-bottom: 2px solid ${MAIN_COLOR}; padding: 20px !important;`;
+      //   const cssTr = cssTable.querySelectorAll('.sc-carGAA');
+      //   if (cssTr)
+      //     cssTr.forEach((e: any, i: number) => {
+      //       e.style.cssText += `border-bottom: 2px solid ${MAIN_COLOR}; padding: 20px !important;`;
 
-            const cssTd: any = e.querySelectorAll('.sc-jcwofb');
-            if (cssTd) {
-              cssTd.forEach((td: any) => {
-                td.style.cssText += `padding: 20px !important;`;
-              });
-            }
-          });
-      }, 250);
+      //       const cssTd: any = e.querySelectorAll('.sc-jcwofb');
+      //       if (cssTd) {
+      //         cssTd.forEach((td: any) => {
+      //           td.style.cssText += `padding: 20px !important;`;
+      //         });
+      //       }
+      //     });
+      // }, 250);
       const rowLen = data_user?.lengthPerPage;
       rowLen != null && setRowLength(rowLen);
     }

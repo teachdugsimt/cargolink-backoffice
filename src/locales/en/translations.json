@@ -20,6 +20,7 @@
   "userManagement": "User Management",
   "jobsManagement": "Jobs Management",
   "trucksManagement": "Trucks Management",
+  "callHistoryManagement": "Call History Management",
   "truckstype": "Trucks Type",
   "truckRegion": "Trucks types in each region",
   "JobsRegion": "Jobs in each region",
@@ -192,6 +193,7 @@
   "createUserSuccess": "Created user successfully",
   "createUserErrorByUser": "Some on your data is invalid, please recheck and try again",
   "typeUserToFind": "Type a keyword to find users to select",
+  "submit": "Submit",
   "vehicle": {
     "management": "Trucks Management",
     "add": "Add Vehicle",
@@ -201,6 +203,7 @@
     "management": "Trips Management"
   },
   "job": {
+    "bookJob": "Contact for book job",
     "management": "Jobs Management",
     "add": "Add Job",
     "info": "Job Info"
@@ -218,7 +221,9 @@
   },
   "errorProfile": {
     "wrongFormatPhoneNumber": "Please check your phone number.",
-    "someThingWrong": "Something went wrong, please check data."
+    "someThingWrong": "Something went wrong, please check data.",
+    "inputName":  "Please input full name.",
+    "inputPhoneNumber": "Please input phone number."
   },
   "allTrucks": "All Trucks",
   "allTypes": "All",

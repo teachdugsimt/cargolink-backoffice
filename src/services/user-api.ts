@@ -42,8 +42,31 @@ class UserApi {
     console.log('Response delete doc : ', response);
     return response;
   };
+
+  checkLineProfile = async (params: ParamsCheckLineProfile) => {
+    const response = await ExcuteApi('/api/v2/users/check-line-oa', params, 'get', 6e5, true, true);
+    return response;
+  };
+
+  createUserWithLine = async (payload: CreateUserLineLiff): Promise<AxiosResponse<CreateUserResponse>> => {
+    const response = await ExcuteApi(`/api/v2/users/add-line-oa`, payload, 'post', 6e5, true, true);
+    return response;
+  };
+
 }
 export default new UserApi();
+
+
+export interface CreateUserLineLiff {
+  lineId: string
+  jobId: string
+  fullName: string
+  phoneNumber: string
+}
+export interface ParamsCheckLineProfile {
+  jobId: string
+  lineId: string
+}
 
 export interface GetUsersListParams {
   page?: number; //? 0 is first

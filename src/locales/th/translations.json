@@ -20,6 +20,7 @@
   "userManagement": "ผู้ใช้งาน",
   "jobsManagement": "จัดการงาน",
   "trucksManagement": "จัดการรถบรรทุก",
+  "callHistoryManagement": "ประวัติการโทร",
   "truckstype": "ประเภทรถบรรทุก",
   "truckRegion": "ประเภทรถบรรทุกในแต่ละภูมิภาค",
   "JobsRegion": "งานทั้งหมด",
@@ -193,6 +194,7 @@
   "createUserSuccess": "สร้างผู้ใช้แล้ว",
   "createUserErrorByUser": "ข้อมูลไม่ถูกต้อง โปรดตรวจสอบข้อมูลใหม่",
   "typeUserToFind": "พิมพ์คีย์เวิร์ดเพื่อค้นหาผู้ใช้",
+  "submit": "Submit",
   "vehicle": {
     "management": "จัดการรถบรรทุก",
     "add": "เพิ่มข้อมูลรถ",
@@ -202,6 +204,7 @@
     "management": "จัดการการขนส่ง"
   },
   "job": {
+    "bookJob": "ติดต่อจองงาน",
     "management": "จัดการงาน",
     "add": "เพิ่มข้อมูลงาน",
     "info": "ข้อมูลงาน"
@@ -219,7 +222,9 @@
   },
   "errorProfile": {
     "wrongFormatPhoneNumber": "กรุณาตรวจสอบหมายเลขโทรศัพท์",
-    "someThingWrong": "มีบางอย่างผิดพลาด กรุณาตรวจสอบข้อมูล"
+    "someThingWrong": "มีบางอย่างผิดพลาด กรุณาตรวจสอบข้อมูล",
+    "inputName":  "กรุณาใส่ชื่อ นามสกุล",
+    "inputPhoneNumber": "กรุณาใส่เบอร์โทรศัพท์"
   },
   "allTrucks": "รถทุกประเภท",
   "allTypes": "ทุกประเภท",

@@ -27,6 +27,7 @@ import { plus } from 'react-icons-kit/fa/plus';
 import { useMst } from '../../../stores/root-store';
 import { observer } from 'mobx-react-lite';
 import Swal, { SweetAlertResult } from 'sweetalert2';
+import Spinner from '@atlaskit/spinner';
 
 interface DeliverPoint {
   name?: string | null;
@@ -379,6 +380,14 @@ const RouteEditWidget: FC<RouteWidgetProps> = observer((props) => {
             })}
           </VerticalTimeline>
         </Col>
+      </Row>
+
+      <Row>
+        {!props.from && <Col flex={1}>
+          <span style={{ textAlign: 'center', marginLeft: 60 }}>
+            <Spinner size={'large'} />
+          </span>
+        </Col>}
       </Row>
     </>
   );
