@@ -147,7 +147,7 @@ export const createRow = (
           content: (
             <div>
               {/* <SpanHover onClick={() => navigate(`/jobs/${history.jobId}`)}> */}
-              <SpanHover onClick={() => onOpenModal(history.jobId)}>
+              <SpanHover onClick={() => onOpenModal ? onOpenModal(history.jobId) : null}>
                 {history.productName || '-'}
                 {` `}
                 <ShortcutIcon label="shortcut" size="small" />
