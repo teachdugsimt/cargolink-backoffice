@@ -82,6 +82,14 @@ const JobView = observer((props: any) => {
   }
 
   useEffect(() => {
+
+    // รายละเอียดงานขนส่ง
+    var node = document.querySelector('title');
+    if(node){
+      node.textContent = t("jobDetailTransport")
+    }
+    console.log("NODE TITLE :: ", node)
+
     console.log(props.jobId);
     if (!versatileStore.list || !versatileStore.listDropdown) getTruckTypeGroup()
 
