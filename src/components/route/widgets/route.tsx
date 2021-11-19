@@ -67,18 +67,19 @@ function RouteWidget(props: RouteWidgetProps) {
               <Row>
                 <span style={{ fontSize: 12 }}>{(from?.location?.lat || from?.lat) || "-"}, {(from?.location?.lng || from?.lng) || "-"}</span>
               </Row>
-              {/* <Row>
+              {disabled != true && <><Row>
                 <Icon icon={userCircleO} size={15} />
                 <Col flex={1} style={{ marginLeft: 10, fontSize: 13 }}>
                   {from?.contactName || '-'}
                 </Col>
               </Row>
-              <Row>
-                <Icon icon={phone} size={15} />
-                <Col flex={1} style={{ marginLeft: 10, fontSize: 13 }}>
-                  {from?.contactMobileNo || '-'}
-                </Col>
-              </Row> */}
+                <Row>
+                  <Icon icon={phone} size={15} />
+                  <Col flex={1} style={{ marginLeft: 10, fontSize: 13 }}>
+                    {from?.contactMobileNo || '-'}
+                  </Col>
+                </Row>
+              </>}
             </VerticalTimelineElement>
 
             {to?.map((e: any, index: number) => {
@@ -112,18 +113,19 @@ function RouteWidget(props: RouteWidgetProps) {
                   <Row>
                     <span style={{ fontSize: 12 }}>{(e?.location?.lat || e?.lat) || "-"}, {(e?.location?.lng || e?.lng) || "-"}</span>
                   </Row>
-                  {/* <Row>
+                  {disabled != true && <> <Row>
                     <Icon icon={userCircleO} size={15} />
                     <Col flex={1} style={{ marginLeft: 10, fontSize: 13 }}>
                       {e?.contactName || '-'}
                     </Col>
                   </Row>
-                  <Row>
-                    <Icon icon={phone} size={15} />
-                    <Col flex={1} style={{ marginLeft: 10, fontSize: 13 }}>
-                      {e?.contactMobileNo || '-'}
-                    </Col>
-                  </Row> */}
+                    <Row>
+                      <Icon icon={phone} size={15} />
+                      <Col flex={1} style={{ marginLeft: 10, fontSize: 13 }}>
+                        {e?.contactMobileNo || '-'}
+                      </Col>
+                    </Row>
+                  </>}
                 </VerticalTimelineElement>
               );
             })}
