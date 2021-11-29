@@ -6,7 +6,7 @@ import { useMst } from '../../stores/root-store';
 import { observer } from 'mobx-react-lite';
 import Page, { Grid, GridColumn } from '@atlaskit/page';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
-import { navigate } from 'gatsby';
+import { navigate, PageProps } from 'gatsby';
 import PageHeader from '@atlaskit/page-header';
 import { useTranslation } from 'react-i18next';
 import { AsyncPaginate } from 'react-select-async-paginate';
@@ -26,6 +26,7 @@ import { TransportationStore } from '../../stores/transportation-store';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import moment from 'moment';
 import { TripStore } from '../../stores/trip-store';
+import TextInputSelected from '../../components/text-input-selected/text-input-selected'
 
 interface LocationProps {
   header: string;
@@ -128,6 +129,13 @@ const TRIANGLE_TOPLEFT: CSSProperties = {
   top: 0,
   left: 0,
 };
+
+const SPINNER_CENTER: CSSProperties = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: 40
+}
 
 const TruckAnimate = () => (
   <LottieView
@@ -268,11 +276,11 @@ interface ITruckTypeSelectedOptionProps {
   isDisabled?: boolean;
 }
 
-interface Props { }
+interface Props extends PageProps { }
 
 let truckPage: number = 1;
 
-const AddTrip: React.FC<Props> = observer(() => {
+const AddTrip: React.FC<Props> = observer(({ location }) => {
   const { truckStore, truckTypesStore, productTypesStore } = useMst();
   const { t } = useTranslation();
   const [state, setState] = useState<any>({
@@ -290,13 +298,36 @@ const AddTrip: React.FC<Props> = observer(() => {
   const [selectedOption, setSelectedOption] = useState('none');
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [dateSelected, setDateSelected] = useState<any>({});
+  const [jobIdQuery, setJobIdQuery] = useState<string>();
+  const [carrierNameQuery, setCarrierNameQuery] = useState<string>();
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const jobId = params.get("job_id");
+    const carrierNameQuery = params.get("carrier_name");
+
+    if (jobId) {
+      setJobIdQuery(jobId);
+      TransportationStore.getJobDetail(jobId);
+    }
+
+    if (carrierNameQuery) {
+      setCarrierNameQuery(carrierNameQuery);
+    }
+
     return () => {
       // jobStore.clearJobs();
       truckStore.clearTrucks();
+      TransportationStore.clearJobDetail();
+      setJobDetail(null);
     };
   }, []);
+
+  useEffect(() => {
+    if (TransportationStore.jobDetail) {
+      setJobDetail(JSON.parse(JSON.stringify(TransportationStore.jobDetail)));
+    }
+  }, [TransportationStore.jobDetail])
 
   useEffect(() => {
     if (!truckTypesStore.data) {
@@ -348,6 +379,11 @@ const AddTrip: React.FC<Props> = observer(() => {
       setState((prev: any) => ({
         ...prev,
         trucks: JSON.parse(JSON.stringify(truckStore.truckList?.content)),
+      }));
+    } else {
+      setState((prev: any) => ({
+        ...prev,
+        trucks: [],
       }));
     }
   }, [JSON.stringify(truckStore.truckList)]);
@@ -402,35 +438,29 @@ const AddTrip: React.FC<Props> = observer(() => {
     setSearchTruck(value);
   };
 
-  const onSubmitTruck = (truckTypeId?: number) => {
-    if (!truckTypeId) {
-      const truckOptions = truckTypeSelectedOption;
-      if (truckOptions[truckOptions.length - 1].value.includes('truck-selected-')) {
-        truckOptions.pop();
-      }
-      const value = `truck-selected-${Math.floor(Date.now() / 1000)}`;
-      truckOptions.push({
-        value: value,
-        label: searchTruck,
-        isDisabled: true,
-      });
-      setTruckTypeSelectedOption(truckOptions);
-      setSelectedOption(value);
-    }
+  const onSubmitTruck = (value: string) => {
+    setSelectedOption('');
+    setSearchTruck(value);
     truckStore.clearTrucks();
     truckStore.getTrucksListWithoutEmptyContent({
       page: 1,
       descending: true,
-      ...(truckTypeId ? { truckTypes: JSON.stringify([truckTypeId]) } : { searchText: searchTruck }),
+      ...(value ? { searchText: value } : undefined)
     });
     truckPage = 1;
   };
 
   const loadMoreTruck = (truckTypeId?: number) => {
+    let params: any = {};
+    if (truckTypeId) {
+      params.truckTypes = JSON.stringify([truckTypeId])
+    } else if (searchTruck) {
+      params.searchText = searchTruck
+    }
     truckStore.getTrucksListWithoutEmptyContent({
       page: ++truckPage,
       descending: true,
-      ...(truckTypeId ? { truckTypes: JSON.stringify([truckTypeId]) } : { searchText: searchTruck }),
+      ...params
     });
   };
 
@@ -440,10 +470,17 @@ const AddTrip: React.FC<Props> = observer(() => {
     setJobDetail(jobDetail);
   };
 
-  const onSelectedTruckOptions = (e: any) => {
-    setSelectedOption(e.value);
+  const onSelectedTruckOptions = (value: string) => {
+    setSelectedOption(value);
     setSearchTruck('');
-    onSubmitTruck(+e.value);
+    // onSubmitTruck(+value);
+    truckStore.clearTrucks();
+    truckStore.getTrucksListWithoutEmptyContent({
+      page: 1,
+      descending: true,
+      truckTypes: JSON.stringify([+value])
+    });
+    truckPage = 1;
   };
 
   const onImageError = (e: any) => {
@@ -576,6 +613,10 @@ const AddTrip: React.FC<Props> = observer(() => {
                   />
                 </div>
               </div>
+
+              {jobIdQuery && !jobDetail && <div style={SPINNER_CENTER}>
+                <Spinner size="large" />
+              </div>}
 
               {jobDetail && (
                 <div>
@@ -774,37 +815,12 @@ const AddTrip: React.FC<Props> = observer(() => {
                       border: '1px solid #cfcfcf',
                     }}
                   >
-                    <Form onSubmit={() => truckDroppable.onSubmit()}>
-                      {({ formProps }: any) => (
-                        <form {...formProps} style={{ paddingBottom: 20 }}>
-                          <div style={{ position: 'relative' }}>
-                            <span style={SEARCH_ICON}>
-                              <SearchIcon label={'search-icon'} size={'medium'} />
-                            </span>
-                            <Field name={truckDroppable.title}>
-                              {({ fieldProps }: any) => (
-                                <Select
-                                  {...fieldProps}
-                                  value={truckTypeSelectedOption.filter((option: any) => {
-                                    return option.value === selectedOption;
-                                  })}
-                                  options={truckTypeSelectedOption}
-                                  onInputChange={(newValue: string) => setSearchTruck(newValue)}
-                                  onChange={(e: any) => onSelectedTruckOptions(e)}
-                                  placeholder={'Search trucks'}
-                                  id={'truck-select-options'}
-                                />
-                              )}
-                            </Field>
-                            {(truckStore.loading || truckTypesStore.loading) && (
-                              <span style={LOADING_ICON}>
-                                <Spinner size={'small'} />
-                              </span>
-                            )}
-                          </div>
-                        </form>
-                      )}
-                    </Form>
+                    <TextInputSelected
+                      defalutValue={carrierNameQuery}
+                      options={truckTypeSelectedOption}
+                      onSubmit={truckDroppable.onSubmit}
+                      onInputChange={onSelectedTruckOptions}
+                    />
                     <div>
                       {state[truckDroppable.listId] &&
                         state[truckDroppable.listId].map((item: any, index: number) => (
