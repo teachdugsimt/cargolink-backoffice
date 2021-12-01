@@ -1,6 +1,7 @@
 import { types, flow } from 'mobx-state-tree';
-import { UserApi } from '../services';
-import { CreateUserLineLiff, ParamsCheckLineProfile } from '../services/user-api';
+import { UserApi, BookingApi } from '../services';
+import { IBookingParams } from '../services/booking-api';
+import { CreateOrUpdateLineOaAndBooking, CreateUserLineLiff, ParamsCheckLineProfile, ParamsCheckLineProfileV2 } from '../services/user-api';
 
 const SaveUser = types.maybeNull(types.model({
   isCall: types.boolean
@@ -18,6 +19,11 @@ export const JobViewStore = types
         content: types.maybeNull(types.string),
       }),
     ),
+
+    checkLineBooking: types.maybeNull(types.model({
+      userId: types.maybeNull(types.string)
+    })),
+    bookingLine: types.maybeNull(types.number)
   })
   .actions((self) => {
     return {
@@ -48,6 +54,84 @@ export const JobViewStore = types
           };
         }
       }),
+
+      checkLineAccountV2: flow(function* checkLineAccountV2(params: ParamsCheckLineProfileV2) {
+        self.loading = true;
+        self.error_response = null;
+        try {
+          const response = yield UserApi.checkLineProfileV2(params);
+          console.log('Check line profile response :> ', response);
+
+          self.loading = false;
+          if (response && response.ok) {
+            self.checkLineBooking = response.data;
+          } else {
+            self.error_response = {
+              title: response.problem,
+              content: 'GET check user line : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to Check line profile :> ', error);
+          self.loading = false;
+          self.error_response = {
+            title: '',
+            content: 'Failed to check line user',
+          };
+        }
+      }),
+      bookingJobInLine: flow(function* bookingJobInLine(params: IBookingParams) {
+        self.loading = true;
+        self.error_response = null;
+        try {
+          const response = yield BookingApi.bookingPost(params);
+          console.log('Check line profile response :> ', response);
+
+          self.loading = false;
+          if (response && response.ok) {
+            self.bookingLine = response.data;
+          } else {
+            self.error_response = {
+              title: response.problem,
+              content: 'GET check user line : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to Check line profile :> ', error);
+          self.loading = false;
+          self.error_response = {
+            title: '',
+            content: 'Failed to check line user',
+          };
+        }
+      }),
+      createOrUpdateLineOaBooking: flow(function* createOrUpdateLineOaBooking(params: CreateOrUpdateLineOaAndBooking) {
+        self.loading = true;
+        self.error_response = null;
+        try {
+          const response = yield UserApi.createOrUpdateLineOaBooking(params);
+          console.log('Check line profile response :> ', response);
+
+          self.loading = false;
+          if (response && response.ok) {
+            self.bookingLine = response.data;
+          } else {
+            self.error_response = {
+              title: response.problem,
+              content: 'GET check user line : ' + response.originalError.message,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to Check line profile :> ', error);
+          self.loading = false;
+          self.error_response = {
+            title: '',
+            content: 'Failed to check line user',
+          };
+        }
+      }),
+
+
 
       createUserWithLine: flow(function* createUserWithLine(params: CreateUserLineLiff) {
         self.loading = true;
@@ -82,6 +166,9 @@ export const JobViewStore = types
       },
       clearError() {
         self.error_response = null
+      },
+      clearCreateOrUpdateLineOA() {
+        self.checkLineBooking = null
       }
 
 
@@ -91,4 +178,6 @@ export const JobViewStore = types
     checkLine: null,
     saveUser: null,
     error_response: null,
+    checkLineBooking: null,
+    bookingLine: null,
   })

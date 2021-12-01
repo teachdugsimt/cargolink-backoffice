@@ -204,10 +204,13 @@
     "management": "Trips Management"
   },
   "job": {
-    "bookJob": "Contact for book job",
+    "contacting": "Contact cargolink",
+    "booking": "Booking",
     "management": "Jobs Management",
     "add": "Add Job",
-    "info": "Job Info"
+    "info": "Job Info",
+    "successBooking": "Success booking !!",
+    "waitCargolinkCallback": "Please wait for a call back from Cargolink."
   },
   "price-calculator": {
     "index": "Price Calculator"

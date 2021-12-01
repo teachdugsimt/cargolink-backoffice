@@ -205,10 +205,13 @@
     "management": "จัดการการขนส่ง"
   },
   "job": {
-    "bookJob": "ติดต่อจองงาน",
+    "contacting": "โทรสอบถาม",
+    "booking": "จองทันที",
     "management": "จัดการงาน",
     "add": "เพิ่มข้อมูลงาน",
-    "info": "ข้อมูลงาน"
+    "info": "ข้อมูลงาน",
+    "successBooking": "จองงานสำเร็จ !!",
+    "waitCargolinkCallback": "กรุณารอการติดต่อกลับจาก Cargolink"
   },
   "price-calculator": {
     "index": "คำนวณราคา"
@@ -224,7 +227,7 @@
   "errorProfile": {
     "wrongFormatPhoneNumber": "กรุณาตรวจสอบหมายเลขโทรศัพท์",
     "someThingWrong": "มีบางอย่างผิดพลาด กรุณาตรวจสอบข้อมูล",
-    "inputName":  "กรุณาใส่ชื่อ นามสกุล",
+    "inputName": "กรุณาใส่ชื่อ นามสกุล",
     "inputPhoneNumber": "กรุณาใส่เบอร์โทรศัพท์"
   },
   "allTrucks": "รถทุกประเภท",

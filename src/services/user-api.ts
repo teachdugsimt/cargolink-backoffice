@@ -47,9 +47,18 @@ class UserApi {
     const response = await ExcuteApi('/api/v2/users/check-line-oa', params, 'get', 6e5, true, true);
     return response;
   };
+  checkLineProfileV2 = async (params: ParamsCheckLineProfileV2) => {
+    const response = await ExcuteApi('/api/v2/users/check-line-oa-v2', params, 'get', 6e5, true, true);
+    return response;
+  };
 
   createUserWithLine = async (payload: CreateUserLineLiff): Promise<AxiosResponse<CreateUserResponse>> => {
     const response = await ExcuteApi(`/api/v2/users/add-line-oa`, payload, 'post', 6e5, true, true);
+    return response;
+  };
+
+  createOrUpdateLineOaBooking = async (payload: CreateOrUpdateLineOaAndBooking): Promise<AxiosResponse<CreateUserResponse>> => {
+    const response = await ExcuteApi(`/api/v2/users/add-line-oa-v2`, payload, 'post', 6e5, true, true);
     return response;
   };
 
@@ -57,6 +66,17 @@ class UserApi {
 export default new UserApi();
 
 
+export interface CreateOrUpdateLineOaAndBooking {
+  lineId: string
+  jobId: string
+  fullName: string
+  phoneNumber: string
+
+  truckId?: string
+  accepterUserId: string
+  requesterType: string
+  requesterUserId?: string
+}
 export interface CreateUserLineLiff {
   lineId: string
   jobId: string
@@ -65,6 +85,11 @@ export interface CreateUserLineLiff {
 }
 export interface ParamsCheckLineProfile {
   jobId: string
+  lineId: string
+  saveHistory?: boolean
+}
+
+export interface ParamsCheckLineProfileV2 {
   lineId: string
 }
 
