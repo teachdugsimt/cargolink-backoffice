@@ -586,7 +586,7 @@ const AddTrip: React.FC<Props> = observer(({ location }) => {
     <Page>
       <PageHeader breadcrumbs={breadcrumbs}>{'Bulk cargo management'}</PageHeader>
       <ButtonGroup>
-        <ButtonBack onClick={() => navigate('/trips')}>{t('back')}</ButtonBack>
+        <ButtonBack onClick={() => navigate(-1)}>{t('back')}</ButtonBack>
         <ButtonConfrim isDisabled={isDisabled} onClick={onSubmitTrip}>
           {t('confirm')}
         </ButtonConfrim>
