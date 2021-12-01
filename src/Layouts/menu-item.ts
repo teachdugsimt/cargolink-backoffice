@@ -21,6 +21,46 @@ const items: MenuItemType[] = [
     link: { to: '/trips' },
   },
   {
+    title_th: 'การจองงาน',
+    title_en: 'Booking',
+    icon: 'check-list',
+    link: { to: '/booking' },
+  },
+  {
+    title_th: 'ประวัติการโทร',
+    title_en: 'Call history',
+    icon: 'phone-call',
+    link: { to: '/call-history' },
+  },
+  {
+    title_th: 'คำนวณราคา',
+    title_en: 'Price Calculator',
+    icon: 'calculator',
+    link: { to: '/price-calculator' }
+  }
+  // {
+  //   title_th: 'ผู้จัดส่ง',
+  //   title_en: 'Shipper',
+  //   icon: 'archive',
+  //   expanded: true,
+  //   children: [
+  //     { title_th: 'บัญชีผู้จัดส่ง', title_en: 'Shipper account', link: { to: '/shipper-account' } },
+  //     { title_th: 'งาน', title_en: 'Jobs', link: { to: '/jobs' } },
+  //   ],
+  // },
+];
+
+export default items;
+
+
+export const toolsMenu: MenuItemType[] = [
+  {
+    title_th: 'ผู้ใช้งาน',
+    title_en: 'Users',
+    icon: 'delivery-man',
+    link: { to: '/users' },
+  },
+  {
     title_th: 'จัดการรถ',
     title_en: 'Trucks',
     icon: 'delivery',
@@ -39,18 +79,6 @@ const items: MenuItemType[] = [
     link: { to: '/jobs' },
   },
   {
-    title_th: 'ผู้ใช้งาน',
-    title_en: 'Users',
-    icon: 'delivery-man',
-    link: { to: '/users' },
-  },
-  {
-    title_th: 'ประวัติการโทร',
-    title_en: 'Call history',
-    icon: 'phone-call',
-    link: { to: '/call-history' },
-  },
-  {
     title_th: 'ข่าวและโปรโมชั่น',
     title_en: 'News & Promotion',
     icon: 'promote',
@@ -61,27 +89,5 @@ const items: MenuItemType[] = [
     title_en: 'Settings',
     icon: 'settings',
     link: { to: '/settings' },
-  },
-  // {
-  //   title_th: 'ผู้จัดส่ง',
-  //   title_en: 'Shipper',
-  //   icon: 'archive',
-  //   expanded: true,
-  //   children: [
-  //     { title_th: 'บัญชีผู้จัดส่ง', title_en: 'Shipper account', link: { to: '/shipper-account' } },
-  //     { title_th: 'งาน', title_en: 'Jobs', link: { to: '/jobs' } },
-  //   ],
-  // },
-];
-
-export default items;
-
-
-export const toolsMenu: MenuItemType[] = [
-  {
-    title_th: 'คำนวณราคา',
-    title_en: 'Price Calculator',
-    icon: 'calculator',
-    link: { to: '/price-calculator' }
   }
 ]

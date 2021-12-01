@@ -243,5 +243,6 @@
   "createJobSuccess": "Created job successfully",
   "createJobErrorByUser": "Some on your data is invalid, please recheck and try again",
   "NO_DOCUMENT": "No document",
-  "see": "see"
+  "see": "see",
+  "create": "Create"
 }

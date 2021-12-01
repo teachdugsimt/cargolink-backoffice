@@ -62,6 +62,7 @@ export const ProductTypeStore = types
       if (!ptype?.length) {
         self.getProductTypes()
       }
+      // console.log('ptype :>> ', ptype);
       return ptype?.length ? ptype[0] : null
     }
   }));

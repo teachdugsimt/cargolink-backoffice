@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { navigate } from 'gatsby';
+import { navigate, Link } from 'gatsby';
 import Swal from 'sweetalert2';
 import { TFunction } from 'react-i18next';
 import { UserApi } from '../../../services';
@@ -70,6 +70,12 @@ export const createHead = (withWidth: boolean): HeadType => {
         shouldTruncate: true,
         // width: 120
       },
+      {
+        key: 'action',
+        content: 'Action',
+        shouldTruncate: true,
+        // width: 120
+      },
     ],
   };
 };
@@ -134,20 +140,20 @@ export const createRow = (
       key: `row-${index}-${history.id}`,
       cells: [
         {
-          key: history.requesterName,
+          key: `${index}-${history.requesterName}-requesterName`,
           content: history.requesterName || '-',
         },
         {
-          key: history.requesterPhoneNumber,
+          key: `${index}-${history.requesterPhoneNumber}-phoneNumber`,
           content: history.requesterPhoneNumber || '-',
         },
         {
-          key: history.productName,
+          key: `${index}-${history.productName}-productName`,
           // content: history.productName || '-',
           content: (
             <div>
               {/* <SpanHover onClick={() => navigate(`/jobs/${history.jobId}`)}> */}
-              <SpanHover onClick={() => onOpenModal(history.jobId)}>
+              <SpanHover onClick={() => onOpenModal ? onOpenModal(history.jobId) : null}>
                 {history.productName || '-'}
                 {` `}
                 <ShortcutIcon label="shortcut" size="small" />
@@ -156,11 +162,11 @@ export const createRow = (
           )
         },
         {
-          key: history.callTime,
+          key: `${index}-${history.callTime}-callTime`,
           content: moment(history.callTime, 'DD-MM-YYYY HH:mm:ss').format('lll')
         },
         {
-          key: history.channel,
+          key: `${index}-${history.channel}-channel`,
           // content: history.channel,
           content: (
             <Channel>
@@ -170,6 +176,18 @@ export const createRow = (
                   : <MobileIcon label="mobile" size="medium" primaryColor={'#0052CC'} />}
               </span>
               {history.channel}
+            </Channel>
+          )
+        },
+        {
+          key: `${index}-${history.status}-status`,
+          content: (
+            <Channel>
+              <Link to={`/trips/add?job_id=${history.jobId}&carrier_name=${history?.requesterName ?? ''}`}>
+                <div className="see-list-trip">
+                  <span className="see-list-span">{t('create')}</span>
+                </div>
+              </Link>
             </Channel>
           )
         },
