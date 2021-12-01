@@ -25,6 +25,7 @@ import { TransportationStore } from '../../stores/transportation-store';
 import moment from 'moment';
 import { TripStore } from '../../stores/trip-store';
 import Swal, { SweetAlertResult } from 'sweetalert2';
+import TextInputSelected from '../../components/text-input-selected/text-input-selected';
 
 interface LocationProps {
   header: string;
@@ -392,6 +393,11 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
         ...prev,
         trucks: JSON.parse(JSON.stringify(truckStore.truckList?.content)),
       }));
+    } else {
+      setState((prev: any) => ({
+        ...prev,
+        trucks: [],
+      }));
     }
   }, [JSON.stringify(truckStore.truckList)]);
 
@@ -463,42 +469,42 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
     setSearchTruck(value);
   };
 
-  const onSubmitTruck = (truckTypeId?: number) => {
-    if (!truckTypeId) {
-      const truckOptions = truckTypeSelectedOption;
-      if (truckOptions[truckOptions.length - 1].value.includes('truck-selected-')) {
-        truckOptions.pop();
-      }
-      const value = `truck-selected-${Math.floor(Date.now() / 1000)}`;
-      truckOptions.push({
-        value: value,
-        label: searchTruck,
-        isDisabled: true,
-      });
-      setTruckTypeSelectedOption(truckOptions);
-      setSelectedOption(value);
-    }
+  const onSubmitTruck = (value: string) => {
+    setSelectedOption('');
+    setSearchTruck(value);
     truckStore.clearTrucks();
     truckStore.getTrucksListWithoutEmptyContent({
       page: 1,
       descending: true,
-      ...(truckTypeId ? { truckTypes: JSON.stringify([truckTypeId]) } : { searchText: searchTruck }),
+      ...(value ? { searchText: value } : undefined)
     });
     truckPage = 1;
   };
 
   const loadMoreTruck = (truckTypeId?: number) => {
+    let params: any = {};
+    if (truckTypeId) {
+      params.truckTypes = JSON.stringify([truckTypeId])
+    } else if (searchTruck) {
+      params.searchText = searchTruck
+    }
     truckStore.getTrucksListWithoutEmptyContent({
       page: ++truckPage,
       descending: true,
-      ...(truckTypeId ? { truckTypes: JSON.stringify([truckTypeId]) } : { searchText: searchTruck }),
+      ...params
     });
   };
 
-  const onSelectedTruckOptions = (e: any) => {
-    setSelectedOption(e.value);
+  const onSelectedTruckOptions = (value: string) => {
+    setSelectedOption(value);
     setSearchTruck('');
-    onSubmitTruck(+e.value);
+    truckStore.clearTrucks();
+    truckStore.getTrucksListWithoutEmptyContent({
+      page: 1,
+      descending: true,
+      truckTypes: JSON.stringify([+value])
+    });
+    truckPage = 1;
   };
 
   const onImageError = (e: any) => {
@@ -783,7 +789,12 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
                       border: '1px solid #cfcfcf',
                     }}
                   >
-                    <Form onSubmit={() => truckDroppable.onSubmit()}>
+                    <TextInputSelected
+                      options={truckTypeSelectedOption}
+                      onSubmit={truckDroppable.onSubmit}
+                      onInputChange={onSelectedTruckOptions}
+                    />
+                    {/* <Form onSubmit={() => truckDroppable.onSubmit()}>
                       {({ formProps }: any) => (
                         <form {...formProps} style={{ paddingBottom: 20 }}>
                           <div style={{ position: 'relative' }}>
@@ -813,7 +824,7 @@ const TripsInfo: React.FC<Props> = observer((props: any) => {
                           </div>
                         </form>
                       )}
-                    </Form>
+                    </Form> */}
                     <div>
                       {state[truckDroppable.listId] &&
                         state[truckDroppable.listId].map((item: any, index: number) => (
