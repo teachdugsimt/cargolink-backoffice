@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.3](https://github.com/paljs/gatsby-admin-template/compare/v0.5.0...v0.8.3) (2021-12-01)
+
+
+### Bug Fixes
+
+* font weight ([5603f11](https://github.com/paljs/gatsby-admin-template/commit/5603f11cd68d789f90587ef30484948d12d16ecb))
+* merge conflict ([2df4f24](https://github.com/paljs/gatsby-admin-template/commit/2df4f24f3db244bfd41dbe922de8f51fce8b1c77))
+
 ### [0.8.2](https://github.com/paljs/gatsby-admin-template/compare/v0.8.1...v0.8.2) (2021-12-01)
 
 ### [0.8.1](https://github.com/paljs/gatsby-admin-template/compare/v0.6.4...v0.8.1) (2021-12-01)
