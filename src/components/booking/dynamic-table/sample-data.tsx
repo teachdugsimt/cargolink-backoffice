@@ -72,7 +72,6 @@ export const createRow = (
   data: any,
   language: string,
   t: TFunction<string>,
-  onOpenModal?: (jobId: string) => any,
 ) => {
   console.log('keys', data);
 

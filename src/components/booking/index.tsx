@@ -35,9 +35,6 @@ const BookingContainer: React.FC<Props> = observer(() => {
   const [searchValue, setSearchValue] = useState({});
   const [sortable, setSortable] = useState(sortabled);
   const [jobId, setJobId] = useState<string>();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const openModal = useCallback(() => setIsOpen(true), []);
-  const closeModal = useCallback(() => setIsOpen(false), []);
 
   const breadcrumbs = (
     <Breadcrumbs onExpand={() => { }}>
@@ -76,25 +73,20 @@ const BookingContainer: React.FC<Props> = observer(() => {
         ...data,
         productType: productTypesStore.productTypeNameById(data?.productTypeId)?.name
       }))
-      const rows = createRow(content, loginStore.language, t, onOpenModal);
+      const rows = createRow(content, loginStore.language, t);
       setRowData(rows);
       const rowLen = BookingStore?.pagination?.size;
       rowLen && setRowLength(rowLen);
     }
   }, [JSON.stringify(BookingStore.bookingData)]);
 
-  useEffect(() => {
-    if (jobId) {
-      openModal();
-    }
-  }, [jobId])
-
   const onSearch = (value: string) => {
     console.log('value :>> ', value);
     if (value) {
       let search = {
         page: 1,
-        textSearch: value,
+        searchText: value,
+        requesterType: 'TRUCK_OWNER',
         descending: true,
       };
       setPage(1);
@@ -113,15 +105,6 @@ const BookingContainer: React.FC<Props> = observer(() => {
     BookingStore.getBooking(searchParams);
   }
 
-  const onOpenModal = (jobId: string) => {
-    setJobId(jobId);
-  };
-
-  const onCloseModal = () => {
-    setJobId('');
-    closeModal();
-  }
-
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -132,22 +115,6 @@ const BookingContainer: React.FC<Props> = observer(() => {
       <SearchForm onSearch={(value: any) => onSearch(value)} />
 
       <span>{`${t('resultsFound')}: ${BookingStore.pagination?.totalElements || 0}`}</span>
-
-      <ModalTransition>
-        {isOpen && (
-          <Modal onClose={onCloseModal} width={'x-large'}>
-            {/* <ModalHeader>
-              <ModalTitle>{'จุดขึ้นลงสินค้า'}</ModalTitle>
-            </ModalHeader> */}
-            <ModalBody>
-              <JobDetailScreen jobId={jobId} isDisableBreadcrumb />
-            </ModalBody>
-            <ModalFooter>
-              {``}
-            </ModalFooter>
-          </Modal>
-        )}
-      </ModalTransition>
 
       <div className="history-call-dynamic-tbl">
         <DynamicTable
