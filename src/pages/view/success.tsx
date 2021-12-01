@@ -15,25 +15,25 @@ const SuccessAnimate = (props: any) => (
       loop: false,
       animationData: require(`../../images/animations/${props.point}.json`),
     }}
-    // width={30}
-    // height={30}
+  // width={30}
+  // height={30}
   />
 );
 
 
 const Success = (props: any) => {
-  const { location } = props
-  const { state } = location
-  const { title, content } = state
+  // const { location } = props
+  // const { state } = location
+  // const { title, content } = state
   console.log("Props success screen :: ", props)
   return <Row style={{ width: '100%' }}>
     <Col breakPoint={{ xs: 12 }}>
       <Row center="xs">
         <Col breakPoint={{ xs: 10, lg: 10 }} style={FLEX_ALLCENTER}>
           <div style={FRAME_MESSAGE}>
-            <SuccessAnimate point={"success-animation"}/>
-            <h1>{title}</h1>
-            <span>{content}</span>
+            <SuccessAnimate point={"success-animation"} />
+            <h1>{props?.location?.state?.title || "-"}</h1>
+            <span>{props?.location?.state?.content || "-"}</span>
           </div>
         </Col>
       </Row>
