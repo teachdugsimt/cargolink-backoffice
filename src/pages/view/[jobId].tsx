@@ -13,14 +13,17 @@ import { color } from '../../theme';
 import { JobViewStore } from '../../stores/job-view-store';
 import { Icon } from 'react-icons-kit'
 import { phone } from 'react-icons-kit/icomoon/phone'
+import { calendar } from 'react-icons-kit/icomoon/calendar'
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { Link, navigate } from 'gatsby';
 import TruckShowWidget from '../../components/truck/widgets/truck-onlyshow';
 import Row from '@paljs/ui/Row';
 import Col from '@paljs/ui/Col';
 import { CreateUserLineLiff } from '../../services/user-api';
 import { CSSProperties } from '@theme-ui/css';
+import { IBookingParams } from '../../services/booking-api';
 
-const BUTT_CONTAINER: CSSProperties = { display: 'flex', justifyContent: 'center', marginLeft: -10 }
+const BUTT_CONTAINER: CSSProperties = { display: 'flex', justifyContent: 'center', marginLeft: -10, width: '100%' }
 
 const TEXT_BUTT_STYLE: CSSProperties = {
   display: 'flex',
@@ -30,7 +33,8 @@ const TEXT_BUTT_STYLE: CSSProperties = {
 }
 
 const BUTT_STYLE: CSSProperties = {
-  width: '50%',
+  // width: '45%',
+  minWidth: '45%',
   backgroundColor: color.primary,
   margin: '0px 0px 20px 0px', height: 40
 }
@@ -60,6 +64,8 @@ const JobView = observer((props: any) => {
   const { error, liff, isLoggedIn, ready } = useLiff();
   const [lineProfile, setlineProfile] = useState<LineProfile>({})
   const [showForm, setShowForm] = useState<boolean>(false)
+  const [actionType, setactionType] = useState<any>(null)
+
   const { register, handleSubmit, errors, control } = useForm({
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -82,10 +88,10 @@ const JobView = observer((props: any) => {
   }
 
   useEffect(() => {
-
+    // setlineProfile({userId: 'U29ec91c8c816d606fda82d38a75c3aef'})
     // รายละเอียดงานขนส่ง
     var node = document.querySelector('title');
-    if(node){
+    if (node) {
       node.textContent = t("jobDetailTransport")
     }
     console.log("NODE TITLE :: ", node)
@@ -96,8 +102,10 @@ const JobView = observer((props: any) => {
     jobStore.getJobById({ jobId: props.jobId || "DLG9J8KX" });
     return () => {
       setShowForm(false)
+      setactionType(null)
       JobViewStore.clearCheckLine()
       JobViewStore.clearSaveUser()
+      JobViewStore.clearCreateOrUpdateLineOA()
       JobViewStore.clearError()
     };
   }, []);
@@ -107,10 +115,33 @@ const JobView = observer((props: any) => {
     if (cssTel) cssTel.click()
   }
 
-  const _bookingJob = async () => {
+  const bookingJob = async () => {
+    setactionType('book')
+    await JobViewStore.checkLineAccountV2({
+      lineId: lineProfile?.userId || ""
+    })
+
+    let dataCheckingLine = JSON.parse(JSON.stringify(JobViewStore.checkLineBooking))
+    if (dataCheckingLine?.userId) {
+      // booking job
+      JobViewStore.bookingJobInLine({
+        jobId: props.jobId,
+        // truckId: null,
+        accepterUserId: currentJob?.owner?.userId || '',
+        requesterType: 'TRUCK_OWNER',
+        requesterUserId: dataCheckingLine?.userId,
+      })
+    } else {
+      // no this line in DB
+      setShowForm(true)
+    }
+  }
+  const contactingJob = async () => {
+    setactionType('contact')
     await JobViewStore.checkLineAccount({
       lineId: lineProfile?.userId || "",
-      jobId: props.jobId
+      jobId: props.jobId,
+      saveHistory: true
     })
 
     let dataCheckingLine = JobViewStore.checkLine
@@ -121,7 +152,6 @@ const JobView = observer((props: any) => {
       // no this line in DB
       setShowForm(true)
     }
-
   }
   const onSubmit = (data: { name?: string | null, phoneNumber?: string | null }) => {
     console.log("ON submit data :: ", data)
@@ -131,25 +161,53 @@ const JobView = observer((props: any) => {
     if (input) input.blur();
     if (phone) phone.blur();
 
+    if (actionType == 'contact') {
+      let finalData: CreateUserLineLiff = {
+        fullName: data?.name || "-",
+        phoneNumber: data?.phoneNumber ? ("+66" + data?.phoneNumber.substring(1)) : "-",
+        jobId: props.jobId,
+        lineId: lineProfile?.userId || "-"
+      }
+      JobViewStore.createUserWithLine(finalData)
+    } else {
+      const dataCheckingLine = JSON.parse(JSON.stringify(JobViewStore.checkLineBooking))
+      JobViewStore.createOrUpdateLineOaBooking({
+        jobId: props.jobId,
+        accepterUserId: currentJob?.owner?.userId || '',
+        requesterType: 'TRUCK_OWNER',
+        // requesterUserId: dataCheckingLine?.userId,
 
-
-    let finalData: CreateUserLineLiff = {
-      fullName: data?.name || "-",
-      phoneNumber: (data?.phoneNumber ? ("+66" + data?.phoneNumber.substring(1)) : "-") || "-",
-      jobId: props.jobId,
-      lineId: lineProfile?.userId || "-"
+        fullName: data?.name || "-",
+        phoneNumber: data?.phoneNumber ? ("+66" + data?.phoneNumber.substring(1)) : "-",
+        lineId: lineProfile?.userId || "-"
+      })
     }
-    JobViewStore.createUserWithLine(finalData)
   }
 
   useEffect(() => {
     let tmpSaveUser = JobViewStore.saveUser
     if (tmpSaveUser) {
+      telCargolink()
       JobViewStore.clearSaveUser()
       setShowForm(false)
-      telCargolink()
+      setactionType(null)
     }
   }, [JSON.stringify(JobViewStore.saveUser)])
+
+  useEffect(() => {
+    let responsCreateOrUpdateLineOA = JSON.parse(JSON.stringify(JobViewStore.bookingLine))
+    console.log(`🚀  ->  responsCreateOrUpdateLineOA`, responsCreateOrUpdateLineOA);
+    if (responsCreateOrUpdateLineOA && responsCreateOrUpdateLineOA != null) {
+      JobViewStore.clearCreateOrUpdateLineOA()
+      setShowForm(false)
+      setactionType(null)
+      navigate('/view/success', {
+        state: {
+          title: t('job.successBooking'), content: t('job.waitCargolinkCallback')
+        }
+      })
+    }
+  }, [JobViewStore.bookingLine])
 
   console.log('currentJob :> ', JSON.parse(JSON.stringify(currentJob)));
 
@@ -171,22 +229,38 @@ const JobView = observer((props: any) => {
       </div> */}
 
       <Grid layout="fluid" spacing="compact">
-
         {lineProfile && lineProfile?.userId && <GridColumn medium={12}>
-          {!showForm && <Col breakPoint={{ xs: 12, lg: 12 }} style={BUTT_CONTAINER}><LoadingButton
-            style={BUTT_STYLE}
-            spacing="compact"
-            testId="uploadButton"
-            isLoading={JobViewStore.loading}
-            appearance="primary"
-            iconBefore={<Icon size={22} icon={phone} style={{ color: color.black }} />}
-            isDisabled={lineProfile?.userId && props.jobId ? false : true}
-            onClick={_bookingJob}
-          >
-            <div style={TEXT_BUTT_STYLE}>
-              <span style={{ color: color.black }}>{t("job.bookJob")}</span>
-            </div>
-          </LoadingButton>
+          {!showForm && <Col breakPoint={{ xs: 12, lg: 12 }} style={BUTT_CONTAINER}>
+            <Row style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+              <LoadingButton
+                style={BUTT_STYLE}
+                spacing="compact"
+                testId="uploadButton"
+                isLoading={JobViewStore.loading}
+                appearance="primary"
+                iconBefore={<Icon size={22} icon={phone} style={{ color: color.black }} />}
+                isDisabled={lineProfile?.userId && props.jobId ? false : true}
+                onClick={contactingJob}
+              >
+                <div style={TEXT_BUTT_STYLE}>
+                  <span style={{ color: color.black }}>{t("job.contacting")}</span>
+                </div>
+              </LoadingButton>
+              <LoadingButton
+                style={{ ...BUTT_STYLE }}
+                spacing="compact"
+                testId="uploadButton"
+                isLoading={JobViewStore.loading}
+                appearance="primary"
+                iconBefore={<Icon size={22} icon={calendar} style={{ color: color.black }} />}
+                isDisabled={lineProfile?.userId && props.jobId ? false : true}
+                onClick={bookingJob}
+              >
+                <div style={TEXT_BUTT_STYLE}>
+                  <span style={{ color: color.black }}>{t("job.booking")}</span>
+                </div>
+              </LoadingButton>
+            </Row>
             <a id="trigger-phone" href={`tel:${JobViewStore.phoneNumber}`}></a>
           </Col>}
           {showForm && <>
@@ -296,12 +370,6 @@ const Box = styled.div`
       padding: 15px;
       margin-bottom: 20px;
       `;
-
-
-
-
-
-
 
 
 
