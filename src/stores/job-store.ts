@@ -325,7 +325,7 @@ export const JobStore = types
           self.boardcastLoading = true;
           self.tmpLineboardcastJobId = params
           const response = yield JobApi.sendLineBoardcast(params);
-          console.log("Response send Notification :: ", response)
+          console.log("Response send Job store :: ", response)
           self.boardcastLoading = false;
           if (response.ok) {
             self.boardcastData = response.data;
@@ -343,7 +343,7 @@ export const JobStore = types
           self.loading = true;
           self.currentJob = { ...self.currentJob, ...data };
           const response = yield JobApi.updateJobById(id, data);
-          console.log("Response send Notification :: ", response)
+          console.log("Response send Job store :: ", response)
           self.notificationLoading = false;
           if (response.ok) {
             console.log('response.data :>> ', response.data);

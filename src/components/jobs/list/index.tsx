@@ -187,7 +187,7 @@ const JobContainer: React.FC = observer(() => {
       const rows = createTableRows(jobsData.content, productTypes, loginStore.language, t, onDetail, onSendNotification, onSendLineBoardcast, jobStore.tmpNotificationJobId, jobStore.notificationLoading, jobStore.tmpLineboardcastJobId, jobStore.boardcastLoading);
       setRows(rows);
     }
-  }, [jobStore.data_jobs, jobStore.data_jobs?.reRender, jobStore.data_jobs?.content?.length, productTypes, jobStore.notificationLoading]);
+  }, [jobStore.data_jobs, jobStore.data_jobs?.reRender, jobStore.data_jobs?.content?.length, productTypes, jobStore.notificationLoading, jobStore.boardcastLoading]);
 
   useEffect(() => {
     const { product_type_loading, list_product_type_pure } = versatileStore;
