@@ -161,7 +161,12 @@ export const JobStore = types
     tmpNotificationJobId: types.maybeNull(types.string),
     notificationLoading: types.boolean,
     notificationData: types.boolean,
-    errorNotification: types.maybeNull(types.string)
+    errorNotification: types.maybeNull(types.string),
+
+    tmpLineboardcastJobId: types.maybeNull(types.string),
+    boardcastLoading: types.boolean,
+    boardcastData: types.boolean,
+    errorBoardcast: types.maybeNull(types.string)
   })
   .actions((self) => {
     return {
@@ -312,6 +317,24 @@ export const JobStore = types
         } catch (err) {
           self.notificationLoading = false;
           self.notificationData = false;
+        }
+      }),
+
+      sendLineBoardcast: flow(function* sendLineBoardcast(params: string) {
+        try {
+          self.boardcastLoading = true;
+          self.tmpLineboardcastJobId = params
+          const response = yield JobApi.sendLineBoardcast(params);
+          console.log("Response send Notification :: ", response)
+          self.boardcastLoading = false;
+          if (response.ok) {
+            self.boardcastData = response.data;
+          } else {
+            self.errorBoardcast = 'Failed to notification job ' + params
+          }
+        } catch (err) {
+          self.boardcastLoading = false;
+          self.boardcastData = false;
         }
       }),
 

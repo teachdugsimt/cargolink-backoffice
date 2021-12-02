@@ -175,10 +175,16 @@ const JobContainer: React.FC = observer(() => {
     }
   }
 
+  const onSendLineBoardcast = (jobId: string) => {
+    if (jobId) {
+      jobStore.sendLineBoardcast(jobId)
+    }
+  }
+
   useEffect(() => {
     const jobsData: IJobsManagement | null = JSON.parse(JSON.stringify(jobStore.data_jobs));
     if (jobsData?.content && productTypes.length) {
-      const rows = createTableRows(jobsData.content, productTypes, loginStore.language, t, onDetail, onSendNotification, jobStore.tmpNotificationJobId, jobStore.notificationLoading);
+      const rows = createTableRows(jobsData.content, productTypes, loginStore.language, t, onDetail, onSendNotification, onSendLineBoardcast, jobStore.tmpNotificationJobId, jobStore.notificationLoading, jobStore.tmpLineboardcastJobId, jobStore.boardcastLoading);
       setRows(rows);
     }
   }, [jobStore.data_jobs, jobStore.data_jobs?.reRender, jobStore.data_jobs?.content?.length, productTypes, jobStore.notificationLoading]);

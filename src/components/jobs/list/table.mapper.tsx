@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import styled from 'styled-components';
 import { momentFormatDateTime } from '../../simple-data';
 import { IJobNull } from '../../../stores/job-store';
@@ -9,6 +9,10 @@ import { findProvince } from '../../../utils';
 import moment from 'moment'
 import { LoadingButton } from '@atlaskit/button';
 import { Link } from 'gatsby';
+
+const COL_BUTTON_NOTIFY: CSSProperties = {
+  display: 'flex', flexDirection: 'column'
+}
 
 export const sortable: any = {
   id: true, //! Note that: DESC = true, ASC = fasle
@@ -100,8 +104,11 @@ export const createTableRows = (
   t: TFunction,
   onDetail: (id: string) => any,
   onSendNotification: (jobId: string) => any,
+  onSendLineBoardcast: (jobId: string) => any,
   tmpNotificationJobId: string | null,
   loadingNotification: boolean,
+  tmpLineboardcastJobId: string | null,
+  boardcastLoading: boolean,
 ) => {
   return jobs.map((job, index) => {
     const productType = products.length && products.find((prod) => prod.id === job.productTypeId);
@@ -179,14 +186,26 @@ export const createTableRows = (
         },
         {
           key: t("notification"),
-          content: <LoadingButton
-            spacing="compact"
-            testId="sendNotiButton"
-            isLoading={tmpNotificationJobId == job.id && loadingNotification}
-            appearance="primary"
-            onClick={() => onSendNotification(job.id || '')} sizes={'small'}>
-            {t("sendNotification")}
-          </LoadingButton>,
+          content: <div style={COL_BUTTON_NOTIFY}>
+            <LoadingButton
+              spacing="compact"
+              testId="sendNotiButton"
+              isLoading={tmpNotificationJobId == job.id && loadingNotification}
+              appearance="primary"
+              onClick={() => onSendNotification(job.id || '')} sizes={'small'}>
+              {t("sendNotification")}
+            </LoadingButton>
+
+            <LoadingButton
+              style={{ marginTop: 5 }}
+              spacing="compact"
+              testId="sendNotiButton"
+              isLoading={tmpLineboardcastJobId == job.id && boardcastLoading}
+              appearance="primary"
+              onClick={() => onSendLineBoardcast(job.id || '')} sizes={'small'}>
+              {t("sendNotification")}(Line)
+            </LoadingButton>
+          </div>,
         },
         {
           key: t('edit'),

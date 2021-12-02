@@ -83,7 +83,11 @@ let initialState = RootModel.create({
     tmpNotificationJobId: null,
     notificationLoading: false,
     notificationData: false,
-    errorNotification: null
+    errorNotification: null,
+    tmpLineboardcastJobId: null,
+    boardcastLoading: false,
+    boardcastData: false,
+    errorBoardcast: null,
   },
   truckStore: {
     loading: false,
