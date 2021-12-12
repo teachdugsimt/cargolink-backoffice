@@ -1,0 +1,106 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "start": "2020-12-25T09:04:37.718Z",
+    "end": "2020-12-25T09:05:12.354Z",
+    "duration": 34636,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "97acb7df-8d40-47a4-a5ad-11d45b79f77e",
+      "title": "",
+      "fullFile": "cypress\\integration\\Management.spec.js",
+      "file": "cypress\\integration\\Management.spec.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "fce6a3ec-5ae0-40f9-a84c-c274babdea5b",
+          "title": "Window",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "ทดสอบหน้า เมนู User Management",
+              "fullTitle": "Window ทดสอบหน้า เมนู User Management",
+              "timedOut": null,
+              "duration": 33437,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.wait(1000);\ncy.get('.header__HeaderStyle-dHeagC > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();\ncy.wait(1000);\ncy.get(':nth-child(4) > a').click();\ncy.wait(2000);\ncy.get('body').click({\n  force: true\n});\ncy.wait(1000);\ncy.get('.sc-dIvqjp > input').type('docu', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('docu');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('0000', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('0000');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('a', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('w');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('[page=\"1\"]').click();\ncy.wait(2000);\ncy.get('[page=\"2\"]').click();\ncy.wait(2000);\ncy.get('[page=\"3\"]').click();\ncy.wait(2000);\ncy.get('[page=\"1\"]').click();\ncy.wait(2000);",
+              "err": {},
+              "uuid": "bb6809f8-a15f-40c7-9c24-f7cd03e7e7cb",
+              "parentUUID": "fce6a3ec-5ae0-40f9-a84c-c274babdea5b",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "bb6809f8-a15f-40c7-9c24-f7cd03e7e7cb"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 33437,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "6.2.1"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/report/mochawesome-report",
+        "overwrite": true,
+        "html": true,
+        "json": true,
+        "timestamp": "mmddyyyy_HHMMss"
+      },
+      "version": "5.1.0"
+    }
+  }
+}

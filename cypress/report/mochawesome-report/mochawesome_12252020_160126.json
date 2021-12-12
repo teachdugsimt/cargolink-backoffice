@@ -1,0 +1,106 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "start": "2020-12-25T09:00:36.320Z",
+    "end": "2020-12-25T09:01:26.443Z",
+    "duration": 50123,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "d0bc3ae9-da76-444b-9412-961aa8580a0b",
+      "title": "",
+      "fullFile": "cypress\\integration\\Carrier.spec.js",
+      "file": "cypress\\integration\\Carrier.spec.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "1c01e136-7214-4942-ac1b-52ce8d51f1c1",
+          "title": "Window",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "ทดสอบหน้า เมนู Carrier account",
+              "fullTitle": "Window ทดสอบหน้า เมนู Carrier account",
+              "timedOut": null,
+              "duration": 48353,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.wait(1000);\ncy.get('.header__HeaderStyle-dHeagC > :nth-child(1) > .sc-kEqYlL > :nth-child(1)').click();\ncy.wait(1000);\ncy.get(':nth-child(3) > [href=\"#\"]').click();\ncy.wait(2000);\ncy.get(':nth-child(3) > .menu-items > :nth-child(1) > a > .menu-title').click();\ncy.wait(2000);\ncy.get('body').click({\n  force: true\n});\ncy.wait(2000);\ncy.get('.sc-efHXLn > :nth-child(2)').click();\ncy.wait(2000);\ncy.get('.sc-efHXLn > :nth-child(3)').click();\ncy.wait(2000);\ncy.get('.Lnyfd').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('777', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('777');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('Individual', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('Individual');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').type('Company', {\n  delay: 300\n});\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('.sc-dIvqjp > input').clear('Company');\ncy.get('[style=\"display: flex; align-items: center;\"] > .sc-bkbjAj').click();\ncy.wait(2000);\ncy.get('[page=\"1\"]').click();\ncy.wait(2000);\ncy.get('[page=\"2\"]').click();\ncy.wait(2000);\ncy.get('[page=\"3\"]').click();\ncy.wait(2000);\ncy.get('[page=\"1\"]').click();\ncy.wait(2000);",
+              "err": {},
+              "uuid": "25d0ca01-99ba-46ce-a0e6-2d2d5d717148",
+              "parentUUID": "1c01e136-7214-4942-ac1b-52ce8d51f1c1",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "25d0ca01-99ba-46ce-a0e6-2d2d5d717148"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 48353,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "6.2.1"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/report/mochawesome-report",
+        "overwrite": true,
+        "html": true,
+        "json": true,
+        "timestamp": "mmddyyyy_HHMMss"
+      },
+      "version": "5.1.0"
+    }
+  }
+}
